@@ -11,9 +11,11 @@
     "postinstall": "husky install"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "react": "17.0.1",
     "react-native": "0.64.0",
-    "react-native-dotenv": "^2.5.3"
+    "react-native-dotenv": "^2.5.3",
+    "react-query": "^3.13.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
