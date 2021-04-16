@@ -1,27 +1,16 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-import APIProvider from 'api/APIProvider';
+import {AuthProvider} from './core/auth/index';
+import {RootNavigator} from 'navigation/RootNavigator';
+import {Provider} from 'react-redux';
+import store from './store/configureStore';
 
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
   return (
-    <APIProvider>
-      <SafeAreaView>
-        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-        <ScrollView contentInsetAdjustmentBehavior="automatic">
-          <View>
-            <Text>Singular</Text>
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </APIProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <RootNavigator />
+      </AuthProvider>
+    </Provider>
   );
 };
 
