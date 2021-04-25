@@ -1,6 +1,6 @@
 /// Auth.tsx
 import * as React from 'react';
-import {getToken, setToken, removeToken} from './utils';
+import {getToken, setToken, removeToken, removeRefreshToken} from './utils';
 
 interface AuthState {
   userToken: string | undefined | null;
@@ -74,6 +74,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
       },
       signOut: async () => {
         await removeToken();
+        await removeRefreshToken();
         dispatch({type: 'SIGN_OUT'});
       },
     }),

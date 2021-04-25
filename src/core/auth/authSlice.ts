@@ -1,5 +1,10 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {
+  createSlice,
+  createAsyncThunk,
+  isRejectedWithValue,
+} from '@reduxjs/toolkit';
 import AuthApi, {Credentials} from 'api/authApi';
+import {setToken, setRefreshToken} from 'core/auth/utils';
 
 type Token = string | undefined;
 
@@ -20,8 +25,16 @@ const initialState = {
 export const fetchToken = createAsyncThunk(
   'auth/fetchToken',
   async (credentials: Credentials) => {
-    const response = await AuthApi.fetchToken(credentials);
-    return response.data;
+    try {
+      const response = await AuthApi.fetchToken(credentials);
+      if (response.status === 200) {
+        setToken(response.data.token);
+        setRefreshToken(response.data.refresh_token);
+        return response.data;
+      }
+    } catch (error) {
+      return isRejectedWithValue(error);
+    }
   },
 );
 

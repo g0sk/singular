@@ -2,18 +2,32 @@ import React, {useState} from 'react';
 import {View, TextInput, Button} from 'react-native';
 import Screen from 'components/Screen';
 import {fetchToken} from 'core/auth/authSlice';
+import {useAuth} from 'core/auth';
 import {useAppDispatch} from 'store/configureStore';
-
-type Token = string | null;
+import {getToken} from 'core/auth/utils';
 
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   //const authState = useAppSelector((state) => state.auth);
+  const {signIn} = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const login = () => {
+
+  const login = async () => {
     const credentials = {username, password};
     dispatch(fetchToken(credentials));
+    navigatorSignIn();
+  };
+
+  const navigatorSignIn = async () => {
+    try {
+      const token = await getToken();
+      if (token !== null) {
+        signIn(token);
+      }
+    } catch (e) {
+      throw 'Token not found on device';
+    }
   };
   return (
     <Screen>

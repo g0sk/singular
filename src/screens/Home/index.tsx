@@ -1,12 +1,15 @@
 import React from 'react';
-//import {useAuth} from 'core/auth';
-import {View, Text} from 'react-native';
+import {useAuth} from 'core/auth';
+import {View, Button} from 'react-native';
+import Screen from 'components/Screen';
 
 export const Home = () => {
-  //const {signOut} = useAuth();
+  const {signOut} = useAuth();
   return (
-    <View>
-      <Text> {'Home'} </Text>
-    </View>
+    <Screen>
+      <View>
+        <Button title="Logout" onPress={() => signOut()} />
+      </View>
+    </Screen>
   );
 };

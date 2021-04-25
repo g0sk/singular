@@ -32,4 +32,4 @@ export const removeToken = () => removeItem(TOKEN);
 export const getRefreshToken = () => getItem<string>(REFRESH_TOKEN);
 export const setRefreshToken = (value: string) =>
   setItem<string>(REFRESH_TOKEN, value);
-export const removerefreshToken = () => removeItem(REFRESH_TOKEN);
+export const removeRefreshToken = () => removeItem(REFRESH_TOKEN);
