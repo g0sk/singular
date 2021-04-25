@@ -1,121 +1,50 @@
-import AuthApi from 'api/authApi';
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {setToken, setRefreshToken} from './utils';
+import AuthApi, {Credentials} from 'api/authApi';
 
-export interface Credentials {
-  username: string;
-  password: string;
-}
+type Token = string | undefined;
 
-export type Token = string;
+type AuthState = {
+  token: Token;
+  refreshToken: Token;
+  loading: boolean;
+  error: boolean;
+};
 
-export interface Response {
-  token: string;
-  refreshToken: string;
-}
-
-interface Status {
-  isFetching: boolean;
-  isSuccess: boolean;
-  isError: boolean;
-  error: {
-    code: string | undefined;
-    message: string | undefined;
-  } | null;
-}
-
-export interface AuthState extends Status {
-  token: string | null;
-  status: 'signIn' | 'signOut' | null;
-}
-
-export const initialState = {
-  token: null,
-  status: null,
-  isFetching: false,
-  isSuccess: false,
-  error: null,
+const initialState = {
+  token: undefined,
+  refreshToken: undefined,
+  loading: false,
+  error: false,
 } as AuthState;
 
-const fetchToken = createAsyncThunk(
+export const fetchToken = createAsyncThunk(
   'auth/fetchToken',
-  async (credentials: Credentials, thunkAPI) => {
-    try {
-      const response = await AuthApi.fetchToken(credentials);
-      if (response.status === 200) {
-        setToken(response.data.token);
-        setRefreshToken(response.data.token);
-        return response.data;
-      }
-      return thunkAPI.rejectWithValue(response.data);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.response.data);
-    }
-  },
-);
-
-const fetchRefreshToken = createAsyncThunk(
-  'auth/fetchRefreshToken',
-  async (refreshToken: string, thunkAPI) => {
-    try {
-      const response = await AuthApi.fetchRefreshToken(refreshToken);
-      if (response.status === 200) {
-        setToken(response.data.token);
-        return response.data.token;
-      }
-      return thunkAPI.rejectWithValue(response.data);
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.response.data);
-    }
+  async (credentials: Credentials) => {
+    const response = await AuthApi.fetchToken(credentials);
+    return response.data;
   },
 );
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState,
-  reducers: {
-    signOut(state) {
-      state = initialState;
-      return state;
-    },
-  },
+  initialState: initialState,
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchToken.fulfilled, (state, action) => {
-        state.token = action.payload.token;
-        state.isFetching = false;
-        state.isSuccess = true;
+        state.error = false;
+        state.loading = false;
+        state.token = action.payload?.token;
       })
       .addCase(fetchToken.pending, (state) => {
-        state.isFetching = false;
+        state.error = false;
+        state.loading = true;
       })
-      .addCase(fetchToken.rejected, (state, action) => {
-        state.isFetching = false;
-        state.isError = true;
-        state.error = {
-          code: action.error?.code,
-          message: action.error?.message,
-        };
-      })
-      .addCase(fetchRefreshToken.fulfilled, (state, action) => {
-        state.token = action.payload.token;
-        state.isFetching = false;
-        state.isSuccess = true;
-      })
-      .addCase(fetchRefreshToken.pending, (state) => {
-        state.isFetching = true;
-      })
-      .addCase(fetchRefreshToken.rejected, (state, action) => {
-        state.isFetching = false;
-        state.isError = true;
-        state.error = {
-          code: action.error?.code,
-          message: action.error?.message,
-        };
+      .addCase(fetchToken.rejected, (state) => {
+        state.error = true;
+        state.loading = false;
       });
   },
 });
 
-export const authReducer = authSlice.reducer;
-export const authActions = authSlice.actions;
-export default authSlice;
+export default authSlice.reducer;
