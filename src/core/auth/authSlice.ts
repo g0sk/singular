@@ -38,6 +38,21 @@ export const fetchToken = createAsyncThunk(
   },
 );
 
+export const fetchRefreshToken = createAsyncThunk(
+  'auth/fetchRefreshToken',
+  async (refreshToken: string) => {
+    try {
+      const response = await AuthApi.fetchRefreshToken(refreshToken);
+      if (response.status === 200) {
+        setRefreshToken(response.data.token);
+        return response.data;
+      }
+    } catch (error) {
+      return isRejectedWithValue(error);
+    }
+  },
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: initialState,
@@ -54,6 +69,19 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchToken.rejected, (state) => {
+        state.error = true;
+        state.loading = false;
+      })
+      .addCase(fetchRefreshToken.fulfilled, (state, action) => {
+        state.error = false;
+        state.loading = false;
+        state.token = action.payload?.token;
+      })
+      .addCase(fetchRefreshToken.pending, (state) => {
+        state.error = false;
+        state.loading = true;
+      })
+      .addCase(fetchRefreshToken.rejected, (state) => {
         state.error = true;
         state.loading = false;
       });

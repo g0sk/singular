@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, TextInput, Button} from 'react-native';
+import {View, TextInput, Button, StyleSheet} from 'react-native';
 import Screen from 'components/Screen';
 import {fetchToken} from 'core/auth/authSlice';
 import {useAuth} from 'core/auth';
@@ -13,15 +13,10 @@ export const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const login = async () => {
-    const credentials = {username, password};
-    dispatch(fetchToken(credentials));
-    navigatorSignIn();
-  };
-
   const navigatorSignIn = async () => {
     try {
       const token = await getToken();
+      console.log('we got token', token);
       if (token !== null) {
         signIn(token);
       }
@@ -29,9 +24,15 @@ export const Login: React.FC = () => {
       throw 'Token not found on device';
     }
   };
+
+  const login = () => {
+    const credentials = {username, password};
+    dispatch(fetchToken(credentials)).then(() => navigatorSignIn());
+  };
+
   return (
     <Screen>
-      <View>
+      <View style={styles.container}>
         <TextInput
           value={username}
           placeholder="Username"
@@ -47,3 +48,10 @@ export const Login: React.FC = () => {
     </Screen>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    //flex: 1,
+    backgroundColor: '#0c4291',
+  },
+});

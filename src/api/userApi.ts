@@ -1,4 +1,4 @@
-import apiURL from './api';
+import apiURL from 'api';
 
 interface User {
   id: string;

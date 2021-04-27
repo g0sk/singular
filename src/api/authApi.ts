@@ -1,4 +1,4 @@
-import apiURL from './api';
+import apiURL from 'api';
 
 type Token = string;
 

@@ -1,6 +1,6 @@
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import {configureStore, combineReducers} from '@reduxjs/toolkit';
-import authReducer from '../core/auth/authSlice';
+import authReducer from 'core/auth/authSlice';
 
 //Flipper app debugger
 //const createDebugger = require('redux-flipper').default;
