@@ -7,7 +7,7 @@ import store from 'store/configureStore';
 type Token = string | null;
 
 export function initialize(): void {
-  //Intercept request before is sent
+  //Intercept request before is sent, looks for JWT token if its saved on device, else throw error.
   apiURL.interceptors.request.use(
     async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
       try {
@@ -25,7 +25,12 @@ export function initialize(): void {
     },
   );
 
-  //Intercept response before is received
+  /*
+    Intercept response before is received. If theres a 200 status
+    code on response, it returns the response. If it gets a 401,
+    we look on the device for refreshToken, if not found we redirect to login.
+  */
+
   apiURL.interceptors.response.use(
     (res: AxiosResponse) => {
       return res;
