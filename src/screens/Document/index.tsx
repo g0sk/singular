@@ -8,7 +8,7 @@ export const Document = () => {
     <View>
       <Text> Document view</Text>
       <Button title="Select image" onPress={() => setShowModal(!showModal)} />
-      <View>{showModal && <ImagePicker isVisible={showModal} />}</View>
+      <ImagePicker visible={showModal} />
     </View>
   );
 };

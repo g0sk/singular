@@ -1,40 +1,44 @@
-import React, {useState} from 'react';
-import {
-  Modal,
-  ModalProps,
-  Pressable,
-  Text,
-  View,
-  StyleSheet,
-} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-export const ImagePickerModal: React.FC<ModalProps> = (props) => {
-  const [modalVisible, setModalVisible] = useState<boolean | undefined>(
-    props.visible,
-  );
+interface ModalProps {
+  visible: boolean;
+}
+
+export const ImagePickerModal: React.FC<ModalProps> = ({visible}) => {
+  const [showModal, setShowModal] = useState(visible);
+
+  useEffect(() => {
+    toggleModal();
+  }, [visible]);
+
+  const toggleModal = () => {
+    if (true) {
+      setShowModal(true);
+    } else {
+      setShowModal(false);
+    }
+  };
+
   return (
-    <Modal visible={modalVisible} {...props}>
+    <Modal transparent={true} visible={showModal}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <View style={styles.header}>
             <Text style={styles.textHeader}>Select Image</Text>
           </View>
           <View style={styles.options}>
-            <Pressable onPress={() => null}>
+            <TouchableOpacity onPress={() => null}>
               <Text style={styles.textOption}>Take picture</Text>
-            </Pressable>
-            <Pressable onPress={() => null}>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => null}>
               <Text style={styles.textOption}>Choose from gallery</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
           <View style={styles.button}>
-            <Pressable
-              onPress={() => {
-                setModalVisible(false);
-                console.log(modalVisible);
-              }}>
+            <TouchableOpacity onPress={() => setShowModal(false)}>
               <Text style={styles.cancelButton}>Cancel</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -44,6 +48,7 @@ export const ImagePickerModal: React.FC<ModalProps> = (props) => {
 
 const styles = StyleSheet.create({
   centeredView: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -51,12 +56,13 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   modalView: {
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
+    borderRadius: 20,
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,

@@ -1,1 +1,1 @@
-export const permission = 'a';
+export default 'a';
