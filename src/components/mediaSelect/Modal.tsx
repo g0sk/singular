@@ -1,42 +1,50 @@
-import React, {useState, useEffect} from 'react';
+import React, {Dispatch, useState, useEffect, SetStateAction} from 'react';
 import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import ImagePickerActions from './ImagePickerActions';
 
 interface ModalProps {
   visible: boolean;
+  setModalVisibility: Dispatch<SetStateAction<boolean>>;
 }
 
-export const ImagePickerModal: React.FC<ModalProps> = ({visible}) => {
-  const [showModal, setShowModal] = useState(visible);
+export const ImagePickerModal: React.FC<ModalProps> = ({
+  visible,
+  setModalVisibility,
+}) => {
+  const [isVisible, setIsVisible] = useState<boolean>(visible);
 
   useEffect(() => {
-    toggleModal();
+    function toogleModal(): void {
+      if (visible) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    }
+    toogleModal();
   }, [visible]);
 
-  const toggleModal = () => {
-    if (true) {
-      setShowModal(true);
-    } else {
-      setShowModal(false);
-    }
-  };
-
   return (
-    <Modal transparent={true} visible={showModal}>
+    <Modal transparent={true} visible={isVisible}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <View style={styles.header}>
             <Text style={styles.textHeader}>Select Image</Text>
           </View>
           <View style={styles.options}>
-            <TouchableOpacity onPress={() => null}>
+            <TouchableOpacity onPress={() => ImagePickerActions.openCamera()}>
               <Text style={styles.textOption}>Take picture</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => null}>
+            <TouchableOpacity onPress={() => ImagePickerActions.openGallery()}>
               <Text style={styles.textOption}>Choose from gallery</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.button}>
-            <TouchableOpacity onPress={() => setShowModal(false)}>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisibility(false);
+                setIsVisible(false);
+              }}>
               <Text style={styles.cancelButton}>Cancel</Text>
             </TouchableOpacity>
           </View>

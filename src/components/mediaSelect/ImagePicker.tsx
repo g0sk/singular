@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {SetStateAction, Dispatch} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {ImagePickerModal} from './Modal';
 
@@ -8,12 +8,19 @@ export interface PermissionTypes {
 }
 type ImagePickerProps = {
   visible: boolean;
+  setModalVisibility: Dispatch<SetStateAction<boolean>>;
 };
 
-export const ImagePicker: React.FC<ImagePickerProps> = ({visible}) => {
+export const ImagePicker: React.FC<ImagePickerProps> = ({
+  visible,
+  setModalVisibility,
+}) => {
   return (
     <View style={styles.centeredView}>
-      <ImagePickerModal visible={visible} />
+      <ImagePickerModal
+        setModalVisibility={setModalVisibility}
+        visible={visible}
+      />
     </View>
   );
 };
