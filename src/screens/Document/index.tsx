@@ -1,13 +1,14 @@
-import React from 'react';
-import {View, Text} from 'react-native';
-import Screen from 'components/Screen';
+import React, {useState} from 'react';
+import {View, Text, Button} from 'react-native';
+import {ImagePicker} from 'components/mediaSelect/ImagePicker';
 
 export const Document = () => {
+  const [showModal, setShowModal] = useState<boolean>(false);
   return (
-    <Screen>
-      <View>
-        <Text> Document view</Text>
-      </View>
-    </Screen>
+    <View>
+      <Text> Document view</Text>
+      <Button title="Select image" onPress={() => setShowModal(!showModal)} />
+      <View>{showModal && <ImagePicker isVisible={showModal} />}</View>
+    </View>
   );
 };

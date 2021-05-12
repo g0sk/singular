@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import Screen from 'components/Screen';
-import {fetchToken} from 'core/auth/authSlice';
+//import {fetchToken} from 'core/auth/authSlice';
 import {useAuth} from 'core/auth';
-import {useAppDispatch, useAppSelector} from 'store/configureStore';
-import {getToken} from 'core/auth/utils';
+import {useAppSelector} from 'store/configureStore';
+import {getToken, setToken} from 'core/auth/utils';
 import Header from 'components/Header';
 import {
   View,
@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 
 export const Login: React.FC = () => {
-  const dispatch = useAppDispatch();
+  //const dispatch = useAppDispatch();
   const authState = useAppSelector((state) => state.auth);
   const {signIn} = useAuth();
   const title = 'Singular';
@@ -22,8 +22,10 @@ export const Login: React.FC = () => {
   const [password, setPassword] = useState('');
 
   const login = () => {
-    const credentials = {username, password};
-    dispatch(fetchToken(credentials)).then(() => navigatorSignIn());
+    //const credentials = {username, password};
+    //dispatch(fetchToken(credentials)).then(() => navigatorSignIn());
+    setToken('hola');
+    navigatorSignIn();
   };
 
   const navigatorSignIn = async () => {

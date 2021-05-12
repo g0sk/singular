@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Home, Profile, Scan} from 'screens';
+import {Home, Document, Scan} from 'screens';
 import {HomeIcon, DocumentIcon} from 'ui/icons';
-import {ScanButton} from 'components/Scan/ScanButton';
+import {ScanButton} from 'components/scan/ScanButton';
 
 const Tab = createBottomTabNavigator();
 export const TabNavigator = () => {
@@ -28,8 +28,8 @@ export const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="Document"
+        component={Document}
         options={{
           tabBarIcon: ({focused}) => <DocumentIcon active={focused} />,
         }}
