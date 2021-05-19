@@ -1,4 +1,4 @@
-import apiURL from 'api';
+import {apiURL} from 'api';
 import {AxiosRequestConfig, AxiosResponse, AxiosError} from 'axios';
 import {getToken, getRefreshToken} from 'core/auth/utils';
 import {fetchRefreshToken} from 'core/auth/authSlice';
