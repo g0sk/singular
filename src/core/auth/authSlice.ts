@@ -26,11 +26,8 @@ export const fetchToken = createAsyncThunk(
   'auth/fetchToken',
   async (credentials: Credentials) => {
     try {
-      console.log('fetch starts');
       const response = await AuthApi.fetchToken(credentials);
-      console.log('fetch ends');
       if (response.status === 200) {
-        console.log(response.data);
         setToken(response.data.token);
         setRefreshToken(response.data.refresh_token);
         return response.data;
