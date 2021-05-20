@@ -1,12 +1,19 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View} from 'components/View';
 import {ErrorHandler} from 'handlers/error';
 
 //View component to handle app errors
 
 const Screen = ({children}: {children: React.ReactNode}) => (
   <ErrorHandler>
-    <View>{children}</View>
+    <View
+      justifyContent="center"
+      flexDirection="column"
+      paddingHorizontal="m"
+      flex={1}
+      bg="background">
+      {children}
+    </View>
   </ErrorHandler>
 );
 

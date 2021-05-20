@@ -8,18 +8,12 @@ import {
   View,
 } from 'react-native';
 import {
-  ErrorCode,
   launchImageLibrary,
   ImagePickerResponse,
   ImageLibraryOptions,
   CameraOptions,
   launchCamera,
 } from 'react-native-image-picker';
-
-type Error = {
-  errorCode: ErrorCode | undefined;
-  errorMessage: string | undefined;
-};
 
 export interface PermissionTypes {
   camera: boolean;
@@ -39,12 +33,14 @@ type ImagePickerProps = {
   visible: boolean;
   setModalVisibility: Dispatch<SetStateAction<boolean>>;
   saveImage: Dispatch<SetStateAction<ParsedImage | undefined>>;
+  cameraType?: 'back' | 'front';
 };
 
 export const ImagePicker: React.FC<ImagePickerProps> = ({
   visible,
   setModalVisibility,
   saveImage,
+  cameraType = 'back',
 }) => {
   const [isVisible, setIsVisible] = useState<boolean>(visible);
 
@@ -102,7 +98,7 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
     const cameraOptions: CameraOptions = {
       mediaType: 'photo',
       quality: 1,
-      cameraType: 'back',
+      cameraType: cameraType,
       includeBase64: true,
       saveToPhotos: true,
     };
