@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'components/View';
+import {View} from 'components';
 import {ErrorHandler} from 'handlers/error';
 
 //View component to handle app errors

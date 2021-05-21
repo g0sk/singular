@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useAuth} from 'core/auth';
 import {View, Button} from 'react-native';
 //import Screen from 'components/Screen';
-import {ImagePicker, ParsedImage} from 'components/mediaSelect/ImagePicker';
+import {ImagePicker, ParsedImage} from 'components/ImagePicker';
 import {Avatar} from 'components/Avatar';
 
 export const Home = () => {

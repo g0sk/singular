@@ -21,7 +21,10 @@ const Header: React.FC<HeaderProps> = ({
 };
 
 const styles = StyleSheet.create({
-  headerContainer: {},
+  headerContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
   title: {},
   description: {},
 });

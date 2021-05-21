@@ -16,6 +16,7 @@ const BaseTheme = {
   colors: {
     primary: '#1f155e',
     secondary: '#ffc107',
+    purpleLight: '#593ac1',
     lightBackground: '#fff',
     card: '#fff',
   },

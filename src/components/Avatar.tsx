@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
 
-interface AvatarProps {
+export interface AvatarProps {
   hasBorder?: boolean;
   placeholderImg?: Image;
   uri: string | undefined;

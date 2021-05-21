@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, Button, Image, StyleSheet} from 'react-native';
-import {ImagePicker, ParsedImage} from 'components/mediaSelect/ImagePicker';
+import {ImagePicker, ParsedImage} from 'components/ImagePicker';
 
 export const Document = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
