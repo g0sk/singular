@@ -9,9 +9,8 @@ const Screen = ({children}: {children: React.ReactNode}) => (
     <View
       justifyContent="center"
       flexDirection="column"
-      paddingHorizontal="m"
-      flex={1}
-      bg="background">
+      //paddingHorizontal="m"
+      flex={1}>
       {children}
     </View>
   </ErrorHandler>

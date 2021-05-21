@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Home, Document, Scan} from 'screens';
 import {HomeIcon, DocumentIcon} from 'ui/icons';
-import {ScanButton} from 'components/scan/ScanButton';
+import {ScanButton} from 'components/Scan/ScanButton';
 
 const Tab = createBottomTabNavigator();
 export const TabNavigator = () => {
