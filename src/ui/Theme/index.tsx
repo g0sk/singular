@@ -14,11 +14,24 @@ const createTheme = <T extends ThemeType>(themeObject: T): T => themeObject;
 
 const BaseTheme = {
   colors: {
-    primary: '#1f155e',
+    primary: '#593ac1',
     secondary: '#ffc107',
-    purpleLight: '#593ac1',
-    lightBackground: '#fff',
-    card: '#fff',
+    blue: '#1f155e',
+    lightBackground: '#ffffff',
+    background: '#000b31',
+    card: '#ffffff',
+    lightText: '#ffffff',
+    darkText: '#000',
+    default: '#9b9b9b',
+    placeholderText: '#716d6d',
+    white: '#fff',
+    error: '#c90404',
+  },
+  borderRadius: {
+    s: 4,
+    m: 10,
+    l: 25,
+    xl: 75,
   },
   spacing: {
     s: 8,
@@ -26,16 +39,45 @@ const BaseTheme = {
     l: 24,
     xl: 40,
   },
+  margin: {
+    s: 10,
+    m: 40,
+    l: 75,
+    xl: 400,
+  },
   breakpoints: {},
 };
 
 export const theme = createTheme({
   ...BaseTheme,
   textVariants: {
-    header: {
-      color: '#000000',
+    button_primary: {
+      color: 'lightText',
+    },
+    button_secondary: {
+      color: 'lightText',
+      fontSize: 20,
+      textTransform: 'uppercase',
+    },
+    header1: {
+      color: 'darkText',
+      fontWeight: 'bold',
+      fontSize: 28,
+    },
+    header2: {
+      color: 'darkText',
+      fontSize: 24,
+    },
+    body: {
+      color: 'darkText',
+      fontSize: 16,
+      lineHeight: 24,
+    },
+    placeholderText: {
+      color: 'placeholderText',
     },
   },
+  boxVariants: {},
   buttonVariants: {
     primary: {
       backgroundColor: 'primary',
@@ -51,8 +93,8 @@ export const theme = createTheme({
       background: BaseTheme.colors.lightBackground,
       card: BaseTheme.colors.card,
       text: BaseTheme.colors.primary,
-      notification: 'grey',
-      border: 'grey',
+      notification: BaseTheme.colors.default,
+      border: BaseTheme.colors.default,
     },
   },
 });

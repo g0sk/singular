@@ -4,3 +4,5 @@ export * from './Screen';
 export * from './View';
 export * from './ImagePicker';
 export * from './Text';
+export * from './Button';
+export * from './TextInput';

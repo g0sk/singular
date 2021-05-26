@@ -1,19 +1,14 @@
 import React from 'react';
 import {View} from 'components';
 import {ErrorHandler} from 'handlers/error';
+import {Dimensions} from 'react-native';
 
-//View component to handle app errors
-
-const Screen = ({children}: {children: React.ReactNode}) => (
+const HEIGHT = Dimensions.get('window').height;
+const WIDTH = Dimensions.get('window').width;
+export const Screen = ({children}: {children: React.ReactNode}) => (
   <ErrorHandler>
-    <View
-      justifyContent="center"
-      flexDirection="column"
-      //paddingHorizontal="m"
-      flex={1}>
+    <View height={HEIGHT} width={WIDTH}>
       {children}
     </View>
   </ErrorHandler>
 );
-
-export default Screen;

@@ -17,7 +17,9 @@
     "@react-navigation/stack": "^5.14.4",
     "@reduxjs/toolkit": "^1.5.1",
     "@shopify/restyle": "^1.4.0",
+    "@types/react-native-vector-icons": "^6.4.6",
     "axios": "^0.21.1",
+    "formik": "^2.2.7",
     "react": "17.0.1",
     "react-error-boundary": "^3.1.1",
     "react-native": "0.64.0",
@@ -30,7 +32,9 @@
     "react-native-screens": "^3.1.1",
     "react-native-sensitive-info": "^6.0.0-alpha.9",
     "react-native-svg": "^12.1.1",
-    "react-redux": "^7.2.3"
+    "react-native-vector-icons": "^8.1.0",
+    "react-redux": "^7.2.3",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

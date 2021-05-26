@@ -9,6 +9,7 @@ import {setToken, setRefreshToken} from 'core/auth/utils';
 type Token = string | undefined;
 
 type AuthState = {
+  userID: number;
   token: Token;
   refreshToken: Token;
   loading: boolean;
@@ -63,6 +64,7 @@ const authSlice = createSlice({
         state.error = false;
         state.loading = false;
         state.token = action.payload?.token;
+        state.userID = 1;
       })
       .addCase(fetchToken.pending, (state) => {
         state.error = false;

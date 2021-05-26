@@ -1,6 +1,6 @@
 import React from 'react';
-import {Text, View, Button} from 'react-native';
-import Screen from 'components/Screen';
+import {Text, Button} from 'react-native';
+import {View, Screen} from 'components';
 
 export function ErrorFallback({resetErrorBoundary}: any) {
   return (
