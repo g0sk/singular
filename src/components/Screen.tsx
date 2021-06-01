@@ -3,11 +3,11 @@ import {View} from 'components';
 import {ErrorHandler} from 'handlers/error';
 import {Dimensions} from 'react-native';
 
-const HEIGHT = Dimensions.get('window').height;
-const WIDTH = Dimensions.get('window').width;
+const {height, width} = Dimensions.get('window');
+
 export const Screen = ({children}: {children: React.ReactNode}) => (
   <ErrorHandler>
-    <View height={HEIGHT} width={WIDTH}>
+    <View height={height} width={width}>
       {children}
     </View>
   </ErrorHandler>

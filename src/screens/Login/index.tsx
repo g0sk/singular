@@ -1,4 +1,6 @@
 import React from 'react';
+//import * as yup from 'yup';
+//import Formik from 'formik';
 //import {fetchToken} from 'core/auth/authSlice';
 //import {fetchUser} from 'store/slices/UserSlice';
 //import {useAuth} from 'core/auth';
@@ -7,10 +9,9 @@ import {ErrorHandler} from 'handlers/error';
 //import {getToken} from 'core/auth/utils';
 
 import {Button, Text, TextInput, View} from 'components';
-import {Dimensions} from 'react-native';
+import {ImageBackground, Dimensions, ScrollView} from 'react-native';
 
-const HEIGHT = Dimensions.get('window').height;
-const WIDTH = Dimensions.get('window').width;
+const {height, width} = Dimensions.get('window');
 
 export const Login: React.FC = () => {
   //const dispatch = useAppDispatch();
@@ -45,46 +46,56 @@ export const Login: React.FC = () => {
     }
   };
   */
+
+  //
   return (
     <ErrorHandler>
-      <View backgroundColor="primary" padding="l" height={HEIGHT} width={WIDTH}>
-        <View
-          borderRadius={30}
-          backgroundColor="lightBackground"
-          alignContent="center"
-          marginTop="xl"
-          marginHorizontal="s"
-          padding="l">
-          <Text variant="header1" textAlign="center" marginBottom="l">
-            Welcome to Singular
-          </Text>
-          <Text variant="body" textAlign="center">
-            Log in to start using the app
-          </Text>
-          <View marginVertical="m" margin="s">
-            <TextInput
-              icon="mail"
-              placeholder="Enter your email"
-              validator={emailValidator}
-            />
-            <View marginTop="m">
-              <TextInput
-                icon="lock"
-                placeholder="Enter your password"
-                secureTextEntry={true}
-                validator={passwordValidator}
-              />
+      <ScrollView>
+        <ImageBackground
+          source={require('../../../assets/images/purple-background.jpg')}
+          style={{height, width}}>
+          <View padding="l">
+            <View
+              borderRadius={30}
+              backgroundColor="lightBackground"
+              alignContent="center"
+              marginTop="xl"
+              marginHorizontal="s"
+              padding="l">
+              <Text variant="header1" textAlign="center" marginBottom="l">
+                Welcome to Singular
+              </Text>
+              <Text variant="body" textAlign="center">
+                Log in to start using the app
+              </Text>
+              <View>
+                <View marginVertical="m" margin="s">
+                  <TextInput
+                    icon="mail"
+                    placeholder="Enter your email"
+                    validator={emailValidator}
+                  />
+                  <View marginTop="m">
+                    <TextInput
+                      icon="lock"
+                      placeholder="Enter your password"
+                      secureTextEntry={true}
+                      validator={passwordValidator}
+                    />
+                  </View>
+                </View>
+                <Button
+                  marginHorizontal="xl"
+                  marginVertical="s"
+                  variant="secondary"
+                  label="Log in"
+                  onPress={() => null}
+                />
+              </View>
             </View>
           </View>
-          <Button
-            marginHorizontal="xl"
-            marginVertical="s"
-            variant="secondary"
-            label="Log in"
-            onPress={() => null}
-          />
-        </View>
-      </View>
+        </ImageBackground>
+      </ScrollView>
     </ErrorHandler>
   );
 };

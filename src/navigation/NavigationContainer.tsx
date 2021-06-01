@@ -15,7 +15,7 @@ export const NavigationContainer = ({
     <SafeAreaProvider>
       <StatusBar
         barStyle={navigation.dark ? 'dark-content' : 'light-content'}
-        backgroundColor="grey"
+        animated={true}
       />
       <RNNavigationContainer theme={navigation}>
         {children}
