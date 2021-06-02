@@ -1,6 +1,9 @@
 import React from 'react';
-//import * as yup from 'yup';
-//import Formik from 'formik';
+import * as Yup from 'yup';
+import {useFormik} from 'formik';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {ImageBackground, Dimensions} from 'react-native';
+import {Button, Text, TextInput, View} from 'components';
 //import {fetchToken} from 'core/auth/authSlice';
 //import {fetchUser} from 'store/slices/UserSlice';
 //import {useAuth} from 'core/auth';
@@ -8,11 +11,15 @@ import React from 'react';
 import {ErrorHandler} from 'handlers/error';
 //import {getToken} from 'core/auth/utils';
 
-import {Button, Text, TextInput, View} from 'components';
-import {ImageBackground, Dimensions, ScrollView} from 'react-native';
-
 const {height, width} = Dimensions.get('window');
 
+const FormSchema = Yup.object().shape({
+  username: Yup.string().email('Invalid username').required('Required'),
+  password: Yup.string()
+    .min(5, 'Too short')
+    .max(15, 'Too long')
+    .required('Required'),
+});
 export const Login: React.FC = () => {
   //const dispatch = useAppDispatch();
   //const authState = useAppSelector((state) => state.auth);
@@ -26,13 +33,6 @@ export const Login: React.FC = () => {
     });
   };
   */
-  const emailValidator = (email: string): boolean => {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-  };
-  const passwordValidator = (password: string): boolean => {
-    return password.length >= 5;
-  };
 
   /* const navigatorSignIn = async () => {
     try {
@@ -47,10 +47,23 @@ export const Login: React.FC = () => {
   };
   */
 
-  //
+  const {
+    handleChange,
+    handleBlur,
+    //handleSubmit,
+    errors,
+    touched,
+    //values,
+    //setFieldValue,
+  } = useFormik({
+    validationSchema: FormSchema,
+    initialValues: {username: '', password: ''},
+    onSubmit: (values) => console.log(values),
+  });
+
   return (
     <ErrorHandler>
-      <ScrollView>
+      <KeyboardAwareScrollView style={{height, width}}>
         <ImageBackground
           source={require('../../../assets/images/purple-background.jpg')}
           style={{height, width}}>
@@ -73,14 +86,24 @@ export const Login: React.FC = () => {
                   <TextInput
                     icon="mail"
                     placeholder="Enter your email"
-                    validator={emailValidator}
+                    autoCapitalize="none"
+                    autoCompleteType="email"
+                    onChangeText={handleChange('username')}
+                    onBlur={handleBlur('username')}
+                    error={errors.username}
+                    touched={touched.username}
                   />
                   <View marginTop="m">
                     <TextInput
                       icon="lock"
                       placeholder="Enter your password"
                       secureTextEntry={true}
-                      validator={passwordValidator}
+                      autoCapitalize="none"
+                      autoCompleteType="password"
+                      onChangeText={handleChange('password')}
+                      onBlur={handleBlur('password')}
+                      error={errors.password}
+                      touched={touched.password}
                     />
                   </View>
                 </View>
@@ -95,7 +118,7 @@ export const Login: React.FC = () => {
             </View>
           </View>
         </ImageBackground>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </ErrorHandler>
   );
 };

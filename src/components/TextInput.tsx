@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   TextInput as RNTextInput,
   TextInputProps as RNTextInputProps,
@@ -8,26 +8,22 @@ import {View} from './View';
 import {theme} from 'ui/Theme';
 
 interface TextInputProps extends RNTextInputProps {
-  placeholder: string;
   icon: string;
-  validator: (input: string) => boolean;
+  touched?: boolean;
+  error?: string;
 }
 
-type InputState = true | false | null;
 export const TextInput: React.FC<TextInputProps> = ({
   icon,
-  validator,
+  touched,
+  error,
   ...props
 }) => {
-  const [valid, setValid] = useState<InputState>(null);
-  const [input, setInput] = useState<string>('');
-
-  const validate = () => {
-    const isValid = validator(input);
-    setValid(isValid);
-  };
-  const color: keyof typeof theme.colors =
-    valid === null ? 'default' : valid === true ? 'primary' : 'error';
+  const color: keyof typeof theme.colors = !touched
+    ? 'default'
+    : error
+    ? 'error'
+    : 'primary';
 
   const iconColor = theme.colors[color];
 
@@ -47,21 +43,19 @@ export const TextInput: React.FC<TextInputProps> = ({
         <RNTextInput
           underlineColorAndroid="transparent"
           selectionColor={theme.colors.primary}
-          onBlur={validate}
-          onChangeText={(value) => setInput(value)}
           placeholderTextColor={iconColor}
           {...props}
         />
       </View>
-      {(valid === true || valid === false) && (
+      {touched && (
         <View
           borderRadius={theme.borderRadius.l}
           justifyContent="center"
           alignItems="center"
           height={18}
           width={18}
-          backgroundColor={valid === true ? 'primary' : 'error'}>
-          <Icon name={valid ? 'check' : 'x'} color="white" size={10} />
+          backgroundColor={!error ? 'primary' : 'error'}>
+          <Icon name={!error ? 'check' : 'x'} color="white" size={10} />
         </View>
       )}
     </View>
