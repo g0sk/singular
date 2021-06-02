@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  useTheme as useReTheme,
   ThemeProvider as RestyleProvider,
   TextProps,
   BoxProps,
@@ -48,7 +49,7 @@ const BaseTheme = {
   breakpoints: {},
 };
 
-export const theme = createTheme({
+const theme = createTheme({
   ...BaseTheme,
   textVariants: {
     button_primary: {
@@ -100,6 +101,7 @@ export const theme = createTheme({
 });
 
 export type Theme = typeof theme;
+export const useTheme = () => useReTheme<Theme>();
 export const ThemeProvider = ({children}: {children: React.ReactNode}) => (
   <RestyleProvider theme={theme}>{children}</RestyleProvider>
 );

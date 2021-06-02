@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {View} from './View';
-import {theme} from 'ui/Theme';
+import {useTheme} from 'ui/Theme';
 
 interface TextInputProps extends RNTextInputProps {
   icon: string;
@@ -19,6 +19,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   error,
   ...props
 }) => {
+  const theme = useTheme();
   const color: keyof typeof theme.colors = !touched
     ? 'default'
     : error
