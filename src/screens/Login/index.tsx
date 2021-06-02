@@ -3,38 +3,46 @@ import * as Yup from 'yup';
 import {useFormik} from 'formik';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {ImageBackground, Dimensions} from 'react-native';
-import {Button, Text, TextInput, View} from 'components';
-//import {fetchToken} from 'core/auth/authSlice';
-//import {fetchUser} from 'store/slices/UserSlice';
-//import {useAuth} from 'core/auth';
-//import {useAppDispatch, useAppSelector} from 'store/configureStore';
+import {Button, CheckBox, Text, TextInput, View} from 'components';
+import {fetchToken} from 'core/auth/authSlice';
+import {fetchUser} from 'store/slices/UserSlice';
+import {useAuth} from 'core/auth';
+import {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {ErrorHandler} from 'handlers/error';
-//import {getToken} from 'core/auth/utils';
+import {getToken} from 'core/auth/utils';
 
 const {height, width} = Dimensions.get('window');
 
-const FormSchema = Yup.object().shape({
+const LoginSchema = Yup.object().shape({
   username: Yup.string().email('Invalid username').required('Required'),
   password: Yup.string()
     .min(5, 'Too short')
     .max(15, 'Too long')
     .required('Required'),
+  saveCredentials: Yup.boolean(),
 });
+interface FormValues {
+  username: string;
+  password: string;
+  saveCredentials: boolean;
+}
+
 export const Login: React.FC = () => {
-  //const dispatch = useAppDispatch();
-  //const authState = useAppSelector((state) => state.auth);
-  //const {signIn} = useAuth();
-  /*
-  const login = ({username, password}) => {
-    const credentials = {username, password};
-    dispatch(fetchToken(credentials)).then(() => {
-      dispatch(fetchUser(authState.userID));
+  const dispatch = useAppDispatch();
+  const authState = useAppSelector((state) => state.auth);
+  const {signIn} = useAuth();
+
+  const login = ({username, password}: FormValues) => {
+    /*if (saveCredentials) {
+      saveCredentials({username, password});
+    }*/
+    dispatch(fetchToken({username, password})).then(() => {
+      dispatch(fetchUser());
       navigatorSignIn();
     });
   };
-  */
 
-  /* const navigatorSignIn = async () => {
+  const navigatorSignIn = async () => {
     try {
       const token = await getToken();
       console.log('Token: ', token);
@@ -45,20 +53,19 @@ export const Login: React.FC = () => {
       throw 'Token not found on device';
     }
   };
-  */
 
   const {
     handleChange,
     handleBlur,
-    //handleSubmit,
+    handleSubmit,
     errors,
     touched,
-    //values,
-    //setFieldValue,
+    values,
+    setFieldValue,
   } = useFormik({
-    validationSchema: FormSchema,
-    initialValues: {username: '', password: ''},
-    onSubmit: (values) => console.log(values),
+    validationSchema: LoginSchema,
+    initialValues: {username: '', password: '', saveCredentials: true},
+    onSubmit: (formValues: FormValues) => login(formValues),
   });
 
   return (
@@ -78,7 +85,7 @@ export const Login: React.FC = () => {
               <Text variant="header1" textAlign="center" marginBottom="l">
                 Welcome to Singular
               </Text>
-              <Text variant="body" textAlign="center">
+              <Text variant="description" textAlign="center">
                 Log in to start using the app
               </Text>
               <View>
@@ -92,6 +99,7 @@ export const Login: React.FC = () => {
                     onBlur={handleBlur('username')}
                     error={errors.username}
                     touched={touched.username}
+                    onSubmitEditing={() => handleSubmit()}
                   />
                   <View marginTop="m">
                     <TextInput
@@ -104,16 +112,30 @@ export const Login: React.FC = () => {
                       onBlur={handleBlur('password')}
                       error={errors.password}
                       touched={touched.password}
+                      onSubmitEditing={() => handleSubmit()}
+                    />
+                  </View>
+                  <View paddingTop="m" paddingHorizontal="s">
+                    <CheckBox
+                      label="Remember me"
+                      checked={values.saveCredentials}
+                      onChange={() =>
+                        setFieldValue(
+                          'saveCredentials',
+                          !values.saveCredentials,
+                        )
+                      }
                     />
                   </View>
                 </View>
-                <Button
-                  marginHorizontal="xl"
-                  marginVertical="s"
-                  variant="secondary"
-                  label="Log in"
-                  onPress={() => null}
-                />
+                <View marginHorizontal="m">
+                  <Button
+                    variant="secondary"
+                    label="Log in"
+                    onPress={() => handleSubmit()}
+                    loading={authState.loading}
+                  />
+                </View>
               </View>
             </View>
           </View>

@@ -14,6 +14,7 @@ type AuthState = {
   refreshToken: Token;
   loading: boolean;
   error: boolean;
+  errorCode: string | undefined;
 };
 
 const initialState = {
@@ -32,6 +33,9 @@ export const fetchToken = createAsyncThunk(
         setToken(response.data.token);
         setRefreshToken(response.data.refresh_token);
         return response.data;
+      }
+      if (response.status === 401) {
+        return response;
       }
     } catch (error) {
       return isRejectedWithValue(error);
@@ -70,8 +74,9 @@ const authSlice = createSlice({
         state.error = false;
         state.loading = true;
       })
-      .addCase(fetchToken.rejected, (state) => {
+      .addCase(fetchToken.rejected, (state, action) => {
         state.error = true;
+        state.errorCode = action.error.code;
         state.loading = false;
       })
       .addCase(fetchRefreshToken.fulfilled, (state, action) => {

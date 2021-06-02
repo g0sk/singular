@@ -15,18 +15,19 @@ const createTheme = <T extends ThemeType>(themeObject: T): T => themeObject;
 
 const BaseTheme = {
   colors: {
-    primary: '#593ac1',
-    secondary: '#ffc107',
-    blue: '#1f155e',
-    lightBackground: '#ffffff',
     background: '#000b31',
+    blue: '#1f155e',
     card: '#ffffff',
-    lightText: '#ffffff',
     darkText: '#000',
     default: '#9b9b9b',
-    placeholderText: '#716d6d',
-    white: '#fff',
+    description: '#393939',
     error: '#c90404',
+    lightBackground: '#ffffff',
+    lightText: '#ffffff',
+    placeholderText: '#716d6d',
+    primary: '#593ac1',
+    secondary: '#ffc107',
+    white: '#fff',
   },
   borderRadius: {
     s: 4,
@@ -57,8 +58,12 @@ const theme = createTheme({
     },
     button_secondary: {
       color: 'lightText',
-      fontSize: 20,
+      fontSize: 15,
       textTransform: 'uppercase',
+    },
+    checkBox: {
+      color: 'description',
+      fontSize: 12,
     },
     header1: {
       color: 'darkText',
@@ -74,11 +79,16 @@ const theme = createTheme({
       fontSize: 16,
       lineHeight: 24,
     },
+    description: {
+      color: 'description',
+      fontSize: 16,
+      lineHeight: 24,
+    },
     placeholderText: {
       color: 'placeholderText',
     },
   },
-  boxVariants: {},
+  viewVariants: {},
   buttonVariants: {
     primary: {
       backgroundColor: 'primary',

@@ -27,7 +27,7 @@ const initialState = {
 
 export const fetchUser = createAsyncThunk(
   'user/fetchUser',
-  async (userID: number) => {
+  async (userID: number = 1) => {
     try {
       const response = await UserApi.getUser(userID);
       if (response.status === 200) {
