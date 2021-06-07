@@ -45,11 +45,11 @@ const userSlice = createSlice({
         state.error = false;
         state.loading = false;
         state.user = {
-          id: action.payload.user.id,
-          username: action.payload.user.username,
-          name: action.payload.user.name,
-          lastName: action.payload.user.lastName,
-          email: action.payload.user.email,
+          id: action.payload.id,
+          username: action.payload.username,
+          name: action.payload.name,
+          lastName: action.payload.lastName,
+          email: action.payload.email,
         };
       })
       .addCase(fetchUser.pending, (state) => {

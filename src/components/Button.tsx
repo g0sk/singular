@@ -58,7 +58,7 @@ export const Button: React.FC<ButtonProps> = ({
         justifyContent="center"
         {...props}>
         {loading ? (
-          <ActivityIndicator size="small" />
+          <ActivityIndicator size="small" color="white" />
         ) : (
           <Text variant={textVariant as Partial<keyof Theme['textVariants']>}>
             {label}

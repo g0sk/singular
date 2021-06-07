@@ -92,6 +92,7 @@ const theme = createTheme({
   buttonVariants: {
     primary: {
       backgroundColor: 'primary',
+      loadingSpinner: 'primary',
     },
     secondary: {
       backgroundColor: 'secondary',

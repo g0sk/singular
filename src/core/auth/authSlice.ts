@@ -80,7 +80,7 @@ const authSlice = createSlice({
         state.error = false;
         state.errorData = null;
         state.loading = false;
-        state.token = action.payload?.token;
+        state.token = action.payload.token;
         state.userID = action.payload.user_data.id;
       })
       .addCase(fetchToken.pending, (state) => {
@@ -89,8 +89,6 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchToken.rejected, (state, action) => {
-        console.log('rejected');
-        console.log(action.payload);
         state.error = true;
         state.loading = false;
         if (action.payload) {
@@ -100,7 +98,7 @@ const authSlice = createSlice({
       .addCase(fetchRefreshToken.fulfilled, (state, action) => {
         state.error = false;
         state.loading = false;
-        state.token = action.payload?.token;
+        state.token = action.payload.token;
       })
       .addCase(fetchRefreshToken.pending, (state) => {
         state.error = false;
