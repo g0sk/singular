@@ -39,12 +39,12 @@ export function initialize(): void {
       if (!error.response) {
         return Promise.reject(error);
       }
-      const {
-        config,
-        response: {status},
-      } = error;
+      const {config, response} = error;
       const refreshToken: Token = await getRefreshToken();
-      if (status === 401 && refreshToken !== null) {
+      if (response.status === 401 && refreshToken === null) {
+        return Promise.reject(response.data);
+      }
+      if (response.status === 401 && refreshToken !== null) {
         let originalRequest = config;
         const originalPath = originalRequest.url?.replace(
           originalRequest.url,

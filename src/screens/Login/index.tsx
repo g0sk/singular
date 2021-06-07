@@ -2,7 +2,7 @@ import React from 'react';
 import * as Yup from 'yup';
 import {useFormik} from 'formik';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {ImageBackground, Dimensions} from 'react-native';
+import {ImageBackground, Dimensions, ToastAndroid} from 'react-native';
 import {Button, CheckBox, Text, TextInput, View} from 'components';
 import {fetchToken} from 'core/auth/authSlice';
 import {fetchUser} from 'store/slices/UserSlice';
@@ -30,15 +30,26 @@ interface FormValues {
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const authState = useAppSelector((state) => state.auth);
-  const {signIn} = useAuth();
+  const {signIn, signOut} = useAuth();
 
   const login = ({username, password}: FormValues) => {
     /*if (saveCredentials) {
       saveCredentials({username, password});
     }*/
     dispatch(fetchToken({username, password})).then(() => {
-      dispatch(fetchUser());
-      navigatorSignIn();
+      const {error, errorData} = authState;
+      if (error && errorData !== null) {
+        ToastAndroid.showWithGravity(
+          errorData.message,
+          ToastAndroid.CENTER,
+          ToastAndroid.SHORT,
+        );
+        //Delete device token, so when app restarts it doesn't jump to home screen
+        signOut();
+      } else {
+        dispatch(fetchUser(authState.userID));
+        navigatorSignIn();
+      }
     });
   };
 

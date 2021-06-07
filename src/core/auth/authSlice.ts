@@ -1,8 +1,4 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  isRejectedWithValue,
-} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import AuthApi, {Credentials} from 'api/authApi';
 import {setToken, setRefreshToken} from 'core/auth/utils';
 
@@ -14,38 +10,54 @@ type AuthState = {
   refreshToken: Token;
   loading: boolean;
   error: boolean;
-  errorCode: string | undefined;
+  errorData: ErrorData | null;
 };
+
+type AuthResponse = {
+  token: Token;
+  user_data: {
+    id: number;
+    username: string;
+  };
+  refreshToken: Token;
+};
+
+type ErrorData = {
+  code: number;
+  message: string;
+} | null;
 
 const initialState = {
   token: undefined,
   refreshToken: undefined,
   loading: false,
   error: false,
+  errorData: null,
 } as AuthState;
 
-export const fetchToken = createAsyncThunk(
-  'auth/fetchToken',
-  async (credentials: Credentials) => {
-    try {
-      const response = await AuthApi.fetchToken(credentials);
-      if (response.status === 200) {
-        setToken(response.data.token);
-        setRefreshToken(response.data.refresh_token);
-        return response.data;
-      }
-      if (response.status === 401) {
-        return response;
-      }
-    } catch (error) {
-      return isRejectedWithValue(error);
+export const fetchToken = createAsyncThunk<
+  AuthResponse,
+  Credentials,
+  {rejectValue: ErrorData}
+>('auth/fetchToken', async (credentials: Credentials, thunkApi) => {
+  try {
+    const response = await AuthApi.fetchToken(credentials);
+    if (response.status === 200) {
+      setToken(response.data.token);
+      setRefreshToken(response.data.refresh_token);
+      return response.data;
     }
-  },
-);
+  } catch (error) {
+    if (!error) {
+      throw error;
+    }
+    return thunkApi.rejectWithValue(error as ErrorData);
+  }
+});
 
 export const fetchRefreshToken = createAsyncThunk(
   'auth/fetchRefreshToken',
-  async (refreshToken: string) => {
+  async (refreshToken: string, {rejectWithValue}) => {
     try {
       const response = await AuthApi.fetchRefreshToken(refreshToken);
       if (response.status === 200) {
@@ -53,7 +65,7 @@ export const fetchRefreshToken = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      return isRejectedWithValue(error);
+      return rejectWithValue(error);
     }
   },
 );
@@ -66,18 +78,24 @@ const authSlice = createSlice({
     builder
       .addCase(fetchToken.fulfilled, (state, action) => {
         state.error = false;
+        state.errorData = null;
         state.loading = false;
         state.token = action.payload?.token;
-        state.userID = 1;
+        state.userID = action.payload.user_data.id;
       })
       .addCase(fetchToken.pending, (state) => {
         state.error = false;
+        state.errorData = null;
         state.loading = true;
       })
       .addCase(fetchToken.rejected, (state, action) => {
+        console.log('rejected');
+        console.log(action.payload);
         state.error = true;
-        state.errorCode = action.error.code;
         state.loading = false;
+        if (action.payload) {
+          state.errorData = action.payload;
+        }
       })
       .addCase(fetchRefreshToken.fulfilled, (state, action) => {
         state.error = false;

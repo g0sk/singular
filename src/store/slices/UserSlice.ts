@@ -1,8 +1,4 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  isRejectedWithValue,
-} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import UserApi from 'api/userApi';
 
 interface User {
@@ -27,14 +23,14 @@ const initialState = {
 
 export const fetchUser = createAsyncThunk(
   'user/fetchUser',
-  async (userID: number = 1) => {
+  async (userID: number) => {
     try {
       const response = await UserApi.getUser(userID);
       if (response.status === 200) {
         return response.data;
       }
     } catch (error) {
-      return isRejectedWithValue(error);
+      throw error;
     }
   },
 );
