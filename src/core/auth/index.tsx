@@ -1,6 +1,18 @@
 /// Auth.tsx
 import * as React from 'react';
-import {getToken, setToken, removeToken, removeRefreshToken} from './utils';
+import store from 'store/configureStore';
+import {fetchToken} from 'core/auth/authSlice';
+import {fetchUser} from 'store/slices/UserSlice';
+import {
+  getToken,
+  setToken,
+  removeToken,
+  removeRefreshToken,
+  getUsername,
+  removeUsername,
+  getPassword,
+  removePassword,
+} from './utils';
 
 interface AuthState {
   userToken: string | undefined | null;
@@ -44,16 +56,28 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     const initState = async () => {
       try {
         const userToken = await getToken();
+        const username = await getUsername();
+        const password = await getPassword();
         console.log(userToken);
 
-        if (userToken !== null) {
-          dispatch({type: 'SIGN_IN', token: userToken});
-        } else {
+        if (userToken === null) {
+          if (username !== null && password !== null) {
+            store.dispatch(fetchToken({username, password})).then(() => {
+              const authState = store.getState();
+              const newToken = authState.auth.token;
+              if (newToken) {
+                const userID = authState.auth.userID;
+                store.dispatch(fetchUser(userID));
+                dispatch({type: 'SIGN_IN', token: newToken});
+              }
+            });
+          }
           dispatch({type: 'SIGN_OUT'});
+        } else {
+          dispatch({type: 'SIGN_IN', token: userToken});
         }
       } catch (e) {
-        // catch error here
-        // Maybe sign_out user!
+        throw e;
       }
     };
 
@@ -75,6 +99,8 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
       signOut: async () => {
         await removeToken();
         await removeRefreshToken();
+        await removeUsername();
+        await removePassword();
         dispatch({type: 'SIGN_OUT'});
       },
     }),

@@ -2,24 +2,22 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import AuthApi, {Credentials} from 'api/authApi';
 import {setToken, setRefreshToken} from 'core/auth/utils';
 
-type Token = string | undefined;
-
 type AuthState = {
   userID: number;
-  token: Token;
-  refreshToken: Token;
+  token: string | null;
+  refreshToken: null;
   loading: boolean;
   error: boolean;
   errorData: ErrorData | null;
 };
 
 type AuthResponse = {
-  token: Token;
+  token: string;
   user_data: {
     id: number;
     username: string;
   };
-  refreshToken: Token;
+  refreshToken: string;
 };
 
 type ErrorData = {
@@ -28,8 +26,8 @@ type ErrorData = {
 } | null;
 
 const initialState = {
-  token: undefined,
-  refreshToken: undefined,
+  token: null,
+  refreshToken: null,
   loading: false,
   error: false,
   errorData: null,

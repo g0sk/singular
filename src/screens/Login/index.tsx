@@ -9,7 +9,7 @@ import {fetchUser} from 'store/slices/UserSlice';
 import {useAuth} from 'core/auth';
 import {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {ErrorHandler} from 'handlers/error';
-import {getToken} from 'core/auth/utils';
+import {getToken, setUsername, setPassword} from 'core/auth/utils';
 
 const {height, width} = Dimensions.get('window');
 
@@ -21,6 +21,7 @@ const LoginSchema = Yup.object().shape({
     .required('Required'),
   saveCredentials: Yup.boolean(),
 });
+
 interface FormValues {
   username: string;
   password: string;
@@ -30,12 +31,13 @@ interface FormValues {
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const authState = useAppSelector((state) => state.auth);
-  const {signIn, signOut} = useAuth();
+  const {signIn} = useAuth();
 
-  const login = ({username, password}: FormValues) => {
-    /*if (saveCredentials) {
-      saveCredentials({username, password});
-    }*/
+  const login = ({username, password, saveCredentials}: FormValues) => {
+    if (saveCredentials) {
+      setUsername(username);
+      setPassword(password);
+    }
     dispatch(fetchToken({username, password})).then(() => {
       const {error, errorData} = authState;
       if (error && errorData !== null) {
@@ -44,11 +46,11 @@ export const Login: React.FC = () => {
           ToastAndroid.CENTER,
           ToastAndroid.SHORT,
         );
-        //Delete device token, so when app restarts it doesn't jump to home screen
-        signOut();
       } else {
-        dispatch(fetchUser(authState.userID));
-        navigatorSignIn();
+        if (authState.userID) {
+          dispatch(fetchUser(authState.userID));
+          navigatorSignIn();
+        }
       }
     });
   };
@@ -59,9 +61,11 @@ export const Login: React.FC = () => {
       console.log('Token: ', token);
       if (token !== null) {
         signIn(token);
+      } else {
+        console.log('Token not found on device');
       }
     } catch (e) {
-      throw 'Token not found on device';
+      throw e;
     }
   };
 
@@ -75,10 +79,13 @@ export const Login: React.FC = () => {
     setFieldValue,
   } = useFormik({
     validationSchema: LoginSchema,
-    initialValues: {username: '', password: '', saveCredentials: true},
+    initialValues: {
+      username: '',
+      password: '',
+      saveCredentials: true,
+    },
     onSubmit: (formValues: FormValues) => login(formValues),
   });
-
   return (
     <ErrorHandler>
       <KeyboardAwareScrollView style={{height, width}}>
