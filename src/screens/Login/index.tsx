@@ -1,8 +1,13 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import * as Yup from 'yup';
 import {useFormik} from 'formik';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {ImageBackground, Dimensions, ToastAndroid} from 'react-native';
+import {
+  ImageBackground,
+  Dimensions,
+  TextInput as RNTextInput,
+  ToastAndroid,
+} from 'react-native';
 import {Button, CheckBox, Text, TextInput, View} from 'components';
 import {fetchToken} from 'core/auth/authSlice';
 import {fetchUser} from 'store/slices/UserSlice';
@@ -39,28 +44,24 @@ export const Login: React.FC = () => {
       setPassword(password);
     }
     dispatch(fetchToken({username, password})).then(() => {
-      const {error, errorData} = authState;
-      if (error && errorData !== null) {
+      if (authState.error && authState.errorData !== null) {
         ToastAndroid.showWithGravity(
-          errorData.message,
+          authState.errorData.message,
           ToastAndroid.CENTER,
           ToastAndroid.SHORT,
         );
       } else {
-        if (authState.userID) {
-          dispatch(fetchUser(authState.userID));
-          navigatorSignIn();
-        }
+        dispatch(fetchUser(authState.userID));
+        navigatorSignIn();
       }
     });
   };
 
   const navigatorSignIn = async () => {
     try {
-      const token = await getToken();
-      console.log('Token: ', token);
-      if (token !== null) {
-        signIn(token);
+      const userToken = await getToken();
+      if (userToken !== null) {
+        signIn(userToken);
       } else {
         console.log('Token not found on device');
       }
@@ -69,6 +70,7 @@ export const Login: React.FC = () => {
     }
   };
 
+  const password = useRef<RNTextInput>(null);
   const {
     handleChange,
     handleBlur,
@@ -117,10 +119,12 @@ export const Login: React.FC = () => {
                     onBlur={handleBlur('username')}
                     error={errors.username}
                     touched={touched.username}
-                    onSubmitEditing={() => handleSubmit()}
+                    returnKeyLabel="next"
+                    onSubmitEditing={() => password.current?.focus()}
                   />
                   <View marginTop="m">
                     <TextInput
+                      ref={password}
                       icon="lock"
                       placeholder="Enter your password"
                       secureTextEntry={true}
@@ -130,6 +134,7 @@ export const Login: React.FC = () => {
                       onBlur={handleBlur('password')}
                       error={errors.password}
                       touched={touched.password}
+                      returnKeyLabel="go"
                       onSubmitEditing={() => handleSubmit()}
                     />
                   </View>

@@ -58,7 +58,6 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
         const userToken = await getToken();
         const username = await getUsername();
         const password = await getPassword();
-        console.log(userToken);
 
         if (userToken === null) {
           if (username !== null && password !== null) {
