@@ -2,11 +2,12 @@ import * as React from 'react';
 import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Home, Document, Scan} from 'screens';
-import {HomeIcon, DocumentIcon} from 'ui/icons';
-import {ScanButton} from 'components/Scan/ScanButton';
+import {useTheme} from 'ui/Theme';
+import Icon from 'react-native-vector-icons/Feather';
 
 const Tab = createBottomTabNavigator();
 export const TabNavigator = () => {
+  const theme = useTheme();
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -17,21 +18,39 @@ export const TabNavigator = () => {
         name="Home"
         component={Home}
         options={{
-          tabBarIcon: ({focused}) => <HomeIcon active={focused} />,
+          tabBarIcon: ({focused}) => (
+            <Icon
+              name="home"
+              size={25}
+              color={focused ? theme.colors.primary : theme.colors.default}
+            />
+          ),
         }}
       />
       <Tab.Screen
         name="Scan"
         component={Scan}
         options={{
-          tabBarIcon: () => <ScanButton height={55} width={55} />,
+          tabBarIcon: ({focused}) => (
+            <Icon
+              name="bluetooth"
+              size={25}
+              color={focused ? theme.colors.primary : theme.colors.default}
+            />
+          ),
         }}
       />
       <Tab.Screen
         name="Document"
         component={Document}
         options={{
-          tabBarIcon: ({focused}) => <DocumentIcon active={focused} />,
+          tabBarIcon: ({focused}) => (
+            <Icon
+              name="file"
+              size={25}
+              color={focused ? theme.colors.primary : theme.colors.default}
+            />
+          ),
         }}
       />
     </Tab.Navigator>
@@ -42,11 +61,7 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     flex: 1,
-    bottom: 15,
-    right: 20,
-    left: 20,
     backgroundColor: '#ffffff',
-    borderRadius: 20,
-    height: 90,
+    height: 60,
   },
 });

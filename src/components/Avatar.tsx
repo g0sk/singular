@@ -1,22 +1,25 @@
 import React from 'react';
+import {API_URL} from '@env';
 import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {} from '@react-navigation/native';
 
 export interface AvatarProps {
   hasBorder?: boolean;
   placeholderImg?: Image;
-  uri: string | undefined;
+  uri?: string | undefined;
+  isContentUrl?: boolean;
   height?: number;
   width?: number;
-  containerHeight?: number;
-  containerWidth?: number;
 }
 
 export const Avatar: React.FC<AvatarProps> = ({
   uri,
+  isContentUrl,
   hasBorder,
   height,
   width,
 }) => {
+  const mediaUrl = isContentUrl ? API_URL + uri : uri;
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => null}>
@@ -24,7 +27,9 @@ export const Avatar: React.FC<AvatarProps> = ({
           style={hasBorder ? styles.avatarWithBorder : styles.avatarNoBorder}
           height={height}
           width={width}
-          source={{uri}}
+          source={
+            uri ? {uri: mediaUrl} : require('../../assets/images/user.png')
+          }
         />
       </TouchableOpacity>
     </View>
@@ -33,18 +38,24 @@ export const Avatar: React.FC<AvatarProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    height: 90,
-    width: 90,
-    padding: 10,
-    //margin: 20,
+    //padding: 5,
   },
   avatarWithBorder: {
-    borderRadius: 70,
+    borderRadius: 30,
     borderWidth: 3,
-    borderColor: '#1f155e',
+    borderColor: '#593ac1',
   },
   avatarNoBorder: {
     borderRadius: 70,
+    //borderWidth: 3,
+  },
+  iconBorder: {
+    justifyContent: 'center',
+    borderRadius: 30,
     borderWidth: 3,
+    borderColor: '#593ac1',
+  },
+  iconNoBorder: {
+    borderRadius: 70,
   },
 });

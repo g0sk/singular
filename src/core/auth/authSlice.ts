@@ -5,7 +5,7 @@ import {setToken, setRefreshToken} from 'core/auth/utils';
 type AuthState = {
   userID: number;
   token: string | null;
-  refreshToken: null;
+  refreshToken: string | null;
   loading: boolean;
   error: boolean;
   errorData: ErrorData | null;
@@ -18,6 +18,11 @@ type AuthResponse = {
     username: string;
   };
   refreshToken: string;
+};
+
+type RefreshTokenResponse = {
+  token: string;
+  refresh_token: string;
 };
 
 type ErrorData = {
@@ -49,33 +54,31 @@ export const fetchToken = createAsyncThunk<
     if (!error) {
       throw error;
     }
-    return thunkApi.rejectWithValue(error as ErrorData);
+    return thunkApi.rejectWithValue(error);
   }
 });
 
-export const fetchRefreshToken = createAsyncThunk(
-  'auth/fetchRefreshToken',
-  async (refreshToken: string, {rejectWithValue}) => {
-    try {
-      const response = await AuthApi.fetchRefreshToken(refreshToken);
-      if (response.status === 200) {
-        setRefreshToken(response.data.token);
-        return response.data;
-      }
-    } catch (error) {
-      return rejectWithValue(error);
+export const fetchRefreshToken = createAsyncThunk<
+  RefreshTokenResponse,
+  string,
+  {rejectValue: ErrorData}
+>('auth/fetchRefreshToken', async (refreshToken: string) => {
+  try {
+    const response = await AuthApi.fetchRefreshToken(refreshToken);
+    if (response.status === 200) {
+      setToken(response.data.token);
+      setRefreshToken(response.data.refresh_token);
+      return response.data;
     }
-  },
-);
+  } catch (error) {
+    throw error;
+  }
+});
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: initialState,
-  reducers: {
-    logOut: () => {
-      return initialState;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchToken.fulfilled, (state, action) => {
@@ -101,6 +104,7 @@ const authSlice = createSlice({
         state.error = false;
         state.loading = false;
         state.token = action.payload.token;
+        state.refreshToken = action.payload.refresh_token;
       })
       .addCase(fetchRefreshToken.pending, (state) => {
         state.error = false;

@@ -7,3 +7,4 @@ export * from './Text';
 export * from './Button';
 export * from './TextInput';
 export * from './CheckBox';
+export * from './SearchBox';

@@ -56,24 +56,10 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     const initState = async () => {
       try {
         const userToken = await getToken();
-        const username = await getUsername();
-        const password = await getPassword();
-
-        if (userToken === null) {
-          if (username !== null && password !== null) {
-            store.dispatch(fetchToken({username, password})).then(() => {
-              const authState = store.getState();
-              const newToken = authState.auth.token;
-              if (newToken) {
-                const userID = authState.auth.userID;
-                store.dispatch(fetchUser(userID));
-                dispatch({type: 'SIGN_IN', token: newToken});
-              }
-            });
-          }
-          dispatch({type: 'SIGN_OUT'});
-        } else {
+        if (userToken) {
           dispatch({type: 'SIGN_IN', token: userToken});
+        } else {
+          dispatch({type: 'SIGN_OUT'});
         }
       } catch (e) {
         throw e;

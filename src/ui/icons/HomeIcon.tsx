@@ -1,34 +1,25 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
-import {
-  IconProps,
-  Colors,
-  ICON_TAB_BAR_HEIGHT,
-  ICON_TAB_BAR_WIDTH,
-} from './icon-constants';
+import {useTheme} from 'ui/Theme';
+import {IconProps} from './icon-constants';
 
 export const HomeIcon: React.FC<IconProps> = ({active}) => {
+  const theme = useTheme();
   return (
     <Svg
-      width={ICON_TAB_BAR_WIDTH}
-      height={ICON_TAB_BAR_HEIGHT}
-      viewBox="0 0 512 512">
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill={active ? theme.colors.primary : 'none'}
+      stroke={theme.colors.primary}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round">
       <Path
-        d="M80 212v236a16 16 0 0016 16h96V328a24 24 0 0124-24h80a24 24 0 0124 24v136h96a16 16 0 0016-16V212"
-        fill={active ? Colors.primary : 'none'}
-        stroke={Colors.primary}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={32}
+        fill={active ? 'white' : 'none'}
+        d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"
       />
-      <Path
-        d="M480 256L266.89 52c-5-5.28-16.69-5.34-21.78 0L32 256m368-77V64h-48v69"
-        fill={active ? Colors.primary : 'none'}
-        stroke={Colors.primary}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={32}
-      />
+      <Path fill={active ? theme.colors.primary : 'none'} d="M9 22V12h6v10" />
     </Svg>
   );
 };

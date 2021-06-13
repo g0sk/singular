@@ -1,5 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import UserApi from 'api/userApi';
+import MediaApi from 'api/mediaApi';
 
 interface User {
   id: number;
@@ -7,6 +8,13 @@ interface User {
   name: string;
   lastName: string;
   email: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+  image?: {
+    id: number;
+    contentUrl: string;
+  };
 }
 
 interface UserState {
@@ -20,6 +28,20 @@ const initialState = {
   error: false,
   user: null,
 } as UserState;
+
+export const fetchUserImage = createAsyncThunk(
+  'user/fetchUserImage',
+  async (contentUrl: string) => {
+    try {
+      const response = await MediaApi.getMediaImage(contentUrl);
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+);
 
 export const fetchUser = createAsyncThunk(
   'user/fetchUser',
@@ -44,13 +66,7 @@ const userSlice = createSlice({
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.error = false;
         state.loading = false;
-        state.user = {
-          id: action.payload.id,
-          username: action.payload.username,
-          name: action.payload.name,
-          lastName: action.payload.lastName,
-          email: action.payload.email,
-        };
+        state.user = action.payload;
       })
       .addCase(fetchUser.pending, (state) => {
         state.error = false;
