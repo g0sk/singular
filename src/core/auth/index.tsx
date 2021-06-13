@@ -1,16 +1,11 @@
 /// Auth.tsx
 import * as React from 'react';
-import store from 'store/configureStore';
-import {fetchToken} from 'core/auth/authSlice';
-import {fetchUser} from 'store/slices/UserSlice';
 import {
   getToken,
   setToken,
   removeToken,
   removeRefreshToken,
-  getUsername,
   removeUsername,
-  getPassword,
   removePassword,
 } from './utils';
 
