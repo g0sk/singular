@@ -74,6 +74,10 @@ const theme = createTheme({
       color: 'darkText',
       fontSize: 24,
     },
+    headerUsername: {
+      color: 'darkText',
+      fontSize: 19,
+    },
     body: {
       color: 'darkText',
       fontSize: 16,

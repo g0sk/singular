@@ -16,7 +16,8 @@ export const Home = ({}) => {
         <Header
           label={name}
           contentUrl={user?.image?.contentUrl}
-          iconName="bell"
+          defaultIcon="bell"
+          hasExtraIcon={false}
         />
       </View>
     </Screen>

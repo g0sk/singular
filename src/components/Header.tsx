@@ -7,13 +7,19 @@ interface HeaderProps {
   contentUrl?: string;
   uri?: string;
   label?: string;
-  iconName: string;
+  defaultIcon: string;
+  hasExtraIcon?: boolean;
+  extraIcon?: string;
+  defaultAction?: () => void;
+  extraAction?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   contentUrl,
   label = undefined,
-  iconName,
+  defaultIcon,
+  hasExtraIcon = false,
+  extraIcon,
 }) => {
   return (
     <View style={styles.headerContainer}>
@@ -28,13 +34,22 @@ export const Header: React.FC<HeaderProps> = ({
           />
         </View>
         <View style={styles.label}>
-          <Text>{label}</Text>
+          <Text variant="headerUsername">{label}</Text>
         </View>
       </View>
-      <View style={styles.notification}>
-        <TouchableOpacity onPress={() => null}>
-          <Icon name={iconName} size={25} />
-        </TouchableOpacity>
+      <View style={!hasExtraIcon ? styles.icon : styles.icons}>
+        {hasExtraIcon && extraIcon && (
+          <View style={styles.extraIcon}>
+            <TouchableOpacity onPress={() => null}>
+              <Icon name={extraIcon} size={25} />
+            </TouchableOpacity>
+          </View>
+        )}
+        <View style={styles.defaultIcon}>
+          <TouchableOpacity onPress={() => null}>
+            <Icon name={defaultIcon} size={25} />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -46,22 +61,36 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     alignItems: 'center',
     flexDirection: 'row',
-    padding: 0,
   },
   userInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: 300,
-    minWidth: 275,
+    minWidth: 200,
+    width: 250,
   },
   avatar: {
     paddingRight: 7,
   },
   label: {
-    paddingTop: 10,
+    paddingTop: 5,
   },
-  notification: {
-    width: 80,
-    //marginLeft: 170,
+  icon: {
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    width: 100,
+    justifyContent: 'center',
+  },
+  icons: {
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    width: 100,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  defaultIcon: {
+    alignItems: 'center',
+  },
+  extraIcon: {
+    alignItems: 'center',
   },
 });

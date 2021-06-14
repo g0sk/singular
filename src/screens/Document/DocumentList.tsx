@@ -1,6 +1,6 @@
 import React from 'react';
-import {Header, SearchBox, View} from 'components';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {Header, View} from 'components';
+//import {SafeAreaView} from 'react-native-safe-area-context';
 
 interface ItemType {
   id: number;
@@ -10,10 +10,13 @@ interface ItemType {
 export const DocumentList = () => {
   return (
     <View>
-      <Header iconName="plus-circle" />
-      <SafeAreaView>
-        <SearchBox />
-      </SafeAreaView>
+      <Header
+        defaultIcon="plus-circle"
+        hasExtraIcon={true}
+        extraIcon="search"
+        //get username from store
+        label="Óscar Santana"
+      />
     </View>
   );
 };
