@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {AuthProvider} from './core/auth/index';
 import {RootNavigator} from 'navigation/RootNavigator';
 import {Provider} from 'react-redux';
@@ -7,7 +7,10 @@ import {ThemeProvider} from './ui/Theme';
 import {initialize} from 'helpers/general';
 
 const App = () => {
-  initialize();
+  useEffect(() => {
+    initialize();
+  }, []);
+
   return (
     <Provider store={store}>
       <AuthProvider>

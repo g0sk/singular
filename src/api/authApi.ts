@@ -1,16 +1,6 @@
 import {apiURL} from './index';
-
+import {Credentials} from 'types';
 type Token = string;
-
-type Response = {
-  token: Token;
-  refreshToken: Token;
-};
-
-export type Credentials = {
-  username: string;
-  password: string;
-};
 
 const fetchToken = (credentials: Credentials) =>
   apiURL.post('/authentication_token', {

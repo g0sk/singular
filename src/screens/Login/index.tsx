@@ -10,11 +10,11 @@ import {
 } from 'react-native';
 import {Button, CheckBox, Text, TextInput, View} from 'components';
 import {fetchToken} from 'core/auth/authSlice';
-import {fetchUser} from 'store/slices/UserSlice';
+import {fetchUser} from 'store/slices/user/userAsyncThunk';
 import {useAuth} from 'core/auth';
-import {useAppDispatch, useAppSelector} from 'store/configureStore';
+import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {ErrorHandler} from 'handlers/error';
-import {getToken, setUsername, setPassword} from 'core/auth/utils';
+import {removeCredentials, setCredentials} from 'core/auth/utils';
 
 const {height, width} = Dimensions.get('window');
 
@@ -35,15 +35,11 @@ interface FormValues {
 
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
-  const authState = useAppSelector((state) => state.auth);
   const {signIn} = useAuth();
-
+  const {loading} = useAppSelector((state) => state.auth);
   const login = ({username, password, saveCredentials}: FormValues) => {
-    if (saveCredentials) {
-      setUsername(username);
-      setPassword(password);
-    }
     dispatch(fetchToken({username, password})).then(() => {
+      const authState = store.getState().auth;
       if (authState.error && authState.errorData !== null) {
         ToastAndroid.showWithGravity(
           authState.errorData.message,
@@ -51,19 +47,27 @@ export const Login: React.FC = () => {
           ToastAndroid.SHORT,
         );
       } else {
-        dispatch(fetchUser(authState.userID));
-        navigatorSignIn();
+        if (authState.userID !== null) {
+          //Credentials are correct
+          if (saveCredentials) {
+            setCredentials({username, password});
+          } else {
+            removeCredentials();
+          }
+          dispatch(fetchUser(authState.userID)).then(() => navigatorSignIn());
+        }
       }
     });
   };
 
   const navigatorSignIn = async () => {
     try {
-      const userToken = await getToken();
-      if (userToken !== null) {
-        signIn(userToken);
+      const {token, refreshToken} = store.getState().auth;
+      const {user} = store.getState().users;
+      if (token !== null && refreshToken !== null && user !== null) {
+        signIn({token, refreshToken, user});
       } else {
-        console.log('Token not found on device');
+        console.log('Authentication error');
       }
     } catch (e) {
       throw e;
@@ -156,7 +160,7 @@ export const Login: React.FC = () => {
                     variant="secondary"
                     label="Log in"
                     onPress={() => handleSubmit()}
-                    loading={authState.loading}
+                    loading={loading}
                   />
                 </View>
               </View>

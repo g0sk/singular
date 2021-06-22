@@ -1,7 +1,7 @@
 import React from 'react';
 import {API_URL} from '@env';
 import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
-import {} from '@react-navigation/native';
+import {useAuth} from 'core/auth';
 
 export interface AvatarProps {
   hasBorder?: boolean;
@@ -20,9 +20,10 @@ export const Avatar: React.FC<AvatarProps> = ({
   width,
 }) => {
   const mediaUrl = isContentUrl ? API_URL + uri : uri;
+  const {signOut} = useAuth();
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => null}>
+      <TouchableOpacity onPress={() => signOut()}>
         <Image
           style={hasBorder ? styles.avatarWithBorder : styles.avatarNoBorder}
           height={height}

@@ -56,12 +56,13 @@ export function initialize(): void {
         ) {
           return Promise.reject(error);
         }
-        store.dispatch(fetchRefreshToken(refreshToken));
-        const token = await getToken();
-        if (token !== null) {
-          originalRequest.headers.Authorization = 'Bearer' + token;
-          return apiURL.request(originalRequest);
-        }
+        store.dispatch(fetchRefreshToken(refreshToken)).then(async () => {
+          const token = await getToken();
+          if (token !== null) {
+            originalRequest.headers.Authorization = 'Bearer' + token;
+            return apiURL.request(originalRequest);
+          }
+        });
       }
     },
   );

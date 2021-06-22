@@ -1,9 +1,9 @@
 import Sinfo from 'react-native-sensitive-info';
+import {Credentials} from '../../../types';
 
 const TOKEN = 'token';
 const REFRESH_TOKEN = 'refreshToken';
-const USERNAME = 'username';
-const PASSWORD = 'password';
+const CREDENTIALS = 'credentials';
 const keyChainOptions = {
   sharedPreferencesName: 'singularSharedPerfs',
   keyChainService: 'singularKeyChain',
@@ -38,12 +38,8 @@ export const setRefreshToken = (value: string) =>
   setItem<string>(REFRESH_TOKEN, value);
 export const removeRefreshToken = () => removeItem(REFRESH_TOKEN);
 
-//Username
-export const getUsername = () => getItem<string>(USERNAME);
-export const setUsername = (value: string) => setItem<string>(USERNAME, value);
-export const removeUsername = () => removeItem(USERNAME);
-
-//Password
-export const getPassword = () => getItem<string>(PASSWORD);
-export const setPassword = (value: string) => setItem<string>(PASSWORD, value);
-export const removePassword = () => removeItem(PASSWORD);
+//Credentials
+export const getCredentials = () => getItem<Credentials>(CREDENTIALS);
+export const setCredentials = (value: Credentials) =>
+  setItem<Credentials>(CREDENTIALS, value);
+export const removeCredentials = () => removeItem(CREDENTIALS);

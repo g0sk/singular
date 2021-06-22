@@ -1,23 +1,21 @@
 import React from 'react';
 import {Screen, View} from 'components';
 import {Header} from 'components';
-import {useAppDispatch, useAppSelector} from 'store/configureStore';
-import {fetchUser} from 'store/slices/UserSlice';
+import {useAppSelector} from 'store/configureStore';
 
-export const Home = ({}) => {
-  const dispatch = useAppDispatch();
-  //const {signOut} = useAuth();
-  dispatch(fetchUser(1));
-  const user = useAppSelector((state) => state.users.user);
-  const name = user?.name + ' ' + user?.lastName;
+export const Home: React.FC = () => {
+  const {user} = useAppSelector((state) => state.users);
+  const userName = user !== null ? user.name + ' ' + user.lastName : '';
+  const userImage =
+    user !== null && user.image !== null ? user.image.contentUrl : '';
   return (
     <Screen>
       <View>
         <Header
-          label={name}
-          contentUrl={user?.image?.contentUrl}
           defaultIcon="bell"
           hasExtraIcon={false}
+          label={userName}
+          contentUrl={userImage}
         />
       </View>
     </Screen>

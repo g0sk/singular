@@ -1,21 +1,18 @@
 import React from 'react';
 import {Header, View} from 'components';
+import {DocumentListProps} from '../../../types';
 //import {SafeAreaView} from 'react-native-safe-area-context';
 
-interface ItemType {
-  id: number;
-  name: string;
-}
-
-export const DocumentList = () => {
+export const DocumentList: React.FC<DocumentListProps> = ({user}) => {
+  const userName = user !== null ? user.name + ' ' + user.lastName : '';
   return (
     <View>
       <Header
+        contentUrl={user?.image?.contentUrl}
         defaultIcon="plus-circle"
         hasExtraIcon={true}
         extraIcon="search"
-        //get username from store
-        label="Óscar Santana"
+        label={userName}
       />
     </View>
   );

@@ -1,21 +1,29 @@
 /// Auth.tsx
 import * as React from 'react';
+import store from 'store/configureStore';
+import {fetchUser} from 'store/slices/user/userAsyncThunk';
+import {User} from 'types';
+import {fetchToken} from './authSlice';
 import {
-  getToken,
   setToken,
   removeToken,
   removeRefreshToken,
-  removeUsername,
-  removePassword,
+  getCredentials,
+  removeCredentials,
+  setRefreshToken,
 } from './utils';
 
 interface AuthState {
   userToken: string | undefined | null;
+  refreshToken: string | undefined | null;
   status: 'idle' | 'signOut' | 'signIn';
+  user: User | null;
 }
-type AuthAction = {type: 'SIGN_IN'; token: string} | {type: 'SIGN_OUT'};
+type AuthAction =
+  | {type: 'SIGN_IN'; token: string; refreshToken: string; user: User}
+  | {type: 'SIGN_OUT'};
 
-type AuthPayload = string;
+type AuthPayload = {token: string; refreshToken: string; user: User};
 
 interface AuthContextActions {
   signIn: (data: AuthPayload) => void;
@@ -26,6 +34,8 @@ interface AuthContextType extends AuthState, AuthContextActions {}
 const AuthContext = React.createContext<AuthContextType>({
   status: 'idle',
   userToken: null,
+  refreshToken: null,
+  user: null,
   signIn: () => {},
   signOut: () => {},
 });
@@ -45,15 +55,42 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
   const [state, dispatch] = React.useReducer(AuthReducer, {
     status: 'idle',
     userToken: null,
+    refreshToken: null,
+    user: null,
   });
 
   React.useEffect(() => {
     const initState = async () => {
       try {
-        const userToken = await getToken();
-        if (userToken) {
-          dispatch({type: 'SIGN_IN', token: userToken});
+        const credentials = await getCredentials();
+        if (credentials !== null) {
+          console.log('credential: ', credentials);
+          store
+            .dispatch(
+              fetchToken({
+                username: credentials.username,
+                password: credentials.password,
+              }),
+            )
+            .then(() => {
+              const {token, refreshToken, userID} = store.getState().auth;
+              if (token !== null && refreshToken !== null && userID !== null) {
+                store.dispatch(fetchUser(userID)).then(() => {
+                  const {user} = store.getState().users;
+                  if (user !== null) {
+                    dispatch({type: 'SIGN_IN', token, refreshToken, user});
+                  } else {
+                    console.log('AuthProvider could not fetch user info');
+                    dispatch({type: 'SIGN_OUT'});
+                  }
+                });
+              } else {
+                console.log('AuthProvider could not fetch authentication info');
+                dispatch({type: 'SIGN_OUT'});
+              }
+            });
         } else {
+          console.log("AuthProvider couldn't find credentials on device");
           dispatch({type: 'SIGN_OUT'});
         }
       } catch (e) {
@@ -68,10 +105,12 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
 
   const authActions: AuthContextActions = React.useMemo(
     () => ({
-      signIn: async (token: string) => {
-        dispatch({type: 'SIGN_IN', token});
+      signIn: async ({token, refreshToken, user}: AuthPayload) => {
+        dispatch({type: 'SIGN_IN', token, refreshToken, user});
         try {
           await setToken(token);
+          await setRefreshToken(refreshToken);
+          //await setRefreshToken(refreshToken);
         } catch (error) {
           console.log(error);
         }
@@ -79,8 +118,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
       signOut: async () => {
         await removeToken();
         await removeRefreshToken();
-        await removeUsername();
-        await removePassword();
+        await removeCredentials();
         dispatch({type: 'SIGN_OUT'});
       },
     }),
@@ -101,12 +139,16 @@ const AuthReducer = (prevState: AuthState, action: AuthAction): AuthState => {
         ...prevState,
         status: 'signIn',
         userToken: action.token,
+        refreshToken: action.refreshToken,
+        user: action.user,
       };
     case 'SIGN_OUT':
       return {
         ...prevState,
         status: 'signOut',
         userToken: null,
+        refreshToken: null,
+        user: null,
       };
   }
 };
