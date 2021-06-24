@@ -34,7 +34,6 @@ export function initialize(): void {
     },
     async (error: AxiosError) => {
       if (!error.response) {
-        console.log('pepega');
         return Promise.reject(error);
       }
       const {config, response} = error;
