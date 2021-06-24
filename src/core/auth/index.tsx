@@ -102,9 +102,8 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
         dispatch({type: 'SIGN_IN', token, refreshToken, user});
       },
       signOut: async () => {
+        //Reset store
         store.dispatch(logOut());
-        const a = store.getState().auth;
-        console.log(store.getState());
         dispatch({type: 'SIGN_OUT'});
         try {
           await removeCredentials();

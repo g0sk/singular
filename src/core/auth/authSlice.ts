@@ -6,7 +6,7 @@ import {
   Credentials,
   RefreshTokenResponse,
   ErrorData,
-} from '../../types';
+} from 'types';
 
 const initialState = {
   token: null,

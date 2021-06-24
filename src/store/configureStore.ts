@@ -9,7 +9,7 @@ import authReducer from 'core/auth/authSlice';
 import userSlice from './slices/user/UserSlice';
 import activeSlice from './slices/active/activeSlice';
 
-const combinedReducers: Reducer = combineReducers({
+const combinedReducers = combineReducers({
   auth: authReducer,
   users: userSlice,
   active: activeSlice,
@@ -18,7 +18,6 @@ const combinedReducers: Reducer = combineReducers({
 const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
   //Reset store on logOut
   if (action.type === 'auth/logOut') {
-    console.log('empty');
     return combinedReducers(undefined, action);
   }
   return combinedReducers(state, action);
