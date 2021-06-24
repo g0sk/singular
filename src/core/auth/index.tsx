@@ -4,14 +4,7 @@ import store from 'store/configureStore';
 import {fetchUser} from 'store/slices/user/userAsyncThunk';
 import {User} from 'types';
 import {fetchToken} from './authSlice';
-import {
-  setToken,
-  removeToken,
-  removeRefreshToken,
-  getCredentials,
-  removeCredentials,
-  setRefreshToken,
-} from './utils';
+import {getCredentials, removeCredentials} from './utils';
 
 interface AuthState {
   userToken: string | undefined | null;
@@ -107,19 +100,14 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     () => ({
       signIn: async ({token, refreshToken, user}: AuthPayload) => {
         dispatch({type: 'SIGN_IN', token, refreshToken, user});
-        try {
-          await setToken(token);
-          await setRefreshToken(refreshToken);
-          //await setRefreshToken(refreshToken);
-        } catch (error) {
-          console.log(error);
-        }
       },
       signOut: async () => {
-        await removeToken();
-        await removeRefreshToken();
-        await removeCredentials();
         dispatch({type: 'SIGN_OUT'});
+        try {
+          await removeCredentials();
+        } catch (e) {
+          console.log("Couldn't remove credentials from device");
+        }
       },
     }),
     [],

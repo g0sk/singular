@@ -1,10 +1,10 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {fetchActives} from './activeAsyncThunk';
-import {ActiveState} from '../../../../types';
+import {ActiveState} from 'types';
 
 const initialState: ActiveState = {
   active: null,
-  actives: null,
+  actives: [],
   loading: false,
   error: false,
   errorData: null,
@@ -17,7 +17,10 @@ const activeSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchActives.fulfilled, (state, action) => {
-        state.actives = action.payload;
+        state.loading = false;
+        state.error = false;
+        state.errorData = null;
+        state.actives = [...action.payload];
       })
       .addCase(fetchActives.pending, (state) => {
         state.loading = true;

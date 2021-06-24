@@ -1,6 +1,5 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import AuthApi from 'api/authApi';
-import {setToken, setRefreshToken} from 'core/auth/utils';
 import {
   AuthState,
   AuthResponse,
@@ -26,8 +25,6 @@ export const fetchToken = createAsyncThunk<
   try {
     const response = await AuthApi.fetchToken(credentials);
     if (response.status === 200) {
-      setToken(response.data.token);
-      setRefreshToken(response.data.refresh_token);
       return response.data;
     }
   } catch (error) {
@@ -43,8 +40,6 @@ export const fetchRefreshToken = createAsyncThunk<
   try {
     const response = await AuthApi.fetchRefreshToken(refreshToken);
     if (response.status === 200) {
-      setToken(response.data.token);
-      setRefreshToken(response.data.refresh_token);
       return response.data;
     }
   } catch (error) {

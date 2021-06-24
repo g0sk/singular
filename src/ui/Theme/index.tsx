@@ -17,8 +17,10 @@ const BaseTheme = {
   colors: {
     background: '#000b31',
     blue: '#1f155e',
+    dark: '#000',
     card: '#ffffff',
     darkText: '#000',
+    chart: '#0cd13f',
     default: '#9b9b9b',
     description: '#393939',
     error: '#c90404',
@@ -90,6 +92,14 @@ const theme = createTheme({
     },
     placeholderText: {
       color: 'placeholderText',
+    },
+    listItemPrimary: {
+      fontSize: 19,
+      color: 'darkText',
+    },
+    listItemData: {
+      fontSize: 13,
+      color: 'darkText',
     },
   },
   viewVariants: {},

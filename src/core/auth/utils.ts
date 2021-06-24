@@ -1,8 +1,6 @@
 import Sinfo from 'react-native-sensitive-info';
-import {Credentials} from '../../../types';
+import {Credentials} from 'types';
 
-const TOKEN = 'token';
-const REFRESH_TOKEN = 'refreshToken';
 const CREDENTIALS = 'credentials';
 const keyChainOptions = {
   sharedPreferencesName: 'singularSharedPerfs',
@@ -26,17 +24,6 @@ export async function setItem<T>(key: string, value: T): Promise<void> {
 export async function removeItem(key: string): Promise<void> {
   Sinfo.deleteItem(key, keyChainOptions);
 }
-
-//Token
-export const getToken = () => getItem<string>(TOKEN);
-export const setToken = (value: string) => setItem<string>(TOKEN, value);
-export const removeToken = () => removeItem(TOKEN);
-
-//RefreshToken
-export const getRefreshToken = () => getItem<string>(REFRESH_TOKEN);
-export const setRefreshToken = (value: string) =>
-  setItem<string>(REFRESH_TOKEN, value);
-export const removeRefreshToken = () => removeItem(REFRESH_TOKEN);
 
 //Credentials
 export const getCredentials = () => getItem<Credentials>(CREDENTIALS);

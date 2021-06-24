@@ -41,7 +41,7 @@ export type RefreshTokenResponse = {
 };
 
 //User types
-interface User {
+export interface User {
   id: number;
   username: string;
   name: string;
@@ -56,7 +56,7 @@ interface User {
   } | null;
 }
 
-interface UserState {
+export interface UserState {
   loading: boolean;
   error: boolean;
   user: User | null;
@@ -74,13 +74,14 @@ export interface Active {
   lifetimeMeasurementUnit: string;
   type: string;
   customAttributes: string;
-  activeRecord: {};
+  activeRecord: {} | null;
   file: File;
+  useWearTear: number;
 }
 
-type Actives = Array<Active>;
+export type Actives = Array<Active>;
 
-interface ActiveState {
+export interface ActiveState {
   active: Active | null;
   actives: Actives | null;
   loading: boolean;
@@ -90,11 +91,20 @@ interface ActiveState {
 
 //DocumentList types
 
-interface ItemType {
+export interface ItemType {
   id: number;
   name: string;
 }
 
-interface DocumentListProps {
+export interface DocumentListProps {
   user: User | null;
+}
+
+export interface DocumentListItemProps extends Active {
+  onPress: () => void;
+  active: Active;
+}
+
+export interface DocumentItemProps {
+  item: Active;
 }
