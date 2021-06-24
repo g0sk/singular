@@ -1,16 +1,28 @@
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
-import {configureStore, combineReducers} from '@reduxjs/toolkit';
+import {
+  configureStore,
+  combineReducers,
+  Reducer,
+  AnyAction,
+} from '@reduxjs/toolkit';
 import authReducer from 'core/auth/authSlice';
 import userSlice from './slices/user/UserSlice';
 import activeSlice from './slices/active/activeSlice';
 
-//Flipper app debugger
-//const createDebugger = require('redux-flipper').default;
-const rootReducer = combineReducers({
+const combinedReducers: Reducer = combineReducers({
   auth: authReducer,
   users: userSlice,
   active: activeSlice,
 });
+
+const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
+  //Reset store on logOut
+  if (action.type === 'auth/logOut') {
+    console.log('empty');
+    return combinedReducers(undefined, action);
+  }
+  return combinedReducers(state, action);
+};
 
 const store = configureStore({
   reducer: rootReducer,

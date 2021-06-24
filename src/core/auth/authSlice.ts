@@ -50,7 +50,10 @@ export const fetchRefreshToken = createAsyncThunk<
 const authSlice = createSlice({
   name: 'auth',
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    logOut: (state) => {},
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchToken.fulfilled, (state, action) => {
@@ -95,5 +98,5 @@ const authSlice = createSlice({
       });
   },
 });
-
+export const {logOut} = authSlice.actions;
 export default authSlice.reducer;

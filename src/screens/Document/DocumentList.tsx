@@ -5,11 +5,16 @@ import {FlatList} from 'react-native';
 import {DocumentListProps} from 'types';
 import {View} from 'components';
 import {DocumentItem} from './DocumentItem';
-import {useAppSelector} from 'store/configureStore';
+import {useAppDispatch, useAppSelector} from 'store/configureStore';
+import {fetchActives} from 'store/slices/active/activeAsyncThunk';
 
 export const DocumentList: React.FC<DocumentListProps> = ({user}) => {
   const activeState = useAppSelector((state) => state.active);
   const userName = user !== null ? user.name + ' ' + user.lastName : '';
+  const dispatch = useAppDispatch();
+  const refresh = () => {
+    dispatch(fetchActives());
+  };
   return (
     <Screen>
       <View style={styles.container}>
@@ -23,6 +28,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({user}) => {
         <FlatList
           renderItem={({item}) => <DocumentItem item={item} />}
           keyExtractor={(item, index) => index.toString()}
+          onEndReached={() => refresh()}
           data={activeState.actives}
           style={styles.itemList}
         />
@@ -39,5 +45,6 @@ const styles = StyleSheet.create({
   itemList: {
     marginVertical: 50,
     marginHorizontal: 10,
+    paddingBottom: 30,
   },
 });

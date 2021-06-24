@@ -3,7 +3,7 @@ import * as React from 'react';
 import store from 'store/configureStore';
 import {fetchUser} from 'store/slices/user/userAsyncThunk';
 import {User} from 'types';
-import {fetchToken} from './authSlice';
+import {logOut, fetchToken} from './authSlice';
 import {getCredentials, removeCredentials} from './utils';
 
 interface AuthState {
@@ -102,6 +102,9 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
         dispatch({type: 'SIGN_IN', token, refreshToken, user});
       },
       signOut: async () => {
+        store.dispatch(logOut());
+        const a = store.getState().auth;
+        console.log(store.getState());
         dispatch({type: 'SIGN_OUT'});
         try {
           await removeCredentials();
