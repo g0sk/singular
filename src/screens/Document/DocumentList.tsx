@@ -1,35 +1,45 @@
 import React from 'react';
-import {Screen, Header} from 'components';
+import {Screen} from 'components';
 import {StyleSheet} from 'react-native';
-import {FlatList} from 'react-native';
+import {Dimensions, FlatList, TouchableOpacity} from 'react-native';
 import {DocumentListProps} from 'types';
-import {View} from 'components';
+import {Text, View} from 'components';
 import {DocumentItem} from './DocumentItem';
 import {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {fetchActives} from 'store/slices/active/activeAsyncThunk';
 
-export const DocumentList: React.FC<DocumentListProps> = ({user}) => {
-  const activeState = useAppSelector((state) => state.active);
-  const userName = user !== null ? user.name + ' ' + user.lastName : '';
+//Screen dimension - tabbar height;
+const HEIGHT = Dimensions.get('window').height - 75;
+
+export const DocumentList: React.FC<DocumentListProps> = () => {
+  const {actives, activesLength, loading} = useAppSelector(
+    (state) => state.active,
+  );
   const dispatch = useAppDispatch();
-  const refresh = () => {
+  const refreshActives = () => {
     dispatch(fetchActives());
   };
+  const nActives = activesLength + ' actives';
+  const emptyList = () =>
+    !loading && activesLength > 0 ? (
+      <Text style={styles.noActives} variant="header1">
+        No actives to display
+      </Text>
+    ) : null;
   return (
     <Screen>
       <View style={styles.container}>
-        <Header
-          contentUrl={user?.image?.contentUrl}
-          defaultIcon="plus-circle"
-          hasExtraIcon={true}
-          extraIcon="search"
-          label={userName}
-        />
+        <TouchableOpacity style={styles.itemNumber} onPress={() => null}>
+          <Text>{nActives}</Text>
+        </TouchableOpacity>
         <FlatList
           renderItem={({item}) => <DocumentItem item={item} />}
           keyExtractor={(item, index) => index.toString()}
-          onEndReached={() => refresh()}
-          data={activeState.actives}
+          onRefresh={() => refreshActives()}
+          refreshing={loading}
+          initialNumToRender={5}
+          ListEmptyComponent={() => emptyList()}
+          data={actives}
           style={styles.itemList}
         />
       </View>
@@ -39,12 +49,18 @@ export const DocumentList: React.FC<DocumentListProps> = ({user}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    //height: 500,
+    height: HEIGHT,
   },
   itemList: {
-    marginVertical: 50,
+    marginBottom: 50,
     marginHorizontal: 10,
-    paddingBottom: 30,
+  },
+  itemNumber: {
+    paddingHorizontal: 10,
+    marginVertical: 20,
+    marginHorizontal: 10,
+  },
+  noActives: {
+    margin: 10,
   },
 });

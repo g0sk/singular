@@ -84,6 +84,8 @@ export type Actives = Array<Active>;
 export interface ActiveState {
   active: Active | null;
   actives: Actives | null;
+  activesLength: number;
+  page: number;
   loading: boolean;
   error: boolean;
   errorData: Error;

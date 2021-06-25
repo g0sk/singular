@@ -5,6 +5,8 @@ import {ActiveState} from 'types';
 const initialState: ActiveState = {
   active: null,
   actives: [],
+  page: 0,
+  activesLength: 0,
   loading: false,
   error: false,
   errorData: null,
@@ -13,7 +15,11 @@ const initialState: ActiveState = {
 const activeSlice = createSlice({
   name: 'active',
   initialState,
-  reducers: {},
+  reducers: {
+    fetchOctives: (state) => {
+      state.actives = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchActives.fulfilled, (state, action) => {
@@ -21,6 +27,8 @@ const activeSlice = createSlice({
         state.error = false;
         state.errorData = null;
         state.actives = [...action.payload];
+        //Not actives length, add items per page used on request
+        state.activesLength = state.actives.length;
       })
       .addCase(fetchActives.pending, (state) => {
         state.loading = true;

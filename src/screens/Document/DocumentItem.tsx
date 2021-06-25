@@ -12,7 +12,7 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({item}) => {
       flexDirection: 'row',
       justifyContent: 'space-around',
       alignItems: 'center',
-      marginHorizontal: 5,
+      //marginHorizontal: 5,
       marginBottom: 10,
     },
     itemContainer: {
