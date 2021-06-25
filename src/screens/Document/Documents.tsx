@@ -3,8 +3,12 @@ import {View, Header} from 'components';
 import store, {useAppSelector} from 'store/configureStore';
 import {fetchActives} from 'store/slices/active/activeAsyncThunk';
 import {DocumentList} from './DocumentList';
+import {DocumentStackProps} from 'types';
 
-export const Document = () => {
+export const Documents: React.FC<DocumentStackProps> = ({
+  navigation,
+  route,
+}) => {
   const {user} = useAppSelector((state) => state.users);
   const userName = user !== null ? user.name + ' ' + user.lastName : '';
   useEffect(() => {
@@ -19,7 +23,7 @@ export const Document = () => {
         extraIcon="search"
         label={userName}
       />
-      <DocumentList user={user} />
+      <DocumentList {...{navigation, route}} />
     </View>
   );
 };

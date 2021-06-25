@@ -94,7 +94,8 @@ const theme = createTheme({
       color: 'placeholderText',
     },
     listItemPrimary: {
-      fontSize: 19,
+      fontSize: 17,
+      fontWeight: 'bold',
       color: 'darkText',
     },
     listItemData: {

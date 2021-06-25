@@ -1,3 +1,6 @@
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RouteProp} from '@react-navigation/native';
+
 //Geral types
 export type Credentials = {
   username: string;
@@ -15,6 +18,26 @@ export type ErrorData = {
   code: number;
   message: string;
 } | null;
+
+//Route
+export type RootDocumentParamList = {
+  Documents: undefined;
+  Document: {activeId: number} | undefined;
+};
+
+export type DocumentScreenRouteProp = RouteProp<
+  RootDocumentParamList,
+  'Document'
+>;
+
+export type DocumentScreenNavigationProp = StackNavigationProp<
+  RootDocumentParamList,
+  'Document'
+>;
+export type DocumentStackProps = {
+  route: DocumentScreenRouteProp;
+  navigation: DocumentScreenNavigationProp;
+};
 
 //Auth Types
 export type AuthState = {
@@ -92,7 +115,6 @@ export interface ActiveState {
 }
 
 //DocumentList types
-
 export interface ItemType {
   id: number;
   name: string;
@@ -107,6 +129,6 @@ export interface DocumentListItemProps extends Active {
   active: Active;
 }
 
-export interface DocumentItemProps {
+interface DocumentItemProps extends DocumentStackProps {
   item: Active;
 }

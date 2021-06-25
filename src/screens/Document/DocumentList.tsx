@@ -2,16 +2,19 @@ import React from 'react';
 import {Screen} from 'components';
 import {StyleSheet} from 'react-native';
 import {Dimensions, FlatList, TouchableOpacity} from 'react-native';
-import {DocumentListProps} from 'types';
 import {Text, View} from 'components';
 import {DocumentItem} from './DocumentItem';
 import {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {fetchActives} from 'store/slices/active/activeAsyncThunk';
+import {DocumentStackProps} from 'types';
 
 //Screen dimension - tabbar height;
 const HEIGHT = Dimensions.get('window').height - 75;
 
-export const DocumentList: React.FC<DocumentListProps> = () => {
+export const DocumentList: React.FC<DocumentStackProps> = ({
+  navigation,
+  route,
+}) => {
   const {actives, activesLength, loading} = useAppSelector(
     (state) => state.active,
   );
@@ -33,11 +36,12 @@ export const DocumentList: React.FC<DocumentListProps> = () => {
           <Text>{nActives}</Text>
         </TouchableOpacity>
         <FlatList
-          renderItem={({item}) => <DocumentItem item={item} />}
+          renderItem={({item}) => (
+            <DocumentItem {...{navigation, route, item}} />
+          )}
           keyExtractor={(item, index) => index.toString()}
           onRefresh={() => refreshActives()}
           refreshing={loading}
-          initialNumToRender={5}
           ListEmptyComponent={() => emptyList()}
           data={actives}
           style={styles.itemList}
