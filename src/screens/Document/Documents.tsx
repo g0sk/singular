@@ -14,11 +14,14 @@ export const Documents: React.FC<DocumentStackProps> = ({
   useEffect(() => {
     store.dispatch(fetchActives());
   });
+  const navigateDocumentScreen = () =>
+    navigation.navigate('Document', {activeId: undefined, title: 'New active'});
   return (
     <View>
       <Header
         contentUrl={user?.image?.contentUrl}
         defaultIcon="plus-circle"
+        defaultAction={navigateDocumentScreen}
         hasExtraIcon={true}
         extraIcon="search"
         label={userName}

@@ -22,7 +22,7 @@ export type ErrorData = {
 //Route
 export type RootDocumentParamList = {
   Documents: undefined;
-  Document: {activeId: number} | undefined;
+  Document: {activeId: number | undefined; title: string | undefined};
 };
 
 export type DocumentScreenRouteProp = RouteProp<
@@ -38,6 +38,13 @@ export type DocumentStackProps = {
   route: DocumentScreenRouteProp;
   navigation: DocumentScreenNavigationProp;
 };
+
+//Login
+export interface FormValues {
+  username: string;
+  password: string;
+  saveCredentials: boolean;
+}
 
 //Auth Types
 export type AuthState = {

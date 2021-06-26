@@ -56,7 +56,12 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.itemContainer}
-        onPress={() => navigation.push('Document', {activeId: item.id})}>
+        onPress={() =>
+          navigation.push('Document', {
+            activeId: item.id,
+            title: item.reference,
+          })
+        }>
         <View style={styles.infoContainer}>
           <View style={styles.infoReference}>
             <Text variant="listItemPrimary">{item.reference}</Text>

@@ -15,6 +15,7 @@ import {useAuth} from 'core/auth';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {ErrorHandler} from 'handlers/error';
 import {removeCredentials, setCredentials} from 'core/auth/utils';
+import {FormValues} from 'types';
 
 const {height, width} = Dimensions.get('window');
 
@@ -26,12 +27,6 @@ const LoginSchema = Yup.object().shape({
     .required('Required'),
   saveCredentials: Yup.boolean(),
 });
-
-interface FormValues {
-  username: string;
-  password: string;
-  saveCredentials: boolean;
-}
 
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();

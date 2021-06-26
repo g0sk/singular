@@ -10,7 +10,7 @@ interface HeaderProps {
   defaultIcon: string;
   hasExtraIcon?: boolean;
   extraIcon?: string;
-  defaultAction?: () => void;
+  defaultAction: () => void;
   extraAction?: () => void;
 }
 
@@ -18,6 +18,7 @@ export const Header: React.FC<HeaderProps> = ({
   contentUrl,
   label = undefined,
   defaultIcon,
+  defaultAction,
   hasExtraIcon = false,
   extraIcon,
 }) => {
@@ -46,7 +47,7 @@ export const Header: React.FC<HeaderProps> = ({
           </View>
         )}
         <View style={styles.defaultIcon}>
-          <TouchableOpacity onPress={() => null}>
+          <TouchableOpacity onPress={() => defaultAction()}>
             <Icon name={defaultIcon} size={25} />
           </TouchableOpacity>
         </View>
