@@ -1,5 +1,6 @@
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
+import {Image} from 'react-native';
 
 //Geral types
 export type Credentials = {
@@ -20,6 +21,33 @@ export type ErrorData = {
 } | null;
 
 //Route
+export type AppNavigatorParamList = {
+  Tab: TabNavigatorParamList;
+  Profile: undefined;
+};
+
+export type TabNavigationProp = StackNavigationProp<
+  AppNavigatorParamList,
+  'Tab'
+>;
+
+export type TabStackProps = {
+  navigation: TabNavigationProp;
+};
+
+//TabNavigator
+export type TabNavigatorParamList = {
+  Home: undefined;
+  Scan: undefined;
+  DocumentNavigator: RootDocumentParamList;
+};
+
+//Auth Navigator
+export type AuthParamList = {
+  Login: undefined;
+};
+
+//Routes Document
 export type RootDocumentParamList = {
   Documents: undefined;
   Document: {activeId: number | undefined; title: string | undefined};
@@ -76,7 +104,6 @@ export interface User {
   username: string;
   name: string;
   lastName: string;
-  email: string;
   createdAt: string;
   updatedAt: string;
   deletedAt: string;
@@ -138,4 +165,40 @@ export interface DocumentListItemProps extends Active {
 
 interface DocumentItemProps extends DocumentStackProps {
   item: Active;
+}
+
+//Profile Scren
+interface UserFormValues {
+  name: string;
+  lastName: string;
+  username: string;
+  image: File;
+}
+
+//Components
+
+//Header
+export interface HeaderProps {
+  contentUrl?: string;
+  uri?: string;
+  label?: string;
+  defaultIcon: string;
+  hasExtraIcon?: boolean;
+  extraIcon?: string;
+  defaultAction: () => void;
+  extraAction?: () => void;
+  navigationTab: TabNavigationProp | null;
+  navigationDocument?: DocumentScreenNavigationProp;
+}
+
+//Avatar
+export interface AvatarProps {
+  hasBorder?: boolean;
+  placeholderImg?: Image;
+  uri?: string | undefined;
+  isContentUrl?: boolean;
+  height?: number;
+  width?: number;
+  navigationTab: TabNavigationProp | null;
+  navigationDocument?: DocumentScreenNavigationProp;
 }

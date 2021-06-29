@@ -2,17 +2,7 @@ import * as React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Avatar, View, Text} from 'components';
 import Icon from 'react-native-vector-icons/Feather';
-
-interface HeaderProps {
-  contentUrl?: string;
-  uri?: string;
-  label?: string;
-  defaultIcon: string;
-  hasExtraIcon?: boolean;
-  extraIcon?: string;
-  defaultAction: () => void;
-  extraAction?: () => void;
-}
+import {HeaderProps} from 'types';
 
 export const Header: React.FC<HeaderProps> = ({
   contentUrl,
@@ -21,6 +11,7 @@ export const Header: React.FC<HeaderProps> = ({
   defaultAction,
   hasExtraIcon = false,
   extraIcon,
+  navigationTab,
 }) => {
   return (
     <View style={styles.headerContainer}>
@@ -32,6 +23,7 @@ export const Header: React.FC<HeaderProps> = ({
             hasBorder={true}
             height={45}
             width={45}
+            navigationTab={navigationTab}
           />
         </View>
         <View style={styles.label}>

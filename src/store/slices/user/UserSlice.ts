@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {fetchUser} from './userAsyncThunk';
-import {UserState} from '../../../types';
+import {UserState} from 'types';
 
 const initialState = {
   loading: false,

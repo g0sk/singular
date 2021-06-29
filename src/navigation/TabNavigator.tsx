@@ -5,8 +5,9 @@ import {Home, Scan} from 'screens';
 import {useTheme} from 'ui/Theme';
 import Icon from 'react-native-vector-icons/Feather';
 import {DocumentNavigator} from './DocumentNavigator';
+import {TabNavigatorParamList} from 'types';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 export const TabNavigator = () => {
   const theme = useTheme();
   return (

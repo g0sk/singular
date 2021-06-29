@@ -8,7 +8,7 @@ import {View} from './View';
 import {useTheme} from 'ui/Theme';
 
 interface TextInputProps extends RNTextInputProps {
-  icon: string;
+  icon: string | null;
   touched?: boolean;
   error?: string;
 }
@@ -31,9 +31,11 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
         borderWidth={1}
         borderColor={color}
         paddingRight="m">
-        <View padding="s">
-          <Icon name={icon} color={iconColor} />
-        </View>
+        {icon !== null && (
+          <View padding="s">
+            <Icon name={icon} color={iconColor} />
+          </View>
+        )}
         <View flex={1}>
           <RNTextInput
             underlineColorAndroid="transparent"

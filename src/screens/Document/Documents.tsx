@@ -25,6 +25,8 @@ export const Documents: React.FC<DocumentStackProps> = ({
         hasExtraIcon={true}
         extraIcon="search"
         label={userName}
+        navigationDocument={navigation}
+        navigationTab={null}
       />
       <DocumentList {...{navigation, route}} />
     </View>

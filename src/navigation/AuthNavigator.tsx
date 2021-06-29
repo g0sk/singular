@@ -1,8 +1,9 @@
 import * as React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Login} from 'screens';
+import {AuthParamList} from 'types';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<AuthParamList>();
 
 export const AuthNavigator = () => {
   return (

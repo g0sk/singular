@@ -2,15 +2,7 @@ import React from 'react';
 import {API_URL} from '@env';
 import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {useAuth} from 'core/auth';
-
-export interface AvatarProps {
-  hasBorder?: boolean;
-  placeholderImg?: Image;
-  uri?: string | undefined;
-  isContentUrl?: boolean;
-  height?: number;
-  width?: number;
-}
+import {AvatarProps} from 'types';
 
 export const Avatar: React.FC<AvatarProps> = ({
   uri,
@@ -18,12 +10,15 @@ export const Avatar: React.FC<AvatarProps> = ({
   hasBorder,
   height,
   width,
+  navigationTab,
 }) => {
   const mediaUrl = isContentUrl ? API_URL + uri : uri;
   const {signOut} = useAuth();
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => signOut()}>
+      <TouchableOpacity
+        onLongPress={() => signOut()}
+        onPress={() => navigationTab?.navigate('Profile', undefined)}>
         <Image
           style={hasBorder ? styles.avatarWithBorder : styles.avatarNoBorder}
           height={height}
