@@ -3,6 +3,8 @@ import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Avatar, View, Text} from 'components';
 import Icon from 'react-native-vector-icons/Feather';
 import {HeaderProps} from 'types';
+import {useNavigation} from '@react-navigation/native';
+import {useAuth} from 'core/auth';
 
 export const Header: React.FC<HeaderProps> = ({
   contentUrl,
@@ -11,8 +13,10 @@ export const Header: React.FC<HeaderProps> = ({
   defaultAction,
   hasExtraIcon = false,
   extraIcon,
-  navigationTab,
 }) => {
+  const {navigate} = useNavigation();
+  const {signOut} = useAuth();
+  const navigateProfile = () => navigate('Profile', undefined);
   return (
     <View style={styles.headerContainer}>
       <View style={styles.userInfo}>
@@ -23,7 +27,8 @@ export const Header: React.FC<HeaderProps> = ({
             hasBorder={true}
             height={45}
             width={45}
-            navigationTab={navigationTab}
+            longPress={signOut}
+            press={navigateProfile}
           />
         </View>
         <View style={styles.label}>

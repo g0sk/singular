@@ -55,6 +55,10 @@ const BaseTheme = {
 const theme = createTheme({
   ...BaseTheme,
   textVariants: {
+    edit_button: {
+      color: 'secondary',
+      fontSize: 19,
+    },
     button_primary: {
       color: 'lightText',
     },
@@ -102,15 +106,24 @@ const theme = createTheme({
       fontSize: 13,
       color: 'darkText',
     },
+    formLabel: {
+      fontSize: 15,
+      fontWeight: 'bold',
+      marginBottom: 's',
+    },
   },
   viewVariants: {},
   buttonVariants: {
     primary: {
       backgroundColor: 'primary',
-      loadingSpinner: 'primary',
+      //loadingSpinner: 'primary',
     },
     secondary: {
       backgroundColor: 'secondary',
+    },
+    editButton: {
+      borderWidth: 0,
+      borderColor: 'white',
     },
   },
   navigation: {

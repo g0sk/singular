@@ -1,3 +1,4 @@
+import {Dispatch, SetStateAction} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
 import {Image} from 'react-native';
@@ -148,6 +149,14 @@ export interface ActiveState {
   errorData: Error;
 }
 
+//Media object
+export interface MediaObjectState {
+  image: File | null;
+  loading: boolean;
+  error: boolean;
+  errorData: Error;
+}
+
 //DocumentList types
 export interface ItemType {
   id: number;
@@ -187,8 +196,6 @@ export interface HeaderProps {
   extraIcon?: string;
   defaultAction: () => void;
   extraAction?: () => void;
-  navigationTab: TabNavigationProp | null;
-  navigationDocument?: DocumentScreenNavigationProp;
 }
 
 //Avatar
@@ -199,6 +206,31 @@ export interface AvatarProps {
   isContentUrl?: boolean;
   height?: number;
   width?: number;
-  navigationTab: TabNavigationProp | null;
-  navigationDocument?: DocumentScreenNavigationProp;
+  longPress: () => void;
+  press: () => void;
 }
+
+//Image Picker
+export interface PermissionTypes {
+  camera: boolean;
+  storage: boolean;
+}
+
+export type ParsedImage =
+  | {
+      base64: string | undefined;
+      uri: string | undefined;
+      width: number | undefined;
+      height: number | undefined;
+      fileSize: number | undefined;
+      fileName: string | undefined;
+    }
+  | undefined;
+
+export type ImagePickerProps = {
+  visible: boolean;
+  setModalVisibility: Dispatch<SetStateAction<boolean>>;
+  //saveImage: Dispatch<SetStateAction<ParsedImage | undefined>>;
+  saveImage: (image: ParsedImage) => void;
+  cameraType?: 'back' | 'front';
+};

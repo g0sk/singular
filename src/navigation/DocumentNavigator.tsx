@@ -9,7 +9,8 @@ export const DocumentNavigator = () => {
   return (
     <Stack.Navigator
       initialRouteName="Documents"
-      screenOptions={{headerShown: false}}>
+      headerMode="float"
+      screenOptions={{headerShown: false, cardShadowEnabled: true}}>
       <Stack.Screen name="Documents" component={Documents} />
       <Stack.Screen
         name="Document"

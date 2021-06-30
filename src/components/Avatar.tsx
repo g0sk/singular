@@ -1,24 +1,21 @@
 import React from 'react';
 import {API_URL} from '@env';
 import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
-import {useAuth} from 'core/auth';
 import {AvatarProps} from 'types';
 
 export const Avatar: React.FC<AvatarProps> = ({
   uri,
   isContentUrl,
   hasBorder,
-  height,
-  width,
-  navigationTab,
+  height = 45,
+  width = 45,
+  longPress,
+  press,
 }) => {
   const mediaUrl = isContentUrl ? API_URL + uri : uri;
-  const {signOut} = useAuth();
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onLongPress={() => signOut()}
-        onPress={() => navigationTab?.navigate('Profile', undefined)}>
+      <TouchableOpacity onLongPress={() => longPress()} onPress={() => press()}>
         <Image
           style={hasBorder ? styles.avatarWithBorder : styles.avatarNoBorder}
           height={height}
@@ -37,7 +34,7 @@ const styles = StyleSheet.create({
     //padding: 5,
   },
   avatarWithBorder: {
-    borderRadius: 30,
+    borderRadius: 60,
     borderWidth: 3,
     borderColor: '#593ac1',
   },

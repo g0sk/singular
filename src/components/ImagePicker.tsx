@@ -1,4 +1,4 @@
-import React, {Dispatch, useState, useEffect, SetStateAction} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Modal,
   StyleSheet,
@@ -15,26 +15,7 @@ import {
   launchCamera,
 } from 'react-native-image-picker';
 
-export interface PermissionTypes {
-  camera: boolean;
-  storage: boolean;
-}
-
-export type ParsedImage = {
-  base64: string | undefined;
-  uri: string | undefined;
-  width: number | undefined;
-  height: number | undefined;
-  fileSize: number | undefined;
-  fileName: string | undefined;
-};
-
-type ImagePickerProps = {
-  visible: boolean;
-  setModalVisibility: Dispatch<SetStateAction<boolean>>;
-  saveImage: Dispatch<SetStateAction<ParsedImage | undefined>>;
-  cameraType?: 'back' | 'front';
-};
+import {ParsedImage, ImagePickerProps} from 'types';
 
 export const ImagePicker: React.FC<ImagePickerProps> = ({
   visible,
@@ -153,7 +134,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
     textAlign: 'left',
   },
   modalView: {
@@ -166,7 +146,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 0,
     textAlign: 'left',
   },
   header: {

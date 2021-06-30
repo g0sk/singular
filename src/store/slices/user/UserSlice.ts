@@ -11,7 +11,13 @@ const initialState = {
 const userSlice = createSlice({
   name: 'users',
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    setImage: (state, action) => {
+      if (state.user !== null) {
+        state.user.image = action.payload;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUser.fulfilled, (state, action) => {
@@ -30,5 +36,5 @@ const userSlice = createSlice({
       });
   },
 });
-
+export const {setImage} = userSlice.actions;
 export default userSlice.reducer;

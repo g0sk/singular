@@ -8,9 +8,17 @@ const Stack = createStackNavigator<AppNavigatorParamList>();
 
 export const AppNavigator = () => {
   return (
-    <Stack.Navigator headerMode="none">
-      <Stack.Screen name="Tab" component={TabNavigator} />
-      <Stack.Screen name="Profile" component={Profile} />
+    <Stack.Navigator screenOptions={{headerShown: true}}>
+      <Stack.Screen
+        name="Tab"
+        component={TabNavigator}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{headerShown: true}}
+      />
     </Stack.Navigator>
   );
 };

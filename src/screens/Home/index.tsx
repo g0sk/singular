@@ -2,9 +2,8 @@ import React from 'react';
 import {Screen, View} from 'components';
 import {Header} from 'components';
 import {useAppSelector} from 'store/configureStore';
-import {TabStackProps} from 'types';
 
-export const Home: React.FC<TabStackProps> = ({navigation}) => {
+export const Home: React.FC = () => {
   const {user} = useAppSelector((state) => state.users);
   const userName = user !== null ? user.name + ' ' + user.lastName : '';
   const userImage =
@@ -19,7 +18,6 @@ export const Home: React.FC<TabStackProps> = ({navigation}) => {
           hasExtraIcon={false}
           label={userName}
           contentUrl={userImage}
-          navigationTab={navigation}
         />
       </View>
     </Screen>
