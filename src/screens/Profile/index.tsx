@@ -1,38 +1,65 @@
-import React, {useState, useRef} from 'react';
-import {TextInput as RNTextInput, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, ToastAndroid} from 'react-native';
 import {Avatar, Button, ImagePicker, View, Text, TextInput} from 'components';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {useAuth} from 'core/auth/index';
-import {ParsedImage, UserFormValues} from 'types';
+import {UserState, ParsedImage, UserFormValues} from 'types';
 import {setImage} from 'store/slices/user/UserSlice';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 //import {createMediaObject} from 'store/slices/mediaObject/mediaObjectAsyncThunk';
+import {updateUser} from 'store/slices/user/userAsyncThunk';
+
 const UserSchema = Yup.object().shape({
-  username: Yup.string().required('Email required'),
+  username: Yup.string()
+    .email('Incorrect email format')
+    .required('Email required'),
   name: Yup.string().required(),
   lastName: Yup.string().required(),
-  image: Yup.object({
-    id: Yup.number(),
-    contentUrl: Yup.string(),
-  }),
 });
 
-export const Profile = () => {
+export const Profile: React.FC = () => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.users.user);
-  //const [editMode, setEditMode] = useState<boolean>(false);
+  const {user, error}: UserState = useAppSelector((state) => state.users);
+  const [change, setChange] = useState<boolean>(false);
+  const [userNameChange, setUsernameChange] = useState<boolean>(false);
+  const [nameChange, setNameChange] = useState<boolean>(false);
+  const [lastNameChange, setLastNameChange] = useState<boolean>(false);
   const [modal, setModal] = useState<boolean>(false);
   const {signOut} = useAuth();
-  const lastName = useRef<RNTextInput>(null);
-  const username = useRef<RNTextInput>(null);
 
-  const submitForm = (formValues: UserFormValues) => console.log(formValues);
   const saveImage = (value: ParsedImage) => {
     if (value !== undefined) {
       //dispatch(createMediaObject(value.uri));
       dispatch(setImage({id: 40, contentUrl: value.uri}));
     }
+  };
+
+  const submitForm = ({name, lastName, username}: UserFormValues) => {
+    if (user !== null && change === true) {
+      const updatedUser = {
+        id: user.id,
+        username: username,
+        name: name,
+        lastName: lastName,
+        image: user.image,
+      };
+      dispatch(updateUser(updatedUser)).then(() => {
+        const message = !error
+          ? 'Profile Updated'
+          : 'Error while updating profile';
+        ToastAndroid.showWithGravity(
+          message,
+          ToastAndroid.CENTER,
+          ToastAndroid.SHORT,
+        );
+      });
+    }
+    setChange(false);
+    setUsernameChange(false);
+    setNameChange(false);
+    setLastNameChange(false);
   };
   const {
     handleChange,
@@ -41,24 +68,26 @@ export const Profile = () => {
     errors,
     touched,
     values,
-    //setFieldValue,
   } = useFormik({
     validationSchema: UserSchema,
     initialValues: {
-      name: user.name,
-      lastName: user.lastName,
-      username: user.username,
-      image: user.image,
+      name: user ? user.name : '',
+      lastName: user ? user.lastName : '',
+      username: user ? user.username : '',
     },
-    onSubmit: (formValues: UserFormValues) => submitForm(formValues),
+    onSubmit: (formValues: UserFormValues) => {
+      submitForm(formValues);
+    },
+    validateOnBlur: false,
+    validateOnChange: false,
   });
   const openImagePicker = () => setModal(true);
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container}>
       <View style={styles.avatar}>
         <Avatar
           isContentUrl={false}
-          uri={user.image?.contentUrl}
+          uri={user?.image?.contentUrl}
           hasBorder={true}
           height={90}
           width={90}
@@ -73,7 +102,9 @@ export const Profile = () => {
       </View>
       <View style={styles.formData}>
         <View style={styles.formField}>
-          <Text variant="formLabel">Name</Text>
+          <Text variant="formLabel" marginBottom="s">
+            Name
+          </Text>
           <TextInput
             icon="user"
             placeholder={'Enter your name'}
@@ -81,15 +112,20 @@ export const Profile = () => {
             autoCapitalize="words"
             autoCompleteType="name"
             onChangeText={handleChange('name')}
+            onChange={() => {
+              setChange(true);
+              setNameChange(true);
+            }}
             onBlur={handleBlur('name')}
             error={errors.name}
-            touched={touched.name}
-            returnKeyLabel="next"
-            onSubmitEditing={() => lastName.current?.focus()}
+            touched={nameChange ? touched.name : false}
+            onSubmitEditing={() => handleSubmit()}
           />
         </View>
         <View style={styles.formField}>
-          <Text variant="formLabel">Last name</Text>
+          <Text variant="formLabel" marginBottom="s">
+            Last name
+          </Text>
           <TextInput
             icon="users"
             placeholder={'Enter your last name'}
@@ -97,15 +133,20 @@ export const Profile = () => {
             autoCapitalize="words"
             autoCompleteType="username"
             onChangeText={handleChange('lastName')}
-            onBlur={handleBlur('lastname')}
+            onChange={() => {
+              setChange(true);
+              setLastNameChange(true);
+            }}
+            onBlur={handleBlur('lastName')}
             error={errors.name}
-            touched={touched.lastName}
-            returnKeyLabel="next"
-            onSubmitEditing={() => username.current?.focus()}
+            touched={lastNameChange ? touched.lastName : false}
+            onSubmitEditing={() => handleSubmit()}
           />
         </View>
         <View style={styles.formField}>
-          <Text variant="formLabel">Email</Text>
+          <Text variant="formLabel" marginBottom="s">
+            Email
+          </Text>
           <TextInput
             icon="mail"
             placeholder={'Enter your email'}
@@ -115,21 +156,27 @@ export const Profile = () => {
             onChangeText={handleChange('username')}
             onBlur={handleBlur('username')}
             error={errors.username}
-            touched={touched.username}
+            touched={userNameChange ? touched.username : false}
+            onChange={() => {
+              setChange(true);
+              setUsernameChange(true);
+            }}
             returnKeyLabel="go"
             onSubmitEditing={() => handleSubmit()}
           />
         </View>
-        <View>
+        <View marginHorizontal="l" marginVertical="l">
           <Button
             variant="primary"
-            margin="l"
             onPress={() => signOut()}
             label="Sign out"
           />
         </View>
+        <View style={styles.version} margin="xl">
+          <Text variant="version">Version 1.0</Text>
+        </View>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -149,5 +196,8 @@ const styles = StyleSheet.create({
   },
   formField: {
     marginVertical: 5,
+  },
+  version: {
+    alignItems: 'center',
   },
 });

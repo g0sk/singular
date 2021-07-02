@@ -5,26 +5,14 @@ import {
   spacing,
   border,
   backgroundColor,
-  SpacingProps,
-  BorderProps,
-  BackgroundColorProps,
   VariantProps,
   createRestyleComponent,
   createVariant,
 } from '@shopify/restyle';
+import {ButtonProps} from 'types';
 import {Text} from 'components/Text';
 import {View} from 'components/View';
 import {Theme} from 'ui/Theme';
-
-type ButtonProps = SpacingProps<Theme> &
-  VariantProps<Theme, 'buttonVariants'> &
-  BorderProps<Theme> &
-  BackgroundColorProps<Theme> & {
-    onPress: () => void;
-    label?: string;
-    outline?: boolean;
-    loading?: boolean;
-  };
 
 //Same name as variable in theme object
 const buttonVariant = createVariant({themeKey: 'buttonVariants'});

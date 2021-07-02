@@ -2,7 +2,13 @@ import {Dispatch, SetStateAction} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
 import {Image} from 'react-native';
-
+import {
+  SpacingProps,
+  BorderProps,
+  BackgroundColorProps,
+  VariantProps,
+} from '@shopify/restyle';
+import {Theme} from 'ui/Theme';
 //Geral types
 export type Credentials = {
   username: string;
@@ -105,9 +111,20 @@ export interface User {
   username: string;
   name: string;
   lastName: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string;
+  image: {
+    id: number;
+    contentUrl: string;
+  } | null;
+}
+
+//Updated user
+export interface UpdateUser {
+  username: string;
+  name: string;
+  lastName: string;
   image: {
     id: number;
     contentUrl: string;
@@ -181,10 +198,20 @@ interface UserFormValues {
   name: string;
   lastName: string;
   username: string;
-  image: File;
 }
 
 //Components
+
+//Button
+export type ButtonProps = SpacingProps<Theme> &
+  VariantProps<Theme, 'buttonVariants'> &
+  BorderProps<Theme> &
+  BackgroundColorProps<Theme> & {
+    onPress: () => void;
+    label?: string;
+    outline?: boolean;
+    loading?: boolean;
+  };
 
 //Header
 export interface HeaderProps {

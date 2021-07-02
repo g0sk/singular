@@ -71,6 +71,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
                 store.dispatch(fetchUser(userID)).then(() => {
                   const {user} = store.getState().users;
                   if (user !== null) {
+                    console.log('user: ', user);
                     dispatch({type: 'SIGN_IN', token, refreshToken, user});
                   } else {
                     console.log('AuthProvider could not fetch user info');

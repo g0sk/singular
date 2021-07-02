@@ -29,7 +29,7 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
     itemContainer: {
       height: 45,
       width: 300,
-      borderColor: theme.colors.secondary,
+      borderColor: theme.colors.primary,
       borderWidth: 2,
       borderRadius: 13,
       flexDirection: 'row',
@@ -38,7 +38,7 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
     icon: {
       borderRadius: 8,
       borderWidth: 2,
-      borderColor: theme.colors.default,
+      borderColor: theme.colors.secondary,
     },
     infoContainer: {
       flexDirection: 'row',

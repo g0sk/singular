@@ -1,3 +1,4 @@
+import {updateUser} from 'store/slices/user/userAsyncThunk';
 import {createSlice} from '@reduxjs/toolkit';
 import {fetchUser} from './userAsyncThunk';
 import {UserState} from 'types';
@@ -21,18 +22,30 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchUser.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.error = false;
         state.loading = false;
         state.user = action.payload;
       })
       .addCase(fetchUser.pending, (state) => {
-        state.error = false;
         state.loading = true;
+        state.error = false;
       })
       .addCase(fetchUser.rejected, (state) => {
-        state.error = true;
         state.loading = false;
+        state.error = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.error = false;
+        state.loading = false;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(updateUser.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
       });
   },
 });
