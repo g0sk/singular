@@ -9,9 +9,19 @@ type TagResponse = TagEvent | null;
 const loadingDots: string =
   '.........................................................................................';
 
+export async function isSupported() {
+  return await NfcManager.isSupported();
+}
+
+export async function isEnabled() {
+  return await NfcManager.isEnabled();
+}
+
 //Start nfc manager before using it
 export async function initNfc() {
-  await NfcManager.start();
+  await NfcManager.start().catch((e) => {
+    throw e;
+  });
 }
 
 //reads ndef_message its ndef_records

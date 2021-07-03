@@ -35,8 +35,8 @@ export const TabNavigator = () => {
         options={{
           tabBarIcon: ({focused}) => (
             <Icon
-              name="bluetooth"
-              size={25}
+              name="radio"
+              size={30}
               color={focused ? theme.colors.primary : theme.colors.default}
             />
           ),

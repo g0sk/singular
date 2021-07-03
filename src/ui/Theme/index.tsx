@@ -56,6 +56,21 @@ const BaseTheme = {
 const theme = createTheme({
   ...BaseTheme,
   textVariants: {
+    errorDescription: {
+      color: 'error',
+      fontSize: 27,
+      textAlign: 'center',
+    },
+    scanError: {
+      color: 'error',
+      fontSize: 30,
+      textAlign: 'center',
+    },
+    scanHeader: {
+      color: 'darkText',
+      fontSize: 30,
+      textAlign: 'center',
+    },
     button_disabled: {
       color: 'lightText',
     },

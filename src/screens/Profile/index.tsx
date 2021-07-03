@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {VERSION} from '@env';
-import {StyleSheet, ToastAndroid} from 'react-native';
+import {Alert, StyleSheet, ToastAndroid} from 'react-native';
 import {Avatar, Button, ImagePicker, View, Text, TextInput} from 'components';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
@@ -29,6 +29,19 @@ export const Profile: React.FC = () => {
   const [lastNameChange, setLastNameChange] = useState<boolean>(false);
   const [modal, setModal] = useState<boolean>(false);
   const {signOut} = useAuth();
+
+  const logOut = () => {
+    Alert.alert('LogOut', 'Are you sure you want to log out?', [
+      {
+        text: 'Cancel',
+        onPress: () => null,
+      },
+      {
+        text: 'Log out',
+        onPress: () => signOut(),
+      },
+    ]);
+  };
 
   const saveImage = (image: ParsedImage) => {
     if (image !== undefined) {
@@ -175,11 +188,7 @@ export const Profile: React.FC = () => {
           />
         </View>
         <View marginHorizontal="l" marginVertical="l">
-          <Button
-            variant="primary"
-            onPress={() => signOut()}
-            label="Sign out"
-          />
+          <Button variant="primary" onPress={() => logOut()} label="Sign out" />
         </View>
         <View style={styles.version} margin="xl">
           <Text variant="version">{'Version ' + VERSION}</Text>
