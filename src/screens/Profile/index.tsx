@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {VERSION} from '@env';
 import {StyleSheet, ToastAndroid} from 'react-native';
 import {Avatar, Button, ImagePicker, View, Text, TextInput} from 'components';
 import {useFormik} from 'formik';
@@ -181,7 +182,7 @@ export const Profile: React.FC = () => {
           />
         </View>
         <View style={styles.version} margin="xl">
-          <Text variant="version">Version 1.0</Text>
+          <Text variant="version">{'Version ' + VERSION}</Text>
         </View>
       </View>
     </KeyboardAwareScrollView>
