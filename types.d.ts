@@ -167,8 +167,14 @@ export interface ActiveState {
 }
 
 //Media object
+
+export type MediaObjectResponse = {
+  id: number;
+  contentUrl: string;
+};
+
 export interface MediaObjectState {
-  image: File | null;
+  image: MediaObjectResponse | null;
   loading: boolean;
   error: boolean;
   errorData: Error;
@@ -245,7 +251,8 @@ export interface PermissionTypes {
 
 export type ParsedImage =
   | {
-      base64: string | undefined;
+      //base64: string | undefined;
+      type: string | undefined;
       uri: string | undefined;
       width: number | undefined;
       height: number | undefined;

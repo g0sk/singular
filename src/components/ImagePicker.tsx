@@ -32,7 +32,8 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
   const parseImageResponse = (response: ImagePickerResponse): ParsedImage => {
     //const base64URI = 'data:image/jpg;base64,' + response.base64;
     return {
-      base64: response.base64,
+      //base64: response.base64,
+      type: response.type,
       uri: response.uri,
       height: response.height,
       width: response.width,
@@ -57,7 +58,7 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
   const showGallery = () => {
     const libraryOptions: ImageLibraryOptions = {
       mediaType: 'photo',
-      includeBase64: true,
+      includeBase64: false,
       //maxWidth: 100,
       //maxHeight: 100,
       quality: 1,

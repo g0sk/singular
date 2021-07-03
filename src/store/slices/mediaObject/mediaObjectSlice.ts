@@ -14,7 +14,8 @@ const MediaObjectSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createMediaObject.fulfilled, (state) => {
+      .addCase(createMediaObject.fulfilled, (state, action) => {
+        state.image = action.payload;
         state.error = false;
         state.loading = false;
       })
@@ -23,12 +24,9 @@ const MediaObjectSlice = createSlice({
         state.loading = true;
         state.errorData = null;
       })
-      .addCase(createMediaObject.rejected, (state, action) => {
+      .addCase(createMediaObject.rejected, (state) => {
         state.error = true;
         state.loading = false;
-        if (action.payload) {
-          state.errorData = action.payload;
-        }
       });
   },
 });

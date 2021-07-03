@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {createRef} from 'react';
 import {Screen} from 'components';
 import {StyleSheet} from 'react-native';
 import {Dimensions, FlatList, TouchableOpacity} from 'react-native';
@@ -18,10 +18,12 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
   const {actives, activesLength, loading} = useAppSelector(
     (state) => state.active,
   );
-  const dispatch = useAppDispatch();
   const refreshActives = () => {
     dispatch(fetchActives());
   };
+
+  const flatListRef = createRef<FlatList<any>>();
+  const dispatch = useAppDispatch();
   const nActives = activesLength + ' actives';
   const emptyList = () =>
     !loading && activesLength > 0 ? (
@@ -32,10 +34,15 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
   return (
     <Screen>
       <View style={styles.container}>
-        <TouchableOpacity style={styles.itemNumber} onPress={() => null}>
+        <TouchableOpacity
+          style={styles.itemNumber}
+          onPress={() =>
+            flatListRef.current?.scrollToIndex({animated: true, index: 0})
+          }>
           <Text>{nActives}</Text>
         </TouchableOpacity>
         <FlatList
+          ref={flatListRef}
           renderItem={({item}) => (
             <DocumentItem {...{navigation, route, item}} />
           )}

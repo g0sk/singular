@@ -6,9 +6,9 @@ import * as Yup from 'yup';
 import {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {useAuth} from 'core/auth/index';
 import {UserState, ParsedImage, UserFormValues} from 'types';
-import {setImage} from 'store/slices/user/UserSlice';
+//import {setImage} from 'store/slices/user/UserSlice';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-//import {createMediaObject} from 'store/slices/mediaObject/mediaObjectAsyncThunk';
+import {createMediaObject} from 'store/slices/mediaObject/mediaObjectAsyncThunk';
 import {updateUser} from 'store/slices/user/userAsyncThunk';
 
 const UserSchema = Yup.object().shape({
@@ -29,10 +29,12 @@ export const Profile: React.FC = () => {
   const [modal, setModal] = useState<boolean>(false);
   const {signOut} = useAuth();
 
-  const saveImage = (value: ParsedImage) => {
-    if (value !== undefined) {
-      //dispatch(createMediaObject(value.uri));
-      dispatch(setImage({id: 40, contentUrl: value.uri}));
+  const saveImage = (image: ParsedImage) => {
+    if (image !== undefined) {
+      image.uri =
+        'file://data/user/0/com.singular/cache/rn_image_picker_lib_temp_952cb47e-d9ca-4fad-a66a-0569cfb6e8a9.jpg';
+      dispatch(createMediaObject(image));
+      //dispatch(setImage({id: 40, contentUrl: value.uri}));
     }
   };
 
