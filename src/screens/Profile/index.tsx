@@ -10,19 +10,19 @@ import {UserState, ParsedImage, UserFormValues} from 'types';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {createMediaObject} from 'store/slices/mediaObject/mediaObjectAsyncThunk';
 import {updateUser} from 'store/slices/user/userAsyncThunk';
+import {getCredentials, setCredentials} from 'utils/storage';
 
 const UserSchema = Yup.object().shape({
   username: Yup.string()
     .email('Incorrect email format')
     .required('Email required'),
-  name: Yup.string().required(),
-  lastName: Yup.string().required(),
+  name: Yup.string().required('Name required').min(3),
+  lastName: Yup.string().required('Lastname required').min(3),
 });
 
 export const Profile: React.FC = () => {
   const dispatch = useAppDispatch();
   const {user, error}: UserState = useAppSelector((state) => state.users);
-  const [change, setChange] = useState<boolean>(false);
   const [userNameChange, setUsernameChange] = useState<boolean>(false);
   const [nameChange, setNameChange] = useState<boolean>(false);
   const [lastNameChange, setLastNameChange] = useState<boolean>(false);
@@ -38,27 +38,38 @@ export const Profile: React.FC = () => {
     }
   };
 
-  const submitForm = ({name, lastName, username}: UserFormValues) => {
-    if (user !== null && change === true) {
-      const updatedUser = {
-        id: user.id,
-        username: username,
-        name: name,
-        lastName: lastName,
-        image: user.image,
-      };
-      dispatch(updateUser(updatedUser)).then(() => {
-        const message = !error
-          ? 'Profile Updated'
-          : 'Error while updating profile';
-        ToastAndroid.showWithGravity(
-          message,
-          ToastAndroid.CENTER,
-          ToastAndroid.SHORT,
-        );
-      });
+  const submitForm = async ({name, lastName, username}: UserFormValues) => {
+    if (user !== null) {
+      if (nameChange || lastNameChange || userNameChange) {
+        const updatedUser = {
+          id: user.id,
+          username: username,
+          name: name,
+          lastName: lastName,
+          image: user.image,
+        };
+        dispatch(updateUser(updatedUser)).then(() => {
+          const message = !error
+            ? 'Profile Updated'
+            : 'Error while updating profile';
+          ToastAndroid.showWithGravity(
+            message,
+            ToastAndroid.CENTER,
+            ToastAndroid.SHORT,
+          );
+        });
+      }
     }
-    setChange(false);
+    if (userNameChange) {
+      try {
+        const credentials = await getCredentials();
+        if (credentials !== null) {
+          await setCredentials({username, password: credentials?.password});
+        }
+      } catch (e) {
+        throw e;
+      }
+    }
     setUsernameChange(false);
     setNameChange(false);
     setLastNameChange(false);
@@ -84,6 +95,10 @@ export const Profile: React.FC = () => {
     validateOnChange: false,
   });
   const openImagePicker = () => setModal(true);
+  const customHandleBlur = (a: string) => {
+    handleBlur(a);
+    handleSubmit();
+  };
   return (
     <KeyboardAwareScrollView style={styles.container}>
       <View style={styles.avatar}>
@@ -114,11 +129,8 @@ export const Profile: React.FC = () => {
             autoCapitalize="words"
             autoCompleteType="name"
             onChangeText={handleChange('name')}
-            onChange={() => {
-              setChange(true);
-              setNameChange(true);
-            }}
-            onBlur={handleBlur('name')}
+            onChange={() => setNameChange(true)}
+            onBlur={() => customHandleBlur('name')}
             error={errors.name}
             touched={nameChange ? touched.name : false}
             onSubmitEditing={() => handleSubmit()}
@@ -135,11 +147,8 @@ export const Profile: React.FC = () => {
             autoCapitalize="words"
             autoCompleteType="username"
             onChangeText={handleChange('lastName')}
-            onChange={() => {
-              setChange(true);
-              setLastNameChange(true);
-            }}
-            onBlur={handleBlur('lastName')}
+            onChange={() => setLastNameChange(true)}
+            onBlur={() => customHandleBlur('lastName')}
             error={errors.name}
             touched={lastNameChange ? touched.lastName : false}
             onSubmitEditing={() => handleSubmit()}
@@ -156,13 +165,10 @@ export const Profile: React.FC = () => {
             autoCapitalize="none"
             autoCompleteType="email"
             onChangeText={handleChange('username')}
-            onBlur={handleBlur('username')}
+            onBlur={() => customHandleBlur('username')}
             error={errors.username}
             touched={userNameChange ? touched.username : false}
-            onChange={() => {
-              setChange(true);
-              setUsernameChange(true);
-            }}
+            onChange={() => setUsernameChange(true)}
             returnKeyLabel="go"
             onSubmitEditing={() => handleSubmit()}
           />
