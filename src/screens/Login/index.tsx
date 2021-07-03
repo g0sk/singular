@@ -14,7 +14,7 @@ import {fetchUser} from 'store/slices/user/userAsyncThunk';
 import {useAuth} from 'core/auth';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {ErrorHandler} from 'handlers/error';
-import {removeCredentials, setCredentials} from 'core/auth/utils';
+import {removeCredentials, setCredentials} from 'utils/storage';
 import {FormValues} from 'types';
 
 const {height, width} = Dimensions.get('window');

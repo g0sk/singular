@@ -4,7 +4,7 @@ import store from 'store/configureStore';
 import {fetchUser} from 'store/slices/user/userAsyncThunk';
 import {User} from 'types';
 import {logOut, fetchToken} from './authSlice';
-import {getCredentials, removeCredentials} from './utils';
+import {getCredentials, removeCredentials} from 'utils/storage';
 
 interface AuthState {
   userToken: string | undefined | null;
