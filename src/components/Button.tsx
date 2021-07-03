@@ -33,12 +33,13 @@ export const Button: React.FC<ButtonProps> = ({
   label,
   loading = false,
   variant = 'primary',
+  disabled = false,
   ...rest
 }) => {
   const props = useRestyle(restyleFunctions, {...rest, variant});
   const textVariant = 'button_' + variant;
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} disabled={disabled}>
       <ButtonContainer
         borderRadius={50}
         flexDirection="row"

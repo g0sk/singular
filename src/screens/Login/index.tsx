@@ -78,6 +78,7 @@ export const Login: React.FC = () => {
     touched,
     values,
     setFieldValue,
+    isValid,
   } = useFormik({
     validationSchema: LoginSchema,
     initialValues: {
@@ -152,7 +153,8 @@ export const Login: React.FC = () => {
                 </View>
                 <View marginHorizontal="m">
                   <Button
-                    variant="secondary"
+                    disabled={isValid}
+                    variant={isValid ? 'secondary' : 'disabled'}
                     label="Log in"
                     onPress={() => handleSubmit()}
                     loading={loading}

@@ -22,6 +22,7 @@ const BaseTheme = {
     darkText: '#000',
     chart: '#0cd13f',
     default: '#9b9b9b',
+    disabled: '#716d6d',
     description: '#393939',
     error: '#c90404',
     lightBackground: '#ffffff',
@@ -55,6 +56,9 @@ const BaseTheme = {
 const theme = createTheme({
   ...BaseTheme,
   textVariants: {
+    button_disabled: {
+      color: 'lightText',
+    },
     button_edit: {
       color: 'white',
     },
@@ -124,6 +128,9 @@ const theme = createTheme({
     },
     edit: {
       backgroundColor: 'secondary',
+    },
+    disabled: {
+      backgroundColor: 'disabled',
     },
   },
   navigation: {

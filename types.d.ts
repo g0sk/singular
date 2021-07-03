@@ -217,6 +217,7 @@ export type ButtonProps = SpacingProps<Theme> &
     label?: string;
     outline?: boolean;
     loading?: boolean;
+    disabled?: boolean;
   };
 
 //Header
