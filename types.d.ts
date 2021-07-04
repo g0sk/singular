@@ -30,8 +30,8 @@ export type ErrorData = {
 //Route
 export type AppNavigatorParamList = {
   Tab: TabNavigatorParamList;
-  Profile: undefined;
 };
+export type TabRouteProp = StackNavigationProp<AppNavigatorParamList, 'Tab'>;
 
 export type TabNavigationProp = StackNavigationProp<
   AppNavigatorParamList,
@@ -40,6 +40,7 @@ export type TabNavigationProp = StackNavigationProp<
 
 export type TabStackProps = {
   navigation: TabNavigationProp;
+  route: TabRouteProp;
 };
 
 //TabNavigator
@@ -47,6 +48,7 @@ export type TabNavigatorParamList = {
   Home: undefined;
   Scan: undefined;
   DocumentNavigator: RootDocumentParamList;
+  Profile: undefined;
 };
 
 //Auth Navigator
@@ -222,13 +224,12 @@ export type ButtonProps = SpacingProps<Theme> &
 
 //Header
 export interface HeaderProps {
-  contentUrl?: string;
-  uri?: string;
-  label?: string;
-  defaultIcon: string;
+  label: string;
+  labelAction: () => void;
+  defaultIcon?: string;
   hasExtraIcon?: boolean;
   extraIcon?: string;
-  defaultAction: () => void;
+  defaultAction?: () => void;
   extraAction?: () => void;
 }
 

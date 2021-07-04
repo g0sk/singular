@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Home, Scan} from 'screens';
+import {Profile, Scan} from 'screens';
 import {useTheme} from 'ui/Theme';
 import Icon from 'react-native-vector-icons/Feather';
 import {DocumentNavigator} from './DocumentNavigator';
@@ -17,12 +17,12 @@ export const TabNavigator = () => {
         style: styles.container,
       }}>
       <Tab.Screen
-        name="Home"
-        component={Home}
+        name="DocumentNavigator"
+        component={DocumentNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <Icon
-              name="home"
+              name="file"
               size={25}
               color={focused ? theme.colors.primary : theme.colors.default}
             />
@@ -43,12 +43,12 @@ export const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="DocumentNavigator"
-        component={DocumentNavigator}
+        name="Profile"
+        component={Profile}
         options={{
           tabBarIcon: ({focused}) => (
             <Icon
-              name="file"
+              name="user"
               size={25}
               color={focused ? theme.colors.primary : theme.colors.default}
             />

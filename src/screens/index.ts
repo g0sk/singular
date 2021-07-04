@@ -1,4 +1,3 @@
-export * from './Home';
 export * from './Document';
 export * from './Profile';
 export * from './Login';

@@ -1,40 +1,24 @@
 import * as React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
-import {Avatar, View, Text} from 'components';
+import {View, Text} from 'components';
 import Icon from 'react-native-vector-icons/Feather';
 import {HeaderProps} from 'types';
-import {useNavigation} from '@react-navigation/native';
-import {useAuth} from 'core/auth';
+//import {useNavigation} from '@react-navigation/native';
 
 export const Header: React.FC<HeaderProps> = ({
-  contentUrl,
-  label = undefined,
+  label,
+  labelAction,
   defaultIcon,
-  defaultAction,
+  defaultAction = () => null,
   hasExtraIcon = false,
   extraIcon,
 }) => {
-  const {navigate} = useNavigation();
-  const {signOut} = useAuth();
-  const navigateProfile = () => navigate('Profile', undefined);
+  //const {navigate} = useNavigation();
   return (
     <View style={styles.headerContainer}>
-      <View style={styles.userInfo}>
-        <View style={styles.avatar}>
-          <Avatar
-            isContentUrl={true}
-            uri={contentUrl}
-            hasBorder={true}
-            height={45}
-            width={45}
-            longPress={signOut}
-            press={navigateProfile}
-          />
-        </View>
-        <View style={styles.label}>
-          <Text variant="headerUsername">{label}</Text>
-        </View>
-      </View>
+      <TouchableOpacity style={styles.userInfo} onPress={labelAction}>
+        <Text variant="headerTitle">{label}</Text>
+      </TouchableOpacity>
       <View style={!hasExtraIcon ? styles.icon : styles.icons}>
         {hasExtraIcon && extraIcon && (
           <View style={styles.extraIcon}>
@@ -43,11 +27,13 @@ export const Header: React.FC<HeaderProps> = ({
             </TouchableOpacity>
           </View>
         )}
-        <View style={styles.defaultIcon}>
-          <TouchableOpacity onPress={() => defaultAction()}>
-            <Icon name={defaultIcon} size={25} />
-          </TouchableOpacity>
-        </View>
+        {defaultIcon && (
+          <View style={styles.defaultIcon}>
+            <TouchableOpacity onPress={() => defaultAction()}>
+              <Icon name={defaultIcon} size={25} />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -55,8 +41,6 @@ export const Header: React.FC<HeaderProps> = ({
 
 const styles = StyleSheet.create({
   headerContainer: {
-    marginTop: 10,
-    marginHorizontal: 15,
     alignItems: 'center',
     flexDirection: 'row',
   },
@@ -65,12 +49,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     minWidth: 200,
     width: 250,
-  },
-  avatar: {
-    paddingRight: 7,
-  },
-  label: {
-    paddingTop: 5,
   },
   icon: {
     paddingHorizontal: 10,

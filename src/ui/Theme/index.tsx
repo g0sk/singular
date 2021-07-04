@@ -43,12 +43,14 @@ const BaseTheme = {
     m: 16,
     l: 24,
     xl: 40,
+    dxl: 110,
   },
   margin: {
     s: 10,
     m: 40,
     l: 75,
     xl: 400,
+    dxl: 500,
   },
   breakpoints: {},
 };
@@ -56,6 +58,16 @@ const BaseTheme = {
 const theme = createTheme({
   ...BaseTheme,
   textVariants: {
+    emptyHeader: {
+      color: 'darkText',
+      fontWeight: 'bold',
+      fontSize: 25,
+    },
+    headerTitle: {
+      color: 'darkText',
+      fontWeight: 'bold',
+      fontSize: 30,
+    },
     errorDescription: {
       color: 'error',
       fontSize: 27,

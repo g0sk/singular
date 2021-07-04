@@ -1,6 +1,5 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Profile} from 'screens';
 import {TabNavigator} from './TabNavigator';
 import {AppNavigatorParamList} from 'types';
 
@@ -13,11 +12,6 @@ export const AppNavigator = () => {
         name="Tab"
         component={TabNavigator}
         options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="Profile"
-        component={Profile}
-        options={{headerShown: true}}
       />
     </Stack.Navigator>
   );
