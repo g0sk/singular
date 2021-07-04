@@ -7,6 +7,7 @@ import {DocumentItem} from './DocumentItem';
 import {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {fetchActives} from 'store/slices/active/activeAsyncThunk';
 import {DocumentStackProps} from 'types';
+import {translate} from 'core';
 
 //Screen dimension - tabbar height;
 const HEIGHT = Dimensions.get('window').height - 75;
@@ -24,7 +25,7 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
   };
 
   const flatListRef = createRef<FlatList<any>>();
-  const nActives = activesLength + ' actives';
+  const nActives = activesLength + ' ' + translate('active.actives');
   const emptyList = () =>
     !loading && activesLength > 0 ? (
       <Text style={styles.noActives} variant="emptyHeader">
@@ -46,7 +47,7 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
             }
             hasExtraIcon={true}
             extraIcon="search"
-            label={route.name}
+            label={translate('screen.documents.title')}
             labelAction={() =>
               flatListRef.current?.scrollToIndex({animated: true, index: 0})
             }

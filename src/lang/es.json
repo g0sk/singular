@@ -1,0 +1,95 @@
+{
+  "screen": {
+    "document": {
+      "title": "Documento"
+    },
+    "documents": {
+      "title": "Documentos"
+    },
+    "profile": {
+      "title": "Perfil"
+    },
+    "scan": {
+      "title": "Escanear"
+    },
+    "login": {
+      "title": "Bienvenido a Singular",
+      "description": "Inicia sesión para comenzar a utilizar la aplicación"
+    }
+  },
+  "active": {
+    "active": "activo",
+    "actives": "activos"
+  },
+  "form": {
+    "login": {
+      "email": {
+        "label": "Correo electrónico",
+        "placeholder": "Introduce tu correo",
+        "error": {
+          "required": "Campo obligatorio",
+          "invalid": "Correo electrónico erróneo"
+        }
+      }, 
+      "password": {
+        "label": "Contraseña",
+        "placeholder": "Introduce tu contraseña",
+        "error": {
+          "required": "Campo obligatorio",
+          "invalid": "Contraseña errónea",
+          "short": "Demasiado corto",
+          "long": "Demasiado largo"
+        }
+      }
+    },
+    "user": {
+      "name": {
+        "label": "Nombre",
+        "placeholder": "Introduce tu nombre"
+      },
+      "lastName": {
+        "label": "Last name",
+        "placeholder": "Introduce tus apellidos"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Introduce tu correo electrónico"
+      }
+    }
+  },
+  "user": {},
+  "messages": {
+    "login": {
+      "signIn": "Iniciar sesión"
+    }
+  },
+  "button": {
+    "general": {
+      "cancel": "Cancelar",
+      "yes": "Sí",
+      "no": "No"
+    },
+    "login": {
+      "logIn": "Iniciar sesión",
+      "logOut": "Cerrar sesión",
+      "rememberMe": "Recordarme"
+    }
+  },
+  "action": {
+    "login": {
+      "signIn": {
+        "title": "Iniciar sesión"
+      },
+      "logOut": {
+        "title": "Cerrar sesión",
+        "message": "¿Está seguro de que quiere cerrar sesión?"
+      }
+    }
+  },
+  "app": {
+    "data": {
+      "version": "Versión"
+    }
+  }
+  
+}

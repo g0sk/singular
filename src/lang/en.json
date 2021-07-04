@@ -1,0 +1,94 @@
+{
+  "screen": {
+    "document": {
+      "title": "Document"
+    },
+    "documents": {
+      "title": "Documents"
+    },
+    "profile": {
+      "title": "Profile"
+    },
+    "scan": {
+      "title": "Scan"
+    },
+    "login": {
+      "title": "Welcome to Singular",
+      "description": "Log in to start using the app"
+    }
+  },
+  "active": {
+    "active": "active",
+    "actives": "actives"
+  },
+  "user": {},
+  "form": {
+    "login": {
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email",
+        "error": {
+          "required": "Field required",
+          "invalid": "Invalid email"
+        }
+      }, 
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password",
+        "error": {
+          "required": "Field required",
+          "invalid": "Invalid password",
+          "short": "Too short",
+          "long": "Too long"
+        }
+      }
+    },
+    "user": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Enter your name"
+      },
+      "lastName": {
+        "label": "Last name",
+        "placeholder": "Enter your last name"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email"
+      }
+    }
+  },
+  "messages": {
+    "login": {
+      "signIn": "Sign in"
+    }
+  },
+  "action": {
+    "login": {
+      "signIn": {
+        "title": "Sign In"
+      },
+      "logOut": {
+        "title": "Log out",
+        "message": "Are you sure you want to log out?"
+      }
+    }
+  },
+  "app": {
+    "data": {
+      "version": "Version"
+    }
+  },
+  "button": {
+    "general": {
+      "cancel": "Cancel",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "login": {
+      "logIn": "Log in",
+      "logOut": "Log out",
+      "rememberMe": "Remember me"
+    }
+  }
+}

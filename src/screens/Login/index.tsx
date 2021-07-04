@@ -11,20 +11,23 @@ import {
 import {Button, CheckBox, Text, TextInput, View} from 'components';
 import {fetchToken} from 'core/auth/authSlice';
 import {fetchUser} from 'store/slices/user/userAsyncThunk';
-import {useAuth} from 'core/auth';
+import {useAuth} from 'core';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {ErrorHandler} from 'handlers/error';
 import {removeCredentials, setCredentials} from 'utils/storage';
+import {translate} from 'core';
 import {FormValues} from 'types';
 
 const {height, width} = Dimensions.get('window');
 
 const LoginSchema = Yup.object().shape({
-  username: Yup.string().email('Invalid username').required('Required'),
+  username: Yup.string()
+    .email(translate('form.login.email.error.invalid'))
+    .required(translate('form.login.email.error.required')),
   password: Yup.string()
-    .min(5, 'Too short')
-    .max(15, 'Too long')
-    .required('Required'),
+    .min(5, translate('form.login.password.error.short'))
+    .max(15, translate('form.login.password.error.long'))
+    .required(translate('form.login.password.error.required')),
   saveCredentials: Yup.boolean(),
 });
 
@@ -103,16 +106,16 @@ export const Login: React.FC = () => {
               marginHorizontal="s"
               padding="l">
               <Text variant="header1" textAlign="center" marginBottom="l">
-                Welcome to Singular
+                {translate('screen.login.title')}
               </Text>
               <Text variant="description" textAlign="center">
-                Log in to start using the app
+                {translate('screen.login.description')}
               </Text>
               <View>
-                <View marginVertical="m" margin="s">
+                <View marginVertical="m" marginHorizontal="s">
                   <TextInput
                     icon="mail"
-                    placeholder="Enter your email"
+                    placeholder={translate('form.login.email.placeholder')}
                     autoCapitalize="none"
                     autoCompleteType="email"
                     onChangeText={handleChange('username')}
@@ -126,7 +129,7 @@ export const Login: React.FC = () => {
                     <TextInput
                       ref={password}
                       icon="lock"
-                      placeholder="Enter your password"
+                      placeholder={translate('form.login.password.placeholder')}
                       secureTextEntry={true}
                       autoCapitalize="none"
                       autoCompleteType="password"
@@ -140,7 +143,7 @@ export const Login: React.FC = () => {
                   </View>
                   <View paddingTop="m" paddingHorizontal="s">
                     <CheckBox
-                      label="Remember me"
+                      label={translate('button.login.rememberMe')}
                       checked={values.saveCredentials}
                       onChange={() =>
                         setFieldValue(
@@ -155,7 +158,7 @@ export const Login: React.FC = () => {
                   <Button
                     disabled={!isValid}
                     variant={isValid ? 'secondary' : 'disabled'}
-                    label="Log in"
+                    label={translate('button.login.logIn')}
                     onPress={() => handleSubmit()}
                     loading={loading}
                   />

@@ -5,13 +5,14 @@ import {Avatar, Button, ImagePicker, View, Text, TextInput} from 'components';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {useAppDispatch, useAppSelector} from 'store/configureStore';
-import {useAuth} from 'core/auth/index';
+import {useAuth} from 'core';
 import {UserState, ParsedImage, UserFormValues} from 'types';
 //import {setImage} from 'store/slices/user/UserSlice';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {createMediaObject} from 'store/slices/mediaObject/mediaObjectAsyncThunk';
 import {updateUser} from 'store/slices/user/userAsyncThunk';
 import {getCredentials, setCredentials} from 'utils/storage';
+import {translate} from 'core';
 
 const UserSchema = Yup.object().shape({
   username: Yup.string()
@@ -31,16 +32,20 @@ export const Profile: React.FC = () => {
   const {signOut} = useAuth();
 
   const logOut = () => {
-    Alert.alert('LogOut', 'Are you sure you want to log out?', [
-      {
-        text: 'Cancel',
-        onPress: () => null,
-      },
-      {
-        text: 'Log out',
-        onPress: () => signOut(),
-      },
-    ]);
+    Alert.alert(
+      translate('action.login.logOut.title'),
+      translate('action.login.logOut.message'),
+      [
+        {
+          text: translate('button.general.cancel'),
+          onPress: () => null,
+        },
+        {
+          text: translate('button.login.logOut'),
+          onPress: () => signOut(),
+        },
+      ],
+    );
   };
 
   const saveImage = (image: ParsedImage) => {
@@ -134,11 +139,11 @@ export const Profile: React.FC = () => {
       <View style={styles.formData}>
         <View style={styles.formField}>
           <Text variant="formLabel" marginBottom="s">
-            Name
+            {translate('form.user.name.label')}
           </Text>
           <TextInput
             icon="user"
-            placeholder={'Enter your name'}
+            placeholder={translate('form.user.name.label')}
             value={values.name}
             autoCapitalize="words"
             autoCompleteType="name"
@@ -152,11 +157,11 @@ export const Profile: React.FC = () => {
         </View>
         <View style={styles.formField}>
           <Text variant="formLabel" marginBottom="s">
-            Last name
+            {translate('form.user.lastName.label')}
           </Text>
           <TextInput
             icon="users"
-            placeholder={'Enter your last name'}
+            placeholder={translate('form.user.lastName.placeholder')}
             value={values.lastName}
             autoCapitalize="words"
             autoCompleteType="username"
@@ -170,11 +175,11 @@ export const Profile: React.FC = () => {
         </View>
         <View style={styles.formField}>
           <Text variant="formLabel" marginBottom="s">
-            Email
+            {translate('form.user.email.label')}
           </Text>
           <TextInput
             icon="mail"
-            placeholder={'Enter your email'}
+            placeholder={translate('form.user.email.placeholder')}
             value={values.username}
             autoCapitalize="none"
             autoCompleteType="email"
@@ -188,10 +193,16 @@ export const Profile: React.FC = () => {
           />
         </View>
         <View marginHorizontal="l" marginVertical="l">
-          <Button variant="primary" onPress={() => logOut()} label="Sign out" />
+          <Button
+            variant="primary"
+            onPress={() => logOut()}
+            label={translate('action.login.logOut.title')}
+          />
         </View>
         <View style={styles.version} margin="xl">
-          <Text variant="version">{'Version ' + VERSION}</Text>
+          <Text variant="version">
+            {translate('app.data.version') + ' ' + VERSION}
+          </Text>
         </View>
       </View>
     </KeyboardAwareScrollView>
