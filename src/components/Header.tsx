@@ -7,7 +7,7 @@ import {HeaderProps} from 'types';
 
 export const Header: React.FC<HeaderProps> = ({
   label,
-  labelAction,
+  labelAction = () => null,
   defaultIcon,
   defaultAction = () => null,
   hasExtraIcon = false,

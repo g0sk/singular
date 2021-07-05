@@ -1,11 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import {Button, Screen, View, Text} from 'components';
+import {Button, Header, Screen, View, Text} from 'components';
 import {ActivityIndicator} from 'react-native';
 import {initNfc, readNdef} from 'utils/nfc_scanner';
 import {StyleSheet, Vibration} from 'react-native';
+import {translate} from 'core';
+import {useTheme} from 'ui/Theme';
+import Icon from 'react-native-vector-icons/Feather';
 //import {TagEvent} from 'react-native-nfc-manager';
 
 export const Scan = () => {
+  const theme = useTheme();
   const [loading, setLoading] = useState<boolean>(false);
   //const [error, setError] = useState<boolean>(false);
   //const [enabled, setEnabled] = useState<boolean>(false);
@@ -43,54 +47,13 @@ export const Scan = () => {
     }
   };
 
-  /*
-  const NotEnabledErrorMessage = () => {
-    return (
-      <View style={styles.container}>
-        <View margin="s">
-          <Text variant="scanError">Error</Text>
-          <Text margin="m" variant="errorDescription">
-            NFC is not enabled
-          </Text>
-        </View>
-        <View margin="s">
-          <Text variant="description">
-            In order to start scanning you need to enable NFC on the device
-            settings
-          </Text>
-        </View>
-      </View>
-    );
-  };
-  const NotSupportedErrorMessage = () => {
-    return (
-      <View style={styles.container}>
-        <View margin="s">
-          <Text variant="scanError">Error</Text>
-          <Text margin="m" variant="errorDescription">
-            NFC is not enabled
-          </Text>
-          <Text margin="m" variant="errorDescription">
-            NFC technology is not supported by the device
-          </Text>
-        </View>
-        <View margin="s">
-          <Text variant="description">
-            In order to start scanning you need to enable NFC on the device
-            settings
-          </Text>
-          <Text variant="description">
-            You can't use this function with the current device
-          </Text>
-        </View>
-      </View>
-    );
-  };
-*/
   return (
     <Screen>
-      <View style={styles.container} paddingTop="xl">
-        <View style={styles.scanImage} marginTop="xl" height={500}>
+      <View>
+        <View margin="m">
+          <Header label={translate('screen.scan.title')} />
+        </View>
+        <View>
           {loading ? (
             <View>
               <View margin="s">
@@ -110,7 +73,10 @@ export const Scan = () => {
               <View margin="s">
                 <Text variant="scanHeader">Start searching tags</Text>
               </View>
-              <View margin="s">
+              <View alignItems="center" margin="l">
+                <Icon name="cpu" color={theme.colors.primary} size={30} />
+              </View>
+              <View margin="s" alignItems="center">
                 <Text variant="description">
                   To begin searching tags, press de the scan button and bring
                   the device close to the tag
@@ -133,11 +99,6 @@ export const Scan = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    //flex: 1,
-    margin: 20,
-    //backgroundColor: 'red',
-  },
   title: {
     textAlign: 'center',
   },

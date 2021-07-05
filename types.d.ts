@@ -225,7 +225,7 @@ export type ButtonProps = SpacingProps<Theme> &
 //Header
 export interface HeaderProps {
   label: string;
-  labelAction: () => void;
+  labelAction?: () => void;
   defaultIcon?: string;
   hasExtraIcon?: boolean;
   extraIcon?: string;

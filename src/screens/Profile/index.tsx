@@ -1,7 +1,15 @@
 import React, {useState} from 'react';
 import {VERSION} from '@env';
 import {Alert, StyleSheet, ToastAndroid} from 'react-native';
-import {Avatar, Button, ImagePicker, View, Text, TextInput} from 'components';
+import {
+  Avatar,
+  Button,
+  Header,
+  ImagePicker,
+  View,
+  Text,
+  TextInput,
+} from 'components';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {useAppDispatch, useAppSelector} from 'store/configureStore';
@@ -57,7 +65,7 @@ export const Profile: React.FC = () => {
     }
   };
 
-  const submitForm = async ({name, lastName, username}: UserFormValues) => {
+  const submitForm = ({name, lastName, username}: UserFormValues) => {
     if (user !== null) {
       if (nameChange || lastNameChange || userNameChange) {
         const updatedUser = {
@@ -67,7 +75,7 @@ export const Profile: React.FC = () => {
           lastName: lastName,
           image: user.image,
         };
-        dispatch(updateUser(updatedUser)).then(() => {
+        dispatch(updateUser(updatedUser)).then(async () => {
           const message = !error
             ? 'Profile Updated'
             : 'Error while updating profile';
@@ -76,17 +84,20 @@ export const Profile: React.FC = () => {
             ToastAndroid.CENTER,
             ToastAndroid.SHORT,
           );
+          if (userNameChange) {
+            try {
+              const credentials = await getCredentials();
+              if (credentials !== null) {
+                await setCredentials({
+                  username,
+                  password: credentials?.password,
+                });
+              }
+            } catch (e) {
+              throw e;
+            }
+          }
         });
-      }
-    }
-    if (userNameChange) {
-      try {
-        const credentials = await getCredentials();
-        if (credentials !== null) {
-          await setCredentials({username, password: credentials?.password});
-        }
-      } catch (e) {
-        throw e;
       }
     }
     setUsernameChange(false);
@@ -119,90 +130,95 @@ export const Profile: React.FC = () => {
     handleSubmit();
   };
   return (
-    <KeyboardAwareScrollView style={styles.container}>
-      <View style={styles.avatar}>
-        <Avatar
-          isContentUrl={false}
-          uri={user?.image?.contentUrl}
-          hasBorder={true}
-          height={90}
-          width={90}
-          press={openImagePicker}
-          longPress={() => null}
-        />
-        <ImagePicker
-          setModalVisibility={setModal}
-          visible={modal}
-          saveImage={saveImage}
-        />
+    <KeyboardAwareScrollView>
+      <View margin="m">
+        <Header label={translate('screen.profile.title')} />
       </View>
-      <View style={styles.formData}>
-        <View style={styles.formField}>
-          <Text variant="formLabel" marginBottom="s">
-            {translate('form.user.name.label')}
-          </Text>
-          <TextInput
-            icon="user"
-            placeholder={translate('form.user.name.label')}
-            value={values.name}
-            autoCapitalize="words"
-            autoCompleteType="name"
-            onChangeText={handleChange('name')}
-            onChange={() => setNameChange(true)}
-            onBlur={() => customHandleBlur('name')}
-            error={errors.name}
-            touched={nameChange ? touched.name : false}
-            onSubmitEditing={() => handleSubmit()}
+      <View marginHorizontal="xl" marginVertical="l">
+        <View style={styles.avatar} marginBottom="l">
+          <Avatar
+            isContentUrl={false}
+            uri={user?.image?.contentUrl}
+            hasBorder={true}
+            height={90}
+            width={90}
+            press={openImagePicker}
+            longPress={() => null}
+          />
+          <ImagePicker
+            setModalVisibility={setModal}
+            visible={modal}
+            saveImage={saveImage}
           />
         </View>
-        <View style={styles.formField}>
-          <Text variant="formLabel" marginBottom="s">
-            {translate('form.user.lastName.label')}
-          </Text>
-          <TextInput
-            icon="users"
-            placeholder={translate('form.user.lastName.placeholder')}
-            value={values.lastName}
-            autoCapitalize="words"
-            autoCompleteType="username"
-            onChangeText={handleChange('lastName')}
-            onChange={() => setLastNameChange(true)}
-            onBlur={() => customHandleBlur('lastName')}
-            error={errors.name}
-            touched={lastNameChange ? touched.lastName : false}
-            onSubmitEditing={() => handleSubmit()}
-          />
-        </View>
-        <View style={styles.formField}>
-          <Text variant="formLabel" marginBottom="s">
-            {translate('form.user.email.label')}
-          </Text>
-          <TextInput
-            icon="mail"
-            placeholder={translate('form.user.email.placeholder')}
-            value={values.username}
-            autoCapitalize="none"
-            autoCompleteType="email"
-            onChangeText={handleChange('username')}
-            onBlur={() => customHandleBlur('username')}
-            error={errors.username}
-            touched={userNameChange ? touched.username : false}
-            onChange={() => setUsernameChange(true)}
-            returnKeyLabel="go"
-            onSubmitEditing={() => handleSubmit()}
-          />
-        </View>
-        <View marginHorizontal="l" marginVertical="l">
-          <Button
-            variant="primary"
-            onPress={() => logOut()}
-            label={translate('action.login.logOut.title')}
-          />
-        </View>
-        <View style={styles.version} margin="xl">
-          <Text variant="version">
-            {translate('app.data.version') + ' ' + VERSION}
-          </Text>
+        <View style={styles.formData} marginHorizontal="m">
+          <View marginBottom="s">
+            <Text variant="formLabel" marginBottom="s">
+              {translate('form.user.name.label')}
+            </Text>
+            <TextInput
+              icon="user"
+              placeholder={translate('form.user.name.label')}
+              value={values.name}
+              autoCapitalize="words"
+              autoCompleteType="name"
+              onChangeText={handleChange('name')}
+              onChange={() => setNameChange(true)}
+              onBlur={() => customHandleBlur('name')}
+              error={errors.name}
+              touched={nameChange ? touched.name : false}
+              onSubmitEditing={() => handleSubmit()}
+            />
+          </View>
+          <View marginBottom="s">
+            <Text variant="formLabel" marginBottom="s">
+              {translate('form.user.lastName.label')}
+            </Text>
+            <TextInput
+              icon="users"
+              placeholder={translate('form.user.lastName.placeholder')}
+              value={values.lastName}
+              autoCapitalize="words"
+              autoCompleteType="username"
+              onChangeText={handleChange('lastName')}
+              onChange={() => setLastNameChange(true)}
+              onBlur={() => customHandleBlur('lastName')}
+              error={errors.name}
+              touched={lastNameChange ? touched.lastName : false}
+              onSubmitEditing={() => handleSubmit()}
+            />
+          </View>
+          <View marginBottom="s">
+            <Text variant="formLabel" marginBottom="s">
+              {translate('form.user.email.label')}
+            </Text>
+            <TextInput
+              icon="mail"
+              placeholder={translate('form.user.email.placeholder')}
+              value={values.username}
+              autoCapitalize="none"
+              autoCompleteType="email"
+              onChangeText={handleChange('username')}
+              onBlur={() => customHandleBlur('username')}
+              error={errors.username}
+              touched={userNameChange ? touched.username : false}
+              onChange={() => setUsernameChange(true)}
+              returnKeyLabel="go"
+              onSubmitEditing={() => handleSubmit()}
+            />
+          </View>
+          <View marginHorizontal="l" marginVertical="l">
+            <Button
+              variant="primary"
+              onPress={() => logOut()}
+              label={translate('action.login.logOut.title')}
+            />
+          </View>
+          <View style={styles.version} margin="l">
+            <Text variant="version">
+              {translate('app.data.version') + ' ' + VERSION}
+            </Text>
+          </View>
         </View>
       </View>
     </KeyboardAwareScrollView>
@@ -213,18 +229,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    margin: 20,
   },
   formData: {
-    padding: 20,
     flexDirection: 'column',
   },
   avatar: {
-    margin: 10,
     alignItems: 'center',
-  },
-  formField: {
-    marginVertical: 5,
   },
   version: {
     alignItems: 'center',
