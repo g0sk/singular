@@ -7,7 +7,7 @@ const Stack = createStackNavigator<AppNavigatorParamList>();
 
 export const AppNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: true}}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen
         name="Tab"
         component={TabNavigator}

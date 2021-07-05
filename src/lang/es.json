@@ -10,7 +10,10 @@
       "title": "Perfil"
     },
     "scan": {
-      "title": "Escanear"
+      "title": "Escanear",
+      "header": "Comienza a escanear etiquetas",
+      "description": "Para empezar a escanear etiquetas, pulsa el botón y acerca el dispositivo a la etiqueta.",
+      "tip": "Acerca el dispositivo a la etiqueta."
     },
     "login": {
       "title": "Bienvenido a Singular",
@@ -73,6 +76,10 @@
       "logIn": "Iniciar sesión",
       "logOut": "Cerrar sesión",
       "rememberMe": "Recordarme"
+    },
+    "scan": {
+      "scan": "Escanear",
+      "cancel": "Cancelar"
     }
   },
   "action": {
@@ -84,6 +91,10 @@
         "title": "Cerrar sesión",
         "message": "¿Está seguro de que quiere cerrar sesión?"
       }
+    },
+    "scan": {
+      "search": "Buscando etiqueta",
+      "scan": "Leyendo etiqueta"
     }
   },
   "app": {

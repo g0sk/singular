@@ -10,7 +10,10 @@
       "title": "Profile"
     },
     "scan": {
-      "title": "Scan"
+      "title": "Scan",
+      "header": "Start scanning tags",
+      "description": "To begin scanning tags, press the scan button and bring the device close to the tag.",
+      "tip": "Bring the device close to the tag."
     },
     "login": {
       "title": "Welcome to Singular",
@@ -72,7 +75,11 @@
         "title": "Log out",
         "message": "Are you sure you want to log out?"
       }
-    }
+    },
+    "scan": {
+        "search": "Searching tag",
+        "scan": "Reading tag"
+      }
   },
   "app": {
     "data": {
@@ -89,6 +96,10 @@
       "logIn": "Log in",
       "logOut": "Log out",
       "rememberMe": "Remember me"
+    },
+    "scan": {
+      "scan": "Scan",
+      "cancel": "Cancel"
     }
   }
 }

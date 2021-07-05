@@ -6,6 +6,7 @@ import {HeaderProps} from 'types';
 //import {useNavigation} from '@react-navigation/native';
 
 export const Header: React.FC<HeaderProps> = ({
+  disabled,
   label,
   labelAction = () => null,
   defaultIcon,
@@ -16,7 +17,10 @@ export const Header: React.FC<HeaderProps> = ({
   //const {navigate} = useNavigation();
   return (
     <View style={styles.headerContainer}>
-      <TouchableOpacity style={styles.userInfo} onPress={labelAction}>
+      <TouchableOpacity
+        style={styles.userInfo}
+        onPress={labelAction}
+        disabled={disabled}>
         <Text variant="headerTitle">{label}</Text>
       </TouchableOpacity>
       <View style={!hasExtraIcon ? styles.icon : styles.icons}>

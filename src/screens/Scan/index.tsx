@@ -1,95 +1,113 @@
 import React, {useState, useEffect} from 'react';
 import {Button, Header, Screen, View, Text} from 'components';
-import {ActivityIndicator} from 'react-native';
-import {initNfc, readNdef} from 'utils/nfc_scanner';
-import {StyleSheet, Vibration} from 'react-native';
+import {ActivityIndicator, Dimensions} from 'react-native';
+import {isEnabled, isSupported} from 'utils/nfc_scanner';
+//import {StyleSheet, ToastAndroid, Vibration} from 'react-native';
 import {translate} from 'core';
 import {useTheme} from 'ui/Theme';
-import Icon from 'react-native-vector-icons/Feather';
-//import {TagEvent} from 'react-native-nfc-manager';
+import IconF from 'react-native-vector-icons/Feather';
+import IconI from 'react-native-vector-icons/Ionicons';
 
+const {height} = Dimensions.get('window');
+//Add ripple effect when pressing button
 export const Scan = () => {
   const theme = useTheme();
   const [loading, setLoading] = useState<boolean>(false);
-  //const [error, setError] = useState<boolean>(false);
-  //const [enabled, setEnabled] = useState<boolean>(false);
-  //const [supported, setSupported] = useState<boolean>(false);
-  //const [tag, setTag] = useState<TagEvent | null>();
+  const [enabled, setEnabled] = useState<Promise<boolean>>();
+  const [supported, setSupported] = useState<Promise<boolean>>();
 
-  //Reset state on unMount
   useEffect(() => {
-    /*
-    isSupported()
-      .then(() => setSupported(true))
-      .catch(() => setSupported(false));
-
-    isEnabled()
-      .then(() => setEnabled(true))
-      .catch(() => setEnabled(false));
-
-    function unMount() {
-      setError(false);
-      setEnabled(false);
-      setSupported(false);
-    }
-    return unMount();
-    */
+    setSupported(isSupported());
+    setEnabled(isEnabled());
   }, []);
 
   const discoverTags = () => {
     setLoading(!loading);
-    if (loading) {
+    console.log(supported);
+    /*if (loading) {
       Vibration.vibrate(500);
       initNfc().then(() => {
         setLoading(!loading);
         readNdef();
       });
-    }
+    } */
   };
 
   return (
     <Screen>
-      <View>
+      <View height={height - 60}>
         <View margin="m">
-          <Header label={translate('screen.scan.title')} />
+          <Header label={translate('screen.scan.title')} disabled={true} />
         </View>
-        <View>
-          {loading ? (
-            <View>
-              <View margin="s">
-                <Text variant="scanHeader">Searching tags</Text>
+        <View margin="m" height={400}>
+          {!loading ? (
+            <View margin="m">
+              <View margin="m">
+                <Text variant="scanHeader">
+                  {translate('screen.scan.header')}
+                </Text>
               </View>
-              <View margin="l">
-                <ActivityIndicator size="large" color="purple" />
+              <View height={175} alignItems="center" margin="m">
+                <IconI
+                  name="radio-outline"
+                  color={theme.colors.primary}
+                  size={100}
+                />
+                <IconF
+                  name="smartphone"
+                  color={theme.colors.primary}
+                  size={60}
+                />
               </View>
-              <View margin="s">
+              <View
+                marginVertical="s"
+                marginHorizontal="xl"
+                alignItems="center">
                 <Text variant="description">
-                  Bring the back of the device close to the card
+                  {translate('screen.scan.description')}
                 </Text>
               </View>
             </View>
           ) : (
-            <View>
-              <View margin="s">
-                <Text variant="scanHeader">Start searching tags</Text>
-              </View>
-              <View alignItems="center" margin="l">
-                <Icon name="cpu" color={theme.colors.primary} size={30} />
-              </View>
-              <View margin="s" alignItems="center">
-                <Text variant="description">
-                  To begin searching tags, press de the scan button and bring
-                  the device close to the tag
+            <View margin="m">
+              <View margin="m">
+                <Text variant="scanHeader">
+                  {translate('action.scan.scan')}
                 </Text>
+              </View>
+              <View
+                height={175}
+                alignItems="center"
+                margin="m"
+                justifyContent="center">
+                <ActivityIndicator size="large" color="purple" />
+              </View>
+              <View
+                flexDirection="row"
+                marginVertical="s"
+                marginHorizontal="xl"
+                //alignItems="center"
+                //justifyContent="center"
+              >
+                <View marginRight="ss">
+                  <IconI
+                    name="information-circle-outline"
+                    size={30}
+                    color={theme.colors.primary}
+                  />
+                </View>
+                <Text variant="tip">{translate('screen.scan.tip')}</Text>
               </View>
             </View>
           )}
         </View>
-        <View padding="xl">
+        <View marginVertical="l" marginHorizontal="xxl">
           <Button
-            margin="xl"
-            label={loading ? 'Cancel' : 'Scan'}
+            label={translate(
+              loading ? 'button.scan.cancel' : 'button.scan.scan',
+            )}
             variant="primary"
+            disabled={!enabled}
             onPress={() => discoverTags()}
           />
         </View>
@@ -97,17 +115,3 @@ export const Scan = () => {
     </Screen>
   );
 };
-
-const styles = StyleSheet.create({
-  title: {
-    textAlign: 'center',
-  },
-  scanButton: {},
-  scanImage: {
-    alignItems: 'center',
-    textAlign: 'center',
-    //backgroundColor: 'gray',
-    //height: 400,
-    //width: 400,
-  },
-});

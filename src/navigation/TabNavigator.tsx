@@ -12,6 +12,7 @@ export const TabNavigator = () => {
   const theme = useTheme();
   return (
     <Tab.Navigator
+      initialRouteName="Scan"
       tabBarOptions={{
         showLabel: false,
         style: styles.container,
@@ -33,6 +34,7 @@ export const TabNavigator = () => {
         name="Scan"
         component={Scan}
         options={{
+          unmountOnBlur: true,
           tabBarIcon: ({focused}) => (
             <Icon
               name="radio"

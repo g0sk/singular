@@ -132,7 +132,7 @@ export const Profile: React.FC = () => {
   return (
     <KeyboardAwareScrollView>
       <View margin="m">
-        <Header label={translate('screen.profile.title')} />
+        <Header label={translate('screen.profile.title')} disabled={true} />
       </View>
       <View marginHorizontal="xl" marginVertical="l">
         <View style={styles.avatar} marginBottom="l">

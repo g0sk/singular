@@ -43,6 +43,7 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
       <View height={HEIGHT}>
         <View marginHorizontal="m" marginBottom="s" marginTop="m">
           <Header
+            disabled={false}
             defaultIcon="plus-circle"
             defaultAction={() =>
               navigation.navigate('Document', {

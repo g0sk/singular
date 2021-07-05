@@ -39,13 +39,16 @@ const BaseTheme = {
     xl: 75,
   },
   spacing: {
+    ss: 4,
     s: 8,
     m: 16,
     l: 24,
     xl: 40,
+    xxl: 70,
     dxl: 110,
   },
   margin: {
+    ss: 5,
     s: 10,
     m: 40,
     l: 75,
@@ -122,7 +125,14 @@ const theme = createTheme({
     description: {
       color: 'description',
       fontSize: 16,
-      lineHeight: 24,
+      lineHeight: 22,
+      textAlign: 'justify',
+    },
+    tip: {
+      color: 'description',
+      fontSize: 18,
+      lineHeight: 23,
+      //textAlign: 'justify',
     },
     placeholderText: {
       color: 'placeholderText',
