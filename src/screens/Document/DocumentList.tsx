@@ -32,6 +32,11 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
         No actives to display
       </Text>
     ) : null;
+  const scrollToTop = () => {
+    if (actives.length > 0) {
+      flatListRef.current?.scrollToIndex({animated: true, index: 0});
+    }
+  };
 
   return (
     <Screen>
@@ -48,18 +53,10 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
             hasExtraIcon={true}
             extraIcon="search"
             label={translate('screen.documents.title')}
-            labelAction={() =>
-              flatListRef.current?.scrollToIndex({animated: true, index: 0})
-            }
+            labelAction={() => scrollToTop()}
           />
           <View marginTop="m" marginBottom="m" marginHorizontal="s" width={70}>
-            <TouchableOpacity
-              onPress={() =>
-                flatListRef.current?.scrollToIndex({
-                  animated: true,
-                  index: 0,
-                })
-              }>
+            <TouchableOpacity onPress={() => scrollToTop()}>
               <Text>{nActives}</Text>
             </TouchableOpacity>
           </View>

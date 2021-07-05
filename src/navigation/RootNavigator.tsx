@@ -1,6 +1,5 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-
 import {useAuth} from 'core';
 import {NavigationContainer} from './NavigationContainer';
 import {TabNavigator} from './TabNavigator';

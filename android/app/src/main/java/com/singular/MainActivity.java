@@ -1,6 +1,8 @@
 package com.singular;
 
+import android.os.Bundle;
 import com.facebook.react.ReactActivity;
+import com.zoontek.rnbootsplash.RNBootSplash;
 
 public class MainActivity extends ReactActivity {
 
@@ -12,4 +14,11 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "singular";
   }
+
+  //Display the generated bootsplash.xml drawable over our MainActivity
+  @Override
+    protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      RNBootSplash.init(R.drawable.bootsplash, MainActivity.this);
+    }
 }

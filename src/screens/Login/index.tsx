@@ -157,7 +157,7 @@ export const Login: React.FC = () => {
                 <View marginHorizontal="m">
                   <Button
                     disabled={!isValid}
-                    variant={isValid ? 'secondary' : 'disabled'}
+                    variant={isValid ? 'primary' : 'disabled'}
                     label={translate('button.login.logIn')}
                     onPress={() => handleSubmit()}
                     loading={loading}
