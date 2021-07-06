@@ -34,7 +34,6 @@ export const TabNavigator = () => {
         name="Scan"
         component={Scan}
         options={{
-          unmountOnBlur: true,
           tabBarIcon: ({focused}) => (
             <Icon
               name="radio"

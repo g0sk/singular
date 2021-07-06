@@ -10,9 +10,9 @@
       "title": "Perfil"
     },
     "scan": {
-      "title": "Escanear",
-      "header": "Comienza a escanear etiquetas",
-      "description": "Para empezar a escanear etiquetas, pulsa el botón y acerca el dispositivo a la etiqueta.",
+      "title": "Etiquetas",
+      "header": "Comienza a leer etiquetas",
+      "description": "Para empezar a leer etiquetas, pulsa el botón y acerca el dispositivo a la etiqueta.",
       "tip": "Acerca el dispositivo a la etiqueta."
     },
     "login": {
@@ -79,7 +79,8 @@
     },
     "scan": {
       "scan": "Escanear",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "retry": "Volver a intentar"
     }
   },
   "action": {
@@ -101,6 +102,17 @@
     "data": {
       "version": "Versión"
     }
+  },
+  "error": {
+    "general": {
+      "error": "Error"
+    },
+    "scan": {
+      "nfcNotEnabled": "NFC desactivado",
+      "enableNfc": "Es necesario activar NFC en el dispositivo para poder leer las etiquetas RFID.",
+      "nfcNotSupported": "NFC no disponible",
+      "deviceNotCompatible": "Este dispositivo no es compatible con NFC, para poder usar la lectura de etiquetas necesita un dispositivo compatible con NFC.",
+      "appSettings": "Ir a configuración de la aplicación"
+    }
   }
-  
 }

@@ -18,6 +18,7 @@ const BaseTheme = {
     background: '#000b31',
     blue: '#1f155e',
     dark: '#000',
+    gray: '#393939',
     card: '#ffffff',
     darkText: '#000',
     chart: '#0cd13f',
@@ -76,10 +77,33 @@ const theme = createTheme({
       fontSize: 27,
       textAlign: 'center',
     },
-    scanError: {
+    scanErrorHeader: {
       color: 'error',
       fontSize: 30,
       textAlign: 'center',
+    },
+    scanWarningHeader: {
+      color: 'secondary',
+      fontSize: 30,
+      textAlign: 'center',
+    },
+    scanDescription: {
+      color: 'darkText',
+      fontSize: 16,
+      lineHeight: 22,
+      textAlign: 'justify',
+    },
+    scanErrorDescription: {
+      color: 'error',
+      fontSize: 17,
+      lineHeight: 22,
+      textAlign: 'justify',
+    },
+    scanWarningDescription: {
+      color: 'darkText',
+      fontSize: 16,
+      lineHeight: 22,
+      textAlign: 'justify',
     },
     scanHeader: {
       color: 'darkText',

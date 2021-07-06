@@ -208,6 +208,18 @@ interface UserFormValues {
   username: string;
 }
 
+//Scan Screen
+interface ScanErrorProps {
+  supported: boolean;
+  enabled: boolean;
+  retry: () => void;
+}
+
+interface ScanProps {
+  reading: boolean;
+}
+interface ScanSuccessProps {}
+
 //Components
 
 //Button

@@ -11,8 +11,8 @@
     },
     "scan": {
       "title": "Scan",
-      "header": "Start scanning tags",
-      "description": "To begin scanning tags, press the scan button and bring the device close to the tag.",
+      "header": "Start reading tags",
+      "description": "To begin reading tags, press the scan button and bring the device close to the tag.",
       "tip": "Bring the device close to the tag."
     },
     "login": {
@@ -99,7 +99,20 @@
     },
     "scan": {
       "scan": "Scan",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "retry": "retry"
+    }
+  },
+  "error": {
+    "general": {
+      "error": "Error"
+    },
+    "scan": {
+      "nfcNotEnabled": "NFC not enabled",
+      "enableNfc": "NFC must be enabled on the device in order to read RFID tags.",
+      "nfcNotSupported": "NFC not supported",
+      "deviceNotCompatible": "This device does not support NFC, in order to use tag reading you need an NFC compatible device.",
+      "appSettings": "Go to app settings"
     }
   }
 }
