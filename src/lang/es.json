@@ -111,8 +111,8 @@
       "nfcNotEnabled": "NFC desactivado",
       "enableNfc": "Es necesario activar NFC en el dispositivo para poder leer las etiquetas RFID.",
       "nfcNotSupported": "NFC no disponible",
-      "deviceNotCompatible": "Este dispositivo no es compatible con NFC, para poder usar la lectura de etiquetas necesita un dispositivo compatible con NFC.",
-      "appSettings": "Ir a configuración de la aplicación"
+      "deviceNotCompatible": "Este dispositivo no es compatible con la tecnología NFC, para poder usar la lectura de etiquetas necesita un dispositivo compatible con NFC.",
+      "appSettings": "Comprobar permisos en la configuración de la aplicación"
     }
   }
 }

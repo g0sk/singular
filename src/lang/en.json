@@ -100,7 +100,7 @@
     "scan": {
       "scan": "Scan",
       "cancel": "Cancel",
-      "retry": "retry"
+      "retry": "Retry"
     }
   },
   "error": {
@@ -109,10 +109,10 @@
     },
     "scan": {
       "nfcNotEnabled": "NFC not enabled",
-      "enableNfc": "NFC must be enabled on the device in order to read RFID tags.",
+      "enableNfc": "NFC must be enabled on the device, in order to read RFID tags.",
       "nfcNotSupported": "NFC not supported",
-      "deviceNotCompatible": "This device does not support NFC, in order to use tag reading you need an NFC compatible device.",
-      "appSettings": "Go to app settings"
+      "deviceNotCompatible": "This device does not support NFC technology, in order to use tag reading you need an NFC compatible device.",
+      "appSettings": "Check permissions on the app configuration"
     }
   }
 }

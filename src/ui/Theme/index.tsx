@@ -94,10 +94,11 @@ const theme = createTheme({
       textAlign: 'justify',
     },
     scanErrorDescription: {
-      color: 'error',
+      color: 'darkText',
       fontSize: 17,
       lineHeight: 22,
       textAlign: 'justify',
+      fontWeight: 'bold',
     },
     scanWarningDescription: {
       color: 'darkText',

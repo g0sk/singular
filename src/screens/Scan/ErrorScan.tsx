@@ -40,8 +40,8 @@ const ErrorScan: React.FC<ScanErrorProps> = ({supported, enabled, retry}) => {
       <View height={175} alignItems="center" margin="m" justifyContent="center">
         {!supported && (
           <View height={175} alignItems="center" margin="m">
-            <IconI name="radio-outline" color={colors.error} size={100} />
-            <IconF name="smartphone" color={colors.error} size={60} />
+            <IconI name="radio-outline" color={colors.dark} size={80} />
+            <IconF name="smartphone" color={colors.dark} size={50} />
           </View>
         )}
         {!enabled && supported && (
@@ -85,7 +85,7 @@ const ErrorScan: React.FC<ScanErrorProps> = ({supported, enabled, retry}) => {
       {!supported && (
         <View
           marginVertical="s"
-          marginHorizontal="l"
+          marginHorizontal="xl"
           alignItems="center"
           justifyContent="center"
           flexDirection="row">
