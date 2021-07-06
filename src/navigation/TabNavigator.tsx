@@ -12,7 +12,7 @@ export const TabNavigator = () => {
   const theme = useTheme();
   return (
     <Tab.Navigator
-      initialRouteName="Scan"
+      initialRouteName="DocumentNavigator"
       tabBarOptions={{
         showLabel: false,
         style: styles.container,

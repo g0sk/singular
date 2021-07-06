@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import * as Yup from 'yup';
 import {useFormik} from 'formik';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -12,7 +12,7 @@ import {Button, CheckBox, Text, TextInput, View} from 'components';
 import {fetchToken} from 'core/auth/authSlice';
 import {fetchUser} from 'store/slices/user/userAsyncThunk';
 import {useAuth} from 'core';
-import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
+import store, {useAppDispatch} from 'store/configureStore';
 import {ErrorHandler} from 'handlers/error';
 import {removeCredentials, setCredentials} from 'utils/storage';
 import {translate} from 'core';
@@ -34,8 +34,10 @@ const LoginSchema = Yup.object().shape({
 export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const {signIn} = useAuth();
-  const {loading} = useAppSelector((state) => state.auth);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const login = ({username, password, saveCredentials}: FormValues) => {
+    setLoading(true);
     dispatch(fetchToken({username, password})).then(() => {
       const authState = store.getState().auth;
       if (authState.error && authState.errorData !== null) {
@@ -55,6 +57,7 @@ export const Login: React.FC = () => {
           dispatch(fetchUser(authState.userID)).then(() => navigatorSignIn());
         }
       }
+      setLoading(false);
     });
   };
 
