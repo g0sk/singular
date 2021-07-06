@@ -5,9 +5,10 @@ import {translate} from 'core';
 import {useTheme} from 'ui/Theme';
 import IconI from 'react-native-vector-icons/Ionicons';
 import IconF from 'react-native-vector-icons/Feather';
+import nfcManager from 'react-native-nfc-manager';
 import {ScanErrorProps} from 'types';
 
-const ErrorScan: React.FC<ScanErrorProps> = ({supported, enabled, retry}) => {
+const ErrorScan: React.FC<ScanErrorProps> = ({supported, enabled}) => {
   const {colors} = useTheme();
   return (
     <View margin="m">
@@ -45,7 +46,7 @@ const ErrorScan: React.FC<ScanErrorProps> = ({supported, enabled, retry}) => {
           </View>
         )}
         {!enabled && supported && (
-          <TouchableOpacity onPress={() => retry()}>
+          <TouchableOpacity onPress={() => nfcManager.goToNfcSetting()}>
             <View
               flexDirection="row"
               margin="xl"

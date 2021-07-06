@@ -13,7 +13,8 @@
       "title": "Etiquetas",
       "header": "Comienza a leer etiquetas",
       "description": "Para empezar a leer etiquetas, pulsa el botón y acerca el dispositivo a la etiqueta.",
-      "tip": "Acerca el dispositivo a la etiqueta."
+      "tip": "Acerca el dispositivo a la etiqueta.",
+      "successDescription": "Etiqueta leída correctamente. Ahora puedes consultar y modificar su información antes de guardarla."
     },
     "login": {
       "title": "Bienvenido a Singular",
@@ -22,7 +23,10 @@
   },
   "active": {
     "active": "activo",
-    "actives": "activos"
+    "actives": "activos",
+    "data": {
+      "id": "ID"
+    }
   },
   "form": {
     "login": {
@@ -79,8 +83,10 @@
     },
     "scan": {
       "scan": "Escanear",
+      "scanAgain": "Volver a escanear",
       "cancel": "Cancelar",
-      "retry": "Volver a intentar"
+      "retry": "Volver a intentar",
+      "goToDetails": "Ir a detalles"
     }
   },
   "action": {
@@ -101,6 +107,14 @@
   "app": {
     "data": {
       "version": "Versión"
+    }
+  },
+  "success": {
+    "general": {
+      "success": "Éxito"
+    },
+    "scan": {
+      "tagFound": "Etiqueta leída correctamente"
     }
   },
   "error": {

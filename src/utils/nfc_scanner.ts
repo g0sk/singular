@@ -1,8 +1,4 @@
-import NfcManager, {
-  NfcEvents,
-  TagEvent,
-  NfcError,
-} from 'react-native-nfc-manager';
+import NfcManager, {NfcEvents, TagEvent} from 'react-native-nfc-manager';
 
 type TagResponse = TagEvent | null;
 
@@ -19,9 +15,7 @@ export async function isEnabled() {
 
 //Start nfc manager before using it
 export async function initNfc() {
-  await NfcManager.start().catch((e) => {
-    throw e;
-  });
+  await NfcManager.start();
 }
 
 //reads ndef_message its ndef_records
@@ -47,7 +41,8 @@ export function readNdef(): Promise<TagResponse> {
         console.log('TAG FOUND', tagFound);
         NfcManager.unregisterTagEvent().catch(() => 0);
       }
-      reject(NfcError.Timeout);
+      console.log('TAG NOT FOUND');
+      reject(null);
     });
 
     NfcManager.setEventListener(NfcEvents.SessionClosed, () => {

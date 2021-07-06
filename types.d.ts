@@ -2,6 +2,7 @@ import {Dispatch, SetStateAction} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RouteProp} from '@react-navigation/native';
 import {Image} from 'react-native';
+import {TagEvent} from 'react-native-nfc-manager';
 import {
   SpacingProps,
   BorderProps,
@@ -9,6 +10,7 @@ import {
   VariantProps,
 } from '@shopify/restyle';
 import {Theme} from 'ui/Theme';
+
 //Geral types
 export type Credentials = {
   username: string;
@@ -59,7 +61,11 @@ export type AuthParamList = {
 //Routes Document
 export type RootDocumentParamList = {
   Documents: undefined;
-  Document: {activeId: number | undefined; title: string | undefined};
+  Document: {
+    activeId: number | undefined;
+    title: string | undefined;
+    tag?: TagEvent;
+  };
 };
 
 export type DocumentScreenRouteProp = RouteProp<
@@ -212,13 +218,14 @@ interface UserFormValues {
 interface ScanErrorProps {
   supported: boolean;
   enabled: boolean;
-  retry: () => void;
 }
 
 interface ScanProps {
   reading: boolean;
 }
-interface ScanSuccessProps {}
+interface ScanSuccessProps {
+  tag: TagEvent;
+}
 
 //Components
 

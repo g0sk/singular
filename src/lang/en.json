@@ -13,7 +13,8 @@
       "title": "Scan",
       "header": "Start reading tags",
       "description": "To begin reading tags, press the scan button and bring the device close to the tag.",
-      "tip": "Bring the device close to the tag."
+      "tip": "Bring the device close to the tag.",
+      "successDescription": "Tag succesfully read. Now you can check and modify its information before saving it."
     },
     "login": {
       "title": "Welcome to Singular",
@@ -22,7 +23,10 @@
   },
   "active": {
     "active": "active",
-    "actives": "actives"
+    "actives": "actives",
+    "data": {
+      "id": "ID"
+    }
   },
   "user": {},
   "form": {
@@ -100,7 +104,17 @@
     "scan": {
       "scan": "Scan",
       "cancel": "Cancel",
-      "retry": "Retry"
+      "retry": "Retry",
+      "goToDetails": "Go to details",
+      "scanAgain": "Back to scan"
+    }
+  },
+  "success": {
+    "general": {
+      "success": "Success"
+    },
+    "scan": {
+      "tagFound": "Tag succesfully read"
     }
   },
   "error": {

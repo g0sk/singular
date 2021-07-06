@@ -1,18 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import {Button, Header, Screen, View} from 'components';
-import {Dimensions} from 'react-native';
+import {Dimensions, ToastAndroid} from 'react-native';
 import {initNfc, readNdef, isEnabled, isSupported} from 'utils/nfc_scanner';
 import {TagEvent} from 'react-native-nfc-manager';
-import {Vibration} from 'react-native';
 import {translate} from 'core';
+import {useNavigation} from '@react-navigation/native';
 import ErrorScan from './ErrorScan';
-import ScanScreen from './Scan';
-import {ToastAndroid} from 'react-native';
+import Scanning from './Scanning';
+import SuccessScan from './SuccesScan';
 
 const {height} = Dimensions.get('window');
 
 export const Scan = () => {
-  const [reading, setReading] = useState<boolean>(false);
+  const {navigate} = useNavigation();
+  const [reading, setReading] = useState(false);
+  const [rest, setRest] = useState<boolean>(false);
+  const [reset, setReset] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [tag, setTag] = useState<TagEvent | null>();
@@ -28,6 +31,22 @@ export const Scan = () => {
     }
     init();
   }, []);
+
+  const goToDetails = () => {
+    setReset(true);
+    navigate('Document', {
+      activeId: tag?.id,
+      title: tag?.id,
+      tag: tag,
+    });
+  };
+
+  const resetState = () => {
+    setError(false);
+    setReset(false);
+    setReading(false);
+    setTag(null);
+  };
 
   const showToast = async () => {
     const nfc_enabled = await isEnabled();
@@ -48,21 +67,26 @@ export const Scan = () => {
     setTimeout(async () => {
       showToast();
       setLoading(false);
-    }, 3000);
+    }, 2000);
   };
-  const discoverTags = () => {
+
+  const discoverTags = async () => {
     if (enabled && supported) {
+      const enabledRes = await isEnabled();
+      setEnabled(enabledRes);
       setReading(!reading);
-      if (reading) {
-        Vibration.vibrate(500);
-        initNfc().then(() => {
+      setRest(!rest);
+      if (!rest) {
+        console.log('estoy dentro');
+        initNfc().then(() =>
           readNdef().then((res) => {
             if (res !== null) {
               setTag(res);
-              console.log(tag);
+              setReading(false);
+              setRest(false);
             }
-          });
-        });
+          }),
+        );
       }
     } else {
       setError(true);
@@ -76,13 +100,14 @@ export const Scan = () => {
           <Header label={translate('screen.scan.title')} disabled={true} />
         </View>
         <View margin="m" height={450}>
-          {!error ? (
-            <ScanScreen reading={reading} />
+          {tag && !error && <SuccessScan tag={tag} />}
+          {!error && !tag ? (
+            <Scanning reading={reading} />
           ) : (
-            <ErrorScan supported={supported} enabled={enabled} retry={retry} />
+            <ErrorScan supported={supported} enabled={enabled} />
           )}
         </View>
-        {!error && (
+        {!error && !tag && (
           <View marginVertical="l" marginHorizontal="xxl">
             <Button
               label={translate(
@@ -93,7 +118,7 @@ export const Scan = () => {
             />
           </View>
         )}
-        {error && supported && (
+        {error && supported && !tag && (
           <View marginVertical="l" marginHorizontal="xxl">
             <Button
               label={translate('button.scan.retry')}
@@ -101,6 +126,17 @@ export const Scan = () => {
               onPress={() => retry()}
               loading={loading}
               disabled={loading}
+            />
+          </View>
+        )}
+        {!error && tag && (
+          <View marginVertical="l" marginHorizontal="xxl">
+            <Button
+              label={translate(
+                !reset ? 'button.scan.goToDetails' : 'button.scan.scanAgain',
+              )}
+              variant="primary"
+              onPress={() => (!reset ? goToDetails() : resetState())}
             />
           </View>
         )}

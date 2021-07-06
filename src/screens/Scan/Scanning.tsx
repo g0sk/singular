@@ -7,7 +7,7 @@ import IconF from 'react-native-vector-icons/Feather';
 import IconI from 'react-native-vector-icons/Ionicons';
 import {ScanProps} from 'types';
 
-const ScanScreen: React.FC<ScanProps> = ({reading}) => {
+const Scanning: React.FC<ScanProps> = ({reading}) => {
   const theme = useTheme();
   return (
     <View>
@@ -58,4 +58,4 @@ const ScanScreen: React.FC<ScanProps> = ({reading}) => {
   );
 };
 
-export default ScanScreen;
+export default Scanning;
