@@ -10,7 +10,7 @@ import {DocumentStackProps} from 'types';
 import {translate} from 'core';
 
 //Screen dimension - tabbar height;
-const HEIGHT = Dimensions.get('window').height - 75;
+const HEIGHT = Dimensions.get('window').height - 100;
 
 export const DocumentList: React.FC<DocumentStackProps> = ({
   navigation,

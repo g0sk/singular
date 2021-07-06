@@ -29,6 +29,7 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
     itemContainer: {
       height: 45,
       width: 300,
+      marginBottom: 8,
       borderColor: theme.colors.primary,
       borderWidth: 2,
       borderRadius: 13,
