@@ -14,7 +14,6 @@ const {height} = Dimensions.get('window');
 export const Scan = () => {
   const {navigate} = useNavigation();
   const [reading, setReading] = useState(false);
-  const [rest, setRest] = useState<boolean>(false);
   const [reset, setReset] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -44,7 +43,7 @@ export const Scan = () => {
   const resetState = () => {
     setError(false);
     setReset(false);
-    setReading(false);
+    setReading(true);
     setTag(null);
   };
 
@@ -75,15 +74,13 @@ export const Scan = () => {
       const enabledRes = await isEnabled();
       setEnabled(enabledRes);
       setReading(!reading);
-      setRest(!rest);
-      if (!rest) {
+      if (!reading) {
         console.log('estoy dentro');
         initNfc().then(() =>
           readNdef().then((res) => {
             if (res !== null) {
               setTag(res);
               setReading(false);
-              setRest(false);
             }
           }),
         );

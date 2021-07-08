@@ -40,9 +40,9 @@ export function readNdef(): Promise<TagResponse> {
         NfcManager.setAlertMessage('TAG FOUND');
         console.log('TAG FOUND', tagFound);
         NfcManager.unregisterTagEvent().catch(() => 0);
+      } else {
+        reject(null);
       }
-      console.log('TAG NOT FOUND');
-      reject(null);
     });
 
     NfcManager.setEventListener(NfcEvents.SessionClosed, () => {

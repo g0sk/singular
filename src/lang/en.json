@@ -10,7 +10,7 @@
       "title": "Profile"
     },
     "scan": {
-      "title": "Scan",
+      "title": "Tags",
       "header": "Start reading tags",
       "description": "To begin reading tags, press the scan button and bring the device close to the tag.",
       "tip": "Bring the device close to the tag.",
@@ -106,7 +106,7 @@
       "cancel": "Cancel",
       "retry": "Retry",
       "goToDetails": "Go to details",
-      "scanAgain": "Back to scan"
+      "scanAgain": "Scan again"
     }
   },
   "success": {

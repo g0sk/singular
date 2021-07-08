@@ -46,7 +46,8 @@ const BaseTheme = {
     l: 24,
     xl: 40,
     xxl: 70,
-    dxl: 110,
+    sxl: 110,
+    mxl: 120,
   },
   margin: {
     ss: 5,
@@ -54,7 +55,9 @@ const BaseTheme = {
     m: 40,
     l: 75,
     xl: 400,
-    dxl: 500,
+    xxl: 450,
+    sxl: 500,
+    mxl: 510,
   },
   breakpoints: {},
 };

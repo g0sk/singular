@@ -1,9 +1,8 @@
 import * as React from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {View, Text} from 'components';
 import Icon from 'react-native-vector-icons/Feather';
 import {HeaderProps} from 'types';
-//import {useNavigation} from '@react-navigation/native';
 
 export const Header: React.FC<HeaderProps> = ({
   disabled,
@@ -14,25 +13,23 @@ export const Header: React.FC<HeaderProps> = ({
   hasExtraIcon = false,
   extraIcon,
 }) => {
-  //const {navigate} = useNavigation();
   return (
-    <View style={styles.headerContainer}>
-      <TouchableOpacity
-        style={styles.userInfo}
-        onPress={labelAction}
-        disabled={disabled}>
-        <Text variant="headerTitle">{label}</Text>
-      </TouchableOpacity>
-      <View style={!hasExtraIcon ? styles.icon : styles.icons}>
+    <View flexDirection="row">
+      <View marginRight="mxl">
+        <TouchableOpacity onPress={labelAction} disabled={disabled}>
+          <Text variant="headerTitle">{label}</Text>
+        </TouchableOpacity>
+      </View>
+      <View flexDirection="row" alignItems="center">
         {hasExtraIcon && extraIcon && (
-          <View style={styles.extraIcon}>
+          <View marginRight="l">
             <TouchableOpacity onPress={() => null}>
               <Icon name={extraIcon} size={25} />
             </TouchableOpacity>
           </View>
         )}
         {defaultIcon && (
-          <View style={styles.defaultIcon}>
+          <View>
             <TouchableOpacity onPress={() => defaultAction()}>
               <Icon name={defaultIcon} size={25} />
             </TouchableOpacity>
@@ -42,35 +39,3 @@ export const Header: React.FC<HeaderProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  headerContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  userInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    minWidth: 200,
-    width: 250,
-  },
-  icon: {
-    paddingHorizontal: 10,
-    flexDirection: 'row',
-    width: 100,
-    justifyContent: 'center',
-  },
-  icons: {
-    paddingHorizontal: 10,
-    flexDirection: 'row',
-    width: 100,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  defaultIcon: {
-    alignItems: 'center',
-  },
-  extraIcon: {
-    alignItems: 'center',
-  },
-});
