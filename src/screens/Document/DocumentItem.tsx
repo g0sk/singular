@@ -19,7 +19,7 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
     '/' +
     entryDate.getFullYear();
   return (
-    <View flexDirection="row" marginBottom="l">
+    <View flexDirection="row" marginBottom="l" alignItems="center">
       <TouchableOpacity
         onPress={() =>
           navigation.push('Document', {
@@ -57,11 +57,7 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
         </View>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => null}>
-        <View
-          borderRadius={8}
-          borderWidth={2}
-          borderColor="dark"
-          marginTop="ss">
+        <View borderRadius={8} borderWidth={2} borderColor="dark">
           <FeatherIcon name="bar-chart-2" size={28} />
         </View>
       </TouchableOpacity>
