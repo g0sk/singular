@@ -1,6 +1,5 @@
 import React, {createRef} from 'react';
 import {Screen} from 'components';
-import {StyleSheet} from 'react-native';
 import {Dimensions, FlatList, TouchableOpacity} from 'react-native';
 import {Header, Text, View} from 'components';
 import {DocumentItem} from './DocumentItem';
@@ -10,7 +9,7 @@ import {DocumentStackProps} from 'types';
 import {translate} from 'core';
 
 //Screen dimension - tabbar height;
-const HEIGHT = Dimensions.get('window').height - 100;
+const HEIGHT = Dimensions.get('window').height - 150;
 
 export const DocumentList: React.FC<DocumentStackProps> = ({
   navigation,
@@ -28,9 +27,7 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
   const nActives = activesLength + ' ' + translate('active.actives');
   const emptyList = () =>
     !loading && activesLength > 0 ? (
-      <Text style={styles.noActives} variant="emptyHeader">
-        No actives to display
-      </Text>
+      <Text variant="emptyHeader">No actives to display</Text>
     ) : null;
   const scrollToTop = () => {
     if (actives.length > 0) {
@@ -41,7 +38,7 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
   return (
     <Screen>
       <View height={HEIGHT}>
-        <View marginHorizontal="m" marginBottom="s" marginTop="m">
+        <View margin="m">
           <Header
             disabled={false}
             defaultIcon="plus-circle"
@@ -56,13 +53,13 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
             label={translate('screen.documents.title')}
             labelAction={() => scrollToTop()}
           />
-          <View marginTop="m" marginBottom="m" marginHorizontal="s" width={70}>
-            <TouchableOpacity onPress={() => scrollToTop()}>
-              <Text>{nActives}</Text>
-            </TouchableOpacity>
-          </View>
         </View>
-        <View marginHorizontal="m" paddingBottom="sxl">
+        <View marginHorizontal="m" width={70}>
+          <TouchableOpacity onPress={() => scrollToTop()}>
+            <Text>{nActives}</Text>
+          </TouchableOpacity>
+        </View>
+        <View marginHorizontal="m" marginTop="m" marginBottom="l">
           <FlatList
             ref={flatListRef}
             renderItem={({item}) => (
@@ -73,15 +70,10 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
             refreshing={loading}
             ListEmptyComponent={() => emptyList()}
             data={actives}
+            scrollToOverflowEnabled={true}
           />
         </View>
       </View>
     </Screen>
   );
 };
-
-const styles = StyleSheet.create({
-  noActives: {
-    margin: 10,
-  },
-});

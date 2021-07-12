@@ -43,21 +43,23 @@ const BaseTheme = {
     ss: 4,
     s: 8,
     m: 16,
+    dm: 19,
     l: 24,
     xl: 40,
     xxl: 70,
     sxl: 110,
-    mxl: 120,
+    mxl: 110,
   },
   margin: {
     ss: 5,
     s: 10,
     m: 40,
+    dm: 55,
     l: 75,
     xl: 400,
     xxl: 450,
     sxl: 500,
-    mxl: 510,
+    mxl: 500,
   },
   breakpoints: {},
 };
@@ -200,7 +202,6 @@ const theme = createTheme({
       color: 'description',
     },
   },
-  viewVariants: {},
   buttonVariants: {
     primary: {
       backgroundColor: 'primary',
