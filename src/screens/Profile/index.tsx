@@ -152,7 +152,7 @@ export const Profile: React.FC = () => {
           />
         </View>
         <View style={styles.formData} marginHorizontal="m">
-          <View marginBottom="s">
+          <View marginBottom="m">
             <Text variant="formLabel" marginBottom="s">
               {translate('form.user.name.label')}
             </Text>
@@ -170,7 +170,7 @@ export const Profile: React.FC = () => {
               onSubmitEditing={() => handleSubmit()}
             />
           </View>
-          <View marginBottom="s">
+          <View marginBottom="m">
             <Text variant="formLabel" marginBottom="s">
               {translate('form.user.lastName.label')}
             </Text>
@@ -188,7 +188,7 @@ export const Profile: React.FC = () => {
               onSubmitEditing={() => handleSubmit()}
             />
           </View>
-          <View marginBottom="s">
+          <View marginBottom="m">
             <Text variant="formLabel" marginBottom="s">
               {translate('form.user.email.label')}
             </Text>

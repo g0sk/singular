@@ -19,7 +19,11 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
     '/' +
     entryDate.getFullYear();
   return (
-    <View flexDirection="row" marginBottom="l" alignItems="center">
+    <View
+      marginHorizontal="s"
+      flexDirection="row"
+      marginBottom="l"
+      alignItems="center">
       <TouchableOpacity
         onPress={() =>
           navigation.push('Document', {
@@ -31,7 +35,7 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
           borderColor="primary"
           borderWidth={3}
           borderRadius={13}
-          marginRight="s"
+          marginRight="m"
           width={310}
           flexDirection="row"
           paddingHorizontal="m"

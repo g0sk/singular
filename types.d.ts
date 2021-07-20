@@ -228,10 +228,6 @@ interface ScanSuccessProps {
 }
 
 //Components
-export type ViewProps = SpacingProps<Theme> &
-  VariantProps<Theme, 'viewVariants'> &
-  BorderProps<Theme> &
-  BackgroundColorProps<Theme> & {};
 
 //Button
 export type ButtonProps = SpacingProps<Theme> &

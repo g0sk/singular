@@ -59,7 +59,7 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
             <Text>{nActives}</Text>
           </TouchableOpacity>
         </View>
-        <View marginHorizontal="m" marginTop="m" marginBottom="l">
+        <View marginHorizontal="s" marginTop="m" marginBottom="l">
           <FlatList
             ref={flatListRef}
             renderItem={({item}) => (
