@@ -32,6 +32,7 @@ const UserSchema = Yup.object().shape({
 
 export const Profile: React.FC = () => {
   const dispatch = useAppDispatch();
+  const [image, setImage] = useState<ParsedImage | undefined>();
   const {user, error}: UserState = useAppSelector((state) => state.users);
   const [userNameChange, setUsernameChange] = useState<boolean>(false);
   const [nameChange, setNameChange] = useState<boolean>(false);
@@ -56,12 +57,10 @@ export const Profile: React.FC = () => {
     );
   };
 
-  const saveImage = (image: ParsedImage) => {
-    if (image !== undefined) {
-      image.uri =
-        'file://data/user/0/com.singular/cache/rn_image_picker_lib_temp_952cb47e-d9ca-4fad-a66a-0569cfb6e8a9.jpg';
-      dispatch(createMediaObject(image));
-      //dispatch(setImage({id: 40, contentUrl: value.uri}));
+  const saveImage = (resImage: ParsedImage) => {
+    if (resImage !== undefined) {
+      dispatch(createMediaObject(resImage));
+      setImage(resImage);
     }
   };
 
@@ -138,7 +137,7 @@ export const Profile: React.FC = () => {
         <View style={styles.avatar} marginBottom="l">
           <Avatar
             isContentUrl={false}
-            uri={user?.image?.contentUrl}
+            uri={image?.uri}
             hasBorder={true}
             height={90}
             width={90}

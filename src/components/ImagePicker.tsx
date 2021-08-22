@@ -30,9 +30,9 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
   }, [visible]);
 
   const parseImageResponse = (response: ImagePickerResponse): ParsedImage => {
-    //const base64URI = 'data:image/jpg;base64,' + response.base64;
+    const base64URI = 'data:image/jpg;base64,' + response.base64;
     return {
-      //base64: response.base64,
+      base64: base64URI,
       type: response.type,
       uri: response.uri,
       height: response.height,
@@ -58,14 +58,12 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
   const showGallery = () => {
     const libraryOptions: ImageLibraryOptions = {
       mediaType: 'photo',
-      includeBase64: false,
-      //maxWidth: 100,
-      //maxHeight: 100,
+      includeBase64: true,
       quality: 1,
     };
     launchImageLibrary(libraryOptions, (response: ImagePickerResponse) => {
       if (response.errorCode) {
-        hideModal();
+        //hideModal();
         errorToast(response.errorCode);
       }
       if (!response.didCancel) {
@@ -73,7 +71,6 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
         const parsedImage = parseImageResponse(response);
         saveImage(parsedImage);
       }
-      return;
     });
   };
   const showCamera = () => {
@@ -94,7 +91,6 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
         const parsedImage = parseImageResponse(response);
         saveImage(parsedImage);
       }
-      return;
     });
   };
 
@@ -144,11 +140,12 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    borderRadius: 20,
+    //borderRadius: 20,
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 0,
     textAlign: 'left',
+    width: 250,
   },
   header: {
     paddingVertical: 20,

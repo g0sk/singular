@@ -75,7 +75,6 @@ export const Scan = () => {
       setEnabled(enabledRes);
       setReading(!reading);
       if (!reading) {
-        console.log('estoy dentro');
         initNfc().then(() =>
           readNdef().then((res) => {
             if (res !== null) {

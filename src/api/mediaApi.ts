@@ -1,19 +1,31 @@
 import {apiURL} from 'api';
 
 const getMediaImage = (contentUrl: string) => apiURL.get(contentUrl);
-const createMediaImage = (contentUrl: string) => apiURL.post(contentUrl);
-/*
-const createMediaImage = (image: any) => {
+
+const createMediaImage = () => null;
+/* const createMediaImage = (image: ParsedImage) => {
   let bodyFormData = new FormData();
-  bodyFormData.append('file', {
-    uri:
-      'file:///data/user/0/com.singular/cache/rn_image_picker_lib_temp_952cb47e-d9ca-4fad-a66a-0569cfb6e8a9.jpg',
-  });
-  return apiURL.post('/api/media_objects', bodyFormData, {
-    headers: {'Content-Type': 'multipart/form-data'},
-  });
-};
-*/
+  const mediaImage = {
+    name: image.fileName,
+    type: image.type,
+    size: image.fileSize,
+    uri: image.uri,
+  };
+  console.log(mediaImage);
+  bodyFormData.append('image', mediaImage);
+
+  apiURL
+    .post('/api/media_objects', mediaImage, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then((res) => {
+      console.log('---------------------------------------------------------');
+      console.log('res: ', res);
+    })
+    .catch((error) => console.log('error creating media image ', error));
+}; */
 
 export default {
   getMediaImage,

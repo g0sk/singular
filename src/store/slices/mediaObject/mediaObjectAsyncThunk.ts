@@ -1,18 +1,18 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import MediaObjectApi from 'api/mediaApi';
-import {File, ParsedImage} from 'types';
+import {ParsedImage} from 'types';
 
-export const createMediaObject = createAsyncThunk<File, ParsedImage, {}>(
+export const createMediaObject = createAsyncThunk(
   'mediaObject/createMediaObject',
-  async (image) => {
+  async (image: ParsedImage) => {
     try {
-      const response = await MediaObjectApi.createMediaImage(
-        image?.uri ? image.uri : '',
-      );
-      if (response.status === 200) {
+      console.log(image !== undefined);
+      const response = await MediaObjectApi.createMediaImage();
+      console.log('response', response);
+      /* if (response.status === 200) {
         console.log(response.data);
         return response.data;
-      }
+      } */
     } catch (error) {
       throw error;
     }

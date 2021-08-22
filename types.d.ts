@@ -271,17 +271,15 @@ export interface PermissionTypes {
   storage: boolean;
 }
 
-export type ParsedImage =
-  | {
-      //base64: string | undefined;
-      type: string | undefined;
-      uri: string | undefined;
-      width: number | undefined;
-      height: number | undefined;
-      fileSize: number | undefined;
-      fileName: string | undefined;
-    }
-  | undefined;
+export type ParsedImage = {
+  base64: string | undefined;
+  type: string | undefined;
+  uri: string | undefined;
+  width: number | undefined;
+  height: number | undefined;
+  fileSize: number | undefined;
+  fileName: string | undefined;
+};
 
 export type ImagePickerProps = {
   visible: boolean;
