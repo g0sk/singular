@@ -44,7 +44,7 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
             defaultIcon="plus-circle"
             defaultAction={() =>
               navigation.navigate('Document', {
-                activeId: undefined,
+                active: undefined,
                 title: 'New active',
               })
             }

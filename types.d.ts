@@ -62,8 +62,8 @@ export type AuthParamList = {
 export type RootDocumentParamList = {
   Documents: undefined;
   Document: {
-    activeId: number | undefined;
-    title: string | undefined;
+    active: Active | undefined;
+    title: string;
     tag?: TagEvent;
   };
 };

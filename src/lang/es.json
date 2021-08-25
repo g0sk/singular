@@ -19,6 +19,9 @@
     "login": {
       "title": "Bienvenido a Singular",
       "description": "Inicia sesión para comenzar a utilizar la aplicación"
+    },
+    "active": {
+      "title": "Activo"
     }
   },
   "active": {
@@ -26,7 +29,8 @@
     "actives": "activos",
     "data": {
       "id": "ID"
-    }
+    },
+    "lastUpdate": "Última actualización"
   },
   "form": {
     "login": {
@@ -90,6 +94,10 @@
     }
   },
   "action": {
+    "general": {
+      "save": "Guardar",
+      "delete": "Eliminar"
+    },
     "login": {
       "signIn": {
         "title": "Iniciar sesión"

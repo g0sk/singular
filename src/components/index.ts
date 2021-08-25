@@ -8,3 +8,4 @@ export * from './Button';
 export * from './TextInput';
 export * from './CheckBox';
 export * from './SearchBox';
+export * from './SimpleTextInput';

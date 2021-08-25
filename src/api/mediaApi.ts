@@ -1,23 +1,22 @@
 import {apiURL} from 'api';
+import {ParsedImage} from 'types';
 
 const getMediaImage = (contentUrl: string) => apiURL.get(contentUrl);
 
-const createMediaImage = () => null;
-/* const createMediaImage = (image: ParsedImage) => {
+const createMediaImage = (image: ParsedImage) => {
   let bodyFormData = new FormData();
-  const mediaImage = {
-    name: image.fileName,
+  console.log(image);
+  bodyFormData.append('file', {
+    name: 'se_ha_subido_correctamente.jpg',
     type: image.type,
-    size: image.fileSize,
     uri: image.uri,
-  };
-  console.log(mediaImage);
-  bodyFormData.append('image', mediaImage);
+  });
 
-  apiURL
-    .post('/api/media_objects', mediaImage, {
+  return apiURL
+    .post('/api/media_objects', bodyFormData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data; boundary=',
       },
     })
     .then((res) => {
@@ -25,7 +24,7 @@ const createMediaImage = () => null;
       console.log('res: ', res);
     })
     .catch((error) => console.log('error creating media image ', error));
-}; */
+};
 
 export default {
   getMediaImage,

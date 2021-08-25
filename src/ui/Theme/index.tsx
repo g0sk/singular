@@ -72,6 +72,11 @@ const theme = createTheme({
       fontWeight: 'bold',
       fontSize: 25,
     },
+    updated: {
+      color: 'darkText',
+      fontWeight: 'bold',
+      fontSize: 18,
+    },
     headerTitle: {
       color: 'darkText',
       fontWeight: 'bold',
@@ -142,10 +147,13 @@ const theme = createTheme({
     button_primary: {
       color: 'lightText',
     },
+    button_delete: {
+      color: 'lightText',
+      fontSize: 15,
+    },
     button_secondary: {
       color: 'lightText',
       fontSize: 15,
-      textTransform: 'uppercase',
     },
     checkBox: {
       color: 'description',
@@ -214,6 +222,9 @@ const theme = createTheme({
     },
     disabled: {
       backgroundColor: 'disabled',
+    },
+    delete: {
+      backgroundColor: 'error',
     },
   },
   navigation: {

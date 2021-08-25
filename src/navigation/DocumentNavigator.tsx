@@ -15,7 +15,10 @@ export const DocumentNavigator = () => {
       <Stack.Screen
         name="Document"
         component={Document}
-        options={({route}) => ({headerShown: true, title: route.params?.title})}
+        options={({route}) => ({
+          headerShown: true,
+          title: route.params?.title,
+        })}
       />
     </Stack.Navigator>
   );

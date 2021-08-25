@@ -19,6 +19,9 @@
     "login": {
       "title": "Welcome to Singular",
       "description": "Log in to start using the app"
+    },
+    "active": {
+      "title": "Active"
     }
   },
   "active": {
@@ -26,7 +29,8 @@
     "actives": "actives",
     "data": {
       "id": "ID"
-    }
+    },
+    "lastUpdate": "Last update"
   },
   "user": {},
   "form": {
@@ -63,6 +67,17 @@
         "label": "Email",
         "placeholder": "Enter your email"
       }
+    },
+    "active": {
+      "entryDate": {
+        "label": "Entry date",
+        "placeholder": "Select and entry date",
+        "error": {
+          "required": "This field is required",
+          "invalid": "This field is invalid"
+        },
+      }
+
     }
   },
   "messages": {
@@ -71,6 +86,10 @@
     }
   },
   "action": {
+    "general": {
+      "save": "Save",
+      "delete": "Delete"
+    },
     "login": {
       "signIn": {
         "title": "Sign In"

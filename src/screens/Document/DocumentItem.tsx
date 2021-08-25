@@ -27,7 +27,7 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
       <TouchableOpacity
         onPress={() =>
           navigation.push('Document', {
-            activeId: item.id,
+            active: item,
             title: item.reference,
           })
         }>
