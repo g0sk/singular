@@ -12,15 +12,13 @@ import {
 } from 'components';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import {useAppDispatch, useAppSelector} from 'store/configureStore';
-import {useAuth} from 'core';
+import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
+import {useAuth, translate} from 'core';
 import {UserState, ParsedImage, UserFormValues} from 'types';
-//import {setImage} from 'store/slices/user/UserSlice';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {createMediaObject} from 'store/slices/mediaObject/mediaObjectAsyncThunk';
 import {updateUser} from 'store/slices/user/userAsyncThunk';
 import {getCredentials, setCredentials} from 'utils/storage';
-import {translate} from 'core';
 
 const UserSchema = Yup.object().shape({
   username: Yup.string()
@@ -32,8 +30,7 @@ const UserSchema = Yup.object().shape({
 
 export const Profile: React.FC = () => {
   const dispatch = useAppDispatch();
-  const [image, setImage] = useState<ParsedImage | undefined>();
-  const {user, error}: UserState = useAppSelector((state) => state.users);
+  const {user, error}: UserState = useAppSelector((state) => state.user);
   const [userNameChange, setUsernameChange] = useState<boolean>(false);
   const [nameChange, setNameChange] = useState<boolean>(false);
   const [lastNameChange, setLastNameChange] = useState<boolean>(false);
@@ -58,9 +55,14 @@ export const Profile: React.FC = () => {
   };
 
   const saveImage = (resImage: ParsedImage) => {
-    if (resImage !== undefined) {
-      dispatch(createMediaObject(resImage));
-      setImage(resImage);
+    if (resImage !== undefined && user !== null) {
+      dispatch(createMediaObject(resImage)).then(() => {
+        const {image} = store.getState().mediaObject;
+        if (image !== null) {
+          const updatedUser = {...user, image: image};
+          dispatch(updateUser(updatedUser));
+        }
+      });
     }
   };
 
@@ -137,7 +139,7 @@ export const Profile: React.FC = () => {
         <View style={styles.avatar} marginBottom="l">
           <Avatar
             isContentUrl={false}
-            uri={image?.uri}
+            uri={user?.image?.contentUrl}
             hasBorder={true}
             height={90}
             width={90}

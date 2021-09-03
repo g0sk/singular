@@ -5,14 +5,13 @@ import {
   Reducer,
   AnyAction,
 } from '@reduxjs/toolkit';
-import authReducer from 'core/auth/authSlice';
-import userSlice from './slices/user/UserSlice';
-import activeSlice from './slices/active/activeSlice';
+import Reducers from './slices';
 
 const combinedReducers = combineReducers({
-  auth: authReducer,
-  users: userSlice,
-  active: activeSlice,
+  auth: Reducers.authReducer,
+  user: Reducers.userReducer,
+  active: Reducers.activeReducer,
+  mediaObject: Reducers.mediaObjectReducer,
 });
 
 const rootReducer: Reducer = (state: RootState, action: AnyAction) => {

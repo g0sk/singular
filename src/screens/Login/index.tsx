@@ -64,7 +64,7 @@ export const Login: React.FC = () => {
   const navigatorSignIn = async () => {
     try {
       const {token, refreshToken} = store.getState().auth;
-      const {user} = store.getState().users;
+      const {user} = store.getState().user;
       if (token !== null && refreshToken !== null && user !== null) {
         signIn({token, refreshToken, user});
       } else {

@@ -69,7 +69,7 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
               const {token, refreshToken, userID} = store.getState().auth;
               if (token !== null && refreshToken !== null && userID !== null) {
                 store.dispatch(fetchUser(userID)).then(() => {
-                  const {user} = store.getState().users;
+                  const {user} = store.getState().user;
                   if (user !== null) {
                     console.log('user: ', user);
                     dispatch({type: 'SIGN_IN', token, refreshToken, user});

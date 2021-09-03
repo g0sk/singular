@@ -1,5 +1,5 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {MediaObjectState} from 'types';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {MediaObjectPayload, MediaObjectState} from 'types';
 import {createMediaObject} from './mediaObjectAsyncThunk';
 const initialState = {
   loading: false,
@@ -14,11 +14,14 @@ const MediaObjectSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createMediaObject.fulfilled, (state, action) => {
-        state.image = action.payload;
-        state.error = false;
-        state.loading = false;
-      })
+      .addCase(
+        createMediaObject.fulfilled,
+        (state, action: PayloadAction<MediaObjectPayload>) => {
+          state.image = action.payload;
+          state.error = false;
+          state.loading = false;
+        },
+      )
       .addCase(createMediaObject.pending, (state) => {
         state.error = false;
         state.loading = true;
@@ -31,4 +34,4 @@ const MediaObjectSlice = createSlice({
   },
 });
 
-export default MediaObjectSlice;
+export default MediaObjectSlice.reducer;

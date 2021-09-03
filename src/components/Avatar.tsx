@@ -5,14 +5,13 @@ import {AvatarProps} from 'types';
 
 export const Avatar: React.FC<AvatarProps> = ({
   uri,
-  isContentUrl,
   hasBorder,
   height = 45,
   width = 45,
   longPress,
   press,
 }) => {
-  const mediaUrl = isContentUrl ? API_URL + uri : uri;
+  const mediaUrl = API_URL + uri;
   return (
     <View style={styles.container}>
       <TouchableOpacity onLongPress={() => longPress()} onPress={() => press()}>
