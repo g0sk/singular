@@ -105,26 +105,20 @@ export const Profile: React.FC = () => {
     setNameChange(false);
     setLastNameChange(false);
   };
-  const {
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    errors,
-    touched,
-    values,
-  } = useFormik({
-    validationSchema: UserSchema,
-    initialValues: {
-      name: user ? user.name : '',
-      lastName: user ? user.lastName : '',
-      username: user ? user.username : '',
-    },
-    onSubmit: (formValues: UserFormValues) => {
-      submitForm(formValues);
-    },
-    validateOnBlur: false,
-    validateOnChange: false,
-  });
+  const {handleChange, handleBlur, handleSubmit, errors, touched, values} =
+    useFormik({
+      validationSchema: UserSchema,
+      initialValues: {
+        name: user ? user.name : '',
+        lastName: user ? user.lastName : '',
+        username: user ? user.username : '',
+      },
+      onSubmit: (formValues: UserFormValues) => {
+        submitForm(formValues);
+      },
+      validateOnBlur: false,
+      validateOnChange: false,
+    });
   const openImagePicker = () => setModal(true);
   const customHandleBlur = (a: string) => {
     handleBlur(a);
@@ -138,7 +132,6 @@ export const Profile: React.FC = () => {
       <View marginHorizontal="xl" marginVertical="l">
         <View style={styles.avatar} marginBottom="l">
           <Avatar
-            isContentUrl={false}
             uri={user?.image?.contentUrl}
             hasBorder={true}
             height={90}

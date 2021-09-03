@@ -28,7 +28,7 @@ export const fetchToken = createAsyncThunk<
       return response.data;
     }
   } catch (error) {
-    return rejectWithValue(error);
+    return rejectWithValue(error as ErrorData);
   }
 });
 
@@ -43,7 +43,7 @@ export const fetchRefreshToken = createAsyncThunk<
       return response.data;
     }
   } catch (error) {
-    return rejectWithValue(error);
+    return rejectWithValue(error as ErrorData);
   }
 });
 

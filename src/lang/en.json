@@ -75,7 +75,7 @@
         "error": {
           "required": "This field is required",
           "invalid": "This field is invalid"
-        },
+        }
       }
 
     }
@@ -102,7 +102,13 @@
     "scan": {
         "search": "Searching tag",
         "scan": "Reading tag"
-      }
+    },
+    "image": {
+        "title": "Select image",
+        "select": "Choose from gallery",
+        "take": "Take picture",
+        "cancel": "Cancel"
+    }
   },
   "app": {
     "data": {

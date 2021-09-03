@@ -110,7 +110,13 @@
     "scan": {
       "search": "Buscando etiqueta",
       "scan": "Leyendo etiqueta"
-    }
+    },
+    "image": {
+        "title": "Seleccionar imagen",
+        "select": "Seleccionar imagen de galería",
+        "take": "Sacar foto",
+        "cancel": "Cancelar"
+      }
   },
   "app": {
     "data": {

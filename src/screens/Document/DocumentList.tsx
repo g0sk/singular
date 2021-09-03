@@ -1,15 +1,12 @@
 import React, {createRef} from 'react';
 import {Screen} from 'components';
-import {Dimensions, FlatList, TouchableOpacity} from 'react-native';
+import {FlatList, TouchableOpacity} from 'react-native';
 import {Header, Text, View} from 'components';
 import {DocumentItem} from './DocumentItem';
 import {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {fetchActives} from 'store/slices/active/activeAsyncThunk';
 import {DocumentStackProps} from 'types';
 import {translate} from 'core';
-
-//Screen dimension - tabbar height;
-const HEIGHT = Dimensions.get('window').height - 150;
 
 export const DocumentList: React.FC<DocumentStackProps> = ({
   navigation,
@@ -37,7 +34,7 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
 
   return (
     <Screen>
-      <View height={HEIGHT}>
+      <View>
         <View margin="m">
           <Header
             disabled={false}

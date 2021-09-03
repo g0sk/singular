@@ -14,7 +14,7 @@ import {
   CameraOptions,
   launchCamera,
 } from 'react-native-image-picker';
-
+import {translate} from 'core';
 import {ParsedImage, ImagePickerProps} from 'types';
 
 export const ImagePicker: React.FC<ImagePickerProps> = ({
@@ -61,13 +61,12 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
       includeBase64: true,
       quality: 1,
     };
+    hideModal();
     launchImageLibrary(libraryOptions, (response: ImagePickerResponse) => {
       if (response.errorCode) {
-        //hideModal();
         errorToast(response.errorCode);
       }
       if (!response.didCancel) {
-        hideModal();
         const parsedImage = parseImageResponse(response);
         saveImage(parsedImage);
       }
@@ -81,13 +80,12 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
       includeBase64: true,
       saveToPhotos: true,
     };
+    hideModal();
     launchCamera(cameraOptions, (response: ImagePickerResponse) => {
       if (response.errorCode) {
-        hideModal();
         errorToast(response.errorCode);
       }
       if (!response.didCancel) {
-        hideModal();
         const parsedImage = parseImageResponse(response);
         saveImage(parsedImage);
       }
@@ -100,14 +98,20 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.header}>
-              <Text style={styles.textHeader}>Select Image</Text>
+              <Text style={styles.textHeader}>
+                {translate('action.image.title')}
+              </Text>
             </View>
             <View style={styles.options}>
               <TouchableOpacity onPress={() => showCamera()}>
-                <Text style={styles.textOption}>Take picture</Text>
+                <Text style={styles.textOption}>
+                  {translate('action.image.take')}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => showGallery()}>
-                <Text style={styles.textOption}>Choose from gallery</Text>
+                <Text style={styles.textOption}>
+                  {translate('action.image.select')}
+                </Text>
               </TouchableOpacity>
             </View>
             <View style={styles.button}>
@@ -115,7 +119,9 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
                 onPress={() => {
                   hideModal();
                 }}>
-                <Text style={styles.cancelButton}>Cancel</Text>
+                <Text style={styles.cancelButton}>
+                  {translate('action.image.cancel')}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
