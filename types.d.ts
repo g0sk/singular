@@ -176,13 +176,13 @@ export interface ActiveState {
 
 //Media object
 
-export type MediaObjectResponse = {
+export type MediaObjectPayload = {
   id: number;
   contentUrl: string;
 };
 
 export interface MediaObjectState {
-  image: MediaObjectResponse | null;
+  image: MediaObjectPayload | null;
   loading: boolean;
   error: boolean;
   errorData: Error;
@@ -257,8 +257,7 @@ export interface HeaderProps {
 export interface AvatarProps {
   hasBorder?: boolean;
   placeholderImg?: Image;
-  uri?: string | undefined;
-  isContentUrl?: boolean;
+  uri?: string;
   height?: number;
   width?: number;
   longPress: () => void;
