@@ -16,7 +16,7 @@ export const Form: React.FC<DynamicFormProps> = ({
 }) => {
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [entryDate, setEntryDate] = useState<string>(new Date().toString());
-  /* 
+  /*
   const updateActive = (activeValues) => {
     null;
   };
