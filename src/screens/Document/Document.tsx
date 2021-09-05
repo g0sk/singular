@@ -1,35 +1,47 @@
-import React, {useEffect} from 'react';
-import {Text, View, Button} from 'components';
+import React, {useState, useEffect} from 'react';
+import {Form, Text, View, Button} from 'components';
 import {translate} from 'core';
 import {DocumentStackProps} from 'types';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-//import * as DatePicker from 'react-native-modern-datepicker';
+import {Active} from 'types';
+import * as Yup from 'yup';
+type Mode = 'date' | 'time';
 
 export const Document: React.FC<DocumentStackProps> = ({route}) => {
-  //const [change, setChange] = useState<boolean>(false);
-  /* const [date, setDate] = useState<Date>(new Date());
-  const [active, setActive] = useState<Active>();
-  const [showDatePicker, setShowDatePicker] = useState<boolean>(false); */
+  const [change, setChange] = useState<boolean>(false);
+  const [active, setActive] = useState<Active>(() => {
+    return {} as Active;
+  });
 
   useEffect(() => {
-    //setActive(route.params.active);
-    console.log(route.params.active);
+    if (route.params.active !== undefined) {
+      setActive(route.params.active);
+    }
   }, [route.params.active]);
+
+  const ActiveSchema = Yup.object().shape({
+    activeType: new Yup.ObjectSchema({
+      id: Yup.number(),
+      name: Yup.string(),
+    }).required(),
+    entryDate: Yup.string().required(),
+    measuramentData: Yup.string().required(),
+    measuramentUnit: Yup.string().required(),
+    useWearTear: Yup.string().required(),
+    estimatedLifeTime: Yup.string().required(),
+    customAttributes: Yup.string(),
+    //activeRecord: new Yup.ArraySchema({}),
+    file: new Yup.ObjectSchema({
+      id: Yup.number(),
+      contentUrl: Yup.string(),
+    }),
+  });
+
   return (
     <View style={styles.container} margin="m">
-      {/* {showDatePicker && (
-        <DatePicker
-          mode="date"
-          display="inline"
-          onChange={onChange}
-          value={date}
-          maximumDate={new Date(2300, 10, 20)}
-          minimumDate={new Date(1950, 0, 1)}
-        />
-      )} */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.info}>
+        <TouchableOpacity style={styles.info} onPress={() => null}>
           <View style={styles.update} marginRight="m">
             <View marginBottom="s">
               <Text variant="updated">{translate('active.lastUpdate')}</Text>
@@ -42,17 +54,22 @@ export const Document: React.FC<DocumentStackProps> = ({route}) => {
             <Icon name="documents" size={34} />
           </View>
         </TouchableOpacity>
-        <View width={100}>
-          <Button
-            onPress={() => null}
-            variant="secondary"
-            label={translate('action.general.save')}
-          />
-        </View>
+        {change && (
+          <View width={100}>
+            <Button
+              onPress={() => null}
+              variant="secondary"
+              label={translate('action.general.save')}
+            />
+          </View>
+        )}
       </View>
-      <View style={styles.form} marginTop="l" padding="m">
-        <Text>holi</Text>
-      </View>
+      <Form
+        schema={ActiveSchema}
+        hasCustomAttributes={false}
+        active={active}
+        setChange={setChange}
+      />
       <View marginVertical="xl" marginHorizontal="xxl">
         <Button
           onPress={() => null}
@@ -88,9 +105,9 @@ const styles = StyleSheet.create({
   button: {},
   form: {
     height: 200,
-    borderRadius: 25,
-    borderColor: '#4b4a4d',
-    borderWidth: 2,
+    //borderRadius: 25,
+    //borderColor: '#4b4a4d',
+    //borderWidth: 2,
   },
   field: {},
 });

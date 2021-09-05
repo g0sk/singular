@@ -10,6 +10,7 @@ import {
   VariantProps,
 } from '@shopify/restyle';
 import {Theme} from 'ui/Theme';
+import {AnyObjectSchema} from 'yup';
 
 //Geral types
 export type Credentials = {
@@ -228,6 +229,12 @@ interface ScanSuccessProps {
 }
 
 //Components
+export interface DynamicFormProps {
+  schema?: AnyObjectSchema;
+  setChange?: Dispatch<SetStateAction<boolean>>;
+  active: Active;
+  hasCustomAttributes?: boolean;
+}
 
 //Button
 export type ButtonProps = SpacingProps<Theme> &
