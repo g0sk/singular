@@ -169,6 +169,7 @@ export interface ActiveState {
   active: Active | null;
   actives: Actives | null;
   activesLength: number;
+  activeTypes: Array<String>;
   page: number;
   loading: boolean;
   error: boolean;

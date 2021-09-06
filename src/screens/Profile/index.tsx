@@ -60,7 +60,16 @@ export const Profile: React.FC = () => {
         const {image} = store.getState().mediaObject;
         if (image !== null) {
           const updatedUser = {...user, image: image};
-          dispatch(updateUser(updatedUser));
+          dispatch(updateUser(updatedUser)).then(() => {
+            const {userLoading, userError} = store.getState().user;
+            if (!userLoading && !userError) {
+              ToastAndroid.showWithGravity(
+                translate('action.image.updated'),
+                ToastAndroid.CENTER,
+                ToastAndroid.SHORT,
+              );
+            }
+          });
         }
       });
     }

@@ -7,6 +7,9 @@ import {translate} from 'core';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/Feather';
 import {dateWithoutTimezone} from 'helpers/date';
+import store from 'store/configureStore';
+import {fetchActiveTypes} from 'store/slices/active/activeAsyncThunk';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 export const Form: React.FC<DynamicFormProps> = ({
   active,
@@ -14,17 +17,18 @@ export const Form: React.FC<DynamicFormProps> = ({
   //setChange,
   //schema,
 }) => {
+  const [openDropdown, setOpenDropdown] = useState<boolean>(false);
+  const [dropdownValue, setDropdownValue] = useState<number | null>(null);
+
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [entryDate, setEntryDate] = useState<string>(new Date().toString());
-  /*
-  const updateActive = (activeValues) => {
-    null;
-  };
- */
+  const {activeTypes} = store.getState().active;
+
   useEffect(() => {
     if (active.entryDate) {
       setEntryDate(active.entryDate);
     }
+    store.dispatch(fetchActiveTypes());
   }, [active.entryDate]);
 
   /* const {
@@ -41,10 +45,9 @@ export const Form: React.FC<DynamicFormProps> = ({
     initialValues: active,
     onSubmit: (activeValues) => updateActive(activeValues),
   }); */
-  const pepega = (e: any, date: any) => {
+  const updateDate = (e: any, date: any) => {
     setShowDatePicker(!showDatePicker);
-    console.log('entry: ', active.entryDate);
-    console.log('\n' + 'pepe: ' + date);
+    setEntryDate(date.toString());
   };
   const formattedEntryDate = dateWithoutTimezone(entryDate);
   return (
@@ -54,14 +57,14 @@ export const Form: React.FC<DynamicFormProps> = ({
           mode="date"
           display="default"
           value={new Date(entryDate)}
-          onChange={pepega}
+          onChange={updateDate}
         />
       )}
-      <View style={styles.entryDate}>
+      <View style={styles.field}>
         <Text marginVertical="s" variant="formLabel">
           {translate('form.active.entryDate.label')}
         </Text>
-        <View style={styles.entryDateField}>
+        <View style={styles.entryDate}>
           <View width={150} marginRight="xl">
             <TextInput
               placeholder={translate('form.active.entryDate.placeholder')}
@@ -73,6 +76,28 @@ export const Form: React.FC<DynamicFormProps> = ({
             <Icon name="calendar" size={25} />
           </TouchableOpacity>
         </View>
+        <View style={styles.field} marginTop="xl">
+          <View marginBottom="m">
+            <Text variant="formLabel">
+              {translate('form.active.type.label')}
+            </Text>
+          </View>
+          <DropDownPicker
+            placeholder={translate('form.active.type.placeholder')}
+            open={openDropdown}
+            value={dropdownValue}
+            items={activeTypes}
+            setOpen={setOpenDropdown}
+            setValue={setDropdownValue}
+            ListEmptyComponent={() => (
+              <View padding="s">
+                <Text>{translate('form.active.type.empty')}</Text>
+              </View>
+            )}
+            //searchable={true}
+            //searchablePlaceholder={translate('form.active.type.search')}
+          />
+        </View>
       </View>
     </View>
   );
@@ -80,12 +105,13 @@ export const Form: React.FC<DynamicFormProps> = ({
 
 const styles = StyleSheet.create({
   form: {},
-  entryDate: {
+  field: {
     flexDirection: 'column',
   },
-  entryDateField: {
+  entryDate: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  type: {},
 });

@@ -76,6 +76,15 @@
           "required": "This field is required",
           "invalid": "This field is invalid"
         }
+      },
+      "type": {
+        "label": "Type",
+        "placeholder": "Select a type",
+        "empty": "No types found",
+        "error": {
+          "required": "Field required",
+          "invalid": "This field is invalid"
+        }
       }
 
     }
@@ -107,7 +116,8 @@
         "title": "Select image",
         "select": "Choose from gallery",
         "take": "Take picture",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "updated": "Profile picture updated"
     }
   },
   "app": {

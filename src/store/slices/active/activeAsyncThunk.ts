@@ -29,3 +29,17 @@ export const fetchActive = createAsyncThunk<Active, number, {}>(
     }
   },
 );
+
+export const fetchActiveTypes = createAsyncThunk<Array<string>, void, {}>(
+  'active/fetchActiveTypes',
+  async () => {
+    try {
+      const response = await ActiveApi.getTypes();
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+);

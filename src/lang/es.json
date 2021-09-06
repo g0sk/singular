@@ -66,6 +66,26 @@
         "label": "Email",
         "placeholder": "Introduce tu correo electrónico"
       }
+    },
+    "active": {
+      "entryDate": {
+        "label": "Fecha de entrada",
+        "placeholder": "Seleccione una fecha de entrada",
+        "error": {
+          "required": "Campo obligatorio",
+          "invalid": "Fecha inválida"
+        }
+      },
+      "type": {
+        "label": "Tipo",
+        "placeholder": "Seleccione un tipo",
+        "empty": "No existen tipos",
+        "error": {
+          "required": "Campo obligatorio",
+          "invalid": "Tipo inválido"
+        }
+      }
+
     }
   },
   "user": {},
@@ -115,7 +135,8 @@
         "title": "Seleccionar imagen",
         "select": "Seleccionar imagen de galería",
         "take": "Sacar foto",
-        "cancel": "Cancelar"
+        "cancel": "Cancelar",
+        "updated": "Foto de perfil actualizada"
       }
   },
   "app": {
