@@ -146,21 +146,31 @@ export interface UserState {
   user: User | null;
 }
 
+//Atributes
+export interface Attribute {
+  id: number;
+  name: string;
+  value: string;
+}
+
 //Active Types
+export interface ActiveType {
+  id: number;
+  name: string;
+  basicAttributes: Attribute[];
+  customAttributes: Attribute[];
+}
+
+export type ActiveTypes = ActiveType[];
+
+//Active
 export interface Active {
   id: number;
   reference: string;
   entryDate: string;
-  measurementData: number;
-  measurementUnit: string;
-  estimatedLifeTime: number;
-  lifetime: number;
-  lifetimeMeasurementUnit: string;
-  type: string;
-  customAttributes: string;
-  activeRecord: {} | null;
   file: File;
-  useWearTear: number;
+  activeType: ActiveType;
+  attributeValues: Attribute[];
 }
 
 export type Actives = Array<Active>;
@@ -169,7 +179,7 @@ export interface ActiveState {
   active: Active | null;
   actives: Actives | null;
   activesLength: number;
-  activeTypes: Array<String>;
+  activeTypes: ActiveType[];
   page: number;
   loading: boolean;
   error: boolean;

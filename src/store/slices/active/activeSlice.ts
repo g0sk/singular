@@ -16,11 +16,7 @@ const initialState: ActiveState = {
 const activeSlice = createSlice({
   name: 'active',
   initialState,
-  reducers: {
-    fetchOctives: (state) => {
-      state.actives = [];
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchActives.fulfilled, (state, action) => {

@@ -9,7 +9,6 @@ import Icon from 'react-native-vector-icons/Feather';
 import {dateWithoutTimezone} from 'helpers/date';
 import store from 'store/configureStore';
 import {fetchActiveTypes} from 'store/slices/active/activeAsyncThunk';
-import DropDownPicker from 'react-native-dropdown-picker';
 
 export const Form: React.FC<DynamicFormProps> = ({
   active,
@@ -17,12 +16,12 @@ export const Form: React.FC<DynamicFormProps> = ({
   //setChange,
   //schema,
 }) => {
-  const [openDropdown, setOpenDropdown] = useState<boolean>(false);
-  const [dropdownValue, setDropdownValue] = useState<number | null>(null);
+  //const [openDropdown, setOpenDropdown] = useState<boolean>(false);
+  //const [dropdownValue, setDropdownValue] = useState<number | null>(null);
 
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [entryDate, setEntryDate] = useState<string>(new Date().toString());
-  const {activeTypes} = store.getState().active;
+  //const {activeTypes} = store.getState().active;
 
   useEffect(() => {
     if (active.entryDate) {
@@ -82,21 +81,6 @@ export const Form: React.FC<DynamicFormProps> = ({
               {translate('form.active.type.label')}
             </Text>
           </View>
-          <DropDownPicker
-            placeholder={translate('form.active.type.placeholder')}
-            open={openDropdown}
-            value={dropdownValue}
-            items={activeTypes}
-            setOpen={setOpenDropdown}
-            setValue={setDropdownValue}
-            ListEmptyComponent={() => (
-              <View padding="s">
-                <Text>{translate('form.active.type.empty')}</Text>
-              </View>
-            )}
-            //searchable={true}
-            //searchablePlaceholder={translate('form.active.type.search')}
-          />
         </View>
       </View>
     </View>
