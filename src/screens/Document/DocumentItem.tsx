@@ -44,12 +44,12 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
           <View alignContent="center" justifyContent="center">
             <Text variant="listItemPrimary">{item.reference}</Text>
           </View>
-          <View justifyContent="center">
+          {/* <View justifyContent="center">
             <Text variant="listItemData">{item.type}</Text>
           </View>
           <View justifyContent="center">
             <Text variant="listItemData">{item.measurementData}</Text>
-          </View>
+          </View> */}
           <View justifyContent="center">
             <Text variant="listItemData">{itemEntryDate}</Text>
           </View>

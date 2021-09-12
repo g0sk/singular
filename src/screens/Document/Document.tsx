@@ -1,26 +1,27 @@
 import React, {useState, useEffect} from 'react';
-import {Form, Text, View, Button} from 'components';
+import {Text, View, Button} from 'components';
+import {DocumentForm} from './';
 import {translate} from 'core';
 import {DocumentStackProps} from 'types';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Active} from 'types';
-import * as Yup from 'yup';
+//import * as Yup from 'yup';
 type Mode = 'date' | 'time';
 
 export const Document: React.FC<DocumentStackProps> = ({route}) => {
   const [change, setChange] = useState<boolean>(false);
-  const [active, setActive] = useState<Active>(() => {
-    return {} as Active;
-  });
+  const [active, setActive] = useState<Active | null>(null);
 
   useEffect(() => {
-    if (route.params.active !== undefined) {
+    //Null for active create
+    if (route.params.active !== null) {
       setActive(route.params.active);
     }
+    setChange(true);
   }, [route.params.active]);
 
-  const ActiveSchema = Yup.object().shape({
+  /* const ActiveSchema = Yup.object().shape({
     activeType: new Yup.ObjectSchema({
       id: Yup.number(),
       name: Yup.string(),
@@ -36,7 +37,7 @@ export const Document: React.FC<DocumentStackProps> = ({route}) => {
       id: Yup.number(),
       contentUrl: Yup.string(),
     }),
-  });
+  }); */
 
   return (
     <View style={styles.container} margin="m">
@@ -64,12 +65,7 @@ export const Document: React.FC<DocumentStackProps> = ({route}) => {
           </View>
         )}
       </View>
-      <Form
-        schema={ActiveSchema}
-        hasCustomAttributes={false}
-        active={active}
-        setChange={setChange}
-      />
+      <DocumentForm active={active} />
       <View marginVertical="xl" marginHorizontal="xxl">
         <Button
           onPress={() => null}

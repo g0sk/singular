@@ -88,6 +88,12 @@
 
     }
   },
+  "activetype": {
+    "menu": {
+      "placeholder": "Selecciona un tipo",
+      "empty": "No se han encontrado tipos"
+    }
+  },
   "user": {},
   "messages": {
     "login": {

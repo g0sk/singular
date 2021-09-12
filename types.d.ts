@@ -63,7 +63,7 @@ export type AuthParamList = {
 export type RootDocumentParamList = {
   Documents: undefined;
   Document: {
-    active: Active | undefined;
+    active: Active | null;
     title: string;
     tag?: TagEvent;
   };
@@ -206,6 +206,10 @@ export interface ItemType {
   name: string;
 }
 
+export interface DocumentFormProps {
+  active: Active | null;
+}
+
 export interface DocumentListProps {
   user: User | null;
 }
@@ -240,11 +244,34 @@ interface ScanSuccessProps {
 }
 
 //Components
-export interface DynamicFormProps {
+
+export interface ModalProps {
+  children: React.ReactNode;
+  show: boolean;
+  visibleSetter: Dispatch<SetStateAction<boolean>>;
+}
+
+interface Item {
+  id: string;
+  name: string;
+}
+
+//Form
+export interface FormProps<T> {
+  item: T;
   schema?: AnyObjectSchema;
-  setChange?: Dispatch<SetStateAction<boolean>>;
-  active: Active;
-  hasCustomAttributes?: boolean;
+  setChange?: Dispatch<SetStateAction<T>>;
+}
+export interface FormItem extends ActiveType {}
+
+//Dropdown
+export interface DropdownProps<T> {
+  selected: T;
+  options: T[];
+  setParentValue?: Dispatch<SetStateAction<T>>;
+  header: string;
+  placeholder: string;
+  emptyMessage: string;
 }
 
 //Button

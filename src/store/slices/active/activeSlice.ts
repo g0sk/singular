@@ -50,7 +50,8 @@ const activeSlice = createSlice({
         state.error = true;
       })
       .addCase(fetchActiveTypes.fulfilled, (state, action) => {
-        state.activeTypes = action.payload;
+        console.log(action.payload);
+        state.activeTypes = [...action.payload];
         state.loading = false;
         state.error = false;
       })

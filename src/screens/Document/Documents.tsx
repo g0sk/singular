@@ -1,7 +1,10 @@
 import React, {useEffect} from 'react';
 import {Screen} from 'components';
 import store from 'store/configureStore';
-import {fetchActives} from 'store/slices/active/activeAsyncThunk';
+import {
+  fetchActives,
+  fetchActiveTypes,
+} from 'store/slices/active/activeAsyncThunk';
 import {DocumentList} from './DocumentList';
 import {DocumentStackProps} from 'types';
 
@@ -11,6 +14,7 @@ export const Documents: React.FC<DocumentStackProps> = ({
 }) => {
   useEffect(() => {
     store.dispatch(fetchActives());
+    store.dispatch(fetchActiveTypes());
   });
   return (
     <Screen>

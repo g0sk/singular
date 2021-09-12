@@ -89,6 +89,12 @@
 
     }
   },
+  "activeType": {
+    "menu": {
+      "placeholder": "Select a type",
+      "empty": "No types found"
+    }
+  },
   "messages": {
     "login": {
       "signIn": "Sign in"

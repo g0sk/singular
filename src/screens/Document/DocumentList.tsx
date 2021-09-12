@@ -21,6 +21,7 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
   };
 
   const flatListRef = createRef<FlatList<any>>();
+  //Change for pagination and items
   const nActives = activesLength + ' ' + translate('active.actives');
   const emptyList = () =>
     !loading && activesLength > 0 ? (
@@ -41,7 +42,7 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
             defaultIcon="plus-circle"
             defaultAction={() =>
               navigation.navigate('Document', {
-                active: undefined,
+                active: null,
                 title: 'New active',
               })
             }
@@ -66,7 +67,7 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
             onRefresh={() => refreshActives()}
             refreshing={loading}
             ListEmptyComponent={() => emptyList()}
-            data={actives}
+            data={Array.isArray(actives) ? actives : []}
             scrollToOverflowEnabled={true}
           />
         </View>

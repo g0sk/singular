@@ -9,4 +9,6 @@ export * from './TextInput';
 export * from './CheckBox';
 export * from './SearchBox';
 export * from './SimpleTextInput';
-export * from './Form';
+export * from './DynamicForm';
+export * from './Dropdown';
+export * from './Modal';
