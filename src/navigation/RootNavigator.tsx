@@ -15,7 +15,7 @@ export const Root = () => {
       headerMode="none"
       screenOptions={{
         cardOverlayEnabled: false,
-        gestureEnabled: false,
+        gestureEnabled: true,
         animationTypeForReplace: status === 'signIn' ? 'push' : 'pop',
       }}>
       {status === 'signIn' ? (

@@ -18,19 +18,20 @@ export const DocumentItem: React.FC<DocumentItemProps> = ({
     entryDate.getMonth() +
     '/' +
     entryDate.getFullYear();
+  const _itemHandler = () => {
+    navigation.push('Document', {
+      active: item,
+      title: item.reference,
+    });
+  };
+
   return (
     <View
       marginHorizontal="s"
       flexDirection="row"
       marginBottom="l"
       alignItems="center">
-      <TouchableOpacity
-        onPress={() =>
-          navigation.push('Document', {
-            active: item,
-            title: item.reference,
-          })
-        }>
+      <TouchableOpacity onPress={_itemHandler}>
         <View
           borderColor="primary"
           borderWidth={3}

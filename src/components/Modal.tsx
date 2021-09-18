@@ -5,10 +5,10 @@ import RNModal from 'react-native-modal';
 export const Modal: React.FC<ModalProps> = ({
   children,
   show,
-  visibleSetter,
+  setVisibility,
 }) => {
   const _onBackdropPressHandler = () => {
-    visibleSetter(false);
+    setVisibility(false);
   };
 
   return (

@@ -168,8 +168,19 @@ export interface Active {
   id: number;
   reference: string;
   entryDate: string;
+  activeRecord: {
+    id: number;
+  } | null;
   file: File;
   activeType: ActiveType;
+  attributeValues?: Attribute[];
+}
+
+export interface NewActive {
+  reference: string;
+  entryDate: Date;
+  file: File | null;
+  activeType: ActiveType | null;
   attributeValues: Attribute[];
 }
 
@@ -244,16 +255,42 @@ interface ScanSuccessProps {
 }
 
 //Components
-
 export interface ModalProps {
   children: React.ReactNode;
   show: boolean;
-  visibleSetter: Dispatch<SetStateAction<boolean>>;
+  setVisibility: Dispatch<SetStateAction<boolean>>;
 }
 
 interface Item {
   id: string;
   name: string;
+}
+
+//Record
+export interface Record {
+  id: number;
+  active: {
+    id: number;
+    reference: string;
+  };
+  dateRecord: Array<string>;
+  activeObject: Array<Active>;
+}
+
+export interface RecordState {
+  activeRecord: Record;
+  loading: boolean;
+  error: boolean;
+}
+
+export interface RecordProps {
+  activeRecord: Record;
+}
+
+//Dynamic form
+export interface DynamicFormProps<T> {
+  basicAttributes: T[];
+  customAttributes: T[];
 }
 
 //Form
@@ -264,14 +301,28 @@ export interface FormProps<T> {
 }
 export interface FormItem extends ActiveType {}
 
+export type ItemGeneric = {
+  id: number;
+  name: string;
+};
+
 //Dropdown
 export interface DropdownProps<T> {
-  selected: T;
+  selected?: T;
   options: T[];
-  setParentValue?: Dispatch<SetStateAction<T>>;
+  setParentValue: Dispatch<SetStateAction<T>>;
   header: string;
   placeholder: string;
   emptyMessage: string;
+}
+
+//DatePicker
+
+export interface DatePickerProps {
+  entryDate: Date | string;
+  setParentDate: Dispatch<SetStateAction<Date>>;
+  setShowCalendar: Dispatch<SetStateAction<boolean>>;
+  showCalendar: boolean;
 }
 
 //Button

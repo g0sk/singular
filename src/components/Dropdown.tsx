@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {DropdownProps} from 'types';
+import {DropdownProps, ItemGeneric} from 'types';
 import {
   TouchableOpacity,
   TouchableHighlight,
@@ -8,49 +8,34 @@ import {
 } from 'react-native';
 import {View, Text, Modal} from 'components';
 import {useTheme} from 'ui/Theme';
-export function Dropdown<T>({
+
+export function Dropdown<T extends ItemGeneric>({
   selected,
   options,
   placeholder,
   emptyMessage,
   header,
 }: DropdownProps<T>) {
-  const [value, setValue] = useState<T>({} as T);
-  const [items, setItems] = useState<T[]>([]);
+  const [value, setValue] = useState<T>();
+
+  const [items, setItems] = useState<T[]>();
   const [open, setOpen] = useState<boolean>(false);
   const theme = useTheme();
 
-  /* const filterItems = useCallback(() => {
-    setItems((state) => {
-      return state.filter((_item) => {
-        return _item.id !== value?.id;
-      });
-    });
-  }, [value]); */
-
-  //component mount
   useEffect(() => {
-    /* let initialItems: T[] = [];
-    if (selected !== null) {
-      if (options.length > 1) {
-        initialItems = options.filter((option: T) => option.id !== selected.id);
-      }
-    } else {
-      initialItems = [...options];
+    if (selected) {
+      setValue(selected);
     }
-    */
-    selected !== null ? setValue(selected) : null;
     setItems(options);
-    console.log('selected', selected);
-    console.log('options', items);
-  }, [selected, options, items]);
+  }, [selected, options]);
 
-  /* useEffect(() => {
-    setItems((state) => {
-      const filteredList = state.filter((item) => item.id !== value?.id);
-      return filteredList;
-    });
-  }, [value]); */
+  useEffect(() => {
+    let _items: T[] = [];
+    if (value) {
+      _items = options.filter((option) => option.id !== value?.id);
+    }
+    setItems(_items);
+  }, [options, value]);
 
   const _pickerOnPressHandler = () => {
     setOpen(!open);
@@ -62,9 +47,13 @@ export function Dropdown<T>({
   const Picker = () => {
     return (
       <TouchableOpacity onPress={_pickerOnPressHandler}>
-        <View style={styles.picker} margin="m">
+        <View
+          style={styles.picker}
+          borderColor="primary"
+          paddingHorizontal="m"
+          paddingVertical="s">
           {value !== null ? (
-            <Text>Value.name</Text>
+            <Text>{value?.name}</Text>
           ) : (
             <Text>{placeholder}</Text>
           )}
@@ -78,8 +67,9 @@ export function Dropdown<T>({
       <View margin="m" borderBottomColor="gray" borderBottomWidth={0.5}>
         <TouchableHighlight
           onPress={() => _itemOnPressHandler(item)}
-          underlayColor={theme.colors.primary}>
-          <Text>item.name</Text>
+          underlayColor={theme.colors.gray}
+          activeOpacity={0.9}>
+          <Text>{item.name}</Text>
         </TouchableHighlight>
       </View>
     );
@@ -95,7 +85,7 @@ export function Dropdown<T>({
 
   const ListEmptyComponent = () => {
     return (
-      <View style={styles.emptyComponent}>
+      <View style={styles.emptyComponent} margin="m">
         <Text>{emptyMessage}</Text>
       </View>
     );
@@ -105,7 +95,7 @@ export function Dropdown<T>({
     return (
       <View style={styles.options} margin="m">
         <FlatList
-          data={options}
+          data={items}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item}) => renderItem(item)}
           scrollEnabled={true}
@@ -115,11 +105,12 @@ export function Dropdown<T>({
       </View>
     );
   };
+
   return (
     <View style={styles.container}>
       <Picker />
       <View style={styles.modal}>
-        <Modal show={open} children={<OptionList />} visibleSetter={setOpen} />
+        <Modal show={open} children={<OptionList />} setVisibility={setOpen} />
       </View>
     </View>
   );
@@ -129,12 +120,11 @@ const styles = StyleSheet.create({
   container: {},
   modal: {},
   picker: {
-    borderRadius: 20,
-    borderColor: 'purple',
+    borderRadius: 12,
     borderWidth: 2,
     minHeight: 30,
-    width: 250,
   },
+  entryDate: {},
   options: {
     borderRadius: 15,
     backgroundColor: 'white',
@@ -148,6 +138,9 @@ const styles = StyleSheet.create({
   emptyComponent: {
     height: 200,
     textAlign: 'center',
+    fontSize: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   header: {
     color: 'black',

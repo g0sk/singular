@@ -12,6 +12,7 @@ const combinedReducers = combineReducers({
   user: Reducers.userReducer,
   active: Reducers.activeReducer,
   mediaObject: Reducers.mediaObjectReducer,
+  record: Reducers.recordReducer,
 });
 
 const rootReducer: Reducer = (state: RootState, action: AnyAction) => {

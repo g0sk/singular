@@ -16,7 +16,6 @@ export const TabNavigator = () => {
       tabBarOptions={{
         showLabel: false,
         style: styles.container,
-        keyboardHidesTabBar: true,
       }}>
       <Tab.Screen
         name="DocumentNavigator"

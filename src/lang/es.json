@@ -53,6 +53,10 @@
         }
       }
     },
+    "record": {
+      "title": "Actividad",
+      "empty": "No hay actividad que mostrar"
+    },
     "user": {
       "name": {
         "label": "Nombre",

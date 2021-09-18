@@ -32,6 +32,10 @@
     },
     "lastUpdate": "Last update"
   },
+  "record": {
+    "title": "Activity",
+    "empty": "No activity to show"
+  },
   "user": {},
   "form": {
     "login": {

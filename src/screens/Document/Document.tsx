@@ -1,70 +1,28 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, Button} from 'components';
+import {View, Button} from 'components';
 import {DocumentForm} from './';
 import {translate} from 'core';
 import {DocumentStackProps} from 'types';
-import {StyleSheet, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {StyleSheet} from 'react-native';
 import {Active} from 'types';
-//import * as Yup from 'yup';
-type Mode = 'date' | 'time';
+import store from 'store/configureStore';
+import {fetchActiveRecord} from 'store/slices/record/recordAsyncThunk';
 
 export const Document: React.FC<DocumentStackProps> = ({route}) => {
-  const [change, setChange] = useState<boolean>(false);
   const [active, setActive] = useState<Active | null>(null);
 
   useEffect(() => {
-    //Null for active create
-    if (route.params.active !== null) {
+    if (
+      route.params.active !== null &&
+      route.params.active.activeRecord !== null
+    ) {
       setActive(route.params.active);
+      store.dispatch(fetchActiveRecord(route.params.active.activeRecord.id));
     }
-    setChange(true);
   }, [route.params.active]);
-
-  /* const ActiveSchema = Yup.object().shape({
-    activeType: new Yup.ObjectSchema({
-      id: Yup.number(),
-      name: Yup.string(),
-    }).required(),
-    entryDate: Yup.string().required(),
-    measuramentData: Yup.string().required(),
-    measuramentUnit: Yup.string().required(),
-    useWearTear: Yup.string().required(),
-    estimatedLifeTime: Yup.string().required(),
-    customAttributes: Yup.string(),
-    //activeRecord: new Yup.ArraySchema({}),
-    file: new Yup.ObjectSchema({
-      id: Yup.number(),
-      contentUrl: Yup.string(),
-    }),
-  }); */
 
   return (
     <View style={styles.container} margin="m">
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.info} onPress={() => null}>
-          <View style={styles.update} marginRight="m">
-            <View marginBottom="s">
-              <Text variant="updated">{translate('active.lastUpdate')}</Text>
-            </View>
-            <View style={styles.date}>
-              <Text>17/17/27</Text>
-            </View>
-          </View>
-          <View style={styles.icon}>
-            <Icon name="documents" size={34} />
-          </View>
-        </TouchableOpacity>
-        {change && (
-          <View width={100}>
-            <Button
-              onPress={() => null}
-              variant="secondary"
-              label={translate('action.general.save')}
-            />
-          </View>
-        )}
-      </View>
       <DocumentForm active={active} />
       <View marginVertical="xl" marginHorizontal="xxl">
         <Button
@@ -86,7 +44,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  update: {
+  activity: {
     flexDirection: 'column',
   },
   date: {
