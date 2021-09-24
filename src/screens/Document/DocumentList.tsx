@@ -1,35 +1,88 @@
-import React, {createRef} from 'react';
-import {Screen} from 'components';
-import {FlatList, TouchableOpacity} from 'react-native';
+import React, {
+  useState,
+  useEffect,
+  createRef,
+  RefObject,
+  useCallback,
+} from 'react';
+import {Screen, Segment} from 'components';
+import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {Header, Text, View} from 'components';
-import {DocumentItem} from './DocumentItem';
+import {ActiveItem} from './ActiveItem';
+import {ActiveTypeItem} from './ActiveTypeItem';
 import {useAppDispatch, useAppSelector} from 'store/configureStore';
-import {fetchActives} from 'store/slices/active/activeAsyncThunk';
-import {DocumentStackProps} from 'types';
+import {
+  fetchActives,
+  fetchActiveTypes,
+} from 'store/slices/active/activeAsyncThunk';
+import {Mode, DocumentStackProps} from 'types';
 import {translate} from 'core';
 
 export const DocumentList: React.FC<DocumentStackProps> = ({
   navigation,
   route,
-}) => {
+}: DocumentStackProps) => {
+  const [segmentMode, setSegmentMode] = useState<Mode>('active');
+  const activeListRef = createRef<FlatList<any>>();
+  const typeListRef = createRef<FlatList<any>>();
+  const [flatListRef, setFlatListRef] = useState<RefObject<FlatList>>(
+    activeListRef,
+  );
   const dispatch = useAppDispatch();
-  const {actives, activesLength, loading} = useAppSelector(
+  const {actives, activeTypes, activesLength, loading} = useAppSelector(
     (state) => state.active,
   );
+
   const refreshActives = () => {
     dispatch(fetchActives());
   };
+  const refreshTypes = () => {
+    dispatch(fetchActiveTypes());
+  };
 
-  const flatListRef = createRef<FlatList<any>>();
-  //Change for pagination and items
-  const nActives = activesLength + ' ' + translate('active.actives');
+  const nActives =
+    activesLength +
+    ' ' +
+    translate(
+      segmentMode === 'active' ? 'active.actives' : 'activeType.activeTypes',
+    );
   const emptyList = () =>
     !loading && activesLength > 0 ? (
-      <Text variant="emptyHeader">No actives to display</Text>
+      <View margin="l">
+        <Text variant="emptyHeader">
+          {translate(
+            segmentMode === 'active' ? 'active.empty' : 'activeType.empty',
+          )}
+        </Text>
+      </View>
     ) : null;
   const scrollToTop = () => {
-    if (actives.length > 0) {
+    if (activesLength > 0) {
       flatListRef.current?.scrollToIndex({animated: true, index: 0});
+    }
+  };
+
+  const _modeHandler = useCallback(() => {
+    const _flatListRef: RefObject<FlatList> =
+      segmentMode === 'active' ? activeListRef : typeListRef;
+    setFlatListRef(_flatListRef);
+  }, [segmentMode, activeListRef, typeListRef]);
+
+  useEffect(() => {
+    _modeHandler;
+  }, [_modeHandler]);
+
+  const _createItem = () => {
+    if (segmentMode === 'active') {
+      navigation.navigate('Active', {
+        active: null,
+        title: 'New active',
+      });
+    } else {
+      navigation.navigate('Type', {
+        type: null,
+        title: 'New type',
+      });
     }
   };
 
@@ -40,38 +93,75 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
           <Header
             disabled={false}
             defaultIcon="plus-circle"
-            defaultAction={() =>
-              navigation.navigate('Document', {
-                active: null,
-                title: 'New active',
-              })
-            }
+            defaultAction={() => _createItem}
             hasExtraIcon={true}
             extraIcon="search"
-            label={translate('screen.documents.title')}
+            label={translate(
+              segmentMode === 'active'
+                ? 'screen.active.title'
+                : 'screen.activeType.title',
+            )}
             labelAction={() => scrollToTop()}
           />
         </View>
-        <View marginHorizontal="m" width={70}>
-          <TouchableOpacity onPress={() => scrollToTop()}>
-            <Text>{nActives}</Text>
-          </TouchableOpacity>
+        <View style={styles.subHeader}>
+          <View marginHorizontal="m">
+            <TouchableOpacity onPress={() => scrollToTop()}>
+              <Text>{nActives}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.segment}>
+            <Segment
+              labels={[
+                {name: 'Actives', id: 'active'},
+                {name: 'Types', id: 'activeType'},
+              ]}
+              mode={segmentMode}
+              segmentHandler={setSegmentMode}
+            />
+          </View>
         </View>
         <View marginHorizontal="s" marginTop="m" marginBottom="l">
-          <FlatList
-            ref={flatListRef}
-            renderItem={({item}) => (
-              <DocumentItem {...{navigation, route, item}} />
-            )}
-            keyExtractor={(item, index) => index.toString()}
-            onRefresh={() => refreshActives()}
-            refreshing={loading}
-            ListEmptyComponent={() => emptyList()}
-            data={Array.isArray(actives) ? actives : []}
-            scrollToOverflowEnabled={true}
-          />
+          {segmentMode === 'active' ? (
+            <FlatList
+              ref={flatListRef}
+              data={actives}
+              renderItem={({item}) => (
+                <ActiveItem {...{navigation, route, active: {...item}}} />
+              )}
+              keyExtractor={(item, index) => index.toString()}
+              onRefresh={() => refreshActives()}
+              refreshing={loading}
+              ListEmptyComponent={() => emptyList()}
+              scrollToOverflowEnabled={true}
+            />
+          ) : (
+            <FlatList
+              ref={flatListRef}
+              data={activeTypes}
+              renderItem={({item}) => (
+                <ActiveTypeItem {...{navigation, route, type: {...item}}} />
+              )}
+              keyExtractor={(item, index) => index.toString()}
+              onRefresh={() => refreshTypes()}
+              refreshing={loading}
+              ListEmptyComponent={() => emptyList()}
+              scrollToOverflowEnabled={true}
+            />
+          )}
         </View>
       </View>
     </Screen>
   );
 };
+
+const styles = StyleSheet.create({
+  subHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  segment: {
+    flexDirection: 'row',
+  },
+});

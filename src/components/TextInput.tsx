@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {View} from './View';
-import {useTheme} from 'ui/Theme';
+import {useTheme} from 'ui/theme';
 
 interface TextInputProps extends RNTextInputProps {
   icon: string | null;

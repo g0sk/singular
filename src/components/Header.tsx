@@ -14,7 +14,7 @@ export const Header: React.FC<HeaderProps> = ({
   extraIcon,
 }) => {
   return (
-    <View flexDirection="row">
+    <View flexDirection="row" justifyContent="space-between">
       <View marginRight="mxl">
         <TouchableOpacity onPress={labelAction} disabled={disabled}>
           <Text variant="headerTitle">{label}</Text>

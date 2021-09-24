@@ -1,0 +1,47 @@
+import React from 'react';
+import {Text, View} from 'components';
+import {TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {TypeFormProps} from 'types';
+
+export const ActiveTypeItem: React.FC<TypeFormProps> = ({navigation, type}) => {
+  const _itemHandler = () => {
+    navigation.push('Type', {
+      type: type,
+      title: type.name,
+    });
+  };
+
+  return (
+    <View
+      marginHorizontal="s"
+      flexDirection="row"
+      marginBottom="l"
+      alignItems="center">
+      <TouchableOpacity onPress={_itemHandler}>
+        <View
+          borderColor="red"
+          borderWidth={3}
+          borderRadius={13}
+          marginRight="m"
+          width={310}
+          flexDirection="row"
+          paddingHorizontal="m"
+          height={50}
+          justifyContent="space-between">
+          <View alignContent="center" justifyContent="center">
+            <Text variant="listItemPrimary">{type.name}</Text>
+          </View>
+          <View justifyContent="center">
+            <Text variant="listItemData">{}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => null}>
+        <View borderRadius={8} borderWidth={0} borderColor="dark">
+          <Icon name="stats-chart" size={28} />
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+};

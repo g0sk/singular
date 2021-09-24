@@ -1,7 +1,6 @@
 import {Dispatch, SetStateAction} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RouteProp} from '@react-navigation/native';
-import {Image} from 'react-native';
+import {Image, NativeScrollEvent} from 'react-native';
 import {TagEvent} from 'react-native-nfc-manager';
 import {
   SpacingProps,
@@ -11,6 +10,7 @@ import {
 } from '@shopify/restyle';
 import {Theme} from 'ui/Theme';
 import {AnyObjectSchema} from 'yup';
+import {RouteProp} from '@react-navigation/core';
 
 //Geral types
 export type Credentials = {
@@ -62,28 +62,41 @@ export type AuthParamList = {
 //Routes Document
 export type RootDocumentParamList = {
   Documents: undefined;
-  Document: {
+  Active: {
     active: Active | null;
     title: string;
     tag?: TagEvent;
   };
+  Type: {
+    type: ActiveType | null;
+    title: string;
+  };
 };
 
-export type DocumentScreenRouteProp = RouteProp<
+//Route
+export type ActiveFormProps = {
+  active: Active;
+  navigation: DocumentNavigationProp;
+};
+
+export type TypeFormProps = {
+  type: ActiveType;
+  navigation: DocumentNavigationProp;
+  route: DocumentRouteProp;
+};
+
+export type DocumentRouteProp = RouteProp<RootDocumentParamList, 'Documents'>;
+
+export type DocumentNavigationProp = StackNavigationProp<
   RootDocumentParamList,
-  'Document'
+  'Documents'
 >;
 
-export type DocumentScreenNavigationProp = StackNavigationProp<
-  RootDocumentParamList,
-  'Document'
->;
 export type DocumentStackProps = {
-  route: DocumentScreenRouteProp;
-  navigation: DocumentScreenNavigationProp;
+  navigation: DocumentNavigationProp;
+  route: DocumentRouteProp;
 };
 
-//Login
 export interface FormValues {
   username: string;
   password: string;
@@ -173,15 +186,8 @@ export interface Active {
   } | null;
   file: File;
   activeType: ActiveType;
-  attributeValues?: Attribute[];
-}
-
-export interface NewActive {
-  reference: string;
-  entryDate: Date;
-  file: File | null;
-  activeType: ActiveType | null;
-  attributeValues: Attribute[];
+  basicAttributes: Attribute[];
+  customAttributes: Attribute[];
 }
 
 export type Actives = Array<Active>;
@@ -217,24 +223,7 @@ export interface ItemType {
   name: string;
 }
 
-export interface DocumentFormProps {
-  active: Active | null;
-}
-
-export interface DocumentListProps {
-  user: User | null;
-}
-
-export interface DocumentListItemProps extends Active {
-  onPress: () => void;
-  active: Active;
-}
-
-interface DocumentItemProps extends DocumentStackProps {
-  item: Active;
-}
-
-//Profile Scren
+//Profile Screen
 interface UserFormValues {
   name: string;
   lastName: string;
@@ -255,6 +244,18 @@ interface ScanSuccessProps {
 }
 
 //Components
+
+export type Mode = 'active' | 'activeType';
+export type SegmentLabel = {
+  name: string;
+  id: Mode;
+};
+export interface SegmentProps {
+  labels: SegmentLabel[];
+  segmentHandler: Dispatch<SetStateAction<Mode>>;
+  mode: Mode;
+}
+
 export interface ModalProps {
   children: React.ReactNode;
   show: boolean;
@@ -288,12 +289,18 @@ export interface RecordProps {
 }
 
 //Dynamic form
-export interface DynamicFormProps<T> {
-  basicAttributes: T[];
-  customAttributes: T[];
+export interface DynamicSectionProps<T> {
+  collection: T[];
+  label: string;
+  setParentScroll: Dispatch<SetStateAction<boolean>>;
+  parentScroll: boolean;
+  parentNativeEvent: NativeScrollEvent;
 }
 
 //Form
+export type DocumentFormProps = {
+  active: Active | null;
+};
 export interface FormProps<T> {
   item: T;
   schema?: AnyObjectSchema;

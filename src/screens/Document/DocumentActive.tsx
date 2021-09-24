@@ -1,20 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import {View, Button} from 'components';
+import {View} from 'components';
 import {DocumentForm} from './';
-import {translate} from 'core';
-import {DocumentStackProps} from 'types';
+//import {translate} from 'core';
+import {DocumentActiveStackProps} from 'types';
 import {StyleSheet} from 'react-native';
 import {Active} from 'types';
 import store from 'store/configureStore';
 import {fetchActiveRecord} from 'store/slices/record/recordAsyncThunk';
 
-export const Document: React.FC<DocumentStackProps> = ({route}) => {
+export const DocumentActive: React.FC<DocumentActiveStackProps> = ({route}) => {
   const [active, setActive] = useState<Active | null>(null);
 
   useEffect(() => {
     if (
       route.params.active !== null &&
-      route.params.active.activeRecord !== null
+      route.params?.active.activeRecord !== null
     ) {
       setActive(route.params.active);
       store.dispatch(fetchActiveRecord(route.params.active.activeRecord.id));
@@ -24,13 +24,6 @@ export const Document: React.FC<DocumentStackProps> = ({route}) => {
   return (
     <View style={styles.container} margin="m">
       <DocumentForm active={active} />
-      <View marginVertical="xl" marginHorizontal="xxl">
-        <Button
-          onPress={() => null}
-          variant="delete"
-          label={translate('action.general.delete')}
-        />
-      </View>
     </View>
   );
 };

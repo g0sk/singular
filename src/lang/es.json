@@ -21,12 +21,16 @@
       "description": "Inicia sesión para comenzar a utilizar la aplicación"
     },
     "active": {
-      "title": "Activo"
+      "title": "Activos"
+    },
+    "activeType": {
+      "title": "Tipos"
     }
   },
   "active": {
     "active": "activo",
     "actives": "activos",
+    "empty": "No hay activos que mostrar",
     "data": {
       "id": "ID"
     },
@@ -93,6 +97,8 @@
     }
   },
   "activetype": {
+    "activeTypes": "tipos",
+    "empty": "No hay tipos que mostrar",
     "menu": {
       "placeholder": "Selecciona un tipo",
       "empty": "No se han encontrado tipos"

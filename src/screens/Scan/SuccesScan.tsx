@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View} from 'components';
 import {translate} from 'core';
-import {useTheme} from 'ui/Theme';
+import {useTheme} from 'ui/theme';
 import {ScanSuccessProps} from 'types';
 import Icon from 'react-native-vector-icons/Ionicons';
 

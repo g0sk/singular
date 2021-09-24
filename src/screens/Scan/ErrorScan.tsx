@@ -2,7 +2,7 @@ import React from 'react';
 import {Linking, TouchableOpacity} from 'react-native';
 import {Text, View} from 'components';
 import {translate} from 'core';
-import {useTheme} from 'ui/Theme';
+import {useTheme} from 'ui/theme';
 import IconI from 'react-native-vector-icons/Ionicons';
 import IconF from 'react-native-vector-icons/Feather';
 import nfcManager from 'react-native-nfc-manager';

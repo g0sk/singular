@@ -12,7 +12,7 @@ import {
 import {ButtonProps} from 'types';
 import {Text} from 'components/Text';
 import {View} from 'components/View';
-import {Theme} from 'ui/Theme';
+import {Theme} from 'ui/theme';
 
 //Same name as variable in theme object
 const buttonVariant = createVariant({themeKey: 'buttonVariants'});

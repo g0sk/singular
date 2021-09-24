@@ -21,12 +21,16 @@
       "description": "Log in to start using the app"
     },
     "active": {
-      "title": "Active"
+      "title": "Actives"
+    },
+    "activeType": {
+      "title": "Types"
     }
   },
   "active": {
     "active": "active",
     "actives": "actives",
+    "empty": "No actives to display",
     "data": {
       "id": "ID"
     },
@@ -94,6 +98,8 @@
     }
   },
   "activeType": {
+    "activeTypes": "types",
+    "empty": "No types to display",
     "menu": {
       "placeholder": "Select a type",
       "empty": "No types found"

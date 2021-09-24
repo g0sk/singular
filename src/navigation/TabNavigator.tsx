@@ -2,8 +2,8 @@ import * as React from 'react';
 import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Profile, Scan} from 'screens';
-import {useTheme} from 'ui/Theme';
-import Icon from 'react-native-vector-icons/Feather';
+import {useTheme} from 'ui/theme';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {DocumentNavigator} from './DocumentNavigator';
 import {TabNavigatorParamList} from 'types';
 
@@ -23,8 +23,8 @@ export const TabNavigator = () => {
         options={{
           tabBarIcon: ({focused}) => (
             <Icon
-              name="file"
-              size={25}
+              name={focused ? 'file-tray' : 'file-tray-outline'}
+              size={28}
               color={focused ? theme.colors.primary : theme.colors.default}
             />
           ),
@@ -36,8 +36,8 @@ export const TabNavigator = () => {
         options={{
           tabBarIcon: ({focused}) => (
             <Icon
-              name="radio"
-              size={30}
+              name={focused ? 'radio' : 'radio-outline'}
+              size={28}
               color={focused ? theme.colors.primary : theme.colors.default}
             />
           ),
@@ -49,8 +49,8 @@ export const TabNavigator = () => {
         options={{
           tabBarIcon: ({focused}) => (
             <Icon
-              name="user"
-              size={25}
+              name={focused ? 'person-circle' : 'person-circle-outline'}
+              size={28}
               color={focused ? theme.colors.primary : theme.colors.default}
             />
           ),

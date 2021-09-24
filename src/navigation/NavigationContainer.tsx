@@ -3,7 +3,7 @@ import {NavigationContainer as RNNavigationContainer} from '@react-navigation/na
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {StatusBar} from 'react-native';
 import {useTheme} from '@shopify/restyle';
-import {Theme} from 'ui/Theme';
+import {Theme} from 'ui/theme';
 
 export const NavigationContainer = ({
   children,

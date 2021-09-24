@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import {View, Text, Modal} from 'components';
-import {useTheme} from 'ui/Theme';
+import {useTheme} from 'ui/theme';
 
 export function Dropdown<T extends ItemGeneric>({
   selected,
@@ -48,6 +48,7 @@ export function Dropdown<T extends ItemGeneric>({
     return (
       <TouchableOpacity onPress={_pickerOnPressHandler}>
         <View
+          alignSelf="flex-start"
           style={styles.picker}
           borderColor="primary"
           paddingHorizontal="m"

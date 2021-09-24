@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
 import {RectButton} from 'react-native-gesture-handler';
 import {View, Text} from 'components';
-import {useTheme} from 'ui/Theme';
+import {useTheme} from 'ui/theme';
 
 interface CheckBoxProps {
   label?: string;

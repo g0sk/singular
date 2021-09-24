@@ -1,4 +1,4 @@
 import {createText} from '@shopify/restyle';
-import {Theme} from 'ui/Theme';
+import {Theme} from 'ui/theme';
 
 export const Text = createText<Theme>();

@@ -5,7 +5,7 @@ import {
   TextInputProps as RNTextInputProps,
 } from 'react-native';
 import {View} from './View';
-import {useTheme} from 'ui/Theme';
+import {useTheme} from 'ui/theme';
 
 interface SimpleTextInputProps extends RNTextInputProps {
   touched?: boolean;
@@ -29,7 +29,7 @@ export const SimpleTextInput = forwardRef<RNTextInput, SimpleTextInputProps>(
     return (
       <View
         flexDirection="row"
-        height={48}
+        height={30}
         alignItems="center"
         borderRadius={theme.borderRadius.m}
         borderWidth={1}

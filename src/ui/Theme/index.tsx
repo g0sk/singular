@@ -21,6 +21,8 @@ const BaseTheme = {
     gray: '#393939',
     card: '#ffffff',
     darkText: '#000',
+    red: '#b9244b',
+    lightBlue: '#0679ef',
     chart: '#0caa36',
     default: '#9b9b9b',
     disabled: '#716d6d',
@@ -67,6 +69,14 @@ const BaseTheme = {
 const theme = createTheme({
   ...BaseTheme,
   textVariants: {
+    segmentLabelDark: {
+      color: 'dark',
+      fontSize: 15,
+    },
+    segmentLabelLight: {
+      color: 'lightText',
+      fontSize: 15,
+    },
     emptyHeader: {
       color: 'darkText',
       fontWeight: 'bold',

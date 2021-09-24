@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
-import {useTheme} from 'ui/Theme';
+import {useTheme} from 'ui/theme';
 import {IconProps} from './icon-constants';
 
 export const HomeIcon: React.FC<IconProps> = ({active}) => {

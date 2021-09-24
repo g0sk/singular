@@ -8,20 +8,36 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {translate} from 'core/i18n';
-import {Active, Record, RecordProps, RecordState} from 'types';
+import {Active, RecordProps, RecordState} from 'types';
 import {useAppSelector} from 'store/configureStore';
+import {useTheme} from 'ui/theme';
 
 export const RecordList: React.FC<RecordProps> = ({activeRecord}) => {
-  const [record, setRecord] = useState<Record>({} as Record);
   const [dateRecord, setDateRecord] = useState<string[]>([]);
   const [activeObject, setActiveObject] = useState<Active[]>([]);
   const {loading}: RecordState = useAppSelector((state) => state.record);
+  const theme = useTheme();
+
   useEffect(() => {
-    console.log(record, dateRecord);
-    setRecord(activeRecord);
     setActiveObject([...activeRecord.activeObject]);
     setDateRecord([...activeRecord.dateRecord]);
-  }, [activeRecord, record, dateRecord]);
+  }, [activeRecord]);
+
+  const styles = StyleSheet.create({
+    container: {},
+    title: {},
+    list: {
+      backgroundColor: 'white',
+      borderRadius: 20,
+      minHeight: 300,
+    },
+    item: {
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: theme.colors.secondary,
+    },
+    empty: {},
+  });
 
   const EmptyComponent = () => {
     return (
@@ -37,8 +53,9 @@ export const RecordList: React.FC<RecordProps> = ({activeRecord}) => {
 
   const ListHeaderComponent = () => {
     return (
-      <View margin="m">
+      <View margin="m" justifyContent="space-between">
         <Text variant="formLabel">{translate('record.title')}</Text>
+        <Text>{dateRecord}</Text>
       </View>
     );
   };
@@ -47,7 +64,7 @@ export const RecordList: React.FC<RecordProps> = ({activeRecord}) => {
   const renderListItem: ListRenderItem<Active> = ({item}) => {
     return (
       <TouchableOpacity>
-        <View margin="m">
+        <View style={styles.item} marginHorizontal="m" marginVertical="s">
           <Text>{item.reference}</Text>
         </View>
       </TouchableOpacity>
@@ -67,14 +84,3 @@ export const RecordList: React.FC<RecordProps> = ({activeRecord}) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {},
-  title: {},
-  list: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    minHeight: 300,
-  },
-  empty: {},
-});
