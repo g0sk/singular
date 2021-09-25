@@ -15,7 +15,7 @@ import {
   fetchActives,
   fetchActiveTypes,
 } from 'store/slices/active/activeAsyncThunk';
-import {Mode, DocumentStackProps} from 'types';
+import {Mode, DocumentStackProps, ActiveState} from 'types';
 import {translate} from 'core';
 
 export const DocumentList: React.FC<DocumentStackProps> = ({
@@ -29,9 +29,13 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
     activeListRef,
   );
   const dispatch = useAppDispatch();
-  const {actives, activeTypes, activesLength, loading} = useAppSelector(
-    (state) => state.active,
-  );
+  const {
+    actives,
+    activeTypes,
+    activeTypesLength,
+    activesLength,
+    loading,
+  }: ActiveState = useAppSelector((state) => state.active);
 
   const refreshActives = () => {
     dispatch(fetchActives());
@@ -40,12 +44,29 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
     dispatch(fetchActiveTypes());
   };
 
-  const nActives =
-    activesLength +
-    ' ' +
-    translate(
-      segmentMode === 'active' ? 'active.actives' : 'activeType.activeTypes',
-    );
+  const Items = () => {
+    if (segmentMode === 'active') {
+      return (
+        <Text>
+          {activesLength +
+            ' ' +
+            (activesLength > 1
+              ? translate('active.actives')
+              : translate('active.active'))}
+        </Text>
+      );
+    } else {
+      return (
+        <Text>
+          {activeTypesLength +
+            ' ' +
+            (activeTypesLength > 1
+              ? translate('activeType.activeTypes')
+              : translate('activeType.activeType'))}
+        </Text>
+      );
+    }
+  };
   const emptyList = () =>
     !loading && activesLength > 0 ? (
       <View margin="l">
@@ -107,7 +128,7 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
         <View style={styles.subHeader}>
           <View marginHorizontal="m">
             <TouchableOpacity onPress={() => scrollToTop()}>
-              <Text>{nActives}</Text>
+              <Items />
             </TouchableOpacity>
           </View>
           <View style={styles.segment}>

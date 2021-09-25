@@ -226,6 +226,7 @@ export interface ActiveState {
   actives: Actives | null;
   activesLength: number;
   activeTypes: ActiveType[];
+  activeTypesLength: number;
   page: number;
   loading: boolean;
   error: boolean;

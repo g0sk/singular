@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
+  Vibration,
 } from 'react-native';
 import {useTheme} from 'ui/theme';
 export const DynamicFields: React.FC<DynamicFieldsProps> = ({
@@ -19,6 +20,7 @@ export const DynamicFields: React.FC<DynamicFieldsProps> = ({
   const theme = useTheme();
 
   const _longPressHandler = () => {
+    Vibration.vibrate(200, true);
     if (canDelete) {
       setShowIcon(!showIcon);
     } else {
@@ -43,12 +45,12 @@ export const DynamicFields: React.FC<DynamicFieldsProps> = ({
       <View style={styles.field}>
         <Pressable
           onLongPress={_longPressHandler}
-          delayLongPress={500}
+          delayLongPress={700}
           style={({pressed}) => [
             {
               backgroundColor: pressed ? theme.colors.primary : 'white',
-              opacity: pressed ? 0.4 : 1,
-              borderRadius: pressed ? 15 : 0,
+              opacity: pressed ? 0.6 : 1,
+              borderRadius: pressed ? 10 : 0,
             },
           ]}>
           <View style={styles.container}>
@@ -74,10 +76,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  field: {
-    flexDirection: 'row',
-  },
+  field: {},
   label: {
+    flexDirection: 'row',
     borderRadius: 10,
     borderWidth: 1,
   },

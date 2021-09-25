@@ -6,6 +6,7 @@ const initialState: ActiveState = {
   active: null,
   actives: [],
   activeTypes: [],
+  activeTypesLength: 0,
   page: 0,
   activesLength: 0,
   loading: false,
@@ -51,6 +52,7 @@ const activeSlice = createSlice({
       })
       .addCase(fetchActiveTypes.fulfilled, (state, action) => {
         state.activeTypes = [...action.payload];
+        state.activeTypesLength = action.payload.length;
         state.loading = false;
         state.error = false;
       })

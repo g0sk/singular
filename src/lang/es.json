@@ -36,6 +36,16 @@
     },
     "lastUpdate": "Última actualización"
   },
+  "activeType": {
+    "activeTypes": "categorías",
+    "activeType": "categoría",
+    "empty": "No hay categorías que mostrar",
+    "menu": {
+      "placeholder": "Selecciona un categoría",
+      "empty": "No se han encontrado categorías"
+    }
+  },
+  "user": {},
   "form": {
     "login": {
       "email": {
@@ -99,15 +109,6 @@
 
     }
   },
-  "activetype": {
-    "activeTypes": "tipos",
-    "empty": "No hay tipos que mostrar",
-    "menu": {
-      "placeholder": "Selecciona un tipo",
-      "empty": "No se han encontrado tipos"
-    }
-  },
-  "user": {},
   "messages": {
     "login": {
       "signIn": "Iniciar sesión"

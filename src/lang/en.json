@@ -102,6 +102,7 @@
   },
   "activeType": {
     "activeTypes": "types",
+    "activeType": "type",
     "empty": "No types to display",
     "menu": {
       "placeholder": "Select a type",
