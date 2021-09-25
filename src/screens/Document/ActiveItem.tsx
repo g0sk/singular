@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {Text, View} from 'components';
 import {TouchableOpacity} from 'react-native';
-import {ActiveFormProps} from 'types';
+import {ActiveItemFormProps} from 'types';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-export const ActiveItem: React.FC<ActiveFormProps> = ({
+export const ActiveItem: React.FC<ActiveItemFormProps> = ({
   navigation,
   active,
-}: ActiveFormProps) => {
+}: ActiveItemFormProps) => {
   const [entryDate, setEntryDate] = useState<Date>(new Date());
   const [activeDate, setActiveDate] = useState<string>();
 

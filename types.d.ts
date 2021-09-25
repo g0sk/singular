@@ -1,6 +1,6 @@
 import {Dispatch, SetStateAction} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Image, NativeScrollEvent} from 'react-native';
+import {Image} from 'react-native';
 import {TagEvent} from 'react-native-nfc-manager';
 import {
   SpacingProps,
@@ -74,15 +74,44 @@ export type RootDocumentParamList = {
 };
 
 //Route
-export type ActiveFormProps = {
+export type ActiveItemFormProps = {
   active: Active;
   navigation: DocumentNavigationProp;
 };
 
-export type TypeFormProps = {
+export type TypeItemFormProps = {
   type: ActiveType;
   navigation: DocumentNavigationProp;
   route: DocumentRouteProp;
+};
+
+export type TypeRouteProp = RouteProp<RootDocumentParamList, 'Type'>;
+
+export type TypeNavigationProp = StackNavigationProp<
+  RootDocumentParamList,
+  'Type'
+>;
+
+export type TypeScreenProps = {
+  navigation: TypeNavigationProp;
+  route: TypeRouteProp;
+};
+
+export type ActiveRouteProp = RouteProp<RootDocumentParamList, 'Active'>;
+
+export type ActiveNavigationProp = StackNavigationProp<
+  RootDocumentParamList,
+  'Active'
+>;
+
+export type ActiveStackProps = {
+  navigation: ActiveNavigationProp;
+  route: ActiveRouteProp;
+};
+
+export type ActiveScreenProps = {
+  route: ActiveRouteProp;
+  navigation: ActiveNavigationProp;
 };
 
 export type DocumentRouteProp = RouteProp<RootDocumentParamList, 'Documents'>;
@@ -285,16 +314,23 @@ export interface RecordState {
 }
 
 export interface RecordProps {
-  activeRecord: Record;
+  activeRecord: Record | null;
 }
 
 //Dynamic form
-export interface DynamicSectionProps<T> {
-  collection: T[];
+export interface DynamicSectionProps {
+  collection: Attribute[] | null;
   label: string;
-  setParentScroll: Dispatch<SetStateAction<boolean>>;
-  parentScroll: boolean;
-  parentNativeEvent: NativeScrollEvent;
+  canCreateNewField: boolean;
+  custom: boolean;
+}
+
+//Dynamic Fields
+export interface DynamicFieldsProps {
+  field: Attribute;
+  listIndex: number;
+  canDelete: boolean;
+  custom: boolean;
 }
 
 //Form
@@ -315,7 +351,7 @@ export type ItemGeneric = {
 
 //Dropdown
 export interface DropdownProps<T> {
-  selected?: T;
+  selected: T | null;
   options: T[];
   setParentValue: Dispatch<SetStateAction<T>>;
   header: string;

@@ -16,14 +16,13 @@ export function Dropdown<T extends ItemGeneric>({
   emptyMessage,
   header,
 }: DropdownProps<T>) {
-  const [value, setValue] = useState<T>();
-
+  const [value, setValue] = useState<T | null>(null);
   const [items, setItems] = useState<T[]>();
   const [open, setOpen] = useState<boolean>(false);
   const theme = useTheme();
 
   useEffect(() => {
-    if (selected) {
+    if (selected !== null) {
       setValue(selected);
     }
     setItems(options);
@@ -46,20 +45,17 @@ export function Dropdown<T extends ItemGeneric>({
 
   const Picker = () => {
     return (
-      <TouchableOpacity onPress={_pickerOnPressHandler}>
-        <View
-          alignSelf="flex-start"
-          style={styles.picker}
-          borderColor="primary"
-          paddingHorizontal="m"
-          paddingVertical="s">
-          {value !== null ? (
-            <Text>{value?.name}</Text>
-          ) : (
-            <Text>{placeholder}</Text>
-          )}
-        </View>
-      </TouchableOpacity>
+      <View alignSelf="flex-start" style={styles.picker} borderColor="primary">
+        <TouchableOpacity onPress={_pickerOnPressHandler}>
+          <View paddingHorizontal="m" paddingVertical="s">
+            {value !== null ? (
+              <Text>{value.name}</Text>
+            ) : (
+              <Text>{placeholder}</Text>
+            )}
+          </View>
+        </TouchableOpacity>
+      </View>
     );
   };
 

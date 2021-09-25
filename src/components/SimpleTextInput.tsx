@@ -13,34 +13,29 @@ interface SimpleTextInputProps extends RNTextInputProps {
 }
 
 export const SimpleTextInput = forwardRef<RNTextInput, SimpleTextInputProps>(
-  ({touched, error, ...props}: SimpleTextInputProps, ref) => {
+  ({value, ...props}: SimpleTextInputProps, ref) => {
     const theme = useTheme();
-    const color: keyof typeof theme.colors = !touched
-      ? 'default'
-      : error
-      ? 'error'
-      : 'primary';
-    const iconColor = theme.colors[color];
+    const color: keyof typeof theme.colors = 'primary';
+    const textColor = theme.colors[color];
     const styles = StyleSheet.create({
       input: {
         color: theme.colors.darkText,
+        fontSize: 10,
       },
     });
     return (
       <View
         flexDirection="row"
-        height={30}
-        alignItems="center"
-        borderRadius={theme.borderRadius.m}
-        borderWidth={1}
-        borderColor={color}
-        paddingLeft="s">
-        <View flex={1}>
+        height={40}
+        width={150}
+        justifyContent="flex-start">
+        <View borderRadius={0} borderBottomWidth={1} borderColor={color}>
           <RNTextInput
+            value={value}
             style={styles.input}
             underlineColorAndroid="transparent"
             selectionColor={theme.colors.primary}
-            placeholderTextColor={iconColor}
+            placeholderTextColor={textColor}
             {...{ref}}
             {...props}
           />

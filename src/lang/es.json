@@ -84,6 +84,9 @@
           "invalid": "Fecha inválida"
         }
       },
+      "attribute": {
+          "empty": "No attributes to display"
+        },
       "type": {
         "label": "Tipo",
         "placeholder": "Seleccione un tipo",

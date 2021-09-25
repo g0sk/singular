@@ -15,7 +15,7 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <View flexDirection="row" justifyContent="space-between">
-      <View marginRight="mxl">
+      <View>
         <TouchableOpacity onPress={labelAction} disabled={disabled}>
           <Text variant="headerTitle">{label}</Text>
         </TouchableOpacity>

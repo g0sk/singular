@@ -73,6 +73,7 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
   }, [_modeHandler]);
 
   const _createItem = () => {
+    console.log('create');
     if (segmentMode === 'active') {
       navigation.navigate('Active', {
         active: null,
@@ -93,7 +94,7 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
           <Header
             disabled={false}
             defaultIcon="plus-circle"
-            defaultAction={() => _createItem}
+            defaultAction={_createItem}
             hasExtraIcon={true}
             extraIcon="search"
             label={translate(

@@ -19,8 +19,10 @@ export const RecordList: React.FC<RecordProps> = ({activeRecord}) => {
   const theme = useTheme();
 
   useEffect(() => {
-    setActiveObject([...activeRecord.activeObject]);
-    setDateRecord([...activeRecord.dateRecord]);
+    if (activeRecord !== null) {
+      setActiveObject([...activeRecord.activeObject]);
+      setDateRecord([...activeRecord.dateRecord]);
+    }
   }, [activeRecord]);
 
   const styles = StyleSheet.create({

@@ -2,9 +2,12 @@ import React from 'react';
 import {Text, View} from 'components';
 import {TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {TypeFormProps} from 'types';
+import {TypeItemFormProps} from 'types';
 
-export const ActiveTypeItem: React.FC<TypeFormProps> = ({navigation, type}) => {
+export const ActiveTypeItem: React.FC<TypeItemFormProps> = ({
+  navigation,
+  type,
+}) => {
   const _itemHandler = () => {
     navigation.push('Type', {
       type: type,
@@ -20,7 +23,7 @@ export const ActiveTypeItem: React.FC<TypeFormProps> = ({navigation, type}) => {
       alignItems="center">
       <TouchableOpacity onPress={_itemHandler}>
         <View
-          borderColor="red"
+          borderColor="primary"
           borderWidth={3}
           borderRadius={13}
           marginRight="m"

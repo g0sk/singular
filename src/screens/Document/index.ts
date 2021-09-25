@@ -3,4 +3,3 @@ export * from './DocumentType';
 export * from './ActiveItem';
 export * from './ActiveTypeItem';
 export * from './Documents';
-export * from './DocumentForm';

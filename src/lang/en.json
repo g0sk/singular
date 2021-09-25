@@ -85,6 +85,9 @@
           "invalid": "This field is invalid"
         }
       },
+      "attribute": {
+        "empty": "No attributes to display"
+      },
       "type": {
         "label": "Type",
         "placeholder": "Select a type",

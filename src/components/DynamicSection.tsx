@@ -1,22 +1,17 @@
-export function DynamicSection<T>() {
-  return null;
-}
-
-/* import React, {useCallback, useEffect, useState} from 'react';
-import {SimpleTextInput as TextInput, View, Text} from 'components';
-import {FlatList, TouchableOpacity, StyleSheet} from 'react-native';
-//import {translate} from 'core';
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import {DynamicFields, View, Text} from 'components';
+import {TouchableOpacity, StyleSheet} from 'react-native';
+import {translate} from 'core';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {DynamicSectionProps} from 'types';
+import {Attribute, DynamicSectionProps} from 'types';
 
-interface SectionItem extends T {
-  id: number;
-  name: string;
-  value: string;
-}
-
-export function DynamicSection<T>({collection, label}: DynamicSectionProps<T>) {
-  const [items, setItems] = useState<T[]>([]);
+export function DynamicSection({
+  collection,
+  label,
+  canCreateNewField,
+  custom,
+}: DynamicSectionProps) {
+  const [items, setItems] = useState<Attribute[]>([]);
   const [icon, setIcon] = useState<string>('chevron-down-outline');
   const [open, setOpen] = useState<boolean>(false);
 
@@ -33,26 +28,17 @@ export function DynamicSection<T>({collection, label}: DynamicSectionProps<T>) {
 
   const _addAttributeHandler = () => null;
 
-  const RenderItem = <T extends SectionItem>(sectionItem: T, index: number) => {
+  const ListEmptyComponent = () => {
     return (
-      <View flexDirection="row" marginTop="m" marginBottom="s">
-        {open && (
-          <View>
-            <View>
-              <Text>{sectionItem.name} + ': '</Text>
-            </View>
-            <View style={styles.formValue}>
-              <TextInput value={sectionItem.value} />
-            </View>
-          </View>
-        )}
+      <View marginVertical="s" marginHorizontal="s">
+        <Text>{translate('form.active.attribute.empty')}</Text>
       </View>
     );
   };
 
   const ListHeaderComponent = () => {
     return (
-      <View style={styles.headerContainer}>
+      <View style={styles.headerContainer} marginBottom="s">
         <View marginRight="xl">
           <TouchableOpacity style={styles.header} onPress={_headerHandler}>
             <View marginRight="s">
@@ -64,9 +50,11 @@ export function DynamicSection<T>({collection, label}: DynamicSectionProps<T>) {
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity onPress={_addAttributeHandler}>
-            <Icon name="add-circle-outline" size={20} color="black" />
-          </TouchableOpacity>
+          {canCreateNewField && open && (
+            <TouchableOpacity onPress={_addAttributeHandler}>
+              <Icon name="add-circle-outline" size={20} color="black" />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     );
@@ -75,13 +63,26 @@ export function DynamicSection<T>({collection, label}: DynamicSectionProps<T>) {
   return (
     //Section
     <View style={styles.container}>
-      {items.map((item: T, index) => {
-        return (
-          <View key={index}>
-            <RenderItem sectionItem={item} />
-          </View>
-        );
-      })}
+      <ListHeaderComponent />
+      {open &&
+        (items.length > 0 ? (
+          items.map((item, index) => {
+            return (
+              <Fragment key={index}>
+                <View marginVertical="s">
+                  <DynamicFields
+                    field={item}
+                    listIndex={index}
+                    canDelete={canCreateNewField}
+                    custom={custom}
+                  />
+                </View>
+              </Fragment>
+            );
+          })
+        ) : (
+          <ListEmptyComponent />
+        ))}
     </View>
   );
 }
@@ -101,4 +102,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
- */

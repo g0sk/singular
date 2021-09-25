@@ -22,7 +22,7 @@ const BaseTheme = {
     card: '#ffffff',
     darkText: '#000',
     red: '#b9244b',
-    lightBlue: '#0679ef',
+    lightBlue: '#39b4ed',
     chart: '#0caa36',
     default: '#9b9b9b',
     disabled: '#716d6d',
@@ -50,7 +50,8 @@ const BaseTheme = {
     xl: 40,
     xxl: 70,
     sxl: 110,
-    mxl: 110,
+    mxl: 120,
+    dxxl: 130,
   },
   margin: {
     ss: 5,
@@ -61,7 +62,8 @@ const BaseTheme = {
     xl: 400,
     xxl: 450,
     sxl: 500,
-    mxl: 500,
+    mxl: 600,
+    dxxl: 700,
   },
   breakpoints: {},
 };

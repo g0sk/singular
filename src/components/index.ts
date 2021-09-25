@@ -10,7 +10,7 @@ export * from './CheckBox';
 export * from './SearchBox';
 export * from './SimpleTextInput';
 export * from './DynamicSection';
-//export * from './DynamicFields';
+export * from './DynamicFields';
 export * from './Dropdown';
 export * from './Modal';
 export * from './DatePicker';
