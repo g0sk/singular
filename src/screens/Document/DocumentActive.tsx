@@ -31,7 +31,7 @@ export const DocumentActive: React.FC<ActiveScreenProps> = ({route}) => {
   const [change, setChange] = useState<boolean>(false);
   const [item, setItem] = useState<Active | null>(null);
   const {activeTypes}: ActiveState = useAppSelector((state) => state.active);
-  const [type, setType] = useState<ActiveType>({} as ActiveType);
+  const [type, setType] = useState<ActiveType | null>(null);
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
   const [date, setDate] = useState<Date>(new Date());
   const [formattedDate, setFormattedDate] = useState<string>('');

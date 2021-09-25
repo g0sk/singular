@@ -1,13 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {DropdownProps, ItemGeneric} from 'types';
-import {
-  TouchableOpacity,
-  TouchableHighlight,
-  FlatList,
-  StyleSheet,
-} from 'react-native';
+import {TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import {View, Text, Modal} from 'components';
-import {useTheme} from 'ui/theme';
 
 export function Dropdown<T extends ItemGeneric>({
   selected,
@@ -19,19 +13,21 @@ export function Dropdown<T extends ItemGeneric>({
   const [value, setValue] = useState<T | null>(null);
   const [items, setItems] = useState<T[]>();
   const [open, setOpen] = useState<boolean>(false);
-  const theme = useTheme();
 
   useEffect(() => {
     if (selected !== null) {
       setValue(selected);
     }
+    console.log(options);
     setItems(options);
   }, [selected, options]);
 
   useEffect(() => {
     let _items: T[] = [];
-    if (value) {
+    if (value !== null) {
       _items = options.filter((option) => option.id !== value?.id);
+    } else {
+      _items = [...options];
     }
     setItems(_items);
   }, [options, value]);
@@ -41,17 +37,22 @@ export function Dropdown<T extends ItemGeneric>({
   };
   const _itemOnPressHandler = (item: T) => {
     setValue(item);
+    setOpen(!open);
   };
 
   const Picker = () => {
     return (
-      <View alignSelf="flex-start" style={styles.picker} borderColor="primary">
+      <View
+        alignSelf="flex-start"
+        style={styles.picker}
+        borderColor="primary"
+        minWidth={100}>
         <TouchableOpacity onPress={_pickerOnPressHandler}>
           <View paddingHorizontal="m" paddingVertical="s">
             {value !== null ? (
-              <Text>{value.name}</Text>
+              <Text variant="listItemData">{value.name}</Text>
             ) : (
-              <Text>{placeholder}</Text>
+              <Text variant="listItemData">{placeholder}</Text>
             )}
           </View>
         </TouchableOpacity>
@@ -61,13 +62,10 @@ export function Dropdown<T extends ItemGeneric>({
 
   const renderItem = (item: T) => {
     return (
-      <View margin="m" borderBottomColor="gray" borderBottomWidth={0.5}>
-        <TouchableHighlight
-          onPress={() => _itemOnPressHandler(item)}
-          underlayColor={theme.colors.gray}
-          activeOpacity={0.9}>
+      <View margin="m" justifyContent="flex-start">
+        <TouchableOpacity onPress={() => _itemOnPressHandler(item)}>
           <Text>{item.name}</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -75,14 +73,16 @@ export function Dropdown<T extends ItemGeneric>({
   const ListHeaderComponent = () => {
     return (
       <View margin="m">
-        <Text style={styles.header}>{header}</Text>
+        <Text variant="formLabel" style={styles.header}>
+          {header}
+        </Text>
       </View>
     );
   };
 
   const ListEmptyComponent = () => {
     return (
-      <View style={styles.emptyComponent} margin="m">
+      <View style={styles.emptyComponent}>
         <Text>{emptyMessage}</Text>
       </View>
     );

@@ -353,7 +353,7 @@ export type ItemGeneric = {
 export interface DropdownProps<T> {
   selected: T | null;
   options: T[];
-  setParentValue: Dispatch<SetStateAction<T>>;
+  setParentValue: Dispatch<SetStateAction<T | null>>;
   header: string;
   placeholder: string;
   emptyMessage: string;

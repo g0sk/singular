@@ -73,7 +73,6 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
   }, [_modeHandler]);
 
   const _createItem = () => {
-    console.log('create');
     if (segmentMode === 'active') {
       navigation.navigate('Active', {
         active: null,
