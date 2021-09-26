@@ -24,15 +24,12 @@ export const SimpleTextInput = forwardRef<RNTextInput, SimpleTextInputProps>(
       },
     });
     return (
-      <View
-        flexDirection="row"
-        height={40}
-        width={150}
-        justifyContent="flex-start">
-        <View borderRadius={0} borderBottomWidth={1} borderColor={color}>
+      <View height={40} justifyContent="flex-start">
+        <View borderRadius={10} borderBottomWidth={1} borderColor={color}>
           <RNTextInput
             value={value}
             style={styles.input}
+            textAlign="center"
             underlineColorAndroid="transparent"
             selectionColor={theme.colors.primary}
             placeholderTextColor={textColor}

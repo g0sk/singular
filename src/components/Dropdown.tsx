@@ -42,11 +42,7 @@ export function Dropdown<T extends ItemGeneric>({
 
   const Picker = () => {
     return (
-      <View
-        alignSelf="flex-start"
-        style={styles.picker}
-        borderColor="primary"
-        minWidth={100}>
+      <View alignSelf="flex-start" style={styles.picker} borderColor="primary">
         <TouchableOpacity onPress={_pickerOnPressHandler}>
           <View paddingHorizontal="m" paddingVertical="s">
             {value !== null ? (
