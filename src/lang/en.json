@@ -98,6 +98,14 @@
         }
       }
 
+    },
+     "activeType": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Enter a name"
+      },
+      "basicAttributes": "Basic attributes",
+      "customAttributes": "Custom attributes"
     }
   },
   "activeType": {

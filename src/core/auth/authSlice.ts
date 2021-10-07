@@ -57,7 +57,6 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchToken.fulfilled, (state, action) => {
-        console.log('fulfilled');
         state.error = false;
         state.errorData = null;
         state.loading = false;
@@ -66,13 +65,11 @@ const authSlice = createSlice({
         state.userID = action.payload.user_data.id;
       })
       .addCase(fetchToken.pending, (state) => {
-        console.log('pending');
         state.error = false;
         state.errorData = null;
         state.loading = true;
       })
       .addCase(fetchToken.rejected, (state, action) => {
-        console.log('rejected');
         state.error = true;
         state.loading = false;
         if (action.payload) {

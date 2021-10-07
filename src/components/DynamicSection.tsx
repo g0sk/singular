@@ -1,32 +1,61 @@
 import React, {Fragment, useCallback, useEffect, useState} from 'react';
-import {DynamicFields, View, Text} from 'components';
+import {DynamicField, DynamicNewField, View, Text} from 'components';
 import {TouchableOpacity, StyleSheet} from 'react-native';
 import {translate} from 'core';
+import {useTheme} from 'ui/theme';
+import {Attribute, DynamicSectionProps, NewAttribute} from 'types';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {Attribute, DynamicSectionProps} from 'types';
 
-export function DynamicSection({
+export const DynamicSection: React.FC<DynamicSectionProps> = ({
   collection,
   label,
-  canCreateNewField,
-  custom,
-}: DynamicSectionProps) {
+  isEditable,
+  //setChanges,
+}) => {
   const [items, setItems] = useState<Attribute[]>([]);
   const [icon, setIcon] = useState<string>('chevron-down-outline');
   const [open, setOpen] = useState<boolean>(false);
+  const [edit, setEdit] = useState<boolean>(false);
+  const [newItems, setNewItems] = useState<NewAttribute[]>([]);
+  const theme = useTheme();
 
   useEffect(() => {
-    if (collection) {
-      setItems([...collection]);
+    if (collection !== null) {
+      setItems(collection);
     }
+    setNewItems([]);
   }, [collection]);
+
+  useEffect(() => {
+    if (!open) {
+      setEdit(false);
+    }
+  }, [open]);
 
   const _headerHandler = useCallback(() => {
     setOpen(!open);
     open ? setIcon('chevron-down-outline') : setIcon('chevron-up-outline');
   }, [open]);
 
-  const _addAttributeHandler = () => null;
+  const _addNewItem = (item: NewAttribute) => {
+    newItems.unshift(item);
+    const _items = [...items];
+    const _newItem = {...item, id: 0};
+    _items.unshift(_newItem);
+    setItems(_items);
+  };
+
+  const _removeItem = (id: number) => {
+    const _items = items.filter((_item) => _item.id !== id);
+    setItems(_items);
+  };
+
+  const _handleItemChange = (item: Attribute) => {
+    const index: number = items.findIndex((_item) => item.id === _item.id);
+    const _items = [...items];
+    _items[index] = {...item};
+    setItems(_items);
+  };
 
   const ListEmptyComponent = () => {
     return (
@@ -50,8 +79,8 @@ export function DynamicSection({
           </TouchableOpacity>
         </View>
         <View>
-          {canCreateNewField && open && (
-            <TouchableOpacity onPress={_addAttributeHandler}>
+          {isEditable && (
+            <TouchableOpacity onPress={() => setEdit(!edit)}>
               <Icon name="add-circle-outline" size={20} color="black" />
             </TouchableOpacity>
           )}
@@ -61,31 +90,45 @@ export function DynamicSection({
   };
 
   return (
-    //Section
-    <View style={styles.container}>
+    <View>
       <ListHeaderComponent />
-      {open &&
-        (items.length > 0 ? (
-          items.map((item, index) => {
-            return (
-              <Fragment key={index}>
-                <View marginVertical="s">
-                  <DynamicFields
+      {edit && (
+        <View marginVertical="s">
+          <DynamicNewField setNewItem={_addNewItem} />
+        </View>
+      )}
+      {items.length > 0 ? (
+        items.map((item, index) => {
+          return (
+            <Fragment key={index}>
+              {open && (
+                <View style={styles.headerContainer}>
+                  {edit && (
+                    <View style={styles.icon} marginRight="s">
+                      <TouchableOpacity onPress={() => _removeItem(item.id)}>
+                        <Icon
+                          name="remove-circle-outline"
+                          size={25}
+                          color={theme.colors.red}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                  <DynamicField
                     field={item}
-                    listIndex={index}
-                    canDelete={canCreateNewField}
-                    custom={custom}
+                    setItemChange={_handleItemChange}
                   />
                 </View>
-              </Fragment>
-            );
-          })
-        ) : (
-          <ListEmptyComponent />
-        ))}
+              )}
+            </Fragment>
+          );
+        })
+      ) : (
+        <View>{open && <ListEmptyComponent />}</View>
+      )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {},

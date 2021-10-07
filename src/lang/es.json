@@ -107,6 +107,14 @@
         }
       }
 
+    },
+    "activeType": {
+      "name": {
+        "label": "Nombre",
+        "placeholder": "Introduce un nombre"
+      },
+      "basicAttributes": "Attributos básicos",
+      "customAttributes": "Attributos personalizados"
     }
   },
   "messages": {

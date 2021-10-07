@@ -3,17 +3,18 @@ import {Text, View} from 'components';
 import {TouchableOpacity} from 'react-native';
 import {ActiveItemFormProps} from 'types';
 import Icon from 'react-native-vector-icons/Ionicons';
+import dayjs from 'dayjs';
 
-export const ActiveItem: React.FC<ActiveItemFormProps> = ({
+export const ActiveListItem: React.FC<ActiveItemFormProps> = ({
   navigation,
   active,
 }: ActiveItemFormProps) => {
-  const [entryDate, setEntryDate] = useState<Date>(new Date());
+  const [entryDate, setEntryDate] = useState<Date>();
   const [activeDate, setActiveDate] = useState<string>();
 
   const _itemHandler = () => {
-    navigation.push('Active', {
-      active: active,
+    navigation.push('ActiveDetails', {
+      activeId: active.id,
       title: active.reference,
     });
   };
@@ -23,7 +24,9 @@ export const ActiveItem: React.FC<ActiveItemFormProps> = ({
   }, [active]);
 
   useEffect(() => {
-    setActiveDate(entryDate?.toDateString());
+    if (entryDate) {
+      setActiveDate(dayjs(entryDate).format('DD-MM-YYYY'));
+    }
   }, [entryDate]);
 
   return (

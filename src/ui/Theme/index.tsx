@@ -214,7 +214,7 @@ const theme = createTheme({
       color: 'darkText',
     },
     formLabel: {
-      fontSize: 15,
+      fontSize: 19,
       fontWeight: 'bold',
     },
     version: {

@@ -1,6 +1,6 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import ActiveApi from 'api/activeApi';
-import {Active, Actives, ActiveTypes} from 'types';
+import {Active, Actives} from 'types';
 
 export const fetchActives = createAsyncThunk<Actives, void, {}>(
   'active/fetchActives',
@@ -30,16 +30,44 @@ export const fetchActive = createAsyncThunk<Active, number, {}>(
   },
 );
 
-export const fetchActiveTypes = createAsyncThunk<ActiveTypes, void, {}>(
-  'active/fetchActiveTypes',
-  async () => {
+export const createActive = createAsyncThunk<Active, Active, {}>(
+  'active/createActive',
+  async (active) => {
     try {
-      const response = await ActiveApi.getTypes();
+      const response = await ActiveApi.createActive(active);
+      if (response.status === 201) {
+        return response.data;
+      }
+    } catch (e) {
+      throw e;
+    }
+  },
+);
+
+export const updateActive = createAsyncThunk<Active, Active, {}>(
+  'active/updateActive',
+  async (active) => {
+    try {
+      const response = await ActiveApi.updateActive(active, active.id);
       if (response.status === 200) {
         return response.data;
       }
-    } catch (error) {
-      throw error;
+    } catch (e) {
+      throw e;
+    }
+  },
+);
+
+export const deleteActive = createAsyncThunk<Active, number, {}>(
+  'active/deleteActive',
+  async (id) => {
+    try {
+      const response = await ActiveApi.deleteActive(id);
+      if (response.status === 204 || response.status === 200) {
+        return response.data;
+      }
+    } catch (e) {
+      throw e;
     }
   },
 );

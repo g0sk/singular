@@ -2,8 +2,8 @@ import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import {
   configureStore,
   combineReducers,
-  Reducer,
-  AnyAction,
+  //Reducer,
+  //AnyAction,
 } from '@reduxjs/toolkit';
 import Reducers from './slices';
 
@@ -13,18 +13,20 @@ const combinedReducers = combineReducers({
   active: Reducers.activeReducer,
   mediaObject: Reducers.mediaObjectReducer,
   record: Reducers.recordReducer,
+  activeType: Reducers.activeTypeReducer,
+  unit: Reducers.unitReducer,
 });
 
-const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
+/* const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
   //Reset store on logOut
   if (action.type === 'auth/logOut') {
     return combinedReducers(undefined, action);
   }
   return combinedReducers(state, action);
-};
+}; */
 
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: combinedReducers,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

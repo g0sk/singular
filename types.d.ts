@@ -61,72 +61,125 @@ export type AuthParamList = {
 
 //Routes Document
 export type RootDocumentParamList = {
-  Documents: undefined;
-  Active: {
-    active: Active | null;
+  DocumentList: undefined;
+  ActiveDetails: {
+    activeId: number;
     title: string;
-    tag?: TagEvent;
   };
-  Type: {
-    type: ActiveType | null;
+  TagDetails: {
+    tag: TagEvent;
+    title: string;
+  };
+  NewActive: {
+    title: string;
+  };
+  NewActiveType: {
+    title: string;
+  };
+  ActiveTypeDetails: {
+    typeId: number | null;
     title: string;
   };
 };
 
 //Route
+
+//DocumentList items
 export type ActiveItemFormProps = {
   active: Active;
-  navigation: DocumentNavigationProp;
+  navigation: DocumentListNavigationProp;
 };
 
 export type TypeItemFormProps = {
   type: ActiveType;
-  navigation: DocumentNavigationProp;
-  route: DocumentRouteProp;
+  navigation: DocumentListNavigationProp;
+  route: DocumentListRouteProp;
 };
 
-export type TypeRouteProp = RouteProp<RootDocumentParamList, 'Type'>;
+//Document navigator types
 
-export type TypeNavigationProp = StackNavigationProp<
+//Documents screen
+export type DocumentListRouteProp = RouteProp<
   RootDocumentParamList,
-  'Type'
+  'DocumentList'
 >;
-
-export type TypeScreenProps = {
-  navigation: TypeNavigationProp;
-  route: TypeRouteProp;
-};
-
-export type ActiveRouteProp = RouteProp<RootDocumentParamList, 'Active'>;
-
-export type ActiveNavigationProp = StackNavigationProp<
+export type DocumentListNavigationProp = StackNavigationProp<
   RootDocumentParamList,
-  'Active'
+  'DocumentList'
 >;
-
-export type ActiveStackProps = {
-  navigation: ActiveNavigationProp;
-  route: ActiveRouteProp;
+export type DocumentListStackProps = {
+  route: DocumentListRouteProp;
+  navigation: DocumentListNavigationProp;
 };
 
-export type ActiveScreenProps = {
-  route: ActiveRouteProp;
-  navigation: ActiveNavigationProp;
-};
-
-export type DocumentRouteProp = RouteProp<RootDocumentParamList, 'Documents'>;
-
-export type DocumentNavigationProp = StackNavigationProp<
+//Active details screen
+export type ActiveDetailsRouteProp = RouteProp<
   RootDocumentParamList,
-  'Documents'
+  'ActiveDetails'
 >;
-
-export type DocumentStackProps = {
-  navigation: DocumentNavigationProp;
-  route: DocumentRouteProp;
+export type ActiveDetailsNavigationProp = StackNavigationProp<
+  RootDocumentParamList,
+  'ActiveDetails'
+>;
+export type ActiveDetailsScreenProps = {
+  route: ActiveDetailsRouteProp;
+  navigation: ActiveDetailsNavigationProp;
 };
 
-export interface FormValues {
+//New Active screen
+export type NewActiveRouteProp = RouteProp<RootDocumentParamList, 'NewActive'>;
+export type NewActiveNavigationProp = StackNavigationProp<
+  RootDocumentParamList,
+  'ActiveDetails'
+>;
+export type NewActiveScreenProps = {
+  route: NewActiveRouteProp;
+  navigation: NewActiveNavigationProp;
+};
+
+//Tag Details Screen
+export type TagDetailsRouteProp = RouteProp<
+  RootDocumentParamList,
+  'TagDetails'
+>;
+export type TagDetailsNavigationProp = StackNavigationProp<
+  RootDocumentParamList,
+  'TagDetails'
+>;
+export type TagDetailsScreenProps = {
+  route: TagDetailsRouteProp;
+  navigation: TagDetailsNavigationProp;
+};
+
+//Type Details Screen
+export type ActiveTypeDetailsRouteProp = RouteProp<
+  RootDocumentParamList,
+  'ActiveTypeDetails'
+>;
+export type ActiveTypeDetailsNavigationProp = StackNavigationProp<
+  RootDocumentParamList,
+  'ActiveTypeDetails'
+>;
+export type ActiveTypeDetailsScreenProps = {
+  route: ActiveTypeDetailsRouteProp;
+  navigation: ActiveTypeDetailsNavigationProp;
+};
+
+//New ActiveType screen
+export type NewActiveTypeRouteProp = RouteProp<
+  RootDocumentParamList,
+  'NewActiveType'
+>;
+export type NewActiveTypeNavigationProp = StackNavigationProp<
+  RootDocumentParamList,
+  'ActiveTypeDetails'
+>;
+export type NewActiveTypeScreenProps = {
+  route: NewActiveTypeRouteProp;
+  navigation: NewActiveTypeNavigationProp;
+};
+
+export interface FormLoginValues {
   username: string;
   password: string;
   saveCredentials: boolean;
@@ -193,6 +246,15 @@ export interface Attribute {
   id: number;
   name: string;
   value: string;
+  unit: Unit;
+}
+
+type AttributeType = 'basic' | 'custom';
+
+export interface NewAttribute {
+  name: string;
+  value: string;
+  unit: Unit;
 }
 
 //Active Types
@@ -201,6 +263,14 @@ export interface ActiveType {
   name: string;
   basicAttributes: Attribute[];
   customAttributes: Attribute[];
+}
+
+export interface ActiveTypeState {
+  activeTypesLength: number;
+  activeType: ActiveType | null;
+  activeTypes: ActiveType[];
+  loading: boolean;
+  error: boolean;
 }
 
 export type ActiveTypes = ActiveType[];
@@ -213,8 +283,20 @@ export interface Active {
   activeRecord: {
     id: number;
   } | null;
-  file: File;
+  file: File | null;
   activeType: ActiveType;
+  basicAttributes: Attribute[];
+  customAttributes: Attribute[];
+}
+
+export interface NewActive {
+  reference: string;
+  entryDate: string;
+  activeRecord: {
+    id: number;
+  } | null;
+  file: File | null;
+  activeType: ActiveType | null;
   basicAttributes: Attribute[];
   customAttributes: Attribute[];
 }
@@ -223,10 +305,8 @@ export type Actives = Array<Active>;
 
 export interface ActiveState {
   active: Active | null;
-  actives: Actives | null;
+  actives: Actives;
   activesLength: number;
-  activeTypes: ActiveType[];
-  activeTypesLength: number;
   page: number;
   loading: boolean;
   error: boolean;
@@ -297,6 +377,24 @@ interface Item {
   name: string;
 }
 
+//Unit
+export interface Unit {
+  id: number;
+  name: string;
+  readOnly: boolean;
+  attributeValues: Attribute[];
+  basicAttributes: Attribute[];
+  customAttributes: Attribute[];
+}
+
+export interface UnitState {
+  unit: Unit | null;
+  units: Unit[];
+  unitsLength: number;
+  loading: boolean;
+  error: boolean;
+}
+
 //Record
 export interface Record {
   id: number;
@@ -322,16 +420,18 @@ export interface RecordProps {
 export interface DynamicSectionProps {
   collection: Attribute[] | null;
   label: string;
-  canCreateNewField: boolean;
-  custom: boolean;
+  isEditable: boolean;
+  setChanges: (items: Attribute[]) => void;
 }
 
 //Dynamic Fields
 export interface DynamicFieldsProps {
   field: Attribute;
-  listIndex: number;
-  canDelete: boolean;
-  custom: boolean;
+  setItemChange: (item: Attribute) => void;
+}
+
+export interface DynamicNewFieldProps {
+  setNewItem: (item: NewAttribute) => void;
 }
 
 //Form
@@ -354,10 +454,9 @@ export type ItemGeneric = {
 export interface DropdownProps<T> {
   selected: T | null;
   options: T[];
-  setParentValue: Dispatch<SetStateAction<T | null>>;
+  setParentValue: (item: T) => void;
   header: string;
   placeholder: string;
-  emptyMessage: string;
 }
 
 //DatePicker

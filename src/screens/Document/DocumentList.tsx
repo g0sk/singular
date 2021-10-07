@@ -8,35 +8,43 @@ import React, {
 import {Screen, Segment} from 'components';
 import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {Header, Text, View} from 'components';
-import {ActiveItem} from './ActiveItem';
-import {ActiveTypeItem} from './ActiveTypeItem';
-import {useAppDispatch, useAppSelector} from 'store/configureStore';
+import {ActiveListItem, ActiveTypeListItem} from 'screens';
+import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
+import {fetchActives} from 'store/slices/active/activeAsyncThunk';
+import {fetchActiveTypes} from 'store/slices/activeType/activeTypeAsyncThunk';
 import {
-  fetchActives,
-  fetchActiveTypes,
-} from 'store/slices/active/activeAsyncThunk';
-import {Mode, DocumentStackProps, ActiveState} from 'types';
+  ActiveState,
+  ActiveTypeState,
+  Mode,
+  DocumentListStackProps,
+} from 'types';
 import {translate} from 'core';
 
-export const DocumentList: React.FC<DocumentStackProps> = ({
+export const DocumentList: React.FC<DocumentListStackProps> = ({
   navigation,
   route,
-}: DocumentStackProps) => {
+}) => {
   const [segmentMode, setSegmentMode] = useState<Mode>('active');
   const activeListRef = createRef<FlatList<any>>();
   const typeListRef = createRef<FlatList<any>>();
+  const dispatch = useAppDispatch();
   const [flatListRef, setFlatListRef] = useState<RefObject<FlatList>>(
     activeListRef,
   );
-  const dispatch = useAppDispatch();
+
+  //States
   const {
     actives,
+    activesLength,
+    loading: activeLoading,
+  }: ActiveState = useAppSelector((state) => state.active);
+  const {
     activeTypes,
     activeTypesLength,
-    activesLength,
-    loading,
-  }: ActiveState = useAppSelector((state) => state.active);
+    loading: activeTypeLoading,
+  }: ActiveTypeState = useAppSelector((state) => state.activeType);
 
+  //Handlers
   const refreshActives = () => {
     dispatch(fetchActives());
   };
@@ -44,6 +52,31 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
     dispatch(fetchActiveTypes());
   };
 
+  const scrollToTop = () => {
+    if (activesLength > 0) {
+      flatListRef.current?.scrollToIndex({animated: true, index: 0});
+    }
+  };
+
+  const _modeHandler = useCallback(() => {
+    const _flatListRef: RefObject<FlatList> =
+      segmentMode === 'active' ? activeListRef : typeListRef;
+    setFlatListRef(_flatListRef);
+  }, [segmentMode, activeListRef, typeListRef]);
+
+  const _createItem = () => {
+    if (segmentMode === 'active') {
+      navigation.navigate('NewActive', {
+        title: 'New active',
+      });
+    } else {
+      navigation.navigate('NewActiveType', {
+        title: 'New type',
+      });
+    }
+  };
+
+  //Components
   const Items = () => {
     if (segmentMode === 'active') {
       return (
@@ -68,7 +101,7 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
     }
   };
   const emptyList = () =>
-    !loading && activesLength > 0 ? (
+    !activeLoading && activesLength > 0 ? (
       <View margin="l">
         <Text variant="emptyHeader">
           {translate(
@@ -77,35 +110,18 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
         </Text>
       </View>
     ) : null;
-  const scrollToTop = () => {
-    if (activesLength > 0) {
-      flatListRef.current?.scrollToIndex({animated: true, index: 0});
-    }
-  };
 
-  const _modeHandler = useCallback(() => {
-    const _flatListRef: RefObject<FlatList> =
-      segmentMode === 'active' ? activeListRef : typeListRef;
-    setFlatListRef(_flatListRef);
-  }, [segmentMode, activeListRef, typeListRef]);
+  //Side effects
+
+  //Mount
+  useEffect(() => {
+    store.dispatch(fetchActives());
+    store.dispatch(fetchActiveTypes());
+  }, []);
 
   useEffect(() => {
     _modeHandler;
   }, [_modeHandler]);
-
-  const _createItem = () => {
-    if (segmentMode === 'active') {
-      navigation.navigate('Active', {
-        active: null,
-        title: 'New active',
-      });
-    } else {
-      navigation.navigate('Type', {
-        type: null,
-        title: 'New type',
-      });
-    }
-  };
 
   return (
     <Screen>
@@ -148,11 +164,11 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
               ref={flatListRef}
               data={actives}
               renderItem={({item}) => (
-                <ActiveItem {...{navigation, route, active: {...item}}} />
+                <ActiveListItem {...{navigation, route, active: {...item}}} />
               )}
               keyExtractor={(item, index) => index.toString()}
               onRefresh={() => refreshActives()}
-              refreshing={loading}
+              refreshing={activeLoading}
               ListEmptyComponent={() => emptyList()}
               scrollToOverflowEnabled={true}
             />
@@ -161,11 +177,11 @@ export const DocumentList: React.FC<DocumentStackProps> = ({
               ref={flatListRef}
               data={activeTypes}
               renderItem={({item}) => (
-                <ActiveTypeItem {...{navigation, route, type: {...item}}} />
+                <ActiveTypeListItem {...{navigation, route, type: {...item}}} />
               )}
               keyExtractor={(item, index) => index.toString()}
               onRefresh={() => refreshTypes()}
-              refreshing={loading}
+              refreshing={activeTypeLoading}
               ListEmptyComponent={() => emptyList()}
               scrollToOverflowEnabled={true}
             />

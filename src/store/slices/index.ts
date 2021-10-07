@@ -3,10 +3,14 @@ import userReducer from './user/userSlice';
 import authReducer from 'core/auth/authSlice';
 import mediaObjectReducer from './mediaObject/mediaObjectSlice';
 import recordReducer from './record/recordSlice';
+import activeTypeReducer from './activeType/activeTypeSlice';
+import unitReducer from './unit/unitSlice';
 export default {
   authReducer,
   activeReducer,
   userReducer,
   mediaObjectReducer,
   recordReducer,
+  activeTypeReducer,
+  unitReducer,
 };

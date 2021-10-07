@@ -4,13 +4,13 @@ import {TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {TypeItemFormProps} from 'types';
 
-export const ActiveTypeItem: React.FC<TypeItemFormProps> = ({
+export const ActiveTypeListItem: React.FC<TypeItemFormProps> = ({
   navigation,
   type,
 }) => {
   const _itemHandler = () => {
-    navigation.push('Type', {
-      type: type,
+    navigation.push('ActiveTypeDetails', {
+      typeId: type.id,
       title: type.name,
     });
   };

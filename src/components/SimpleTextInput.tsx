@@ -1,43 +1,51 @@
-import React, {forwardRef} from 'react';
+import React, {useRef, useEffect, SetStateAction, Dispatch} from 'react';
 import {
   StyleSheet,
   TextInput as RNTextInput,
+  TextInput,
   TextInputProps as RNTextInputProps,
 } from 'react-native';
-import {View} from './View';
 import {useTheme} from 'ui/theme';
 
 interface SimpleTextInputProps extends RNTextInputProps {
-  touched?: boolean;
-  error?: string;
+  focused: boolean;
+  setFocused: Dispatch<SetStateAction<boolean>>;
 }
 
-export const SimpleTextInput = forwardRef<RNTextInput, SimpleTextInputProps>(
-  ({value, ...props}: SimpleTextInputProps, ref) => {
-    const theme = useTheme();
-    const color: keyof typeof theme.colors = 'primary';
-    const textColor = theme.colors[color];
-    const styles = StyleSheet.create({
-      input: {
-        color: theme.colors.darkText,
-        fontSize: 10,
-      },
-    });
-    return (
-      <View height={40} justifyContent="flex-start">
-        <View borderRadius={10} borderBottomWidth={1} borderColor={color}>
-          <RNTextInput
-            value={value}
-            style={styles.input}
-            textAlign="center"
-            underlineColorAndroid="transparent"
-            selectionColor={theme.colors.primary}
-            placeholderTextColor={textColor}
-            {...{ref}}
-            {...props}
-          />
-        </View>
-      </View>
-    );
-  },
-);
+export const SimpleTextInput: React.FC<SimpleTextInputProps> = ({
+  focused,
+  setFocused,
+  ...props
+}: SimpleTextInputProps) => {
+  const theme = useTheme();
+  const _ref = useRef<TextInput>(null);
+  const styles = StyleSheet.create({
+    input: {
+      color: theme.colors.darkText,
+      fontSize: 14,
+      borderBottomColor: focused ? theme.colors.primary : theme.colors.white,
+      borderBottomWidth: 1,
+      marginBottom: 0,
+      paddingBottom: 0,
+    },
+  });
+
+  useEffect(() => {
+    if (focused === true) {
+      _ref.current?.focus();
+    }
+  }, [focused]);
+
+  return (
+    <RNTextInput
+      ref={_ref}
+      style={styles.input}
+      underlineColorAndroid="transparent"
+      selectionColor={theme.colors.primary}
+      placeholderTextColor={theme.colors.default}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      {...props}
+    />
+  );
+};

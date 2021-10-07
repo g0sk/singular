@@ -1,12 +1,16 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {fetchActives, fetchActive, fetchActiveTypes} from './activeAsyncThunk';
+import {
+  createActive,
+  //deleteActive,
+  updateActive,
+  fetchActives,
+  fetchActive,
+} from './activeAsyncThunk';
 import {ActiveState} from 'types';
 
 const initialState: ActiveState = {
   active: null,
   actives: [],
-  activeTypes: [],
-  activeTypesLength: 0,
   page: 0,
   activesLength: 0,
   loading: false,
@@ -17,7 +21,11 @@ const initialState: ActiveState = {
 const activeSlice = createSlice({
   name: 'active',
   initialState,
-  reducers: {},
+  reducers: {
+    clearActive: (state) => {
+      state.active = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchActives.fulfilled, (state, action) => {
@@ -50,21 +58,34 @@ const activeSlice = createSlice({
         state.loading = false;
         state.error = true;
       })
-      .addCase(fetchActiveTypes.fulfilled, (state, action) => {
-        state.activeTypes = [...action.payload];
-        state.activeTypesLength = action.payload.length;
+      .addCase(createActive.fulfilled, (state, action) => {
+        state.active = action.payload;
         state.loading = false;
         state.error = false;
       })
-      .addCase(fetchActiveTypes.pending, (state) => {
+      .addCase(createActive.pending, (state) => {
         state.loading = true;
         state.error = false;
       })
-      .addCase(fetchActiveTypes.rejected, (state) => {
-        state.loading = false;
+      .addCase(createActive.rejected, (state) => {
         state.error = true;
+        state.loading = false;
+      })
+      .addCase(updateActive.fulfilled, (state, action) => {
+        state.active = action.payload;
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(updateActive.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(updateActive.rejected, (state) => {
+        state.error = true;
+        state.loading = false;
       });
   },
 });
 
 export default activeSlice.reducer;
+export const {clearActive} = activeSlice.actions;

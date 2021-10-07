@@ -1,5 +1,5 @@
 import {apiURL} from 'api';
-import {Active} from '../types';
+import {Active} from 'types';
 
 const getActive = (id: number) => apiURL.get('/api/actives/' + id);
 const getActives = () => apiURL.get('/api/actives');

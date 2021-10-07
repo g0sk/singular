@@ -16,7 +16,7 @@ import store, {useAppDispatch} from 'store/configureStore';
 import {ErrorHandler} from 'handlers/error';
 import {removeCredentials, setCredentials} from 'utils/storage';
 import {translate} from 'core';
-import {FormValues} from 'types';
+import {FormLoginValues} from 'types';
 
 const {height, width} = Dimensions.get('window');
 
@@ -36,7 +36,7 @@ export const Login: React.FC = () => {
   const {signIn} = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const login = ({username, password, saveCredentials}: FormValues) => {
+  const login = ({username, password, saveCredentials}: FormLoginValues) => {
     setLoading(true);
     dispatch(fetchToken({username, password})).then(() => {
       const authState = store.getState().auth;
@@ -92,7 +92,7 @@ export const Login: React.FC = () => {
       password: '',
       saveCredentials: true,
     },
-    onSubmit: (formValues: FormValues) => login(formValues),
+    onSubmit: (formValues: FormLoginValues) => login(formValues),
   });
   return (
     <ErrorHandler>
