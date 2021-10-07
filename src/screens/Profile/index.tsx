@@ -61,8 +61,8 @@ export const Profile: React.FC = () => {
         if (image !== null) {
           const updatedUser = {...user, image: image};
           dispatch(updateUser(updatedUser)).then(() => {
-            const {loading, error} = store.getState().user;
-            if (!loading && !error) {
+            const {loading, error: userError} = store.getState().user;
+            if (!loading && !userError) {
               ToastAndroid.showWithGravity(
                 translate('action.image.updated'),
                 ToastAndroid.CENTER,
