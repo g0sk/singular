@@ -84,8 +84,8 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({route}) => {
     }
   };
 
-  const _handleUnitChange = (_type: ActiveType) => {
-    setType(_type);
+  const _handleTypeChange = (_item: ActiveType) => {
+    setType(_item);
   };
 
   //Sideeffects
@@ -239,7 +239,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({route}) => {
                   options={activeTypes}
                   emptyMessage="No items"
                   header="Types"
-                  setParentValue={_handleUnitChange}
+                  setParentValue={_handleTypeChange}
                 />
               </View>
             </View>

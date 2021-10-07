@@ -155,6 +155,11 @@ const theme = createTheme({
     },
     button_edit: {
       color: 'white',
+      fontSize: 12,
+    },
+    button_select: {
+      color: 'white',
+      fontSize: 12,
     },
     button_primary: {
       color: 'lightText',
@@ -231,6 +236,21 @@ const theme = createTheme({
     },
     edit: {
       backgroundColor: 'secondary',
+      width: 59,
+      height: 28,
+      paddingHorizontal: 's',
+      paddingVertical: 'ss',
+      borderRadius: 10,
+      alignItems: 'center',
+    },
+    select: {
+      backgroundColor: 'primary',
+      width: 59,
+      height: 28,
+      paddingHorizontal: 's',
+      paddingVertical: 'ss',
+      borderRadius: 10,
+      alignItems: 'center',
     },
     disabled: {
       backgroundColor: 'disabled',

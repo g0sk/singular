@@ -19,22 +19,28 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {translate} from 'core';
-import store, {useAppSelector} from 'store/configureStore';
-import {fetchActiveType} from 'store/slices/activeType/activeTypeAsyncThunk';
+import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
+import {
+  fetchActiveType,
+  updateActiveType,
+} from 'store/slices/activeType/activeTypeAsyncThunk';
 import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
+//import {fetchCustomAttributes} from 'store/slices/customAttribute/customAttributeAsyncThunk';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   route,
-  //navigation,
+  navigation,
 }) => {
   const [item, setItem] = useState<ActiveType>({} as ActiveType);
+  const [referenceError, setReferenceError] = useState<string | undefined>();
   const [name, setName] = useState<string>('');
   const [focused, setfocused] = useState<boolean>(false);
   const [basicAttributes, setBasicAttributes] = useState<Attribute[]>([]);
   const [customAttributes, setCustomAttributes] = useState<Attribute[]>([]);
   const [change, setChange] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
   const activeTypeState: ActiveTypeState = useAppSelector(
     (state) => state.activeType,
   );
@@ -46,12 +52,32 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
     }
   };
   const _handleSave = () => {
-    setChange(false);
-    return item;
+    if (change) {
+      const _item = {...item};
+      _item.name = name;
+      _item.basicAttributes = [...basicAttributes];
+      _item.customAttributes = [...customAttributes];
+      dispatch(updateActiveType(item));
+    }
+  };
+
+  const _handleName = (_name: string) => {
+    setName(_name);
+    setChange(true);
+  };
+  const _handleBasicAttributes = (_basicAttributes: Attribute[]) => {
+    setBasicAttributes(_basicAttributes);
+    setChange(true);
+  };
+  const _handleCustomAttributes = (_customAttributes: Attribute[]) => {
+    console.log(_customAttributes[0]);
+    setCustomAttributes(_customAttributes);
+    setChange(true);
   };
 
   useEffect(() => {
     store.dispatch(fetchUnits());
+    //store.dispatch(fetchCustomAttributes());
     if (route.params.typeId !== null) {
       store.dispatch(fetchActiveType(route.params.typeId));
     }
@@ -65,6 +91,15 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
       setCustomAttributes([...activeTypeState.activeType.customAttributes]);
     }
   }, [activeTypeState]);
+
+  useEffect(() => {
+    navigation.setParams({title: name});
+    if (name.length < 2) {
+      setReferenceError('error');
+    } else {
+      setReferenceError(undefined);
+    }
+  }, [navigation, name]);
 
   //Unmount
   useEffect(() => {
@@ -95,7 +130,7 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
               />
             }>
             <View style={styles.header}>
-              <View marginVertical="m">
+              <View marginTop="m" marginBottom="l">
                 <TouchableOpacity onPress={() => setfocused(!focused)}>
                   <View>
                     <Text variant="formLabel">Type</Text>
@@ -107,9 +142,10 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
                       )}
                       value={name}
                       autoCapitalize="words"
-                      onChangeText={setName}
+                      onChangeText={_handleName}
                       focused={focused}
                       setFocused={setfocused}
+                      error={referenceError}
                     />
                   </View>
                 </TouchableOpacity>
@@ -128,8 +164,8 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
               <DynamicSection
                 collection={basicAttributes}
                 label="Basic Attributes"
-                isEditable={true}
-                setChanges={setBasicAttributes}
+                isEditable={false}
+                setChanges={_handleBasicAttributes}
               />
             </View>
             <View marginVertical="m">
@@ -137,7 +173,7 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
                 collection={customAttributes}
                 label="Custom Attributes"
                 isEditable={true}
-                setChanges={setCustomAttributes}
+                setChanges={_handleCustomAttributes}
               />
             </View>
           </KeyboardAwareScrollView>

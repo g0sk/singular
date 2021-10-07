@@ -51,7 +51,7 @@ export function Dropdown<T extends ItemGeneric>({
         minWidth={75}
         maxWidth={130}>
         <TouchableOpacity onPress={_pickerOnPressHandler}>
-          <View paddingHorizontal="m" paddingVertical="s" alignItems="center">
+          <View paddingHorizontal="s" paddingVertical="s" alignItems="center">
             {value !== null ? (
               <Text variant="listItemData">{value.name}</Text>
             ) : (

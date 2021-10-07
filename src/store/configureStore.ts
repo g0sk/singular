@@ -15,6 +15,7 @@ const combinedReducers = combineReducers({
   record: Reducers.recordReducer,
   activeType: Reducers.activeTypeReducer,
   unit: Reducers.unitReducer,
+  customAttribute: Reducers.customAttributeReducer,
 });
 
 /* const rootReducer: Reducer = (state: RootState, action: AnyAction) => {

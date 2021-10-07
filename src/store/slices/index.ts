@@ -5,6 +5,7 @@ import mediaObjectReducer from './mediaObject/mediaObjectSlice';
 import recordReducer from './record/recordSlice';
 import activeTypeReducer from './activeType/activeTypeSlice';
 import unitReducer from './unit/unitSlice';
+import customAttributeReducer from './customAttribute/customAttributeSlice';
 export default {
   authReducer,
   activeReducer,
@@ -13,4 +14,5 @@ export default {
   recordReducer,
   activeTypeReducer,
   unitReducer,
+  customAttributeReducer,
 };

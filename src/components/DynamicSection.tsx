@@ -1,29 +1,38 @@
 import React, {Fragment, useCallback, useEffect, useState} from 'react';
-import {DynamicField, DynamicNewField, View, Text} from 'components';
+import {DynamicField, DynamicNewField, View, Text, Button} from 'components';
 import {TouchableOpacity, StyleSheet} from 'react-native';
 import {translate} from 'core';
 import {useTheme} from 'ui/theme';
-import {Attribute, DynamicSectionProps, NewAttribute} from 'types';
+import {
+  Attribute,
+  CustomAttributeState,
+  DynamicSectionProps,
+  NewAttribute,
+} from 'types';
 import Icon from 'react-native-vector-icons/Ionicons';
+import store, {useAppDispatch} from 'store/configureStore';
+import {createCustomAttribute} from 'store/slices/customAttribute/customAttributeAsyncThunk';
 
 export const DynamicSection: React.FC<DynamicSectionProps> = ({
   collection,
   label,
   isEditable,
-  //setChanges,
+  setChanges,
 }) => {
   const [items, setItems] = useState<Attribute[]>([]);
   const [icon, setIcon] = useState<string>('chevron-down-outline');
   const [open, setOpen] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
-  const [newItems, setNewItems] = useState<NewAttribute[]>([]);
+  const dispatch = useAppDispatch();
   const theme = useTheme();
+  /* const {customAttributes}: CustomAttributeState = useAppSelector(
+    (state) => state.customAttribute,
+  ); */
 
   useEffect(() => {
     if (collection !== null) {
       setItems(collection);
     }
-    setNewItems([]);
   }, [collection]);
 
   useEffect(() => {
@@ -38,11 +47,16 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
   }, [open]);
 
   const _addNewItem = (item: NewAttribute) => {
-    newItems.unshift(item);
-    const _items = [...items];
-    const _newItem = {...item, id: 0};
-    _items.unshift(_newItem);
-    setItems(_items);
+    dispatch(createCustomAttribute(item)).then(() => {
+      const {
+        customAttribute,
+      }: CustomAttributeState = store.getState().customAttribute;
+      if (customAttribute !== null) {
+        const _items = [...items];
+        _items.unshift(customAttribute);
+        setChanges(_items);
+      }
+    });
   };
 
   const _removeItem = (id: number) => {
@@ -78,11 +92,17 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
             </View>
           </TouchableOpacity>
         </View>
-        <View>
+        <View justifyContent="center">
           {isEditable && (
-            <TouchableOpacity onPress={() => setEdit(!edit)}>
-              <Icon name="add-circle-outline" size={20} color="black" />
-            </TouchableOpacity>
+            <View flexDirection="row">
+              <View marginRight="m">
+                <Button
+                  label={!edit ? 'Edit' : 'Cancel'}
+                  onPress={() => setEdit(!edit)}
+                  variant="edit"
+                />
+              </View>
+            </View>
           )}
         </View>
       </View>
@@ -124,7 +144,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
           );
         })
       ) : (
-        <View>{open && <ListEmptyComponent />}</View>
+        <View>{open && !edit && <ListEmptyComponent />}</View>
       )}
     </View>
   );

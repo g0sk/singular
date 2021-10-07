@@ -257,6 +257,14 @@ export interface NewAttribute {
   unit: Unit;
 }
 
+//Custom Attribute
+export interface CustomAttributeState {
+  customAttribute: Attribute | null;
+  customAttributes: Attribute[];
+  loading: boolean;
+  error: boolean;
+}
+
 //Active Types
 export interface ActiveType {
   id: number;
@@ -454,7 +462,7 @@ export type ItemGeneric = {
 export interface DropdownProps<T> {
   selected: T | null;
   options: T[];
-  setParentValue: (item: T) => void;
+  setParentValue: (_item: T) => void;
   header: string;
   placeholder: string;
 }
