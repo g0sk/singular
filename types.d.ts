@@ -261,9 +261,9 @@ export interface NewAttribute {
 }
 
 //Basic Attribute State
-export interface BasicAttributeState {
-  basicAttribute: Attribute | null;
-  basicAttributes: Attribute[];
+export interface AttributeValueState {
+  attributeValue: Attribute | null;
+  attributeValues: Attribute[];
   loading: boolean;
   error: boolean;
 }

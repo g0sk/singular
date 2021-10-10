@@ -6,7 +6,7 @@ import recordReducer from './record/recordSlice';
 import activeTypeReducer from './activeType/activeTypeSlice';
 import unitReducer from './unit/unitSlice';
 import customAttributeReducer from './customAttribute/customAttributeSlice';
-import basicAttributeReducer from './basicAttribute/basicAttributeSlice';
+import attributeValueReducer from './attributeValue/attributeValueSlice';
 export default {
   authReducer,
   activeReducer,
@@ -16,5 +16,5 @@ export default {
   activeTypeReducer,
   unitReducer,
   customAttributeReducer,
-  basicAttributeReducer,
+  attributeValueReducer,
 };

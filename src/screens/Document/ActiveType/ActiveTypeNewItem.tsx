@@ -6,7 +6,12 @@ import {
   Text,
   View,
 } from 'components';
-import {NewActiveTypeScreenProps, Attribute, NewActiveType} from 'types';
+import {
+  NewActiveTypeScreenProps,
+  Attribute,
+  NewActiveType,
+  AttributeValueState,
+} from 'types';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -21,8 +26,8 @@ import {
 } from 'store/slices/activeType/activeTypeAsyncThunk';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {fetchBasicAttributes} from 'store/slices/basicAttribute/basicAttributeAsyncThunk';
 import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
+import {fetchAttributeValues} from 'store/slices/attributeValue/attributeValueAsyncThunk';
 
 export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = (
   {
@@ -38,7 +43,9 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = (
   const [change, setChange] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
-  const basicAttributeState = useAppSelector((state) => state.basicAttribute);
+  const attributeValueState: AttributeValueState = useAppSelector(
+    (state) => state.attributeValue,
+  );
 
   const _handleSave = () => {
     if (change) {
@@ -74,7 +81,7 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = (
   };
 
   useEffect(() => {
-    store.dispatch(fetchBasicAttributes());
+    store.dispatch(fetchAttributeValues());
     store.dispatch(fetchUnits());
   }, []);
 
@@ -83,9 +90,9 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = (
   }, []);
 
   useEffect(() => {
-    setBasicAttributes([...basicAttributeState.basicAttributes]);
-    setLoading(basicAttributeState.loading);
-  }, [basicAttributeState]);
+    setBasicAttributes([...attributeValueState.attributeValues]);
+    setLoading(attributeValueState.loading);
+  }, [attributeValueState]);
 
   useEffect(() => {
     if (name.length < 2) {
