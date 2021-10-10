@@ -17,11 +17,16 @@ export function Dropdown<T extends ItemGeneric>({
   const theme = useTheme();
 
   useLayoutEffect(() => {
+    selected !== null ? setValue(selected) : setValue(null);
+    setItems(options);
+  }, [selected, options, placeholder]);
+
+  useEffect(() => {
     if (selected !== null) {
       setValue(selected);
     }
     setItems(options);
-  }, [selected, options, placeholder]);
+  }, [selected, options]);
 
   useEffect(() => {
     let _items: T[] = [];
@@ -37,9 +42,9 @@ export function Dropdown<T extends ItemGeneric>({
     setOpen(!open);
   };
   const _itemOnPressHandler = (item: T) => {
-    setParentValue(item);
-    setValue(item);
     setOpen(!open);
+    setValue(item);
+    setParentValue(item);
   };
 
   const Picker = () => {
@@ -75,7 +80,7 @@ export function Dropdown<T extends ItemGeneric>({
               borderRadius: pressed ? 10 : 0,
             },
           ]}>
-          <View height={30} justifyContent="center">
+          <View height={30} justifyContent="center" paddingHorizontal="s">
             <Text>{item.name}</Text>
           </View>
         </Pressable>

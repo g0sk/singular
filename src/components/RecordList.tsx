@@ -8,11 +8,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {translate} from 'core/i18n';
-import {Active, RecordProps, RecordState} from 'types';
+import {Active, RecordState, RecordListProps} from 'types';
 import {useAppSelector} from 'store/configureStore';
 import {useTheme} from 'ui/theme';
 
-export const RecordList: React.FC<RecordProps> = ({activeRecord}) => {
+export const RecordList: React.FC<RecordListProps> = ({activeRecord}) => {
   const [dateRecord, setDateRecord] = useState<string[]>([]);
   const [activeObject, setActiveObject] = useState<Active[]>([]);
   const {loading}: RecordState = useAppSelector((state) => state.record);
@@ -41,6 +41,8 @@ export const RecordList: React.FC<RecordProps> = ({activeRecord}) => {
     empty: {},
   });
 
+  const _handleItemPress = () => {};
+
   const EmptyComponent = () => {
     return (
       <View style={styles.empty} margin="m">
@@ -65,7 +67,7 @@ export const RecordList: React.FC<RecordProps> = ({activeRecord}) => {
   //Create new entry on nav stack for active inside actives.
   const renderListItem: ListRenderItem<Active> = ({item}) => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => _handleItemPress}>
         <View style={styles.item} marginHorizontal="m" marginVertical="s">
           <Text>{item.reference}</Text>
         </View>

@@ -1,6 +1,6 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import ActiveTypeApi from 'api/activeTypeApi';
-import {ActiveType, ActiveTypes} from 'types';
+import {ActiveType, ActiveTypes, NewActiveType} from 'types';
 
 export const fetchActiveTypes = createAsyncThunk<ActiveTypes, void, {}>(
   'activeType/fetchActiveTypes',
@@ -30,7 +30,7 @@ export const fetchActiveType = createAsyncThunk<ActiveType, number, {}>(
   },
 );
 
-export const createActiveType = createAsyncThunk<ActiveType, ActiveType, {}>(
+export const createActiveType = createAsyncThunk<ActiveType, NewActiveType, {}>(
   'activeType/createActiveType',
   async (activeType) => {
     try {

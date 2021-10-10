@@ -1,74 +1,70 @@
-import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import {DynamicField, DynamicNewField, View, Text, Button} from 'components';
 import {TouchableOpacity, StyleSheet} from 'react-native';
 import {translate} from 'core';
 import {useTheme} from 'ui/theme';
-import {
-  Attribute,
-  CustomAttributeState,
-  DynamicSectionProps,
-  NewAttribute,
-} from 'types';
+import {Attribute, DynamicSectionProps} from 'types';
 import Icon from 'react-native-vector-icons/Ionicons';
-import store, {useAppDispatch} from 'store/configureStore';
-import {createCustomAttribute} from 'store/slices/customAttribute/customAttributeAsyncThunk';
 
 export const DynamicSection: React.FC<DynamicSectionProps> = ({
   collection,
   label,
   isEditable,
   setChanges,
+  open,
 }) => {
   const [items, setItems] = useState<Attribute[]>([]);
   const [icon, setIcon] = useState<string>('chevron-down-outline');
-  const [open, setOpen] = useState<boolean>(false);
+  const [openSection, setOpenSection] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
-  const theme = useTheme();
-  /* const {customAttributes}: CustomAttributeState = useAppSelector(
-    (state) => state.customAttribute,
-  ); */
 
-  useEffect(() => {
-    if (collection !== null) {
-      setItems(collection);
-    }
+  const theme = useTheme();
+
+  useLayoutEffect(() => {
+    collection !== null ? setItems(collection) : null;
   }, [collection]);
 
   useEffect(() => {
-    if (!open) {
+    open ? setOpenSection(open) : null;
+  }, [open]);
+
+  useEffect(() => {
+    if (!openSection) {
       setEdit(false);
     }
-  }, [open]);
+  }, [openSection]);
 
   const _headerHandler = useCallback(() => {
-    setOpen(!open);
-    open ? setIcon('chevron-down-outline') : setIcon('chevron-up-outline');
-  }, [open]);
+    setOpenSection(!openSection);
+    openSection
+      ? setIcon('chevron-down-outline')
+      : setIcon('chevron-up-outline');
+  }, [openSection]);
 
-  const _addNewItem = (item: NewAttribute) => {
-    dispatch(createCustomAttribute(item)).then(() => {
-      const {
-        customAttribute,
-      }: CustomAttributeState = store.getState().customAttribute;
-      if (customAttribute !== null) {
-        const _items = [...items];
-        _items.unshift(customAttribute);
-        setChanges(_items);
-      }
-    });
+  const _addNewItem = (item: Attribute) => {
+    const _items = [...items];
+    _items.unshift(item);
+    setItems([..._items]);
+    setChanges([..._items]);
   };
 
   const _removeItem = (id: number) => {
     const _items = items.filter((_item) => _item.id !== id);
-    setItems(_items);
+    setItems([..._items]);
+    setChanges([..._items]);
   };
 
-  const _handleItemChange = (item: Attribute) => {
-    const index: number = items.findIndex((_item) => item.id === _item.id);
+  const _handleItemChange = (item: Attribute, listIndex: number) => {
     const _items = [...items];
-    _items[index] = {...item};
-    setItems(_items);
+    _items[listIndex] = {...item};
+    setItems([..._items]);
+    setChanges([..._items]);
   };
 
   const ListEmptyComponent = () => {
@@ -136,6 +132,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
                   )}
                   <DynamicField
                     field={item}
+                    listIndex={index}
                     setItemChange={_handleItemChange}
                   />
                 </View>
@@ -144,14 +141,13 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
           );
         })
       ) : (
-        <View>{open && !edit && <ListEmptyComponent />}</View>
+        <View>{openSection && !edit && <ListEmptyComponent />}</View>
       )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
   formValue: {
     justifyContent: 'flex-start',
   },

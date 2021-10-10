@@ -17,23 +17,26 @@ import {
   RefreshControl,
   StyleSheet,
   TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
 import {translate} from 'core';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {
+  deleteActiveType,
   fetchActiveType,
+  fetchActiveTypes,
   updateActiveType,
 } from 'store/slices/activeType/activeTypeAsyncThunk';
 import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
-//import {fetchCustomAttributes} from 'store/slices/customAttribute/customAttributeAsyncThunk';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   route,
-  navigation,
+  //navigation,
 }) => {
   const [item, setItem] = useState<ActiveType>({} as ActiveType);
+  const [loading, setLoading] = useState<boolean>(false);
   const [referenceError, setReferenceError] = useState<string | undefined>();
   const [name, setName] = useState<string>('');
   const [focused, setfocused] = useState<boolean>(false);
@@ -45,6 +48,11 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
     (state) => state.activeType,
   );
 
+  const _handleDelete = () => {
+    dispatch(deleteActiveType(item.id));
+    dispatch(fetchActiveTypes());
+  };
+
   const _handleRefresh = () => {
     if (activeTypeState.activeType !== null) {
       store.dispatch(fetchActiveType(activeTypeState.activeType.id));
@@ -53,12 +61,23 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   };
   const _handleSave = () => {
     if (change) {
-      const _item = {...item};
-      _item.name = name;
-      _item.basicAttributes = [...basicAttributes];
-      _item.customAttributes = [...customAttributes];
-      dispatch(updateActiveType(item));
+      if (name.length >= 2) {
+        const _item = {} as ActiveType;
+        _item.id = item.id;
+        _item.name = name;
+        _item.basicAttributes = [...basicAttributes];
+        _item.customAttributes = [...customAttributes];
+        dispatch(fetchActiveTypes());
+        dispatch(updateActiveType(_item));
+      } else {
+        ToastAndroid.showWithGravity(
+          'Type name must be at least 2 characters long',
+          ToastAndroid.CENTER,
+          ToastAndroid.SHORT,
+        );
+      }
     }
+    setChange(false);
   };
 
   const _handleName = (_name: string) => {
@@ -66,14 +85,27 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
     setChange(true);
   };
   const _handleBasicAttributes = (_basicAttributes: Attribute[]) => {
-    setBasicAttributes(_basicAttributes);
     setChange(true);
+    setBasicAttributes([..._basicAttributes]);
   };
   const _handleCustomAttributes = (_customAttributes: Attribute[]) => {
-    console.log(_customAttributes[0]);
-    setCustomAttributes(_customAttributes);
     setChange(true);
+    setCustomAttributes([..._customAttributes]);
   };
+
+  useLayoutEffect(() => {
+    setLoading(true);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (activeTypeState.activeType !== null) {
+      setItem(activeTypeState.activeType);
+      setName(activeTypeState.activeType.name);
+      setBasicAttributes([...activeTypeState.activeType.basicAttributes]);
+      setCustomAttributes([...activeTypeState.activeType.customAttributes]);
+    }
+    setLoading(activeTypeState.loading);
+  }, [activeTypeState]);
 
   useEffect(() => {
     store.dispatch(fetchUnits());
@@ -83,40 +115,26 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
     }
   }, [route.params.typeId]);
 
-  useLayoutEffect(() => {
-    if (activeTypeState.activeType !== null) {
-      setItem({...activeTypeState.activeType});
-      setName(activeTypeState.activeType.name);
-      setBasicAttributes([...activeTypeState.activeType.basicAttributes]);
-      setCustomAttributes([...activeTypeState.activeType.customAttributes]);
-    }
-  }, [activeTypeState]);
+  useEffect(() => {
+    return () => {
+      store.dispatch(clearActiveType());
+    };
+  });
 
   useEffect(() => {
-    navigation.setParams({title: name});
+    //navigation.setParams({title: name});
     if (name.length < 2) {
       setReferenceError('error');
     } else {
       setReferenceError(undefined);
     }
-  }, [navigation, name]);
-
-  //Unmount
-  useEffect(() => {
-    return () => {
-      store.dispatch(clearActiveType());
-    };
-  }, []);
+  }, [name]);
 
   return (
-    <View style={styles.container} margin="m">
-      {activeTypeState.loading ? (
+    <View style={styles.container} marginHorizontal="m" marginBottom="m">
+      {loading ? (
         <View style={styles.loading}>
-          <ActivityIndicator
-            size="large"
-            color="black"
-            animating={activeTypeState.loading}
-          />
+          <ActivityIndicator size="large" color="black" animating={loading} />
         </View>
       ) : (
         <View marginBottom="xl">
@@ -129,8 +147,8 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
                 onRefresh={_handleRefresh}
               />
             }>
-            <View style={styles.header}>
-              <View marginTop="m" marginBottom="l">
+            <View style={styles.header} paddingTop="s" marginRight="m">
+              <View marginBottom="l">
                 <TouchableOpacity onPress={() => setfocused(!focused)}>
                   <View>
                     <Text variant="formLabel">Type</Text>
@@ -166,6 +184,7 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
                 label="Basic Attributes"
                 isEditable={false}
                 setChanges={_handleBasicAttributes}
+                open={true}
               />
             </View>
             <View marginVertical="m">
@@ -174,7 +193,11 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
                 label="Custom Attributes"
                 isEditable={true}
                 setChanges={_handleCustomAttributes}
+                open={true}
               />
+            </View>
+            <View marginHorizontal="xxl" marginTop="xl" marginBottom="xxl">
+              <Button variant="delete" label="Delete" onPress={_handleDelete} />
             </View>
           </KeyboardAwareScrollView>
         </View>

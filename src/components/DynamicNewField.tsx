@@ -1,12 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {Dropdown, SimpleTextInput as TextInput, View} from 'components';
-import {UnitState, DynamicNewFieldProps, Unit} from 'types';
+import {
+  UnitState,
+  DynamicNewFieldProps,
+  Unit,
+  CustomAttributeState,
+} from 'types';
 import {StyleSheet, ToastAndroid, TouchableOpacity} from 'react-native';
 import {useTheme} from 'ui/theme';
-import {useAppSelector} from 'store/configureStore';
+import store, {useAppSelector} from 'store/configureStore';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useFormik} from 'formik';
+import {useAppDispatch} from 'store/configureStore';
 import * as yup from 'yup';
+import {createCustomAttribute} from 'store/slices/customAttribute/customAttributeAsyncThunk';
 
 const AttributeSchema = yup.object().shape({
   name: yup.string().min(2).required('Min 2 characters'),
@@ -19,6 +26,7 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
   const [unit, setUnit] = useState<Unit | null>(null);
   const {units}: UnitState = useAppSelector((state) => state.unit);
   const [message, setMessage] = useState<string>('');
+  const dispatch = useAppDispatch();
   const theme = useTheme();
 
   const _errorHandler = () => {
@@ -33,17 +41,25 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
     setUnit(_unit);
   };
 
-  const resetState = () => {
-    setFieldValue('name', '');
-    setFieldValue('value', '');
-    setUnit(null);
-  };
-
   const _saveHandler = (formValue: {name: string; value: string}) => {
     if (unit !== null) {
-      setNewItem({name: formValue.name, value: formValue.value, unit});
+      const item = {
+        name: formValue.name,
+        value: formValue.value,
+        unit: {...unit},
+      };
+      dispatch(createCustomAttribute(item)).then(() => {
+        const {
+          customAttribute,
+        }: CustomAttributeState = store.getState().customAttribute;
+        if (customAttribute !== null) {
+          setNewItem(customAttribute);
+        }
+      });
     }
-    resetState();
+    setUnit(null);
+    setFieldValue('name', '');
+    setFieldValue('value', '');
   };
 
   const {

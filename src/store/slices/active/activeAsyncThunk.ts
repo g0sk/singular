@@ -1,6 +1,6 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import ActiveApi from 'api/activeApi';
-import {Active, Actives} from 'types';
+import {Active, Actives, NewActive} from 'types';
 
 export const fetchActives = createAsyncThunk<Actives, void, {}>(
   'active/fetchActives',
@@ -30,7 +30,7 @@ export const fetchActive = createAsyncThunk<Active, number, {}>(
   },
 );
 
-export const createActive = createAsyncThunk<Active, Active, {}>(
+export const createActive = createAsyncThunk<Active, NewActive, {}>(
   'active/createActive',
   async (active) => {
     try {

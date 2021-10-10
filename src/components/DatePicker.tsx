@@ -9,11 +9,10 @@ type CalendarMode = 'date' | 'time';
 export const DatePicker: React.FC<DatePickerProps> = ({
   entryDate,
   setParentDate,
-  showCalendar,
   setShowCalendar,
 }) => {
   const [date, setDate] = useState<Date>(new Date());
-  const mode = 'date';
+  const mode: CalendarMode = 'date';
 
   useEffect(() => {
     const newDate = new Date(entryDate);
@@ -21,13 +20,9 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   }, [entryDate]);
 
   const _calendarOnChange = (evt: AndroidEvent, selectedDate?: Date) => {
-    if (evt.type === 'set' && selectedDate) {
-      setDate(selectedDate);
+    setShowCalendar(false);
+    if (selectedDate) {
       setParentDate(selectedDate);
-      setShowCalendar(!showCalendar);
-    }
-    if (evt.type === 'dismissed') {
-      setShowCalendar(!showCalendar);
     }
   };
   return (
@@ -36,9 +31,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       mode={mode}
       is24Hour={true}
       display="default"
-      onChange={(event: AndroidEvent, selectedDate?: Date) =>
-        _calendarOnChange(event, selectedDate)
-      }
+      onChange={_calendarOnChange}
+      maximumDate={new Date()}
     />
   );
 };

@@ -144,7 +144,8 @@
   "action": {
     "general": {
       "save": "Guardar",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "create": "Crear"
     },
     "login": {
       "signIn": {

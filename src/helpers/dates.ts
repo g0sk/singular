@@ -11,6 +11,6 @@ export function formatDate(date: Date) {
     '.' +
     date.getMilliseconds();
 
-  const _date = day + '-' + month + '-' + year + 'T' + time;
-  return _date;
+  const _date = day + '-' + month + '-' + year + 'T' + time + 'z';
+  return _date.toString();
 }

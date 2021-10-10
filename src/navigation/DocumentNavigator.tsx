@@ -16,8 +16,13 @@ export const DocumentNavigator = () => {
     <Stack.Navigator
       initialRouteName="DocumentList"
       headerMode="float"
-      screenOptions={{headerShown: false, cardShadowEnabled: true}}>
-      <Stack.Screen name="DocumentList" component={DocumentList} />
+      screenOptions={{headerShown: false, cardShadowEnabled: true}}
+      detachInactiveScreens={true}>
+      <Stack.Screen
+        name="DocumentList"
+        component={DocumentList}
+        initialParams={{tab: 'active'}}
+      />
       <Stack.Screen
         name="ActiveDetails"
         component={ActiveDetails}

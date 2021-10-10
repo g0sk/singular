@@ -67,11 +67,11 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
   const _createItem = () => {
     if (segmentMode === 'active') {
       navigation.navigate('NewActive', {
-        title: 'New active',
+        title: 'Create new active',
       });
     } else {
       navigation.navigate('NewActiveType', {
-        title: 'New type',
+        title: 'Create new type',
       });
     }
   };
@@ -111,9 +111,12 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
       </View>
     ) : null;
 
-  //Side effects
+  useEffect(() => {
+    if (route.params.tab !== null) {
+      setSegmentMode(route.params.tab);
+    }
+  }, [route.params.tab]);
 
-  //Mount
   useEffect(() => {
     store.dispatch(fetchActives());
     store.dispatch(fetchActiveTypes());

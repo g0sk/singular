@@ -16,3 +16,4 @@ export * from './Dropdown';
 export * from './Modal';
 export * from './DatePicker';
 export * from './Segment';
+export * from './RecordList';

@@ -8,6 +8,7 @@ import {useTheme} from 'ui/theme';
 export const DynamicField: React.FC<DynamicFieldsProps> = ({
   field,
   setItemChange,
+  listIndex,
 }) => {
   const theme = useTheme();
   const [focused, setFocused] = useState<boolean>(false);
@@ -16,14 +17,15 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
   const _handleValueChange = (value: string) => {
     const _field = {...field};
     _field.value = value;
-    setItemChange(_field);
+    setItemChange(_field, listIndex);
   };
 
   const _handleUnitChange = (unit: Unit) => {
     const _field = {...field};
-    _field.unit = unit;
-    setItemChange(_field);
+    _field.unit = {...unit};
+    setItemChange(_field, listIndex);
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.field} marginVertical="s">
@@ -53,6 +55,7 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
                 focused={focused}
                 setFocused={setFocused}
                 textAlign="center"
+                keyboardType="numeric"
               />
             </View>
             <View>

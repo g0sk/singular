@@ -59,9 +59,12 @@ export type AuthParamList = {
   Login: undefined;
 };
 
+type Segment = 'active' | 'activeType';
 //Routes Document
 export type RootDocumentParamList = {
-  DocumentList: undefined;
+  DocumentList: {
+    tab: Segment | null;
+  };
   ActiveDetails: {
     activeId: number;
     title: string;
@@ -257,7 +260,15 @@ export interface NewAttribute {
   unit: Unit;
 }
 
-//Custom Attribute
+//Basic Attribute State
+export interface BasicAttributeState {
+  basicAttribute: Attribute | null;
+  basicAttributes: Attribute[];
+  loading: boolean;
+  error: boolean;
+}
+
+//Custom Attribute State
 export interface CustomAttributeState {
   customAttribute: Attribute | null;
   customAttributes: Attribute[];
@@ -268,6 +279,12 @@ export interface CustomAttributeState {
 //Active Types
 export interface ActiveType {
   id: number;
+  name: string;
+  basicAttributes: Attribute[];
+  customAttributes: Attribute[];
+}
+
+export interface NewActiveType {
   name: string;
   basicAttributes: Attribute[];
   customAttributes: Attribute[];
@@ -390,9 +407,9 @@ export interface Unit {
   id: number;
   name: string;
   readOnly: boolean;
-  attributeValues: Attribute[];
-  basicAttributes: Attribute[];
-  customAttributes: Attribute[];
+  //attributeValues: Attribute[];
+  //basicAttributes: Attribute[];
+  //customAttributes: Attribute[];
 }
 
 export interface UnitState {
@@ -414,14 +431,22 @@ export interface Record {
   activeObject: Array<Active>;
 }
 
+export interface RecordListProps {
+  activeRecord: Record | null;
+}
+
 export interface RecordState {
   activeRecord: Record;
   loading: boolean;
   error: boolean;
 }
 
-export interface RecordProps {
-  activeRecord: Record | null;
+//Section form
+export interface SectionProps {
+  collection: Attribute[];
+  label: string;
+  setChanges: (item: Attribute[]) => void;
+  open?: boolean;
 }
 
 //Dynamic form
@@ -430,16 +455,18 @@ export interface DynamicSectionProps {
   label: string;
   isEditable: boolean;
   setChanges: (items: Attribute[]) => void;
+  open?: boolean;
 }
 
 //Dynamic Fields
 export interface DynamicFieldsProps {
   field: Attribute;
-  setItemChange: (item: Attribute) => void;
+  listIndex: number;
+  setItemChange: (item: Attribute, listIndex: number) => void;
 }
 
 export interface DynamicNewFieldProps {
-  setNewItem: (item: NewAttribute) => void;
+  setNewItem: (item: Attribute) => void;
 }
 
 //Form
@@ -471,9 +498,8 @@ export interface DropdownProps<T> {
 
 export interface DatePickerProps {
   entryDate: Date | string;
-  setParentDate: Dispatch<SetStateAction<Date>>;
+  setParentDate: (_date: Date) => void;
   setShowCalendar: Dispatch<SetStateAction<boolean>>;
-  showCalendar: boolean;
 }
 
 //Button
