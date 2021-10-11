@@ -2,22 +2,22 @@ import React, {useState, useEffect} from 'react';
 import {Button, Header, Screen, View} from 'components';
 import {Dimensions, ToastAndroid} from 'react-native';
 import {initNfc, readNdef, isEnabled, isSupported} from 'utils/nfc_scanner';
-import {TagEvent} from 'react-native-nfc-manager';
 import {translate} from 'core';
 import {useNavigation} from '@react-navigation/native';
 import ErrorScan from './ErrorScan';
 import Scanning from './Scanning';
 import SuccessScan from './SuccesScan';
+import {ActiveTagEvent} from 'types';
 
 const {height} = Dimensions.get('window');
 
 export const Scan = () => {
-  const {navigate} = useNavigation();
+  const navigation = useNavigation();
   const [reading, setReading] = useState(false);
   const [reset, setReset] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [tag, setTag] = useState<TagEvent | null>();
+  const [tag, setTag] = useState<ActiveTagEvent | undefined>(undefined);
   const [enabled, setEnabled] = useState<boolean>(false);
   const [supported, setSupported] = useState<boolean>(false);
 
@@ -32,19 +32,17 @@ export const Scan = () => {
   }, []);
 
   const goToDetails = () => {
-    setReset(true);
-    navigate('Document', {
-      activeId: tag?.id,
-      title: tag?.id,
-      tag: tag,
-    });
+    if (tag !== undefined) {
+      navigation.navigate('TagDetails', {title: tag?.id, tag: tag});
+      resetState();
+    }
   };
 
   const resetState = () => {
     setError(false);
-    setReset(false);
-    setReading(true);
-    setTag(null);
+    setReset(true);
+    setReading(false);
+    setTag(undefined);
   };
 
   const showToast = async () => {

@@ -6,6 +6,7 @@ import {
   ActiveNewItem,
   ActiveTypeDetails,
   ActiveTypeNewItem,
+  TagDetails,
 } from 'screens';
 import {RootDocumentParamList} from 'types';
 
@@ -42,10 +43,11 @@ export const DocumentNavigator = () => {
       />
       <Stack.Screen
         name="TagDetails"
-        component={ActiveNewItem}
+        component={TagDetails}
         options={({route}) => ({
           headerShown: true,
           title: route.params.title,
+          tag: route.params.tag,
         })}
       />
       <Stack.Screen

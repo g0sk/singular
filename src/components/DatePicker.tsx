@@ -9,6 +9,8 @@ type CalendarMode = 'date' | 'time';
 
 export const DatePicker: React.FC<DatePickerProps> = ({
   entryDate,
+  maximumDate = new Date(),
+  minimumDate = new Date('01/01/1950'),
   setParentDate,
   setShowCalendar,
 }) => {
@@ -37,8 +39,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       is24Hour={true}
       display="default"
       onChange={_calendarOnChange}
-      maximumDate={new Date()}
-      minimumDate={new Date('01/01/1950')}
+      maximumDate={maximumDate}
+      minimumDate={minimumDate}
     />
   );
 };

@@ -70,7 +70,7 @@ export type RootDocumentParamList = {
     title: string;
   };
   TagDetails: {
-    tag: TagEvent;
+    tag: ActiveTagEvent;
     title: string;
   };
   NewActive: {
@@ -371,11 +371,17 @@ interface ScanErrorProps {
   enabled: boolean;
 }
 
+export interface ActiveTagEvent extends TagEvent {
+  tagType?: ActiveType;
+  basicAttributes?: Attribute[];
+  customAttributes?: Attribute[];
+}
+
 interface ScanProps {
   reading: boolean;
 }
 interface ScanSuccessProps {
-  tag: TagEvent;
+  tag: ActiveTagEvent;
 }
 
 //Components
@@ -492,6 +498,8 @@ export interface DropdownProps<T> {
 
 export interface DatePickerProps {
   entryDate: Date | string;
+  maximumDate?: Date;
+  minimumDate?: Date;
   setParentDate: (_date: Date) => void;
   setShowCalendar: Dispatch<SetStateAction<boolean>>;
 }

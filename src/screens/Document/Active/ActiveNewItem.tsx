@@ -69,7 +69,7 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
     if (change) {
       if (reference.length >= 2 && type) {
         _item.reference = reference;
-        _item.entryDate = '2021-10-08T14:55:12.659Z';
+        _item.entryDate = date.toString();
         _item.activeType = {...type};
         _item.basicAttributes = [...basicAttributes];
         _item.customAttributes = [...customAttributes];
