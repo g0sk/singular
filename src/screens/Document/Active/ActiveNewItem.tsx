@@ -24,12 +24,12 @@ import {
   ActiveType,
   ActiveTypeState,
   Attribute,
-  AttributeValueState,
+  BasicAttributeState,
   NewActive,
   NewActiveScreenProps,
 } from 'types';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
-import {fetchAttributeValues} from 'store/slices/attributeValue/attributeValueAsyncThunk';
+import {fetchBasicAttributes} from 'store/slices/basicAttribute/basicAttributeAsyncThunk';
 import {clearActive} from 'store/slices/active/activeSlice';
 
 export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
@@ -56,8 +56,8 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
   const activeTypeState: ActiveTypeState = useAppSelector(
     (state) => state.activeType,
   );
-  const attributeValueState: AttributeValueState = useAppSelector(
-    (state) => state.attributeValue,
+  const basicAttributeState: BasicAttributeState = useAppSelector(
+    (state) => state.basicAttribute,
   );
 
   //Handlers
@@ -113,8 +113,8 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
   }, []);
 
   useEffect(() => {
-    setBasicAttributes([...attributeValueState.attributeValues]);
-  }, [attributeValueState]);
+    setBasicAttributes([...basicAttributeState.basicAttributes]);
+  }, [basicAttributeState]);
 
   useEffect(() => {
     setLoading(activeTypeState.loading);
@@ -122,7 +122,7 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
 
   //component mount
   useEffect(() => {
-    store.dispatch(fetchAttributeValues());
+    store.dispatch(fetchBasicAttributes());
     store.dispatch(fetchActiveTypes());
     store.dispatch(fetchUnits());
   }, []);

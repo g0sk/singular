@@ -10,10 +10,12 @@ import {
   NewActiveTypeScreenProps,
   Attribute,
   NewActiveType,
-  AttributeValueState,
+  BasicAttributeState,
+  ActiveTypeState,
 } from 'types';
 import {
   ActivityIndicator,
+  RefreshControl,
   StyleSheet,
   ToastAndroid,
   TouchableOpacity,
@@ -27,13 +29,11 @@ import {
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
-import {fetchAttributeValues} from 'store/slices/attributeValue/attributeValueAsyncThunk';
+import {fetchBasicAttributes} from 'store/slices/basicAttribute/basicAttributeAsyncThunk';
 
-export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = (
-  {
-    //navigation,
-  },
-) => {
+export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = ({
+  navigation,
+}) => {
   const [referenceError, setReferenceError] = useState<string | undefined>();
   const [name, setName] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -43,8 +43,11 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = (
   const [change, setChange] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
-  const attributeValueState: AttributeValueState = useAppSelector(
-    (state) => state.attributeValue,
+  const basicAttributeState: BasicAttributeState = useAppSelector(
+    (state) => state.basicAttribute,
+  );
+  const activeTypeState: ActiveTypeState = useAppSelector(
+    (state) => state.activeType,
   );
 
   const _handleSave = () => {
@@ -54,8 +57,10 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = (
         _item.name = name;
         _item.basicAttributes = [...basicAttributes];
         _item.customAttributes = [...customAttributes];
-        dispatch(createActiveType(_item));
-        dispatch(fetchActiveTypes());
+        dispatch(createActiveType(_item)).then(() => {
+          dispatch(fetchActiveTypes());
+          navigation.goBack();
+        });
       } else {
         ToastAndroid.showWithGravity(
           'Type name must be at least 2 characters long',
@@ -63,8 +68,8 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = (
           ToastAndroid.SHORT,
         );
       }
+      setChange(false);
     }
-    setChange(false);
   };
 
   const _handleName = (_name: string) => {
@@ -81,7 +86,7 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = (
   };
 
   useEffect(() => {
-    store.dispatch(fetchAttributeValues());
+    store.dispatch(fetchBasicAttributes());
     store.dispatch(fetchUnits());
   }, []);
 
@@ -90,9 +95,9 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = (
   }, []);
 
   useEffect(() => {
-    setBasicAttributes([...attributeValueState.attributeValues]);
-    setLoading(attributeValueState.loading);
-  }, [attributeValueState]);
+    setBasicAttributes([...basicAttributeState.basicAttributes]);
+    setLoading(basicAttributeState.loading);
+  }, [basicAttributeState]);
 
   useEffect(() => {
     if (name.length < 2) {
@@ -116,9 +121,17 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = (
         </View>
       ) : (
         <View marginBottom="xl">
-          <KeyboardAwareScrollView scrollEnabled={true} horizontal={false}>
+          <KeyboardAwareScrollView
+            scrollEnabled={true}
+            horizontal={false}
+            refreshControl={
+              <RefreshControl
+                enabled={false}
+                refreshing={activeTypeState.loading}
+              />
+            }>
             <View style={styles.header} paddingTop="s" marginRight="m">
-              <View marginTop="m" marginBottom="l">
+              <View marginBottom="l">
                 <TouchableOpacity onPress={() => setfocused(!focused)}>
                   <View>
                     <Text variant="formLabel">Type</Text>
@@ -143,7 +156,11 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = (
                   <Button
                     onPress={_handleSave}
                     variant="secondary"
-                    label={translate('action.general.save')}
+                    label={
+                      !activeTypeState.loading
+                        ? translate('action.general.save')
+                        : ''
+                    }
                   />
                 </View>
               )}

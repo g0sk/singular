@@ -33,10 +33,10 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   route,
-  //navigation,
+  navigation,
 }) => {
   const [item, setItem] = useState<ActiveType>({} as ActiveType);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [save, setSave] = useState<boolean>(false);
   const [referenceError, setReferenceError] = useState<string | undefined>();
   const [name, setName] = useState<string>('');
   const [focused, setfocused] = useState<boolean>(false);
@@ -49,26 +49,35 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   );
 
   const _handleDelete = () => {
-    dispatch(deleteActiveType(item.id));
-    dispatch(fetchActiveTypes());
+    dispatch(deleteActiveType(item.id)).then(() => {
+      dispatch(fetchActiveTypes());
+      navigation.goBack();
+    });
   };
 
   const _handleRefresh = () => {
     if (activeTypeState.activeType !== null) {
-      store.dispatch(fetchActiveType(activeTypeState.activeType.id));
+      store.dispatch(fetchActiveType(route.params.typeId));
       store.dispatch(fetchUnits());
     }
   };
   const _handleSave = () => {
     if (change) {
       if (name.length >= 2) {
+        setSave(true);
         const _item = {} as ActiveType;
         _item.id = item.id;
         _item.name = name;
         _item.basicAttributes = [...basicAttributes];
         _item.customAttributes = [...customAttributes];
-        dispatch(fetchActiveTypes());
-        dispatch(updateActiveType(_item));
+        dispatch(updateActiveType(_item)).then(() => {
+          dispatch(fetchActiveTypes());
+          ToastAndroid.showWithGravity(
+            'Type saved correctly',
+            ToastAndroid.BOTTOM,
+            ToastAndroid.SHORT,
+          );
+        });
       } else {
         ToastAndroid.showWithGravity(
           'Type name must be at least 2 characters long',
@@ -94,7 +103,7 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   };
 
   useLayoutEffect(() => {
-    setLoading(true);
+    //setLoading(true);
   }, []);
 
   useLayoutEffect(() => {
@@ -104,7 +113,6 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
       setBasicAttributes([...activeTypeState.activeType.basicAttributes]);
       setCustomAttributes([...activeTypeState.activeType.customAttributes]);
     }
-    setLoading(activeTypeState.loading);
   }, [activeTypeState]);
 
   useEffect(() => {
@@ -122,19 +130,23 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   });
 
   useEffect(() => {
-    //navigation.setParams({title: name});
+    navigation.setParams({title: name});
     if (name.length < 2) {
       setReferenceError('error');
     } else {
       setReferenceError(undefined);
     }
-  }, [name]);
+  }, [navigation, name]);
 
   return (
     <View style={styles.container} marginHorizontal="m" marginBottom="m">
-      {loading ? (
+      {activeTypeState.loading && !save ? (
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="black" animating={loading} />
+          <ActivityIndicator
+            size="large"
+            color="black"
+            animating={activeTypeState.loading}
+          />
         </View>
       ) : (
         <View marginBottom="xl">

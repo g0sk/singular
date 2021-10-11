@@ -80,7 +80,7 @@ export type RootDocumentParamList = {
     title: string;
   };
   ActiveTypeDetails: {
-    typeId: number | null;
+    typeId: number;
     title: string;
   };
 };
@@ -261,9 +261,9 @@ export interface NewAttribute {
 }
 
 //Basic Attribute State
-export interface AttributeValueState {
-  attributeValue: Attribute | null;
-  attributeValues: Attribute[];
+export interface BasicAttributeState {
+  basicAttribute: Attribute | null;
+  basicAttributes: Attribute[];
   loading: boolean;
   error: boolean;
 }
