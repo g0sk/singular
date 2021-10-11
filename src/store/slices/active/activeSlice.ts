@@ -66,9 +66,12 @@ const activeSlice = createSlice({
         state.loading = true;
         state.error = false;
       })
-      .addCase(createActive.rejected, (state) => {
+      .addCase(createActive.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
+        if (action.payload) {
+          state.errorData = {...action.payload};
+        }
       })
       .addCase(updateActive.fulfilled, (state, action) => {
         state.active = {...action.payload};
@@ -79,9 +82,12 @@ const activeSlice = createSlice({
         state.loading = true;
         state.error = false;
       })
-      .addCase(updateActive.rejected, (state) => {
+      .addCase(updateActive.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
+        if (action.payload) {
+          state.errorData = {...action.payload};
+        }
       });
   },
 });

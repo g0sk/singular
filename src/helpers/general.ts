@@ -40,6 +40,10 @@ export function initialize(): void {
       const credentials = await getCredentials();
       const {refreshToken} = store.getState().auth;
       //401
+      if (response.status === 400) {
+        return Promise.reject(response.data);
+      }
+
       if (response.status === 401) {
         if (refreshToken === null) {
           //Invalid Credentials

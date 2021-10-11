@@ -37,6 +37,7 @@ import {
   Attribute,
   RecordState,
   ActiveDetailsScreenProps,
+  ServerError,
 } from 'types';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {clearActive} from 'store/slices/active/activeSlice';
@@ -97,14 +98,27 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
         _item.activeType = {...type};
         _item.basicAttributes = [...basicAttributes];
         _item.customAttributes = [...customAttributes];
-        dispatch(updateActive(_item)).then(() => {
-          dispatch(fetchActives());
-          ToastAndroid.showWithGravity(
-            'Changes saved correctly',
-            ToastAndroid.CENTER,
-            ToastAndroid.SHORT,
-          );
-        });
+        dispatch(updateActive(_item))
+          .unwrap()
+          .then(() => {
+            dispatch(fetchActives());
+            ToastAndroid.showWithGravity(
+              'Changes saved correctly',
+              ToastAndroid.CENTER,
+              ToastAndroid.SHORT,
+            );
+          })
+          .catch((error: ServerError) => {
+            ToastAndroid.showWithGravity(
+              error.violations[0].message +
+                '(' +
+                error.violations[0].propertyPath +
+                ')',
+              ToastAndroid.CENTER,
+              ToastAndroid.LONG,
+            );
+            setChange(false);
+          });
       } else {
         if (reference.length < 2) {
           ToastAndroid.showWithGravity(

@@ -31,6 +31,7 @@ import {
   Attribute,
   NewActive,
   NewActiveScreenProps,
+  ServerError,
 } from 'types';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {clearActive} from 'store/slices/active/activeSlice';
@@ -73,10 +74,23 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
         _item.activeType = {...type};
         _item.basicAttributes = [...basicAttributes];
         _item.customAttributes = [...customAttributes];
-        dispatch(createActive(_item)).then(() => {
-          dispatch(fetchActives());
-          navigation.goBack();
-        });
+        dispatch(createActive(_item))
+          .unwrap()
+          .then(() => {
+            dispatch(fetchActives());
+            navigation.goBack();
+          })
+          .catch((error: ServerError) => {
+            ToastAndroid.showWithGravity(
+              error.violations[0].message +
+                '(' +
+                error.violations[0].propertyPath +
+                ')',
+              ToastAndroid.CENTER,
+              ToastAndroid.LONG,
+            );
+            setChange(false);
+          });
       } else {
         if (reference.length < 2) {
           ToastAndroid.showWithGravity(
@@ -193,6 +207,8 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
                       entryDate={date}
                       setShowCalendar={setShowCalendar}
                       setParentDate={_handleDateChange}
+                      maximumDate={new Date()}
+                      minimumDate={new Date()}
                     />
                   )}
                   <View style={styles.entryDate} marginVertical="m">

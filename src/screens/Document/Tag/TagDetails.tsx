@@ -31,6 +31,7 @@ import {
   ActiveTypeState,
   Attribute,
   NewActive,
+  ServerError,
   TagDetailsScreenProps,
 } from 'types';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
@@ -78,10 +79,23 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
         _item.activeType = {...type};
         _item.basicAttributes = [...basicAttributes];
         _item.customAttributes = [...customAttributes];
-        dispatch(createActive(_item)).then(() => {
-          dispatch(fetchActives());
-          navigation.navigate('DocumentList', {tab: 'active'});
-        });
+        dispatch(createActive(_item))
+          .unwrap()
+          .then(() => {
+            dispatch(fetchActives());
+            navigation.navigate('DocumentList', {tab: 'active'});
+          })
+          .catch((error: ServerError) => {
+            ToastAndroid.showWithGravity(
+              error.violations[0].message +
+                '(' +
+                error.violations[0].propertyPath +
+                ')',
+              ToastAndroid.CENTER,
+              ToastAndroid.LONG,
+            );
+            setChange(false);
+          });
       } else {
         if (reference.length < 2) {
           ToastAndroid.showWithGravity(
@@ -223,6 +237,8 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
                       entryDate={date}
                       setShowCalendar={setShowCalendar}
                       setParentDate={_handleDateChange}
+                      maximumDate={new Date()}
+                      minimumDate={new Date()}
                     />
                   )}
                   <View style={styles.entryDate} marginVertical="m">

@@ -28,7 +28,24 @@ export type Error = ErrorData | null;
 export type ErrorData = {
   code: number;
   message: string;
-} | null;
+};
+
+type ActiveError = {
+  property: string;
+  message: string;
+};
+
+type ViolationsErrors = {
+  message: string;
+  propertyPath: string;
+};
+
+type ServerError = {
+  detail: string;
+  title: string;
+  type: string;
+  violations: ViolationsErrors[];
+};
 
 //Route
 export type AppNavigatorParamList = {
@@ -335,7 +352,7 @@ export interface ActiveState {
   page: number;
   loading: boolean;
   error: boolean;
-  errorData: Error;
+  errorData: ServerError | null;
 }
 
 //Media object
