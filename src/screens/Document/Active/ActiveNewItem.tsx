@@ -2,7 +2,10 @@ import React, {useEffect, useLayoutEffect, useState} from 'react';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {translate} from 'core/i18n';
 import dayjs from 'dayjs';
-import {fetchActiveTypes} from 'store/slices/activeType/activeTypeAsyncThunk';
+import {
+  fetchActiveType,
+  fetchActiveTypes,
+} from 'store/slices/activeType/activeTypeAsyncThunk';
 import {createActive} from 'store/slices/active/activeAsyncThunk';
 import {
   Button,
@@ -24,20 +27,18 @@ import {
   ActiveType,
   ActiveTypeState,
   Attribute,
-  BasicAttributeState,
   NewActive,
   NewActiveScreenProps,
 } from 'types';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
-import {fetchBasicAttributes} from 'store/slices/basicAttribute/basicAttributeAsyncThunk';
 import {clearActive} from 'store/slices/active/activeSlice';
+import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
 
 export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
   const dispatch = useAppDispatch();
   const [change, setChange] = useState<boolean>(false);
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
   const [focused, setFocused] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
 
   //Active values
   const [reference, setReference] = useState<string>('');
@@ -55,9 +56,6 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
   //slices
   const activeTypeState: ActiveTypeState = useAppSelector(
     (state) => state.activeType,
-  );
-  const basicAttributeState: BasicAttributeState = useAppSelector(
-    (state) => state.basicAttribute,
   );
 
   //Handlers
@@ -90,7 +88,7 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
 
   const _handleReferenceChange = (_reference: string) => {
     setReference(_reference);
-    setChange(true);
+    reference.length >= 0 ? setChange(true) : null;
   };
 
   const _handleTypeChange = (_item: ActiveType) => {
@@ -108,24 +106,24 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
     setChange(true);
   };
 
-  useLayoutEffect(() => {
-    setLoading(true);
-  }, []);
-
-  useEffect(() => {
-    setBasicAttributes([...basicAttributeState.basicAttributes]);
-  }, [basicAttributeState]);
-
-  useEffect(() => {
-    setLoading(activeTypeState.loading);
-  }, [activeTypeState]);
-
   //component mount
   useEffect(() => {
-    store.dispatch(fetchBasicAttributes());
     store.dispatch(fetchActiveTypes());
     store.dispatch(fetchUnits());
   }, []);
+
+  useEffect(() => {
+    if (activeTypeState.activeType !== null) {
+      setBasicAttributes([...activeTypeState.activeType.basicAttributes]);
+      setCustomAttributes([...activeTypeState.activeType.customAttributes]);
+    }
+  }, [activeTypeState.activeType]);
+
+  useEffect(() => {
+    if (type !== null) {
+      store.dispatch(fetchActiveType(type.id));
+    }
+  }, [type]);
 
   //Displayed entryDate
   useLayoutEffect(() => {
@@ -145,14 +143,19 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
   useEffect(() => {
     return () => {
       dispatch(clearActive());
+      dispatch(clearActiveType());
     };
   });
 
   return (
     <View style={styles.container} marginHorizontal="m" marginBottom="m">
-      {loading ? (
+      {activeTypeState.loading ? (
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="black" animating={loading} />
+          <ActivityIndicator
+            size="large"
+            color="black"
+            animating={activeTypeState.loading}
+          />
         </View>
       ) : (
         <View marginBottom="xl">
@@ -225,7 +228,9 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
             </View>
             <View marginVertical="m">
               <DynamicSection
+                loading={activeTypeState.loading}
                 collection={basicAttributes}
+                emptyMessage="Select a type to inherit it's  basic attributes"
                 label="Basic Attributes"
                 isEditable={false}
                 setChanges={_handleBasicAttributesChange}
@@ -234,8 +239,10 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
             </View>
             <View marginTop="m" marginBottom="l">
               <DynamicSection
+                loading={activeTypeState.loading}
                 collection={customAttributes}
                 label="Custom Attributes"
+                emptyMessage="Select a type to inherit it's custom attributes"
                 isEditable={true}
                 setChanges={_handleCustomAttributesChange}
                 open={true}

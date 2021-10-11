@@ -74,7 +74,7 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = ({
 
   const _handleName = (_name: string) => {
     setName(_name);
-    setChange(true);
+    name.length >= 1 ? setChange(true) : null;
   };
   const _handleBasicAttributes = (_basicAttributes: Attribute[]) => {
     setBasicAttributes([..._basicAttributes]);

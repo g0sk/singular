@@ -441,21 +441,15 @@ export interface RecordState {
   error: boolean;
 }
 
-//Section form
-export interface SectionProps {
-  collection: Attribute[];
-  label: string;
-  setChanges: (item: Attribute[]) => void;
-  open?: boolean;
-}
-
 //Dynamic form
 export interface DynamicSectionProps {
   collection: Attribute[] | null;
   label: string;
+  emptyMessage?: string;
   isEditable: boolean;
   setChanges: (items: Attribute[]) => void;
   open?: boolean;
+  loading?: boolean;
 }
 
 //Dynamic Fields

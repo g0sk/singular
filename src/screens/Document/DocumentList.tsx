@@ -100,8 +100,8 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
       );
     }
   };
-  const emptyList = () =>
-    !activeLoading && activesLength > 0 ? (
+  const EmptyList = () => {
+    return (
       <View margin="l">
         <Text variant="emptyHeader">
           {translate(
@@ -109,7 +109,8 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
           )}
         </Text>
       </View>
-    ) : null;
+    );
+  };
 
   useEffect(() => {
     if (route.params.tab !== null) {
@@ -172,7 +173,7 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
               keyExtractor={(item, index) => index.toString()}
               onRefresh={() => refreshActives()}
               refreshing={activeLoading}
-              ListEmptyComponent={() => emptyList()}
+              ListEmptyComponent={<EmptyList />}
               scrollToOverflowEnabled={true}
             />
           ) : (
@@ -185,7 +186,7 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
               keyExtractor={(item, index) => index.toString()}
               onRefresh={() => refreshTypes()}
               refreshing={activeTypeLoading}
-              ListEmptyComponent={() => emptyList()}
+              ListEmptyComponent={<EmptyList />}
               scrollToOverflowEnabled={true}
             />
           )}

@@ -28,8 +28,8 @@ export const activeTypeSlice = createSlice({
       .addCase(fetchActiveTypes.fulfilled, (state, action) => {
         state.activeTypes = [...action.payload];
         state.activeTypesLength = action.payload.length;
-        state.loading = false;
         state.error = false;
+        state.loading = false;
       })
       .addCase(fetchActiveTypes.pending, (state) => {
         state.loading = true;
@@ -41,8 +41,8 @@ export const activeTypeSlice = createSlice({
       })
       .addCase(fetchActiveType.fulfilled, (state, action) => {
         state.activeType = {...action.payload};
-        state.loading = false;
         state.error = false;
+        state.loading = false;
       })
       .addCase(fetchActiveType.pending, (state) => {
         state.loading = true;

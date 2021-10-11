@@ -3,6 +3,7 @@ import {DatePickerProps} from 'types';
 import DateTimePicker, {
   AndroidEvent,
 } from '@react-native-community/datetimepicker';
+import dayjs from 'dayjs';
 
 type CalendarMode = 'date' | 'time';
 
@@ -21,7 +22,11 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
   const _calendarOnChange = (evt: AndroidEvent, selectedDate?: Date) => {
     setShowCalendar(false);
-    if (selectedDate) {
+    if (
+      evt.type === 'set' &&
+      selectedDate &&
+      !dayjs(selectedDate).isSame(date)
+    ) {
       setParentDate(selectedDate);
     }
   };
@@ -33,6 +38,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       display="default"
       onChange={_calendarOnChange}
       maximumDate={new Date()}
+      minimumDate={new Date('01/01/1950')}
     />
   );
 };

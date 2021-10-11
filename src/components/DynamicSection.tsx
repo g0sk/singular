@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import {DynamicField, DynamicNewField, View, Text, Button} from 'components';
-import {TouchableOpacity, StyleSheet} from 'react-native';
+import {TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
 import {translate} from 'core';
 import {useTheme} from 'ui/theme';
 import {Attribute, DynamicSectionProps} from 'types';
@@ -18,6 +18,8 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
   isEditable,
   setChanges,
   open,
+  emptyMessage,
+  loading,
 }) => {
   const [items, setItems] = useState<Attribute[]>([]);
   const [icon, setIcon] = useState<string>('chevron-down-outline');
@@ -70,7 +72,53 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
   const ListEmptyComponent = () => {
     return (
       <View marginVertical="s" marginHorizontal="s">
-        <Text>{translate('form.active.attribute.empty')}</Text>
+        <Text>
+          {!emptyMessage
+            ? translate('form.active.attribute.empty')
+            : emptyMessage}
+        </Text>
+      </View>
+    );
+  };
+
+  const ListComponent = () => {
+    return (
+      <View>
+        {edit && (
+          <View marginVertical="s">
+            <DynamicNewField setNewItem={_addNewItem} />
+          </View>
+        )}
+        {!loading && items.length > 0 ? (
+          items.map((item, index) => {
+            return (
+              <Fragment key={index}>
+                {openSection && (
+                  <View style={styles.headerContainer}>
+                    {edit && (
+                      <View style={styles.icon} marginRight="s">
+                        <TouchableOpacity onPress={() => _removeItem(item.id)}>
+                          <Icon
+                            name="remove-circle-outline"
+                            size={25}
+                            color={theme.colors.red}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                    <DynamicField
+                      field={item}
+                      listIndex={index}
+                      setItemChange={_handleItemChange}
+                    />
+                  </View>
+                )}
+              </Fragment>
+            );
+          })
+        ) : (
+          <View>{openSection && !edit && <ListEmptyComponent />}</View>
+        )}
       </View>
     );
   };
@@ -108,41 +156,17 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
   return (
     <View>
       <ListHeaderComponent />
-      {edit && (
-        <View marginVertical="s">
-          <DynamicNewField setNewItem={_addNewItem} />
-        </View>
-      )}
-      {items.length > 0 ? (
-        items.map((item, index) => {
-          return (
-            <Fragment key={index}>
-              {open && (
-                <View style={styles.headerContainer}>
-                  {edit && (
-                    <View style={styles.icon} marginRight="s">
-                      <TouchableOpacity onPress={() => _removeItem(item.id)}>
-                        <Icon
-                          name="remove-circle-outline"
-                          size={25}
-                          color={theme.colors.red}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                  <DynamicField
-                    field={item}
-                    listIndex={index}
-                    setItemChange={_handleItemChange}
-                  />
-                </View>
-              )}
-            </Fragment>
-          );
-        })
-      ) : (
-        <View>{openSection && !edit && <ListEmptyComponent />}</View>
-      )}
+      <View>
+        {loading && items.length === 0 ? (
+          <ActivityIndicator
+            animating={loading}
+            color={theme.colors.primary}
+            size="large"
+          />
+        ) : (
+          <ListComponent />
+        )}
+      </View>
     </View>
   );
 };
