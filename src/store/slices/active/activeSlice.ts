@@ -33,7 +33,6 @@ const activeSlice = createSlice({
         state.error = false;
         state.errorData = null;
         state.actives = [...action.payload];
-        //Not actives length, add items per page used on request
         state.activesLength = state.actives.length;
       })
       .addCase(fetchActives.pending, (state) => {
@@ -46,9 +45,9 @@ const activeSlice = createSlice({
         state.error = true;
       })
       .addCase(fetchActive.fulfilled, (state, action) => {
+        state.active = action.payload;
         state.loading = false;
         state.error = false;
-        state.active = action.payload;
       })
       .addCase(fetchActive.pending, (state) => {
         state.loading = true;

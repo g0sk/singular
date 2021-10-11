@@ -41,7 +41,7 @@ export const ActiveListItem: React.FC<ActiveItemFormProps> = ({
           borderWidth={3}
           borderRadius={13}
           marginRight="m"
-          width={310}
+          width={360}
           flexDirection="row"
           paddingHorizontal="m"
           height={70}
@@ -69,11 +69,11 @@ export const ActiveListItem: React.FC<ActiveItemFormProps> = ({
           </View>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => null}>
+      {/* <TouchableOpacity onPress={() => null}>
         <View borderRadius={8} borderWidth={0} borderColor="dark">
           <Icon name="stats-chart" size={28} />
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

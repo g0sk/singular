@@ -36,7 +36,6 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = ({
 }) => {
   const [referenceError, setReferenceError] = useState<string | undefined>();
   const [name, setName] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
   const [focused, setfocused] = useState<boolean>(false);
   const [basicAttributes, setBasicAttributes] = useState<Attribute[]>([]);
   const [customAttributes, setCustomAttributes] = useState<Attribute[]>([]);
@@ -91,12 +90,7 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = ({
   }, []);
 
   useLayoutEffect(() => {
-    setLoading(true);
-  }, []);
-
-  useEffect(() => {
     setBasicAttributes([...basicAttributeState.basicAttributes]);
-    setLoading(basicAttributeState.loading);
   }, [basicAttributeState]);
 
   useEffect(() => {
@@ -115,9 +109,13 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = ({
 
   return (
     <View style={styles.container} margin="m">
-      {loading ? (
+      {basicAttributeState.loading ? (
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="black" animating={loading} />
+          <ActivityIndicator
+            size="large"
+            color="black"
+            animating={basicAttributeState.loading}
+          />
         </View>
       ) : (
         <View marginBottom="xl">

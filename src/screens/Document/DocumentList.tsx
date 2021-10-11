@@ -33,16 +33,10 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
   );
 
   //States
-  const {
-    actives,
-    activesLength,
-    loading: activeLoading,
-  }: ActiveState = useAppSelector((state) => state.active);
-  const {
-    activeTypes,
-    activeTypesLength,
-    loading: activeTypeLoading,
-  }: ActiveTypeState = useAppSelector((state) => state.activeType);
+  const activeState: ActiveState = useAppSelector((state) => state.active);
+  const activeTypeState: ActiveTypeState = useAppSelector(
+    (state) => state.activeType,
+  );
 
   //Handlers
   const refreshActives = () => {
@@ -53,7 +47,7 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
   };
 
   const scrollToTop = () => {
-    if (activesLength > 0) {
+    if (activeState.activesLength > 0) {
       flatListRef.current?.scrollToIndex({animated: true, index: 0});
     }
   };
@@ -81,9 +75,9 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
     if (segmentMode === 'active') {
       return (
         <Text>
-          {activesLength +
+          {activeState.activesLength +
             ' ' +
-            (activesLength > 1
+            (activeState.activesLength > 1
               ? translate('active.actives')
               : translate('active.active'))}
         </Text>
@@ -91,9 +85,9 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
     } else {
       return (
         <Text>
-          {activeTypesLength +
+          {activeTypeState.activeTypesLength +
             ' ' +
-            (activeTypesLength > 1
+            (activeTypeState.activeTypesLength > 1
               ? translate('activeType.activeTypes')
               : translate('activeType.activeType'))}
         </Text>
@@ -162,32 +156,37 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
             />
           </View>
         </View>
-        <View marginHorizontal="s" marginTop="m" marginBottom="l">
+        <View
+          marginHorizontal="s"
+          marginTop="m"
+          marginBottom="l"
+          paddingBottom="xl"
+          height={590}>
           {segmentMode === 'active' ? (
             <FlatList
               ref={flatListRef}
-              data={actives}
+              data={activeState.actives}
+              scrollEnabled={true}
               renderItem={({item}) => (
                 <ActiveListItem {...{navigation, route, active: {...item}}} />
               )}
               keyExtractor={(item, index) => index.toString()}
               onRefresh={() => refreshActives()}
-              refreshing={activeLoading}
+              refreshing={activeState.loading}
               ListEmptyComponent={<EmptyList />}
-              scrollToOverflowEnabled={true}
             />
           ) : (
             <FlatList
+              scrollEnabled={true}
               ref={flatListRef}
-              data={activeTypes}
+              data={activeTypeState.activeTypes}
               renderItem={({item}) => (
                 <ActiveTypeListItem {...{navigation, route, type: {...item}}} />
               )}
               keyExtractor={(item, index) => index.toString()}
               onRefresh={() => refreshTypes()}
-              refreshing={activeTypeLoading}
+              refreshing={activeTypeState.loading}
               ListEmptyComponent={<EmptyList />}
-              scrollToOverflowEnabled={true}
             />
           )}
         </View>

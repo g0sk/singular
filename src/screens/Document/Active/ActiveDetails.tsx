@@ -8,6 +8,7 @@ import {fetchActiveTypes} from 'store/slices/activeType/activeTypeAsyncThunk';
 import {
   deleteActive,
   fetchActive,
+  fetchActives,
   updateActive,
 } from 'store/slices/active/activeAsyncThunk';
 import {
@@ -37,8 +38,8 @@ import {
   RecordState,
   ActiveDetailsScreenProps,
 } from 'types';
-import {clearActive} from 'store/slices/active/activeSlice';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
+import {clearActive} from 'store/slices/active/activeSlice';
 
 export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   route,
@@ -49,7 +50,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
   const [openActivity, setOpenActivity] = useState<boolean>(false);
   const [focused, setFocused] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [save, setSave] = useState<boolean>(false);
 
   //Active values
   const [item, setItem] = useState<Active>({} as Active);
@@ -80,29 +81,45 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   };
 
   const _handleDelete = () => {
-    dispatch(deleteActive(route.params.activeId));
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'DocumentList', params: {tab: 'active'}}],
+    dispatch(deleteActive(route.params.activeId)).then(() => {
+      dispatch(fetchActives());
+      navigation.goBack();
     });
   };
 
   const _handleSave = () => {
     const _item = {...item};
     if (change) {
-      if (reference.length >= 2 && type && date) {
+      if (reference.length >= 2 && type) {
+        setSave(true);
         _item.reference = reference;
         _item.entryDate = date.toString();
         _item.activeType = {...type};
         _item.basicAttributes = [...basicAttributes];
         _item.customAttributes = [...customAttributes];
-        dispatch(updateActive(_item));
+        dispatch(updateActive(_item)).then(() => {
+          dispatch(fetchActives());
+          ToastAndroid.showWithGravity(
+            'Changes saved correctly',
+            ToastAndroid.CENTER,
+            ToastAndroid.SHORT,
+          );
+        });
       } else {
-        ToastAndroid.showWithGravity(
-          'Reference must be 2 characters at least',
-          ToastAndroid.CENTER,
-          ToastAndroid.SHORT,
-        );
+        if (reference.length < 2) {
+          ToastAndroid.showWithGravity(
+            'Reference must be 2 characters at least',
+            ToastAndroid.CENTER,
+            ToastAndroid.SHORT,
+          );
+        }
+        if (type === null) {
+          ToastAndroid.showWithGravity(
+            'Unit must be selected',
+            ToastAndroid.CENTER,
+            ToastAndroid.SHORT,
+          );
+        }
       }
     }
     setChange(false);
@@ -133,9 +150,12 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
     setChange(true);
   };
 
-  useLayoutEffect(() => {
-    setLoading(true);
-  }, []);
+  //component mount
+  useEffect(() => {
+    store.dispatch(fetchActiveTypes());
+    store.dispatch(fetchUnits());
+    store.dispatch(fetchActive(route.params.activeId));
+  }, [route.params.activeId]);
 
   useLayoutEffect(() => {
     if (activeState.active !== null) {
@@ -146,25 +166,16 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
       setBasicAttributes([...activeState.active.activeType.basicAttributes]);
       setCustomAttributes([...activeState.active.activeType.customAttributes]);
     }
-    setLoading(activeState.loading);
-  }, [activeState]);
-
-  //component mount
-  useEffect(() => {
-    store.dispatch(fetchActiveTypes());
-    store.dispatch(fetchUnits());
-    const {activeId} = route.params;
-    store.dispatch(fetchActive(activeId));
-  }, [route.params]);
+  }, [activeState.active]);
 
   //Displayed entryDate
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (date) {
       setFormattedDate(dayjs(date).format('DD/MM/YYYY'));
     }
   }, [date]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (recordState.activeRecord !== null) {
       const _date = new Date(
         recordState.activeRecord.dateRecord[
@@ -178,7 +189,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   }, [recordState.activeRecord]);
 
   useEffect(() => {
-    //navigation.setParams({title: reference});
+    navigation.setOptions({title: reference});
     if (reference.length < 2) {
       setReferenceError('error');
     } else {
@@ -186,18 +197,21 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
     }
   }, [navigation, reference]);
 
-  //Unmount
   useEffect(() => {
     return () => {
       store.dispatch(clearActive());
     };
-  });
+  }, [save]);
 
   return (
     <View style={styles.container} marginHorizontal="m" marginBottom="m">
-      {loading ? (
+      {activeState.loading && !save ? (
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="black" animating={loading} />
+          <ActivityIndicator
+            size="large"
+            color="black"
+            animating={activeState.loading}
+          />
         </View>
       ) : (
         <View marginBottom="xl">
@@ -205,7 +219,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
             horizontal={false}
             refreshControl={
               <RefreshControl
-                refreshing={loading}
+                refreshing={activeState.loading}
                 onRefresh={_onRefreshHandler}
               />
             }>

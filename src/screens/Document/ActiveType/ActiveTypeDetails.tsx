@@ -103,10 +103,6 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   };
 
   useLayoutEffect(() => {
-    //setLoading(true);
-  }, []);
-
-  useLayoutEffect(() => {
     if (activeTypeState.activeType !== null) {
       setItem(activeTypeState.activeType);
       setName(activeTypeState.activeType.name);
@@ -117,7 +113,6 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
 
   useEffect(() => {
     store.dispatch(fetchUnits());
-    //store.dispatch(fetchCustomAttributes());
     if (route.params.typeId !== null) {
       store.dispatch(fetchActiveType(route.params.typeId));
     }
@@ -130,13 +125,19 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   });
 
   useEffect(() => {
-    navigation.setParams({title: name});
+    navigation.setOptions({title: name});
     if (name.length < 2) {
       setReferenceError('error');
     } else {
       setReferenceError(undefined);
     }
   }, [navigation, name]);
+
+  useEffect(() => {
+    return () => {
+      store.dispatch(clearActiveType());
+    };
+  }, [save]);
 
   return (
     <View style={styles.container} marginHorizontal="m" marginBottom="m">

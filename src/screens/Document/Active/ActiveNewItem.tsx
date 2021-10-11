@@ -6,7 +6,7 @@ import {
   fetchActiveType,
   fetchActiveTypes,
 } from 'store/slices/activeType/activeTypeAsyncThunk';
-import {createActive} from 'store/slices/active/activeAsyncThunk';
+import {createActive, fetchActives} from 'store/slices/active/activeAsyncThunk';
 import {
   Button,
   Dropdown,
@@ -22,8 +22,10 @@ import {
   StyleSheet,
   ScrollView,
   ToastAndroid,
+  RefreshControl,
 } from 'react-native';
 import {
+  ActiveState,
   ActiveType,
   ActiveTypeState,
   Attribute,
@@ -34,11 +36,12 @@ import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {clearActive} from 'store/slices/active/activeSlice';
 import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
 
-export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
+export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
   const dispatch = useAppDispatch();
   const [change, setChange] = useState<boolean>(false);
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
   const [focused, setFocused] = useState<boolean>(false);
+  const [typeChange, setTypeChange] = useState<boolean>(false);
 
   //Active values
   const [reference, setReference] = useState<string>('');
@@ -57,25 +60,38 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
   const activeTypeState: ActiveTypeState = useAppSelector(
     (state) => state.activeType,
   );
+  const activeState: ActiveState = useAppSelector((state) => state.active);
 
   //Handlers
 
   const _handleSave = () => {
     const _item: NewActive = {} as NewActive;
     if (change) {
-      if (reference.length >= 2 && type && date) {
+      if (reference.length >= 2 && type) {
         _item.reference = reference;
-        _item.entryDate = date.toString();
+        _item.entryDate = '2021-10-08T14:55:12.659Z';
         _item.activeType = {...type};
         _item.basicAttributes = [...basicAttributes];
         _item.customAttributes = [...customAttributes];
-        dispatch(createActive(_item));
+        dispatch(createActive(_item)).then(() => {
+          dispatch(fetchActives());
+          navigation.goBack();
+        });
       } else {
-        ToastAndroid.showWithGravity(
-          'Reference must be 2 characters at least',
-          ToastAndroid.CENTER,
-          ToastAndroid.SHORT,
-        );
+        if (reference.length < 2) {
+          ToastAndroid.showWithGravity(
+            'Reference must be 2 characters at least',
+            ToastAndroid.CENTER,
+            ToastAndroid.SHORT,
+          );
+        }
+        if (type === null) {
+          ToastAndroid.showWithGravity(
+            'Type must be selected',
+            ToastAndroid.CENTER,
+            ToastAndroid.SHORT,
+          );
+        }
       }
     }
     setChange(false);
@@ -122,6 +138,7 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
   useEffect(() => {
     if (type !== null) {
       store.dispatch(fetchActiveType(type.id));
+      setTypeChange(true);
     }
   }, [type]);
 
@@ -149,7 +166,7 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
 
   return (
     <View style={styles.container} marginHorizontal="m" marginBottom="m">
-      {activeTypeState.loading ? (
+      {activeTypeState.loading && !typeChange ? (
         <View style={styles.loading}>
           <ActivityIndicator
             size="large"
@@ -159,7 +176,14 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
         </View>
       ) : (
         <View marginBottom="xl">
-          <ScrollView horizontal={false}>
+          <ScrollView
+            horizontal={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={activeState.loading}
+                enabled={false}
+              />
+            }>
             <View style={styles.header} paddingTop="m" marginRight="m">
               <View alignSelf="flex-start">
                 <TouchableOpacity
@@ -226,28 +250,40 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({}) => {
                 />
               </View>
             </View>
-            <View marginVertical="m">
-              <DynamicSection
-                loading={activeTypeState.loading}
-                collection={basicAttributes}
-                emptyMessage="Select a type to inherit it's  basic attributes"
-                label="Basic Attributes"
-                isEditable={false}
-                setChanges={_handleBasicAttributesChange}
-                open={true}
-              />
-            </View>
-            <View marginTop="m" marginBottom="l">
-              <DynamicSection
-                loading={activeTypeState.loading}
-                collection={customAttributes}
-                label="Custom Attributes"
-                emptyMessage="Select a type to inherit it's custom attributes"
-                isEditable={true}
-                setChanges={_handleCustomAttributesChange}
-                open={true}
-              />
-            </View>
+            {activeTypeState.loading ? (
+              <View margin="l">
+                <ActivityIndicator
+                  animating={activeTypeState.loading}
+                  size="large"
+                  color="black"
+                />
+              </View>
+            ) : (
+              <View>
+                <View marginVertical="m">
+                  <DynamicSection
+                    loading={activeTypeState.loading}
+                    collection={basicAttributes}
+                    emptyMessage="Select a type to inherit it's  basic attributes"
+                    label="Basic Attributes"
+                    isEditable={false}
+                    setChanges={_handleBasicAttributesChange}
+                    open={true}
+                  />
+                </View>
+                <View marginTop="m" marginBottom="l">
+                  <DynamicSection
+                    loading={activeTypeState.loading}
+                    collection={customAttributes}
+                    label="Custom Attributes"
+                    emptyMessage="Select a type to inherit it's custom attributes"
+                    isEditable={true}
+                    setChanges={_handleCustomAttributesChange}
+                    open={true}
+                  />
+                </View>
+              </View>
+            )}
           </ScrollView>
         </View>
       )}
