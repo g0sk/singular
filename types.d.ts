@@ -466,7 +466,7 @@ export interface RecordState {
 
 //Dynamic form
 export interface DynamicSectionProps {
-  collection: Attribute[] | null;
+  collection: Attribute[];
   label: string;
   emptyMessage?: string;
   isEditable: boolean;
@@ -484,6 +484,7 @@ export interface DynamicFieldsProps {
 }
 
 export interface DynamicNewFieldProps {
+  isEditable: boolean;
   setNewItem: (item: Attribute) => void;
 }
 

@@ -23,6 +23,7 @@ const AttributeSchema = yup.object().shape({
 
 export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
   setNewItem,
+  isEditable,
 }) => {
   const [unit, setUnit] = useState<Unit | null>(null);
   const {units}: UnitState = useAppSelector((state) => state.unit);
@@ -135,6 +136,7 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
           <Dropdown
             selected={unit}
             options={units}
+            edit={isEditable}
             placeholder={translate('form.unit.placeholder')}
             header={translate('form.unit.header')}
             setParentValue={_handleUnitChange}

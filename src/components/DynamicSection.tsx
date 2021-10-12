@@ -29,7 +29,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
   const theme = useTheme();
 
   useLayoutEffect(() => {
-    collection !== null ? setItems(collection) : null;
+    setItems(collection);
   }, [collection]);
 
   useEffect(() => {
@@ -86,7 +86,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
       <View>
         {edit && (
           <View marginVertical="s">
-            <DynamicNewField setNewItem={_addNewItem} />
+            <DynamicNewField isEditable={isEditable} setNewItem={_addNewItem} />
           </View>
         )}
         {!loading && items.length > 0 ? (

@@ -178,8 +178,8 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
       setReference(activeState.active.reference);
       setDate(new Date(activeState.active.entryDate));
       setType(activeState.active.activeType);
-      setBasicAttributes([...activeState.active.activeType.basicAttributes]);
-      setCustomAttributes([...activeState.active.activeType.customAttributes]);
+      setBasicAttributes([...activeState.active.basicAttributes]);
+      setCustomAttributes([...activeState.active.customAttributes]);
     }
   }, [activeState.active]);
 
