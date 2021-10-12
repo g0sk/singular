@@ -268,6 +268,7 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
               <View marginVertical="s">
                 <Dropdown
                   selected={type}
+                  editValue={true}
                   options={activeTypeState.activeTypes}
                   header={translate('form.active.type.header')}
                   placeholder={translate('form.active.type.placeholder')}
@@ -289,6 +290,7 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
                   <DynamicSection
                     loading={activeTypeState.loading}
                     collection={basicAttributes}
+                    editDropdownValue={false}
                     emptyMessage={translate('form.active.basicAttribute.empty')}
                     label={translate('form.active.basicAttribute.label')}
                     isEditable={false}
@@ -300,6 +302,7 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
                   <DynamicSection
                     loading={activeTypeState.loading}
                     collection={customAttributes}
+                    editDropdownValue={true}
                     label={translate('form.active.customAttribute.label')}
                     emptyMessage={translate(
                       'form.active.customAttribute.empty',

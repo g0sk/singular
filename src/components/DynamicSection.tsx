@@ -16,6 +16,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
   collection,
   label,
   isEditable,
+  editDropdownValue,
   setChanges,
   open,
   emptyMessage,
@@ -86,7 +87,10 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
       <View>
         {edit && (
           <View marginVertical="s">
-            <DynamicNewField isEditable={isEditable} setNewItem={_addNewItem} />
+            <DynamicNewField
+              editDropdownValue={editDropdownValue}
+              setNewItem={_addNewItem}
+            />
           </View>
         )}
         {!loading && items.length > 0 ? (
@@ -107,7 +111,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
                       </View>
                     )}
                     <DynamicField
-                      isEditable={isEditable}
+                      editDropdownValue={editDropdownValue}
                       field={item}
                       listIndex={index}
                       setItemChange={_handleItemChange}

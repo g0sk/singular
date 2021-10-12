@@ -17,7 +17,7 @@ export function Dropdown<T extends ItemGeneric>({
   placeholder,
   header,
   setParentValue,
-  edit,
+  editValue,
 }: DropdownProps<T>) {
   const [value, setValue] = useState<T | null>(null);
   const [items, setItems] = useState<T[]>();
@@ -47,7 +47,7 @@ export function Dropdown<T extends ItemGeneric>({
   }, [options, value]);
 
   const _pickerOnPressHandler = () => {
-    if (edit) {
+    if (editValue) {
       setOpen(!open);
     } else {
       ToastAndroid.showWithGravity(

@@ -331,6 +331,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
               <View marginVertical="s">
                 <Dropdown
                   selected={type}
+                  editValue={true}
                   options={activeTypes}
                   header={translate('form.active.type.header')}
                   placeholder={translate('form.active.type.placeholder')}
@@ -343,6 +344,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
                 collection={basicAttributes}
                 label={translate('form.active.basicAttribute.label')}
                 isEditable={false}
+                editDropdownValue={false}
                 setChanges={_handleBasicAttributesChange}
                 open={true}
               />
@@ -352,6 +354,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
                 collection={customAttributes}
                 label={translate('form.active.customAttribute.label')}
                 isEditable={true}
+                editDropdownValue={true}
                 setChanges={_handleCustomAttributesChange}
                 open={true}
               />

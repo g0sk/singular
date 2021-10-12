@@ -170,6 +170,7 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = ({
                 collection={basicAttributes}
                 label={translate('form.activeType.basicAttribute.label')}
                 isEditable={false}
+                editDropdownValue={true}
                 setChanges={_handleBasicAttributes}
                 open={true}
               />
@@ -178,6 +179,7 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = ({
               <DynamicSection
                 collection={customAttributes}
                 label={translate('form.activeType.customAttribute.label')}
+                editDropdownValue={true}
                 isEditable={true}
                 setChanges={_handleCustomAttributes}
                 open={true}

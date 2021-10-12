@@ -195,6 +195,7 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
             </View>
             <View marginBottom="m">
               <DynamicSection
+                editDropdownValue={true}
                 collection={basicAttributes}
                 label={translate('form.activeType.basicAttribute.label')}
                 isEditable={false}
@@ -204,6 +205,7 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
             </View>
             <View marginVertical="m">
               <DynamicSection
+                editDropdownValue={true}
                 collection={customAttributes}
                 label={translate('form.activeType.customAttribute.label')}
                 isEditable={true}
