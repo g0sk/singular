@@ -477,6 +477,7 @@ export interface DynamicSectionProps {
 
 //Dynamic Fields
 export interface DynamicFieldsProps {
+  isEditable?: boolean;
   field: Attribute;
   listIndex: number;
   setItemChange: (item: Attribute, listIndex: number) => void;
@@ -506,6 +507,7 @@ export type ItemGeneric = {
 export interface DropdownProps<T> {
   selected: T | null;
   options: T[];
+  edit?: boolean;
   setParentValue: (_item: T) => void;
   header: string;
   placeholder: string;

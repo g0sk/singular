@@ -10,6 +10,7 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
   field,
   setItemChange,
   listIndex,
+  isEditable,
 }) => {
   const theme = useTheme();
   const [focused, setFocused] = useState<boolean>(false);
@@ -63,6 +64,7 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
             <View>
               <Dropdown
                 selected={field.unit}
+                edit={isEditable}
                 options={units}
                 placeholder={translate('form.unit.placeholder')}
                 header={translate('form.unit.header')}

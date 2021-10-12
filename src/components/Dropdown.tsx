@@ -1,6 +1,12 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {DropdownProps, ItemGeneric} from 'types';
-import {TouchableOpacity, FlatList, StyleSheet, Pressable} from 'react-native';
+import {
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  Pressable,
+  ToastAndroid,
+} from 'react-native';
 import {View, Text, Modal} from 'components';
 import {useTheme} from 'ui/theme';
 import {translate} from 'core';
@@ -11,6 +17,7 @@ export function Dropdown<T extends ItemGeneric>({
   placeholder,
   header,
   setParentValue,
+  edit,
 }: DropdownProps<T>) {
   const [value, setValue] = useState<T | null>(null);
   const [items, setItems] = useState<T[]>();
@@ -40,7 +47,15 @@ export function Dropdown<T extends ItemGeneric>({
   }, [options, value]);
 
   const _pickerOnPressHandler = () => {
-    setOpen(!open);
+    if (edit) {
+      setOpen(!open);
+    } else {
+      ToastAndroid.showWithGravity(
+        translate('form.unit.noEdit'),
+        ToastAndroid.CENTER,
+        ToastAndroid.SHORT,
+      );
+    }
   };
   const _itemOnPressHandler = (item: T) => {
     setOpen(!open);

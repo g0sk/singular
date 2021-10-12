@@ -318,7 +318,7 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
                     loading={activeTypeState.loading}
                     collection={basicAttributes}
                     emptyMessage={translate('form.tag.basicAttribute.empty')}
-                    label="Basic Attributes"
+                    label={translate('form.tag.basicAttribute.label')}
                     isEditable={false}
                     setChanges={_handleBasicAttributesChange}
                     open={true}
@@ -328,7 +328,7 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
                   <DynamicSection
                     loading={activeTypeState.loading}
                     collection={customAttributes}
-                    label="Custom Attributes"
+                    label={translate('form.tag.customAttribute.label')}
                     emptyMessage={translate('form.tag.customAttribute.empty')}
                     isEditable={true}
                     setChanges={_handleCustomAttributesChange}

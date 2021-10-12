@@ -178,7 +178,8 @@
     },
     "unit": {
         "header": "Units",
-        "placeholder": "Unit"
+        "placeholder": "Unit",
+        "noEdit": "Basic attribute units can only be modified on type"
       },
     "field": {
       "minRef": "Reference must be 2 characters at least",

@@ -196,7 +196,8 @@
     },
     "unit": {
       "header": "Unidades",
-      "placeholder": "Unidad"
+      "placeholder": "Unidad",
+      "noEdit": "Las unidades de los attributos básicos sólo pueden ser modificadas en el tipo"
     },
     "value": "Valor",
     "name": "Nombre",

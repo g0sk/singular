@@ -107,6 +107,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
                       </View>
                     )}
                     <DynamicField
+                      isEditable={isEditable}
                       field={item}
                       listIndex={index}
                       setItemChange={_handleItemChange}
