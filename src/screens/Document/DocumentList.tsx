@@ -160,8 +160,8 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
           marginHorizontal="s"
           marginTop="m"
           marginBottom="l"
-          paddingBottom="xl"
-          height={590}>
+          paddingBottom="xxl"
+          height={700}>
           {segmentMode === 'active' ? (
             <FlatList
               ref={flatListRef}
