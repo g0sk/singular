@@ -21,10 +21,12 @@
       "description": "Log in to start using the app"
     },
     "active": {
-      "title": "Actives"
+      "title": "Actives",
+      "newActive": "Create new active"
     },
     "activeType": {
-      "title": "Types"
+      "title": "Types",
+      "newActiveType": "Create new type"
     }
   },
   "active": {
@@ -38,7 +40,7 @@
   },
   "record": {
     "title": "Activity",
-    "empty": "No activity to show"
+    "empty": "No records"
   },
   "user": {},
   "form": {
@@ -77,9 +79,13 @@
       }
     },
     "active": {
+      "reference": {
+        "label": "Reference",
+        "placeholder": "Reference"
+      },
       "entryDate": {
         "label": "Entry date",
-        "placeholder": "Select and entry date",
+        "placeholder": "Select an entry date",
         "error": {
           "required": "This field is required",
           "invalid": "This field is invalid"
@@ -88,7 +94,16 @@
       "attribute": {
         "empty": "No attributes to display"
       },
+      "basicAttribute": {
+        "label": "Basic Attributes",
+        "empty": "Select a type to inherit it's attributes"
+      },
+      "customAttribute": {
+        "label": "Custom Attributes",
+        "empty": "Select a type to inherit it's attributes"
+      },
       "type": {
+        "header": "Types",
         "label": "Type",
         "placeholder": "Select a type",
         "empty": "No types found",
@@ -97,15 +112,84 @@
           "invalid": "This field is invalid"
         }
       }
-
     },
-     "activeType": {
+    "activeType": {
       "name": {
         "label": "Name",
-        "placeholder": "Enter a name"
+        "placeholder": "Name"
       },
-      "basicAttributes": "Basic attributes",
-      "customAttributes": "Custom attributes"
+      "attribute": {
+        "empty": "No attributes to display"
+      },
+      "basicAttribute": {
+        "label": "Basic Attributes",
+        "empty": "Select a type to inherit it's attributes"
+      },
+      "customAttribute": {
+        "label": "Custom Attributes",
+        "empty": "Select a type to inherit it's attributes"
+      },
+      "type": {
+        "header": "Types",
+        "label": "Type",
+        "placeholder": "Select a type",
+        "empty": "No types found",
+        "error": {
+          "required": "Field required",
+          "invalid": "This field is invalid"
+        }
+      }
+    },
+    "tag": {
+      "notFound": "Tag not found on tag",
+      "reference": {
+        "label": "Reference",
+        "placeholder": "Reference"
+      },
+      "entryDate": {
+        "label": "Entry date",
+        "placeholder": "Select an entry date",
+        "error": {
+          "required": "This field is required",
+          "invalid": "This field is invalid"
+        }
+      },
+      "attribute": {
+        "empty": "No attributes to display"
+      },
+      "basicAttribute": {
+        "label": "Basic Attributes",
+        "empty": "Select a type to inherit it's attributes"
+      },
+      "customAttribute": {
+        "label": "Custom Attributes",
+        "empty": "Select a type to inherit it's attributes"
+      },
+      "type": {
+        "header": "Types",
+        "label": "Type",
+        "placeholder": "Type",
+        "empty": "No types found",
+        "error": {
+          "required": "Field required",
+          "invalid": "This field is invalid"
+        }
+      }
+    },
+    "unit": {
+        "header": "Units",
+        "placeholder": "Unit"
+      },
+    "field": {
+      "minRef": "Reference must be 2 characters at least",
+      "unitSelect": "A unit must be selected",
+      "noItems": "No items to display"
+    },
+    "value": "Value",
+    "name": "Name",
+    "newField": {
+      "unitNotSelected": "Unit not selected",
+      "attributeForm": "Attributes are not correctly formed"
     }
   },
   "activeType": {
@@ -126,7 +210,9 @@
     "general": {
       "save": "Save",
       "delete": "Delete",
-      "create": "Create"
+      "create": "Create",
+      "cancel": "Cancel",
+      "edit": "Edit"
     },
     "login": {
       "signIn": {
@@ -175,7 +261,8 @@
   },
   "success": {
     "general": {
-      "success": "Success"
+      "success": "Success",
+      "saved": "Changes saved correctly"
     },
     "scan": {
       "tagFound": "Tag succesfully read"
@@ -183,7 +270,8 @@
   },
   "error": {
     "general": {
-      "error": "Error"
+      "error": "Error",
+      "used": "This value is already used"
     },
     "scan": {
       "nfcNotEnabled": "NFC not enabled",

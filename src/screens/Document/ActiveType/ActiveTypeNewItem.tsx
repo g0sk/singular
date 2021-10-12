@@ -62,7 +62,7 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = ({
         });
       } else {
         ToastAndroid.showWithGravity(
-          'Type name must be at least 2 characters long',
+          translate('form.field.minRef'),
           ToastAndroid.CENTER,
           ToastAndroid.SHORT,
         );
@@ -132,7 +132,9 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = ({
               <View marginBottom="l">
                 <TouchableOpacity onPress={() => setfocused(!focused)}>
                   <View>
-                    <Text variant="formLabel">Type</Text>
+                    <Text variant="formLabel">
+                      {translate('form.activeType.name.label')}
+                    </Text>
                   </View>
                   <View marginTop="s">
                     <TextInput
@@ -156,7 +158,7 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = ({
                     variant="secondary"
                     label={
                       !activeTypeState.loading
-                        ? translate('action.general.save')
+                        ? translate('action.general.create')
                         : ''
                     }
                   />
@@ -166,7 +168,7 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = ({
             <View marginBottom="m">
               <DynamicSection
                 collection={basicAttributes}
-                label="Basic Attributes"
+                label={translate('form.activeType.basicAttribute.label')}
                 isEditable={false}
                 setChanges={_handleBasicAttributes}
                 open={true}
@@ -175,7 +177,7 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = ({
             <View marginVertical="m">
               <DynamicSection
                 collection={customAttributes}
-                label="Custom Attributes"
+                label={translate('form.activeType.customAttribute.label')}
                 isEditable={true}
                 setChanges={_handleCustomAttributes}
                 open={true}

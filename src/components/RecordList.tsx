@@ -7,7 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import {translate} from 'core/i18n';
+import {translate} from 'core';
 import {Active, RecordState, RecordListProps} from 'types';
 import {useAppSelector} from 'store/configureStore';
 import {useTheme} from 'ui/theme';

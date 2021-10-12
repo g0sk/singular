@@ -1,6 +1,6 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
-import {translate} from 'core/i18n';
+import {translate} from 'core';
 import dayjs from 'dayjs';
 import {
   fetchActiveType,
@@ -87,26 +87,27 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
           })
           .catch((error: ServerError) => {
             ToastAndroid.showWithGravity(
-              error.violations[0].message +
-                '(' +
+              translate('error.general.used') +
+                ' (' +
                 error.violations[0].propertyPath +
                 ')',
               ToastAndroid.CENTER,
               ToastAndroid.LONG,
             );
             setChange(false);
+            setReferenceError('error');
           });
       } else {
         if (reference.length < 2) {
           ToastAndroid.showWithGravity(
-            'Reference must be 2 characters at least',
+            translate('form.field.minRef'),
             ToastAndroid.CENTER,
             ToastAndroid.SHORT,
           );
         }
         if (type === null) {
           ToastAndroid.showWithGravity(
-            'Type must be selected',
+            translate('form.field.unitSelect'),
             ToastAndroid.CENTER,
             ToastAndroid.SHORT,
           );
@@ -164,7 +165,7 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
         setType(tag.tagType);
       } else {
         ToastAndroid.showWithGravity(
-          'Type not found on tag',
+          translate('form.tag.notFound'),
           ToastAndroid.CENTER,
           ToastAndroid.LONG,
         );
@@ -243,7 +244,9 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
                   )}
                   <View style={styles.entryDate} marginVertical="m">
                     <View>
-                      <Text variant="formLabel">Entry Date</Text>
+                      <Text variant="formLabel">
+                        {translate('form.tag.entryDate.label')}
+                      </Text>
                     </View>
                     <View marginTop="s">
                       <Text>{formattedDate}</Text>
@@ -256,7 +259,7 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
                   <Button
                     onPress={_handleSave}
                     variant="secondary"
-                    label={translate('action.general.save')}
+                    label={translate('action.general.create')}
                   />
                 </View>
               )}
@@ -265,7 +268,9 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
               <TouchableOpacity onPress={() => setFocused(!focused)}>
                 <View flexDirection="column" alignItems="flex-start">
                   <View>
-                    <Text variant="formLabel">Reference</Text>
+                    <Text variant="formLabel">
+                      {translate('form.tag.reference.label')}
+                    </Text>
                   </View>
                   <View height={40}>
                     <TextInput
@@ -273,7 +278,7 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
                       focused={focused}
                       textAlign="left"
                       value={reference}
-                      placeholder="Reference id"
+                      placeholder={translate('form.tag.reference.placeholder')}
                       autoCapitalize="none"
                       onChangeText={_handleReferenceChange}
                       error={referenceError}
@@ -284,14 +289,16 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
             </View>
             <View marginTop="m" marginBottom="s">
               <View>
-                <Text variant="formLabel">Type</Text>
+                <Text variant="formLabel">
+                  {translate('form.tag.type.label')}
+                </Text>
               </View>
               <View marginVertical="s">
                 <Dropdown
                   selected={type}
                   options={activeTypeState.activeTypes}
-                  header="Types"
-                  placeholder="Select type"
+                  header={translate('form.tag.type.header')}
+                  placeholder={translate('form.tag.type.placeholder')}
                   setParentValue={_handleTypeChange}
                 />
               </View>
@@ -310,7 +317,7 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
                   <DynamicSection
                     loading={activeTypeState.loading}
                     collection={basicAttributes}
-                    emptyMessage="Select a type to inherit it's  basic attributes"
+                    emptyMessage={translate('form.tag.basicAttribute.empty')}
                     label="Basic Attributes"
                     isEditable={false}
                     setChanges={_handleBasicAttributesChange}
@@ -322,7 +329,7 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
                     loading={activeTypeState.loading}
                     collection={customAttributes}
                     label="Custom Attributes"
-                    emptyMessage="Select a type to inherit it's custom attributes"
+                    emptyMessage={translate('form.tag.customAttribute.empty')}
                     isEditable={true}
                     setChanges={_handleCustomAttributesChange}
                     open={true}

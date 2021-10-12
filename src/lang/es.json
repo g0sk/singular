@@ -21,10 +21,16 @@
       "description": "Inicia sesión para comenzar a utilizar la aplicación"
     },
     "active": {
-      "title": "Activos"
+      "title": "Activos",
+      "newActive": "Crear nuevo activo"
     },
     "activeType": {
-      "title": "Tipos"
+      "title": "Tipos",
+      "newActiveType": "Crear nuevo tipo"
+    },
+    "record": {
+      "title": "Actividad",
+      "empty": "No hay documentos"
     }
   },
   "active": {
@@ -37,13 +43,17 @@
     "lastUpdate": "Última actualización"
   },
   "activeType": {
-    "activeTypes": "categorías",
-    "activeType": "categoría",
+    "activeTypes": "tipos",
+    "activeType": "tipo",
     "empty": "No hay categorías que mostrar",
     "menu": {
       "placeholder": "Selecciona un categoría",
       "empty": "No se han encontrado categorías"
     }
+  },
+  "record": {
+    "title": "Actividad",
+    "empty": "No hay documentos"
   },
   "user": {},
   "form": {
@@ -86,6 +96,10 @@
       }
     },
     "active": {
+      "reference": {
+        "label": "Referencia",
+        "placeholder": "Referencia"
+      },
       "entryDate": {
         "label": "Fecha de entrada",
         "placeholder": "Seleccione una fecha de entrada",
@@ -95,9 +109,45 @@
         }
       },
       "attribute": {
-          "empty": "No attributes to display"
+          "empty": "No hay attributos que mostrar"
         },
+      "basicAttribute": {
+        "label": "Attributos básicos",
+        "empty": "Selecciona un tipo para heredar sus attributos"
+      },
+      "customAttribute": {
+        "label": "Attributos personalizados",
+        "empty": "Selecciona un tipo para heredar sus attributos"
+      },
       "type": {
+        "header": "Tipos",
+        "label": "Tipo",
+        "placeholder": "Seleccione un tipo",
+        "empty": "No existen tipos",
+        "error": {
+          "required": "Campo obligatorio",
+          "invalid": "Tipo inválido"
+        }
+      }
+    },
+    "activeType": {
+      "name": {
+        "label": "Nombre",
+        "placeholder": "Nombre"
+      },
+      "attribute": {
+          "empty": "No hay attributos que mostrar"
+        },
+      "basicAttribute": {
+        "label": "Attributos básicos",
+        "empty": "Selecciona un tipo para heredar sus attributos"
+      },
+      "customAttribute": {
+        "label": "Attributos personalizados",
+        "empty": "Selecciona un tipo para heredar sus attributos"
+      },
+      "type": {
+        "header": "Tipos",
         "label": "Tipo",
         "placeholder": "Seleccione un tipo",
         "empty": "No existen tipos",
@@ -108,13 +158,56 @@
       }
 
     },
-    "activeType": {
-      "name": {
-        "label": "Nombre",
-        "placeholder": "Introduce un nombre"
+    "tag": {
+      "notFound": "Tipo no encontrado en la etiqueta",
+      "reference": {
+        "label": "Referencia",
+        "placeholder": "Referencia"
       },
-      "basicAttributes": "Attributos básicos",
-      "customAttributes": "Attributos personalizados"
+      "entryDate": {
+        "label": "Fecha de entrada",
+        "placeholder": "Seleccione una fecha de entrada",
+        "error": {
+          "required": "Campo obligatorio",
+          "invalid": "Fecha inválida"
+        }
+      },
+      "attribute": {
+          "empty": "No hay attributos que mostrar"
+        },
+      "basicAttribute": {
+        "label": "Attributos básicos",
+        "empty": "Selecciona un tipo para heredar sus attributos"
+      },
+      "customAttribute": {
+        "label": "Attributos personalizados",
+        "empty": "Selecciona un tipo para heredar sus attributos"
+      },
+      "type": {
+        "header": "Tipos",
+        "label": "Tipo",
+        "placeholder": "Tipo",
+        "empty": "No existen tipos",
+        "error": {
+          "required": "Campo obligatorio",
+          "invalid": "Tipo inválido"
+        }
+      }
+    },
+    "unit": {
+      "header": "Unidades",
+      "placeholder": "Unidad"
+    },
+    "value": "Valor",
+    "name": "Nombre",
+    "field": {
+      "minRef": "La referencia debe tener al menos 2 caracteres",
+      "unitSelect": "Debe seleccionar una unidad",
+      "noItems": "No hay elementos que mostrar"
+    },
+    "newField": {
+      "unitNotSelected": "Unidad no seleccionada",
+      "attributeForm": "Los attributos no están correctamente rellenos"
     }
   },
   "messages": {
@@ -145,7 +238,9 @@
     "general": {
       "save": "Guardar",
       "delete": "Eliminar",
-      "create": "Crear"
+      "create": "Crear",
+      "cancel": "Cancel",
+      "edit": "Editar"
     },
     "login": {
       "signIn": {
@@ -175,7 +270,8 @@
   },
   "success": {
     "general": {
-      "success": "Éxito"
+      "success": "Éxito",
+      "saved": "Los cambios se han guardado"
     },
     "scan": {
       "tagFound": "Etiqueta leída correctamente"
@@ -183,7 +279,8 @@
   },
   "error": {
     "general": {
-      "error": "Error"
+      "error": "Error",
+      "used": "Este valor ya está en uso"
     },
     "scan": {
       "nfcNotEnabled": "NFC desactivado",

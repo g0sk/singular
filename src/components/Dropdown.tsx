@@ -3,6 +3,7 @@ import {DropdownProps, ItemGeneric} from 'types';
 import {TouchableOpacity, FlatList, StyleSheet, Pressable} from 'react-native';
 import {View, Text, Modal} from 'components';
 import {useTheme} from 'ui/theme';
+import {translate} from 'core';
 
 export function Dropdown<T extends ItemGeneric>({
   selected,
@@ -101,7 +102,7 @@ export function Dropdown<T extends ItemGeneric>({
   const ListEmptyComponent = () => {
     return (
       <View style={styles.emptyComponent}>
-        <Text>No items to display</Text>
+        <Text>{translate('form.field.noItems')}</Text>
       </View>
     );
   };

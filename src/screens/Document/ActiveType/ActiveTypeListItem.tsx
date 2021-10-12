@@ -1,7 +1,6 @@
 import React from 'react';
 import {Text, View} from 'components';
 import {TouchableOpacity} from 'react-native';
-//import Icon from 'react-native-vector-icons/Ionicons';
 import {TypeItemFormProps} from 'types';
 
 export const ActiveTypeListItem: React.FC<TypeItemFormProps> = ({
@@ -35,16 +34,8 @@ export const ActiveTypeListItem: React.FC<TypeItemFormProps> = ({
           <View alignContent="center" justifyContent="center">
             <Text variant="listItemPrimary">{type.name}</Text>
           </View>
-          <View justifyContent="center">
-            <Text variant="listItemData">{}</Text>
-          </View>
         </View>
       </TouchableOpacity>
-      {/* <TouchableOpacity onPress={() => null}>
-        <View borderRadius={8} borderWidth={0} borderColor="dark">
-          <Icon name="stats-chart" size={28} />
-        </View>
-      </TouchableOpacity> */}
     </View>
   );
 };

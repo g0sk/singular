@@ -14,6 +14,7 @@ import {useFormik} from 'formik';
 import {useAppDispatch} from 'store/configureStore';
 import * as yup from 'yup';
 import {createCustomAttribute} from 'store/slices/customAttribute/customAttributeAsyncThunk';
+import {translate} from 'core';
 
 const AttributeSchema = yup.object().shape({
   name: yup.string().min(2).required('Min 2 characters'),
@@ -82,9 +83,9 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
 
   useEffect(() => {
     if (values.name.length < 2 || values.value.length < 1) {
-      setMessage('Attribute values are not correctly formed');
+      setMessage(translate('form.newField.attributeForm'));
     } else if (unit === null) {
-      setMessage('Unit not selected');
+      setMessage(translate('form.newField.unitNotSelected'));
     }
   }, [values, unit]);
 
@@ -110,7 +111,7 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
         <View style={styles.label} paddingHorizontal="s" marginRight="m">
           <TextInput
             style={{minWidth: 90, maxWidth: 115, height: 40, color: 'black'}}
-            placeholder="Name"
+            placeholder={translate('form.name')}
             textAlign="left"
             value={values.name}
             onChangeText={handleChange('name')}
@@ -121,7 +122,7 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
         <View marginRight="s" paddingHorizontal="s">
           <TextInput
             style={{minWidth: 40, maxWidth: 65, height: 40, color: 'black'}}
-            placeholder="Value"
+            placeholder={translate('form.value')}
             textAlign="left"
             value={values.value}
             keyboardType="numeric"
@@ -134,8 +135,8 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
           <Dropdown
             selected={unit}
             options={units}
-            placeholder="Select Unit"
-            header="Units"
+            placeholder={translate('form.unit.placeholder')}
+            header={translate('form.unit.header')}
             setParentValue={_handleUnitChange}
           />
         </View>

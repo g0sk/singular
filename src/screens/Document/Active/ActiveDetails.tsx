@@ -2,7 +2,7 @@ import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {RecordList} from 'components';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {translate} from 'core/i18n';
+import {translate} from 'core';
 import dayjs from 'dayjs';
 import {fetchActiveTypes} from 'store/slices/activeType/activeTypeAsyncThunk';
 import {
@@ -103,33 +103,34 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
           .then(() => {
             dispatch(fetchActives());
             ToastAndroid.showWithGravity(
-              'Changes saved correctly',
+              translate('success.general.saved'),
               ToastAndroid.CENTER,
               ToastAndroid.SHORT,
             );
           })
           .catch((error: ServerError) => {
             ToastAndroid.showWithGravity(
-              error.violations[0].message +
-                '(' +
+              translate('error.general.used') +
+                ' (' +
                 error.violations[0].propertyPath +
                 ')',
               ToastAndroid.CENTER,
               ToastAndroid.LONG,
             );
+            setReferenceError('error');
             setChange(false);
           });
       } else {
         if (reference.length < 2) {
           ToastAndroid.showWithGravity(
-            'Reference must be 2 characters at least',
+            translate('form.field.minRef'),
             ToastAndroid.CENTER,
             ToastAndroid.SHORT,
           );
         }
         if (type === null) {
           ToastAndroid.showWithGravity(
-            'Unit must be selected',
+            translate('form.field.unitSelect'),
             ToastAndroid.CENTER,
             ToastAndroid.SHORT,
           );
@@ -198,7 +199,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
       );
       setLastUpdate(dayjs(_date).format('DD/MM/YYYY'));
     } else {
-      setLastUpdate('No records');
+      setLastUpdate(translate('record.empty'));
     }
   }, [recordState.activeRecord]);
 
@@ -286,7 +287,9 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
                 )}
                 <View style={styles.entryDate} marginVertical="m">
                   <View>
-                    <Text variant="formLabel">Entry Date</Text>
+                    <Text variant="formLabel">
+                      {translate('form.active.entryDate.label')}
+                    </Text>
                   </View>
                   <View marginTop="s">
                     <Text>{formattedDate}</Text>
@@ -298,7 +301,9 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
               <TouchableOpacity onPress={() => setFocused(!focused)}>
                 <View flexDirection="column" alignItems="flex-start">
                   <View>
-                    <Text variant="formLabel">Reference</Text>
+                    <Text variant="formLabel">
+                      {translate('form.active.reference.label')}
+                    </Text>
                   </View>
                   <View height={40}>
                     <TextInput
@@ -306,7 +311,9 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
                       focused={focused}
                       textAlign="left"
                       value={reference}
-                      placeholder="Reference id"
+                      placeholder={translate(
+                        'form.active.reference.placeholder',
+                      )}
                       autoCapitalize="none"
                       onChangeText={_handleReferenceChange}
                       error={referenceError}
@@ -317,14 +324,16 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
             </View>
             <View marginTop="m" marginBottom="s">
               <View>
-                <Text variant="formLabel">Type</Text>
+                <Text variant="formLabel">
+                  {translate('form.active.type.label')}
+                </Text>
               </View>
               <View marginVertical="s">
                 <Dropdown
                   selected={type}
                   options={activeTypes}
-                  header="Types"
-                  placeholder="Select type"
+                  header={translate('form.active.type.header')}
+                  placeholder={translate('form.active.type.placeholder')}
                   setParentValue={_handleTypeChange}
                 />
               </View>
@@ -332,7 +341,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
             <View marginVertical="m">
               <DynamicSection
                 collection={basicAttributes}
-                label="Basic Attributes"
+                label={translate('form.active.basicAttribute.label')}
                 isEditable={false}
                 setChanges={_handleBasicAttributesChange}
                 open={true}
@@ -341,14 +350,18 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
             <View marginTop="m" marginBottom="l">
               <DynamicSection
                 collection={customAttributes}
-                label="Custom Attributes"
+                label={translate('form.active.customAttribute.label')}
                 isEditable={true}
                 setChanges={_handleCustomAttributesChange}
                 open={true}
               />
             </View>
             <View marginHorizontal="xxl" marginTop="xxl" marginBottom="xxl">
-              <Button variant="delete" label="Delete" onPress={_handleDelete} />
+              <Button
+                variant="delete"
+                label={translate('action.general.delete')}
+                onPress={_handleDelete}
+              />
             </View>
           </ScrollView>
         </View>

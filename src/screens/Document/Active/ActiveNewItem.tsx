@@ -1,6 +1,5 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
-import {translate} from 'core/i18n';
 import dayjs from 'dayjs';
 import {
   fetchActiveType,
@@ -36,6 +35,7 @@ import {
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {clearActive} from 'store/slices/active/activeSlice';
 import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
+import {translate} from 'core';
 
 export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
   const dispatch = useAppDispatch();
@@ -82,26 +82,27 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
           })
           .catch((error: ServerError) => {
             ToastAndroid.showWithGravity(
-              error.violations[0].message +
-                '(' +
+              translate('error.general.used') +
+                ' (' +
                 error.violations[0].propertyPath +
                 ')',
               ToastAndroid.CENTER,
               ToastAndroid.LONG,
             );
             setChange(false);
+            setReferenceError('error');
           });
       } else {
         if (reference.length < 2) {
           ToastAndroid.showWithGravity(
-            'Reference must be 2 characters at least',
+            translate('form.field.minRef'),
             ToastAndroid.CENTER,
             ToastAndroid.SHORT,
           );
         }
         if (type === null) {
           ToastAndroid.showWithGravity(
-            'Type must be selected',
+            translate('form.field.unitSelect'),
             ToastAndroid.CENTER,
             ToastAndroid.SHORT,
           );
@@ -213,7 +214,9 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
                   )}
                   <View style={styles.entryDate} marginVertical="m">
                     <View>
-                      <Text variant="formLabel">Entry Date</Text>
+                      <Text variant="formLabel">
+                        {translate('form.active.entryDate.label')}
+                      </Text>
                     </View>
                     <View marginTop="s">
                       <Text>{formattedDate}</Text>
@@ -226,7 +229,7 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
                   <Button
                     onPress={_handleSave}
                     variant="secondary"
-                    label={translate('action.general.save')}
+                    label={translate('action.general.create')}
                   />
                 </View>
               )}
@@ -235,7 +238,9 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
               <TouchableOpacity onPress={() => setFocused(!focused)}>
                 <View flexDirection="column" alignItems="flex-start">
                   <View>
-                    <Text variant="formLabel">Reference</Text>
+                    <Text variant="formLabel">
+                      {translate('form.active.reference.label')}
+                    </Text>
                   </View>
                   <View height={40}>
                     <TextInput
@@ -243,7 +248,9 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
                       focused={focused}
                       textAlign="left"
                       value={reference}
-                      placeholder="Reference id"
+                      placeholder={translate(
+                        'form.active.reference.placeholder',
+                      )}
                       autoCapitalize="none"
                       onChangeText={_handleReferenceChange}
                       error={referenceError}
@@ -254,14 +261,16 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
             </View>
             <View marginTop="m" marginBottom="s">
               <View>
-                <Text variant="formLabel">Type</Text>
+                <Text variant="formLabel">
+                  {translate('form.active.type.label')}
+                </Text>
               </View>
               <View marginVertical="s">
                 <Dropdown
                   selected={type}
                   options={activeTypeState.activeTypes}
-                  header="Types"
-                  placeholder="Select type"
+                  header={translate('form.active.type.header')}
+                  placeholder={translate('form.active.type.placeholder')}
                   setParentValue={_handleTypeChange}
                 />
               </View>
@@ -280,8 +289,8 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
                   <DynamicSection
                     loading={activeTypeState.loading}
                     collection={basicAttributes}
-                    emptyMessage="Select a type to inherit it's  basic attributes"
-                    label="Basic Attributes"
+                    emptyMessage={translate('form.active.basicAttribute.empty')}
+                    label={translate('form.active.basicAttribute.label')}
                     isEditable={false}
                     setChanges={_handleBasicAttributesChange}
                     open={true}
@@ -291,8 +300,10 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
                   <DynamicSection
                     loading={activeTypeState.loading}
                     collection={customAttributes}
-                    label="Custom Attributes"
-                    emptyMessage="Select a type to inherit it's custom attributes"
+                    label={translate('form.active.customAttribute.label')}
+                    emptyMessage={translate(
+                      'form.active.customAttribute.empty',
+                    )}
                     isEditable={true}
                     setChanges={_handleCustomAttributesChange}
                     open={true}

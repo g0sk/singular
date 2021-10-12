@@ -4,6 +4,7 @@ import {Pressable, StyleSheet} from 'react-native';
 import {useAppSelector} from 'store/configureStore';
 import {DynamicFieldsProps, Unit, UnitState} from 'types';
 import {useTheme} from 'ui/theme';
+import {translate} from 'core';
 
 export const DynamicField: React.FC<DynamicFieldsProps> = ({
   field,
@@ -53,6 +54,7 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
                 onChangeText={_handleValueChange}
                 maxLength={8}
                 focused={focused}
+                placeholder={translate('form.value')}
                 setFocused={setFocused}
                 textAlign="center"
                 keyboardType="numeric"
@@ -62,8 +64,8 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
               <Dropdown
                 selected={field.unit}
                 options={units}
-                placeholder="Select unit"
-                header="Units"
+                placeholder={translate('form.unit.placeholder')}
+                header={translate('form.unit.header')}
                 setParentValue={_handleUnitChange}
               />
             </View>

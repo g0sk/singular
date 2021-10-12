@@ -141,7 +141,11 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
             <View flexDirection="row">
               <View marginRight="m">
                 <Button
-                  label={!edit ? 'Edit' : 'Cancel'}
+                  label={
+                    !edit
+                      ? translate('action.general.edit')
+                      : translate('action.general.cancel')
+                  }
                   onPress={() => setEdit(!edit)}
                   variant="edit"
                 />

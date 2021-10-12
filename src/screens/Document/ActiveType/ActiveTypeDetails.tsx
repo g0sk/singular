@@ -73,14 +73,14 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
         dispatch(updateActiveType(_item)).then(() => {
           dispatch(fetchActiveTypes());
           ToastAndroid.showWithGravity(
-            'Type saved correctly',
+            translate('success.general.saved'),
             ToastAndroid.BOTTOM,
             ToastAndroid.SHORT,
           );
         });
       } else {
         ToastAndroid.showWithGravity(
-          'Type name must be at least 2 characters long',
+          translate('form.field.minRef'),
           ToastAndroid.CENTER,
           ToastAndroid.SHORT,
         );
@@ -164,7 +164,9 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
               <View marginBottom="l">
                 <TouchableOpacity onPress={() => setfocused(!focused)}>
                   <View>
-                    <Text variant="formLabel">Type</Text>
+                    <Text variant="formLabel">
+                      {translate('form.activeType.name.label')}
+                    </Text>
                   </View>
                   <View marginTop="s">
                     <TextInput
@@ -194,7 +196,7 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
             <View marginBottom="m">
               <DynamicSection
                 collection={basicAttributes}
-                label="Basic Attributes"
+                label={translate('form.activeType.basicAttribute.label')}
                 isEditable={false}
                 setChanges={_handleBasicAttributes}
                 open={true}
@@ -203,14 +205,18 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
             <View marginVertical="m">
               <DynamicSection
                 collection={customAttributes}
-                label="Custom Attributes"
+                label={translate('form.activeType.customAttribute.label')}
                 isEditable={true}
                 setChanges={_handleCustomAttributes}
                 open={true}
               />
             </View>
             <View marginHorizontal="xxl" marginTop="xl" marginBottom="xxl">
-              <Button variant="delete" label="Delete" onPress={_handleDelete} />
+              <Button
+                variant="delete"
+                label={translate('action.general.delete')}
+                onPress={_handleDelete}
+              />
             </View>
           </KeyboardAwareScrollView>
         </View>

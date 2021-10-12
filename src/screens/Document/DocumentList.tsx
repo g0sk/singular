@@ -61,11 +61,11 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
   const _createItem = () => {
     if (segmentMode === 'active') {
       navigation.navigate('NewActive', {
-        title: 'Create new active',
+        title: translate('screen.active.newActive'),
       });
     } else {
       navigation.navigate('NewActiveType', {
-        title: 'Create new type',
+        title: translate('screen.activeType.newActiveType'),
       });
     }
   };
@@ -148,8 +148,8 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
           <View style={styles.segment}>
             <Segment
               labels={[
-                {name: 'Actives', id: 'active'},
-                {name: 'Types', id: 'activeType'},
+                {name: translate('screen.active.title'), id: 'active'},
+                {name: translate('screen.activeType.title'), id: 'activeType'},
               ]}
               mode={segmentMode}
               segmentHandler={setSegmentMode}

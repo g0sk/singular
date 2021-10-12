@@ -69,11 +69,6 @@ export const ActiveListItem: React.FC<ActiveItemFormProps> = ({
           </View>
         </View>
       </TouchableOpacity>
-      {/* <TouchableOpacity onPress={() => null}>
-        <View borderRadius={8} borderWidth={0} borderColor="dark">
-          <Icon name="stats-chart" size={28} />
-        </View>
-      </TouchableOpacity> */}
     </View>
   );
 };
