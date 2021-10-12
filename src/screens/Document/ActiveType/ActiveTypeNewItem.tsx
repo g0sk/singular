@@ -12,6 +12,7 @@ import {
   NewActiveType,
   BasicAttributeState,
   ActiveTypeState,
+  NewAttribute,
 } from 'types';
 import {
   ActivityIndicator,
@@ -54,8 +55,8 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = ({
       if (name.length >= 2) {
         const _item = {} as NewActiveType;
         _item.name = name;
-        _item.basicAttributes = [...basicAttributes];
-        _item.customAttributes = [...customAttributes];
+        _item.basicAttributes = formatAttributes(basicAttributes);
+        _item.customAttributes = formatAttributes(customAttributes);
         dispatch(createActiveType(_item)).then(() => {
           dispatch(fetchActiveTypes());
           navigation.goBack();
@@ -69,6 +70,16 @@ export const ActiveTypeNewItem: React.FC<NewActiveTypeScreenProps> = ({
       }
       setChange(false);
     }
+  };
+
+  const formatAttributes = (attributes: Attribute[]): NewAttribute[] => {
+    const newAttributes: NewAttribute[] = [];
+    attributes.forEach((_attribute) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      let {id, ...attribute} = _attribute;
+      newAttributes.push({...attribute});
+    });
+    return newAttributes;
   };
 
   const _handleName = (_name: string) => {

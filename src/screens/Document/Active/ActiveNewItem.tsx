@@ -30,6 +30,7 @@ import {
   Attribute,
   NewActive,
   NewActiveScreenProps,
+  NewAttribute,
   ServerError,
 } from 'types';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
@@ -65,6 +66,16 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
 
   //Handlers
 
+  const formatAttributes = (attributes: Attribute[]): NewAttribute[] => {
+    const newAttributes: NewAttribute[] = [];
+    attributes.forEach((_attribute) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      let {id, ...attribute} = _attribute;
+      newAttributes.push({...attribute});
+    });
+    return newAttributes;
+  };
+
   const _handleSave = () => {
     const _item: NewActive = {} as NewActive;
     if (change) {
@@ -72,8 +83,8 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
         _item.reference = reference;
         _item.entryDate = date.toString();
         _item.activeType = {...type};
-        _item.basicAttributes = [...basicAttributes];
-        _item.customAttributes = [...customAttributes];
+        _item.basicAttributes = formatAttributes(basicAttributes);
+        _item.customAttributes = formatAttributes(customAttributes);
         dispatch(createActive(_item))
           .unwrap()
           .then(() => {

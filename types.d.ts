@@ -303,8 +303,8 @@ export interface ActiveType {
 
 export interface NewActiveType {
   name: string;
-  basicAttributes: Attribute[];
-  customAttributes: Attribute[];
+  basicAttributes: NewAttribute[];
+  customAttributes: NewAttribute[];
 }
 
 export interface ActiveTypeState {
@@ -339,8 +339,8 @@ export interface NewActive {
   } | null;
   file: File | null;
   activeType: ActiveType | null;
-  basicAttributes: Attribute[];
-  customAttributes: Attribute[];
+  basicAttributes: NewAttribute[];
+  customAttributes: NewAttribute[];
 }
 
 export type Actives = Array<Active>;
