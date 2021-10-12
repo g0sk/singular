@@ -129,8 +129,8 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
             disabled={false}
             defaultIcon="plus-circle"
             defaultAction={_createItem}
-            hasExtraIcon={true}
-            extraIcon="search"
+            //hasExtraIcon={true}
+            //extraIcon="search"
             label={translate(
               segmentMode === 'active'
                 ? 'screen.active.title'
