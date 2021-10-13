@@ -315,6 +315,7 @@ export interface CustomAttributeState {
 export interface ActiveType {
   id: number;
   name: string;
+  activesCount: number;
   basicAttributes: Attribute[];
   customAttributes: Attribute[];
 }
