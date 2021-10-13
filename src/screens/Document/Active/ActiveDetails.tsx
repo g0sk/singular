@@ -1,5 +1,4 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {RecordList} from 'components';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {translate} from 'core';
@@ -22,6 +21,7 @@ import {
   Modal,
   Text,
   SimpleTextInput as TextInput,
+  RecordModal,
   View,
 } from 'components';
 import {
@@ -57,6 +57,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   const [openActivity, setOpenActivity] = useState<boolean>(false);
   const [focused, setFocused] = useState<boolean>(false);
   const [save, setSave] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   //Active values
   const [item, setItem] = useState<Active>({} as Active);
@@ -180,9 +181,21 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
 
   useLayoutEffect(() => {
     if (activeState.active !== null) {
-      if (activeState.active.activeRecord !== null) {
-        store.dispatch(fetchActiveRecord(activeState.active.activeRecord.id));
-      }
+      store.dispatch(fetchActiveRecord(activeState.active.activeRecord.id));
+    }
+  }, [activeState.active]);
+
+  useLayoutEffect(() => {
+    if (activeState.loading || recordState.loading) {
+      setLoading(true);
+    }
+    if (!activeState.loading && !recordState.loading) {
+      setLoading(false);
+    }
+  }, [activeState.loading, recordState.loading]);
+
+  useLayoutEffect(() => {
+    if (activeState.active !== null) {
       setItem(activeState.active);
       setReference(activeState.active.reference);
       setDate(new Date(activeState.active.entryDate));
@@ -197,9 +210,10 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
     if (date) {
       setFormattedDate(dayjs(date).format('DD/MM/YYYY'));
     }
+    1;
   }, [date]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (recordState.activeRecord !== null) {
       const _date = new Date(
         recordState.activeRecord.dateRecord[
@@ -230,13 +244,9 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
 
   return (
     <View style={styles.container} marginHorizontal="m" marginBottom="m">
-      {activeState.loading && !save ? (
+      {loading && !save ? (
         <View style={styles.loading}>
-          <ActivityIndicator
-            size="large"
-            color="black"
-            animating={activeState.loading}
-          />
+          <ActivityIndicator size="large" color="black" animating={loading} />
         </View>
       ) : (
         <View marginBottom="xl">
@@ -278,7 +288,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
             </View>
             <Modal
               children={
-                <RecordList
+                <RecordModal
                   {...{route, navigation}}
                   activeRecord={item ? recordState.activeRecord : null}
                 />
@@ -361,6 +371,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
               <View>
                 <View marginVertical="m">
                   <DynamicSection
+                    editValue={true}
                     collection={basicAttributes}
                     label={translate('form.active.basicAttribute.label')}
                     isEditable={false}
@@ -371,6 +382,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
                 </View>
                 <View marginTop="m" marginBottom="l">
                   <DynamicSection
+                    editValue={true}
                     collection={customAttributes}
                     label={translate('form.active.customAttribute.label')}
                     isEditable={true}

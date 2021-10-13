@@ -299,7 +299,7 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
               <View>
                 <View marginVertical="m">
                   <DynamicSection
-                    loading={activeTypeState.loading}
+                    editValue={true}
                     collection={basicAttributes}
                     editDropdownValue={false}
                     emptyMessage={translate('form.active.basicAttribute.empty')}
@@ -311,7 +311,7 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
                 </View>
                 <View marginTop="m" marginBottom="l">
                   <DynamicSection
-                    loading={activeTypeState.loading}
+                    editValue={true}
                     collection={customAttributes}
                     editDropdownValue={true}
                     label={translate('form.active.customAttribute.label')}

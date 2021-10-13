@@ -295,6 +295,7 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
               </View>
               <View marginVertical="s">
                 <Dropdown
+                  editValue={true}
                   selected={type}
                   options={activeTypeState.activeTypes}
                   header={translate('form.tag.type.header')}
@@ -315,7 +316,8 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
               <View>
                 <View marginVertical="m">
                   <DynamicSection
-                    loading={activeTypeState.loading}
+                    editDropdownValue={true}
+                    editValue={true}
                     collection={basicAttributes}
                     emptyMessage={translate('form.tag.basicAttribute.empty')}
                     label={translate('form.tag.basicAttribute.label')}
@@ -326,7 +328,8 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
                 </View>
                 <View marginTop="m" marginBottom="l">
                   <DynamicSection
-                    loading={activeTypeState.loading}
+                    editDropdownValue={true}
+                    editValue={true}
                     collection={customAttributes}
                     label={translate('form.tag.customAttribute.label')}
                     emptyMessage={translate('form.tag.customAttribute.empty')}

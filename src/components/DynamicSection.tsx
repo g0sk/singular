@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import {DynamicField, DynamicNewField, View, Text, Button} from 'components';
-import {TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
+import {TouchableOpacity, StyleSheet} from 'react-native';
 import {translate} from 'core';
 import {useTheme} from 'ui/theme';
 import {Attribute, DynamicSectionProps} from 'types';
@@ -17,10 +17,10 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
   label,
   isEditable,
   editDropdownValue,
+  editValue,
   setChanges,
   open,
   emptyMessage,
-  loading,
 }) => {
   const [items, setItems] = useState<Attribute[]>([]);
   const [icon, setIcon] = useState<string>('chevron-down-outline');
@@ -93,7 +93,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
             />
           </View>
         )}
-        {!loading && items.length > 0 ? (
+        {items.length > 0 ? (
           items.map((item, index) => {
             return (
               <Fragment key={index}>
@@ -112,6 +112,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
                     )}
                     <DynamicField
                       editDropdownValue={editDropdownValue}
+                      editValue={editValue}
                       field={item}
                       listIndex={index}
                       setItemChange={_handleItemChange}
@@ -165,17 +166,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
   return (
     <View>
       <ListHeaderComponent />
-      <View>
-        {loading && items.length === 0 ? (
-          <ActivityIndicator
-            animating={loading}
-            color={theme.colors.primary}
-            size="large"
-          />
-        ) : (
-          <ListComponent />
-        )}
-      </View>
+      <ListComponent />
     </View>
   );
 };

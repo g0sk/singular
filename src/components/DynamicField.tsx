@@ -11,6 +11,7 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
   setItemChange,
   listIndex,
   editDropdownValue,
+  editValue,
 }) => {
   const theme = useTheme();
   const [focused, setFocused] = useState<boolean>(false);
@@ -30,7 +31,9 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
   const _setValueChange = () => {
     const _field = {...field};
     _field.value = value;
-    setItemChange(_field, listIndex);
+    if (value !== field.value) {
+      setItemChange(_field, listIndex);
+    }
   };
 
   useEffect(() => {
@@ -58,19 +61,25 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
               marginRight="m">
               <Text>{field.name}</Text>
             </View>
-            <View marginRight="m">
-              <TextInput
-                value={value}
-                onChangeText={_handleValueChange}
-                maxLength={8}
-                focused={focused}
-                placeholder={translate('form.value')}
-                setFocused={setFocused}
-                setBlur={_setValueChange}
-                textAlign="center"
-                keyboardType="numeric"
-              />
-            </View>
+            {editValue ? (
+              <View marginRight="m">
+                <TextInput
+                  value={value}
+                  onChangeText={_handleValueChange}
+                  maxLength={8}
+                  focused={focused}
+                  placeholder={translate('form.value')}
+                  setFocused={setFocused}
+                  setBlur={_setValueChange}
+                  textAlign="center"
+                  keyboardType="numeric"
+                />
+              </View>
+            ) : (
+              <View marginRight="m">
+                <Text>{value}</Text>
+              </View>
+            )}
             <View>
               <Dropdown
                 selected={field.unit}

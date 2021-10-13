@@ -100,6 +100,10 @@ export type RootDocumentParamList = {
     typeId: number;
     title: string;
   };
+  RecordDetails: {
+    active: RecordActive;
+    title: string;
+  };
 };
 
 //Route
@@ -197,6 +201,20 @@ export type NewActiveTypeNavigationProp = StackNavigationProp<
 export type NewActiveTypeScreenProps = {
   route: NewActiveTypeRouteProp;
   navigation: NewActiveTypeNavigationProp;
+};
+
+//Record details
+export type RecordDetailsRouteProp = RouteProp<
+  RootDocumentParamList,
+  'RecordDetails'
+>;
+export type RecordDetailsNavigationProp = StackNavigationProp<
+  RootDocumentParamList,
+  'RecordDetails'
+>;
+export type RecordDetailsStackProps = {
+  route: RecordDetailsRouteProp;
+  navigation: RecordDetailsNavigationProp;
 };
 
 export interface FormLoginValues {
@@ -324,7 +342,7 @@ export interface Active {
   entryDate: string;
   activeRecord: {
     id: number;
-  } | null;
+  };
   file: File | null;
   activeType: ActiveType;
   basicAttributes: Attribute[];
@@ -451,10 +469,22 @@ export interface Record {
     reference: string;
   };
   dateRecord: Array<string>;
-  activeObject: Array<Active>;
+  activeObject: Array<RecordActive>;
 }
 
-export interface RecordListProps {
+export interface RecordActive {
+  entryDate: string;
+  reference: string;
+  file: File;
+  type: {
+    id: number;
+    name: string;
+  };
+  basic_attributes: Attribute[];
+  custom_attributes: Attribute[];
+}
+
+export interface RecordModalProps {
   activeRecord: Record | null;
 }
 
@@ -470,15 +500,16 @@ export interface DynamicSectionProps {
   label: string;
   emptyMessage?: string;
   editDropdownValue: boolean;
+  editValue: boolean;
   isEditable: boolean;
   setChanges: (items: Attribute[]) => void;
   open?: boolean;
-  loading?: boolean;
 }
 
 //Dynamic Fields
 export interface DynamicFieldsProps {
   editDropdownValue: boolean;
+  editValue: boolean;
   field: Attribute;
   listIndex: number;
   setItemChange: (item: Attribute, listIndex: number) => void;
