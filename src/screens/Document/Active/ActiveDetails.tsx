@@ -4,7 +4,10 @@ import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {translate} from 'core';
 import dayjs from 'dayjs';
-import {fetchActiveTypes} from 'store/slices/activeType/activeTypeAsyncThunk';
+import {
+  fetchActiveType,
+  fetchActiveTypes,
+} from 'store/slices/activeType/activeTypeAsyncThunk';
 import {
   deleteActive,
   fetchActive,
@@ -41,6 +44,7 @@ import {
 } from 'types';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {clearActive} from 'store/slices/active/activeSlice';
+import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
 
 export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   route,
@@ -71,7 +75,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   //slices
   const recordState: RecordState = useAppSelector((state) => state.record);
   const activeState: ActiveState = useAppSelector((state) => state.active);
-  const {activeTypes}: ActiveTypeState = useAppSelector(
+  const activeTypeState: ActiveTypeState = useAppSelector(
     (state) => state.activeType,
   );
 
@@ -152,6 +156,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
 
   const _handleTypeChange = (_item: ActiveType) => {
     setType(_item);
+    store.dispatch(fetchActiveType(_item.id));
     setChange(true);
   };
 
@@ -215,6 +220,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   useEffect(() => {
     return () => {
       store.dispatch(clearActive());
+      store.dispatch(clearActiveType());
     };
   }, [save]);
 
@@ -332,33 +338,45 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
                 <Dropdown
                   selected={type}
                   editValue={true}
-                  options={activeTypes}
+                  options={activeTypeState.activeTypes}
                   header={translate('form.active.type.header')}
                   placeholder={translate('form.active.type.placeholder')}
                   setParentValue={_handleTypeChange}
                 />
               </View>
             </View>
-            <View marginVertical="m">
-              <DynamicSection
-                collection={basicAttributes}
-                label={translate('form.active.basicAttribute.label')}
-                isEditable={false}
-                editDropdownValue={false}
-                setChanges={_handleBasicAttributesChange}
-                open={true}
-              />
-            </View>
-            <View marginTop="m" marginBottom="l">
-              <DynamicSection
-                collection={customAttributes}
-                label={translate('form.active.customAttribute.label')}
-                isEditable={true}
-                editDropdownValue={true}
-                setChanges={_handleCustomAttributesChange}
-                open={true}
-              />
-            </View>
+            {activeTypeState.loading ? (
+              <View>
+                <ActivityIndicator
+                  animating={activeTypeState.loading}
+                  size="large"
+                  color="black"
+                />
+              </View>
+            ) : (
+              <View>
+                <View marginVertical="m">
+                  <DynamicSection
+                    collection={basicAttributes}
+                    label={translate('form.active.basicAttribute.label')}
+                    isEditable={false}
+                    editDropdownValue={false}
+                    setChanges={_handleBasicAttributesChange}
+                    open={true}
+                  />
+                </View>
+                <View marginTop="m" marginBottom="l">
+                  <DynamicSection
+                    collection={customAttributes}
+                    label={translate('form.active.customAttribute.label')}
+                    isEditable={true}
+                    editDropdownValue={true}
+                    setChanges={_handleCustomAttributesChange}
+                    open={true}
+                  />
+                </View>
+              </View>
+            )}
             <View marginHorizontal="xxl" marginTop="xxl" marginBottom="xxl">
               <Button
                 variant="delete"

@@ -63,6 +63,7 @@ export const SimpleTextInput: React.FC<SimpleTextInputProps> = ({
         placeholderTextColor={theme.colors.default}
         onFocus={_handleFocus}
         onBlur={_handleBlur}
+        maxLength={22}
         {...props}
       />
     </View>
