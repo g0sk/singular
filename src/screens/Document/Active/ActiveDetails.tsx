@@ -45,6 +45,7 @@ import {
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {clearActive} from 'store/slices/active/activeSlice';
 import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
+import {fetchActiveRecord} from 'store/slices/record/recordAsyncThunk';
 
 export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   route,
@@ -122,7 +123,6 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
               ToastAndroid.LONG,
             );
             setReferenceError('error');
-            setChange(false);
           });
       } else {
         if (reference.length < 2) {
@@ -141,6 +141,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
         }
       }
     }
+    setSave(false);
     setChange(false);
   };
 
@@ -179,6 +180,9 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
 
   useLayoutEffect(() => {
     if (activeState.active !== null) {
+      if (activeState.active.activeRecord !== null) {
+        store.dispatch(fetchActiveRecord(activeState.active.activeRecord.id));
+      }
       setItem(activeState.active);
       setReference(activeState.active.reference);
       setDate(new Date(activeState.active.entryDate));

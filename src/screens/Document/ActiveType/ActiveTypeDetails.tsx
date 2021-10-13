@@ -86,6 +86,7 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
         );
       }
     }
+    setSave(false);
     setChange(false);
   };
 
