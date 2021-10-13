@@ -11,12 +11,14 @@ import {useTheme} from 'ui/theme';
 interface SimpleTextInputProps extends RNTextInputProps {
   focused?: boolean;
   setFocused?: Dispatch<SetStateAction<boolean>>;
+  setBlur?: () => void;
   error?: string;
 }
 
 export const SimpleTextInput: React.FC<SimpleTextInputProps> = ({
   focused,
   setFocused,
+  setBlur,
   error,
   ...props
 }: SimpleTextInputProps) => {
@@ -40,8 +42,8 @@ export const SimpleTextInput: React.FC<SimpleTextInputProps> = ({
   };
 
   const _handleBlur = () => {
-    if (setFocused) {
-      setFocused(false);
+    if (setBlur) {
+      setBlur();
     }
   };
 

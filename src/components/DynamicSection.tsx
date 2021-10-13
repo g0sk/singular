@@ -53,20 +53,20 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
   const _addNewItem = (item: Attribute) => {
     const _items = [...items];
     _items.unshift(item);
-    setItems([..._items]);
+    //setItems([..._items]);
     setChanges([..._items]);
   };
 
   const _removeItem = (id: number) => {
     const _items = items.filter((_item) => _item.id !== id);
-    setItems([..._items]);
+    //setItems([..._items]);
     setChanges([..._items]);
   };
 
   const _handleItemChange = (item: Attribute, listIndex: number) => {
     const _items = [...items];
     _items[listIndex] = {...item};
-    setItems([..._items]);
+    //setItems([..._items]);
     setChanges([..._items]);
   };
 

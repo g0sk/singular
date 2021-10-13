@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Dropdown, Text, SimpleTextInput as TextInput, View} from 'components';
 import {Pressable, StyleSheet} from 'react-native';
 import {useAppSelector} from 'store/configureStore';
@@ -14,12 +14,11 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
 }) => {
   const theme = useTheme();
   const [focused, setFocused] = useState<boolean>(false);
+  const [value, setValue] = useState<string>('');
   const {units}: UnitState = useAppSelector((state) => state.unit);
 
-  const _handleValueChange = (value: string) => {
-    const _field = {...field};
-    _field.value = value;
-    setItemChange(_field, listIndex);
+  const _handleValueChange = (_value: string) => {
+    setValue(_value);
   };
 
   const _handleUnitChange = (unit: Unit) => {
@@ -27,6 +26,16 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
     _field.unit = {...unit};
     setItemChange(_field, listIndex);
   };
+
+  const _setValueChange = () => {
+    const _field = {...field};
+    _field.value = value;
+    setItemChange(_field, listIndex);
+  };
+
+  useEffect(() => {
+    setValue(field.value);
+  }, [field]);
 
   return (
     <View style={styles.container}>
@@ -51,12 +60,13 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
             </View>
             <View marginRight="m">
               <TextInput
-                value={field.value}
+                value={value}
                 onChangeText={_handleValueChange}
                 maxLength={8}
                 focused={focused}
                 placeholder={translate('form.value')}
                 setFocused={setFocused}
+                setBlur={_setValueChange}
                 textAlign="center"
                 keyboardType="numeric"
               />
