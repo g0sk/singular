@@ -133,13 +133,14 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
 
 const styles = StyleSheet.create({
   centeredView: {
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.7)',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'left',
   },
   modalView: {
+    borderRadius: 10,
     backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: {
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 0,
     textAlign: 'left',
-    width: 250,
+    width: 320,
   },
   header: {
     paddingVertical: 20,

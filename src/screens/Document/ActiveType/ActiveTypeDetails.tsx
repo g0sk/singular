@@ -86,7 +86,6 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
         );
       }
     }
-    setSave(false);
     setChange(false);
   };
 
@@ -113,6 +112,7 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   }, [activeTypeState]);
 
   useEffect(() => {
+    setSave(false);
     store.dispatch(fetchUnits());
     if (route.params.typeId !== null) {
       store.dispatch(fetchActiveType(route.params.typeId));

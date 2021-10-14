@@ -40,7 +40,7 @@ export const RecordDetails: React.FC<RecordDetailsStackProps> = ({route}) => {
               </View>
             </TouchableOpacity>
           </View>
-          <View marginTop="m" marginBottom="s">
+          <View marginBottom="s">
             <View>
               <Text variant="formLabel">
                 {translate('form.active.type.label')}
