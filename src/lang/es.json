@@ -149,7 +149,7 @@
       "type": {
         "header": "Tipos",
         "label": "Tipo",
-        "placeholder": "Seleccione un tipo",
+        "placeholder": "Tipo",
         "empty": "No existen tipos",
         "error": {
           "required": "Campo obligatorio",
@@ -204,6 +204,7 @@
     "field": {
       "minRef": "La referencia debe tener al menos 2 caracteres",
       "unitSelect": "Debe seleccionar una unidad",
+      "typeSelect": "A type must be selected",
       "noItems": "No hay elementos que mostrar"
     },
     "newField": {

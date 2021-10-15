@@ -107,7 +107,7 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
         }
         if (type === null) {
           ToastAndroid.showWithGravity(
-            translate('form.field.unitSelect'),
+            translate('form.field.typeSelect'),
             ToastAndroid.CENTER,
             ToastAndroid.SHORT,
           );

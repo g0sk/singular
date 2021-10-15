@@ -132,7 +132,7 @@
       "type": {
         "header": "Types",
         "label": "Type",
-        "placeholder": "Select a type",
+        "placeholder": "Type",
         "empty": "No types found",
         "error": {
           "required": "Field required",
@@ -184,6 +184,7 @@
     "field": {
       "minRef": "Reference must be 2 characters at least",
       "unitSelect": "A unit must be selected",
+      "typeSelect": "A type must be selected",
       "noItems": "No items to display"
     },
     "value": "Value",
