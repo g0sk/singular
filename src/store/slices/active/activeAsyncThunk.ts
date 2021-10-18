@@ -1,12 +1,18 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import ActiveApi from 'api/activeApi';
-import {Active, Actives, NewActive, ServerError} from 'types';
+import {
+  Active,
+  Actives,
+  NewActive,
+  PaginationFilters,
+  ServerError,
+} from 'types';
 
-export const fetchActives = createAsyncThunk<Actives, void, {}>(
+export const fetchActives = createAsyncThunk<Actives, PaginationFilters, {}>(
   'active/fetchActives',
-  async () => {
+  async (pagination) => {
     try {
-      const response = await ActiveApi.getActives();
+      const response = await ActiveApi.getActives(pagination);
       if (response.status === 200) {
         return response.data;
       }

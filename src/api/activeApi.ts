@@ -1,8 +1,11 @@
 import {apiURL} from 'api';
-import {Active, NewActive} from 'types';
+import {Active, NewActive, PaginationFilters} from 'types';
 
 const getActive = (id: number) => apiURL.get('/api/actives/' + id);
-const getActives = () => apiURL.get('/api/actives');
+const getActives = ({page, itemsPerPage}: PaginationFilters) =>
+  apiURL.get(
+    '/api/actives' + '?' + 'page=' + page + '&itemsPerPage=' + itemsPerPage,
+  );
 const createActive = (active: NewActive) => apiURL.post('/api/actives', active);
 const updateActive = (active: Active, id: number) =>
   apiURL.put('/api/actives/' + id, active);

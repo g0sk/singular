@@ -11,8 +11,9 @@ import {ActiveState} from 'types';
 const initialState: ActiveState = {
   active: null,
   actives: [],
-  page: 0,
+  page: 1,
   activesLength: 0,
+  itemsPerPage: 7,
   loading: false,
   error: false,
   errorData: null,
@@ -22,6 +23,12 @@ const activeSlice = createSlice({
   name: 'active',
   initialState,
   reducers: {
+    resetActiveState: (state) => {
+      state.active = null;
+      state.actives = [];
+      state.page = 1;
+      state.activesLength = 0;
+    },
     clearActive: (state) => {
       state.active = null;
     },
@@ -32,8 +39,9 @@ const activeSlice = createSlice({
         state.loading = false;
         state.error = false;
         state.errorData = null;
-        state.actives = [...action.payload];
-        state.activesLength = state.actives.length;
+        state.actives = state.actives.concat(action.payload);
+        state.activesLength += action.payload.length;
+        state.page += 1;
       })
       .addCase(fetchActives.pending, (state) => {
         state.loading = true;
@@ -93,4 +101,4 @@ const activeSlice = createSlice({
 });
 
 export default activeSlice.reducer;
-export const {clearActive} = activeSlice.actions;
+export const {resetActiveState, clearActive} = activeSlice.actions;

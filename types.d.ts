@@ -327,6 +327,8 @@ export interface NewActiveType {
 }
 
 export interface ActiveTypeState {
+  page: number;
+  itemsPerPage: number;
   activeTypesLength: number;
   activeType: ActiveType | null;
   activeTypes: ActiveType[];
@@ -335,6 +337,11 @@ export interface ActiveTypeState {
 }
 
 export type ActiveTypes = ActiveType[];
+
+export type PaginationFilters = {
+  page: number;
+  itemsPerPage: number;
+};
 
 //Active
 export interface Active {
@@ -368,6 +375,7 @@ export interface ActiveState {
   active: Active | null;
   actives: Actives;
   activesLength: number;
+  itemsPerPage: number;
   page: number;
   loading: boolean;
   error: boolean;

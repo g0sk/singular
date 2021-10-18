@@ -16,21 +16,17 @@ export const ActiveTypeListItem: React.FC<TypeItemFormProps> = ({
   };
 
   return (
-    <View
-      marginHorizontal="s"
-      flexDirection="row"
-      marginBottom="l"
-      alignItems="center">
+    <View flexDirection="row" marginBottom="l" alignItems="center">
       <TouchableOpacity onPress={_itemHandler}>
         <View
           borderColor="primary"
           borderWidth={3}
           borderRadius={13}
           marginRight="m"
-          width={360}
+          width={350}
           flexDirection="row"
           paddingHorizontal="m"
-          height={50}
+          height={60}
           alignItems="center"
           justifyContent="space-between">
           <View>

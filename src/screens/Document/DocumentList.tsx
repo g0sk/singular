@@ -5,7 +5,7 @@ import React, {
   RefObject,
   useCallback,
 } from 'react';
-import {Screen, Segment} from 'components';
+import {Segment} from 'components';
 import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {Header, Text, View} from 'components';
 import {ActiveListItem, ActiveTypeListItem} from 'screens';
@@ -19,6 +19,8 @@ import {
   DocumentListStackProps,
 } from 'types';
 import {translate} from 'core';
+import {resetActiveState} from 'store/slices/active/activeSlice';
+import {resetActiveTypeState} from 'store/slices/activeType/activeTypeSlice';
 
 export const DocumentList: React.FC<DocumentListStackProps> = ({
   navigation,
@@ -39,11 +41,41 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
   );
 
   //Handlers
+  const _handleActivesOnEndReached = () => {
+    dispatch(
+      fetchActives({
+        page: activeState.page,
+        itemsPerPage: activeState.itemsPerPage,
+      }),
+    );
+  };
+
+  const _handleActiveTypesOnEndReached = () => {
+    dispatch(
+      fetchActiveTypes({
+        page: activeTypeState.page,
+        itemsPerPage: activeTypeState.itemsPerPage,
+      }),
+    );
+  };
+
   const refreshActives = () => {
-    dispatch(fetchActives());
+    dispatch(resetActiveState());
+    dispatch(
+      fetchActives({
+        page: 1,
+        itemsPerPage: activeState.itemsPerPage,
+      }),
+    );
   };
   const refreshTypes = () => {
-    dispatch(fetchActiveTypes());
+    dispatch(resetActiveTypeState());
+    dispatch(
+      fetchActiveTypes({
+        page: 1,
+        itemsPerPage: activeTypeState.itemsPerPage,
+      }),
+    );
   };
 
   const scrollToTop = () => {
@@ -107,91 +139,90 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
   };
 
   useEffect(() => {
+    store.dispatch(fetchActives({page: 1, itemsPerPage: 7}));
+    store.dispatch(fetchActiveTypes({page: 1, itemsPerPage: 9}));
+  }, []);
+
+  useEffect(() => {
     if (route.params.tab !== null) {
       setSegmentMode(route.params.tab);
     }
   }, [route.params.tab]);
 
   useEffect(() => {
-    store.dispatch(fetchActives());
-    store.dispatch(fetchActiveTypes());
-  }, []);
-
-  useEffect(() => {
     _modeHandler;
   }, [_modeHandler]);
 
   return (
-    <Screen>
-      <View>
-        <View margin="m">
-          <Header
-            disabled={false}
-            defaultIcon="plus-circle"
-            defaultAction={_createItem}
-            hasExtraIcon={true}
-            extraIcon="search"
-            label={translate(
-              segmentMode === 'active'
-                ? 'screen.active.title'
-                : 'screen.activeType.title',
-            )}
-            labelAction={() => scrollToTop()}
+    <View>
+      <View margin="m">
+        <Header
+          disabled={false}
+          defaultIcon="plus-circle"
+          defaultAction={_createItem}
+          hasExtraIcon={true}
+          extraIcon="search"
+          label={translate(
+            segmentMode === 'active'
+              ? 'screen.active.title'
+              : 'screen.activeType.title',
+          )}
+          labelAction={() => scrollToTop()}
+        />
+      </View>
+      <View style={styles.subHeader}>
+        <View marginHorizontal="m">
+          <TouchableOpacity onPress={() => scrollToTop()}>
+            <Items />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.segment}>
+          <Segment
+            labels={[
+              {name: translate('screen.active.title'), id: 'active'},
+              {name: translate('screen.activeType.title'), id: 'activeType'},
+            ]}
+            mode={segmentMode}
+            segmentHandler={setSegmentMode}
           />
         </View>
-        <View style={styles.subHeader}>
-          <View marginHorizontal="m">
-            <TouchableOpacity onPress={() => scrollToTop()}>
-              <Items />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.segment}>
-            <Segment
-              labels={[
-                {name: translate('screen.active.title'), id: 'active'},
-                {name: translate('screen.activeType.title'), id: 'activeType'},
-              ]}
-              mode={segmentMode}
-              segmentHandler={setSegmentMode}
-            />
-          </View>
-        </View>
-        <View
-          marginHorizontal="s"
-          marginTop="m"
-          marginBottom="l"
-          paddingBottom="xxl"
-          height={700}>
-          {segmentMode === 'active' ? (
-            <FlatList
-              ref={flatListRef}
-              data={activeState.actives}
-              scrollEnabled={true}
-              renderItem={({item}) => (
-                <ActiveListItem {...{navigation, route, active: {...item}}} />
-              )}
-              keyExtractor={(item, index) => index.toString()}
-              onRefresh={() => refreshActives()}
-              refreshing={activeState.loading}
-              ListEmptyComponent={<EmptyList />}
-            />
-          ) : (
-            <FlatList
-              scrollEnabled={true}
-              ref={flatListRef}
-              data={activeTypeState.activeTypes}
-              renderItem={({item}) => (
-                <ActiveTypeListItem {...{navigation, route, type: {...item}}} />
-              )}
-              keyExtractor={(item, index) => index.toString()}
-              onRefresh={() => refreshTypes()}
-              refreshing={activeTypeState.loading}
-              ListEmptyComponent={<EmptyList />}
-            />
-          )}
-        </View>
       </View>
-    </Screen>
+      <View height={590} marginHorizontal="m" marginTop="m">
+        {segmentMode === 'active' ? (
+          <FlatList
+            ref={flatListRef}
+            data={activeState.actives}
+            initialNumToRender={7}
+            scrollEnabled={true}
+            renderItem={({item}) => (
+              <ActiveListItem {...{navigation, route, active: {...item}}} />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            onRefresh={() => refreshActives()}
+            refreshing={activeState.loading}
+            ListEmptyComponent={<EmptyList />}
+            onEndReached={_handleActivesOnEndReached}
+            onEndReachedThreshold={0.1}
+          />
+        ) : (
+          <FlatList
+            scrollEnabled={true}
+            ref={flatListRef}
+            data={activeTypeState.activeTypes}
+            renderItem={({item}) => (
+              <ActiveTypeListItem {...{navigation, route, type: {...item}}} />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            onRefresh={() => refreshTypes()}
+            refreshing={activeTypeState.loading}
+            ListEmptyComponent={<EmptyList />}
+            initialNumToRender={9}
+            onEndReached={_handleActiveTypesOnEndReached}
+            onEndReachedThreshold={0.1}
+          />
+        )}
+      </View>
+    </View>
   );
 };
 
