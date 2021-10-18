@@ -122,7 +122,7 @@
       "type": {
         "header": "Tipos",
         "label": "Tipo",
-        "placeholder": "Seleccione un tipo",
+        "placeholder": "Tipo",
         "empty": "No existen tipos",
         "error": {
           "required": "Campo obligatorio",
@@ -197,7 +197,8 @@
     "unit": {
       "header": "Unidades",
       "placeholder": "Unidad",
-      "noEdit": "Las unidades de los attributos básicos sólo pueden ser modificadas en el tipo"
+      "noEdit": "Las unidades de los attributos básicos sólo pueden ser modificadas en el tipo",
+      "noEditRecord": "No se pueden modificar los valores del histórico"
     },
     "value": "Valor",
     "name": "Nombre",

@@ -105,7 +105,7 @@
       "type": {
         "header": "Types",
         "label": "Type",
-        "placeholder": "Select a type",
+        "placeholder": "Type",
         "empty": "No types found",
         "error": {
           "required": "Field required",
@@ -141,7 +141,7 @@
       }
     },
     "tag": {
-      "notFound": "Tag not found on tag",
+      "notFound": "Type not found on tag",
       "reference": {
         "label": "Reference",
         "placeholder": "Reference"
@@ -179,7 +179,8 @@
     "unit": {
         "header": "Units",
         "placeholder": "Unit",
-        "noEdit": "Basic attribute units can only be modified on type"
+        "noEdit": "Basic attribute units can only be modified on type",
+        "noEditRecord": "Values can't be changed on records"
       },
     "field": {
       "minRef": "Reference must be 2 characters at least",

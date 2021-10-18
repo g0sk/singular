@@ -33,14 +33,14 @@ export const Scan = () => {
 
   const goToDetails = () => {
     if (tag !== undefined) {
-      navigation.navigate('TagDetails', {title: tag?.id, tag: tag});
       resetState();
+      navigation.navigate('TagDetails', {title: tag?.id, tag: tag});
     }
   };
 
   const resetState = () => {
     setError(false);
-    setReset(true);
+    //setReset(true);
     setReading(false);
     setTag(undefined);
   };

@@ -545,6 +545,7 @@ export interface DropdownProps<T> {
   setParentValue: (_item: T) => void;
   header: string;
   placeholder: string;
+  isRecord?: boolean;
 }
 
 //DatePicker

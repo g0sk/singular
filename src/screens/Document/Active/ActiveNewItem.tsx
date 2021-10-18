@@ -113,7 +113,7 @@ export const ActiveNewItem: React.FC<NewActiveScreenProps> = ({navigation}) => {
         }
         if (type === null) {
           ToastAndroid.showWithGravity(
-            translate('form.field.unitSelect'),
+            translate('form.field.typeSelect'),
             ToastAndroid.CENTER,
             ToastAndroid.SHORT,
           );
