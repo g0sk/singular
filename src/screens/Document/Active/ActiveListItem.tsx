@@ -61,7 +61,7 @@ export const ActiveListItem: React.FC<ActiveItemFormProps> = ({
               <Text variant="listItemData">{activeDate}</Text>
             </View>
             <View>
-              <Icon name="document" size={15} />
+              <Icon name="image" size={15} />
             </View>
           </View>
         </View>

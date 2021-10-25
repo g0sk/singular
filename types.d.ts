@@ -505,7 +505,8 @@ export interface RecordModalProps {
 }
 
 export interface RecordState {
-  activeRecord: Record;
+  activeRecord: Record | null;
+  recordsLength: number;
   loading: boolean;
   error: boolean;
 }

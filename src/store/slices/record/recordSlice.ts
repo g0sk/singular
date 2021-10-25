@@ -4,6 +4,7 @@ import {RecordState} from 'types';
 
 const initialState: RecordState = {
   activeRecord: null,
+  recordsLength: 0,
   error: false,
   loading: false,
 };
@@ -16,6 +17,7 @@ const recordSlice = createSlice({
     builder
       .addCase(fetchActiveRecord.fulfilled, (state, action) => {
         state.activeRecord = {...action.payload};
+        state.recordsLength = action.payload.dateRecord.length;
         state.error = false;
         state.loading = false;
       })
