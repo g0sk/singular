@@ -1,10 +1,4 @@
-import React, {
-  Fragment,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from 'react';
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
 import {DynamicField, DynamicNewField, View, Text, Button} from 'components';
 import {TouchableOpacity, StyleSheet} from 'react-native';
 import {translate} from 'core';
@@ -22,16 +16,11 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
   open,
   emptyMessage,
 }) => {
-  const [items, setItems] = useState<Attribute[]>([]);
   const [icon, setIcon] = useState<string>('chevron-down-outline');
   const [openSection, setOpenSection] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
 
   const theme = useTheme();
-
-  useLayoutEffect(() => {
-    setItems(collection);
-  }, [collection]);
 
   useEffect(() => {
     open ? setOpenSection(open) : null;
@@ -51,23 +40,20 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
   }, [openSection]);
 
   const _addNewItem = (item: Attribute) => {
-    const _items = [...items];
+    const _items = [...collection];
     _items.unshift(item);
-    //setItems([..._items]);
-    setChanges([..._items]);
+    setChanges(_items);
   };
 
-  const _removeItem = (id: number) => {
-    const _items = items.filter((_item) => _item.id !== id);
-    //setItems([..._items]);
-    setChanges([..._items]);
+  const _removeItem = (index: number) => {
+    const _items = collection.splice(index, 1);
+    setChanges(_items);
   };
 
   const _handleItemChange = (item: Attribute, listIndex: number) => {
-    const _items = [...items];
+    const _items = [...collection];
     _items[listIndex] = {...item};
-    //setItems([..._items]);
-    setChanges([..._items]);
+    setChanges(_items);
   };
 
   const ListEmptyComponent = () => {
@@ -93,15 +79,15 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
             />
           </View>
         )}
-        {items.length > 0 ? (
-          items.map((item, index) => {
+        {collection.length > 0 ? (
+          collection.map((item, index) => {
             return (
               <Fragment key={index}>
                 {openSection && (
                   <View style={styles.headerContainer}>
                     {edit && (
                       <View style={styles.icon} marginRight="s">
-                        <TouchableOpacity onPress={() => _removeItem(item.id)}>
+                        <TouchableOpacity onPress={() => _removeItem(index)}>
                           <Icon
                             name="remove-circle-outline"
                             size={25}
@@ -132,7 +118,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
   const ListHeaderComponent = () => {
     return (
       <View style={styles.headerContainer} marginBottom="s">
-        <View marginRight="xl">
+        <View marginRight="l">
           <TouchableOpacity style={styles.header} onPress={_headerHandler}>
             <View marginRight="s">
               <Text variant="formLabel">{label}</Text>
@@ -144,18 +130,16 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
         </View>
         <View justifyContent="center">
           {isEditable && (
-            <View flexDirection="row">
-              <View marginRight="m">
-                <Button
-                  label={
-                    !edit
-                      ? translate('action.general.edit')
-                      : translate('action.general.cancel')
-                  }
-                  onPress={() => setEdit(!edit)}
-                  variant="edit"
-                />
-              </View>
+            <View marginRight="m">
+              <Button
+                label={
+                  !edit
+                    ? translate('action.general.edit')
+                    : translate('action.general.cancel')
+                }
+                onPress={() => setEdit(!edit)}
+                variant="edit"
+              />
             </View>
           )}
         </View>

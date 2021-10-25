@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {Dropdown, Text, SimpleTextInput as TextInput, View} from 'components';
-import {Pressable, StyleSheet} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {Dropdown, Text, View} from 'components';
+import {TextInput, Pressable, StyleSheet} from 'react-native';
 import {useAppSelector} from 'store/configureStore';
 import {DynamicFieldsProps, Unit, UnitState} from 'types';
 import {useTheme} from 'ui/theme';
@@ -14,13 +14,10 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
   editValue,
 }) => {
   const theme = useTheme();
-  const [focused, setFocused] = useState<boolean>(false);
   const [value, setValue] = useState<string>('');
+  const [error, setError] = useState<boolean>(false);
   const {units}: UnitState = useAppSelector((state) => state.unit);
-
-  const _handleValueChange = (_value: string) => {
-    setValue(_value);
-  };
+  const _ref = useRef<TextInput>(null);
 
   const _handleUnitChange = (unit: Unit) => {
     const _field = {...field};
@@ -29,12 +26,22 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
   };
 
   const _setValueChange = () => {
-    const _field = {...field};
-    _field.value = value;
-    if (value !== field.value) {
-      setItemChange(_field, listIndex);
+    if (!error) {
+      const _field = {...field};
+      _field.value = value;
+      if (value !== field.value) {
+        setItemChange(_field, listIndex);
+      }
     }
   };
+
+  useEffect(() => {
+    if (value.length > 0) {
+      setError(false);
+    } else {
+      setError(true);
+    }
+  }, [value]);
 
   useEffect(() => {
     setValue(field.value);
@@ -45,7 +52,7 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
       <View style={styles.field} marginVertical="s">
         <Pressable
           delayLongPress={700}
-          onPress={() => setFocused(true)}
+          onPress={() => _ref.current?.focus()}
           style={({pressed}) => [
             {
               backgroundColor: pressed ? theme.colors.primary : 'white',
@@ -64,15 +71,20 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
             {editValue ? (
               <View marginRight="m">
                 <TextInput
+                  style={{
+                    borderBottomColor: !error
+                      ? theme.colors.primary
+                      : theme.colors.error,
+                    borderBottomWidth: 1,
+                  }}
+                  ref={_ref}
                   value={value}
-                  onChangeText={_handleValueChange}
+                  onChangeText={setValue}
                   maxLength={8}
-                  focused={focused}
                   placeholder={translate('form.value')}
-                  setFocused={setFocused}
-                  setBlur={_setValueChange}
                   textAlign="center"
                   keyboardType="numeric"
+                  onBlur={_setValueChange}
                 />
               </View>
             ) : (

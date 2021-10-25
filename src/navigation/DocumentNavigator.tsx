@@ -32,6 +32,7 @@ export const DocumentNavigator = () => {
           headerShown: true,
           title: route.params.title,
           activeId: route.params.activeId,
+          recordId: route.params.recordId,
         })}
       />
       <Stack.Screen

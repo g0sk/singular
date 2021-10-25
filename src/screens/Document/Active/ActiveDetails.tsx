@@ -1,217 +1,89 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
-import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
-import Icon from 'react-native-vector-icons/Ionicons';
-import {translate} from 'core';
-import dayjs from 'dayjs';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
 import {
-  fetchActiveType,
-  fetchActiveTypes,
-} from 'store/slices/activeType/activeTypeAsyncThunk';
+  Active,
+  ActiveDetailsScreenProps,
+  ActiveState,
+  Attribute,
+  File,
+  RecordState,
+} from 'types';
+import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {
   deleteActive,
   fetchActive,
   fetchActives,
   updateActive,
 } from 'store/slices/active/activeAsyncThunk';
+import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {
   Button,
-  Dropdown,
-  DatePicker,
-  DynamicSection,
-  Modal,
   Text,
-  SimpleTextInput as TextInput,
-  RecordModal,
   View,
+  Modal,
+  RecordModal,
+  DynamicSection,
+  ImageUpload,
+  UserModal,
 } from 'components';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {
   ActivityIndicator,
-  TouchableOpacity,
   RefreshControl,
-  StyleSheet,
   ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  Alert,
   ToastAndroid,
 } from 'react-native';
-import {
-  Active,
-  ActiveState,
-  ActiveType,
-  ActiveTypeState,
-  Attribute,
-  RecordState,
-  ActiveDetailsScreenProps,
-  ServerError,
-} from 'types';
-import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
-import {clearActive} from 'store/slices/active/activeSlice';
+import {translate} from 'core';
+import dayjs from 'dayjs';
+import {useFocusEffect} from '@react-navigation/core';
 import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
-import {fetchActiveRecord} from 'store/slices/record/recordAsyncThunk';
+import {fetchActiveRecords} from 'store/slices/record/recordAsyncThunk';
+import {resetActiveState} from 'store/slices/active/activeSlice';
 
 export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   route,
   navigation,
 }) => {
-  const dispatch = useAppDispatch();
-  const [change, setChange] = useState<boolean>(false);
-  const [showCalendar, setShowCalendar] = useState<boolean>(false);
-  const [openActivity, setOpenActivity] = useState<boolean>(false);
-  const [focused, setFocused] = useState<boolean>(false);
-  const [save, setSave] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-
-  //Active values
-  const [item, setItem] = useState<Active>({} as Active);
-  const [reference, setReference] = useState<string>('');
-  const [date, setDate] = useState<Date>(new Date());
-  const [type, setType] = useState<ActiveType | null>(null);
-  const [formattedDate, setFormattedDate] = useState<string>('');
-  const [lastUpdate, setLastUpdate] = useState<string>('');
   const [basicAttributes, setBasicAttributes] = useState<Attribute[]>([]);
   const [customAttributes, setCustomAttributes] = useState<Attribute[]>([]);
-
-  //Errors
-  const [referenceError, setReferenceError] = useState<string | undefined>(
-    undefined,
-  );
-
-  //slices
-  const recordState: RecordState = useAppSelector((state) => state.record);
+  const [file, setFile] = useState<File | null>(null);
+  const [description, setDescription] = useState<string>('');
+  const [change, setChange] = useState<boolean>(false);
+  const [update, setUpdate] = useState<string>('');
+  const [saved, setSaved] = useState<boolean>(false);
+  const [openActivity, setOpenActivity] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
   const activeState: ActiveState = useAppSelector((state) => state.active);
-  const activeTypeState: ActiveTypeState = useAppSelector(
-    (state) => state.activeType,
+  const recordState: RecordState = useAppSelector((state) => state.record);
+
+  //Unmount when screen loses focus
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        return () => {
+          setUpdate('');
+          clearActiveType();
+        };
+      };
+    }, []),
   );
 
-  //Handlers
-  const _onRefreshHandler = () => {
-    dispatch(fetchActive(route.params.activeId));
-    dispatch(fetchActiveTypes());
-  };
-
-  const _handleDelete = () => {
-    dispatch(deleteActive(route.params.activeId)).then(() => {
-      dispatch(fetchActives());
-      navigation.goBack();
-    });
-  };
-
-  const _handleSave = () => {
-    const _item = {...item};
-    if (change) {
-      if (reference.length >= 2 && type) {
-        setSave(true);
-        _item.reference = reference;
-        _item.entryDate = date.toString();
-        _item.activeType = {...type};
-        _item.basicAttributes = [...basicAttributes];
-        _item.customAttributes = [...customAttributes];
-        dispatch(updateActive(_item))
-          .unwrap()
-          .then(() => {
-            dispatch(fetchActives());
-            ToastAndroid.showWithGravity(
-              translate('success.general.saved'),
-              ToastAndroid.CENTER,
-              ToastAndroid.SHORT,
-            );
-          })
-          .catch((error: ServerError) => {
-            ToastAndroid.showWithGravity(
-              translate('error.general.used') +
-                ' (' +
-                error.violations[0].propertyPath +
-                ')',
-              ToastAndroid.CENTER,
-              ToastAndroid.LONG,
-            );
-            setReferenceError('error');
-          });
-      } else {
-        if (reference.length < 2) {
-          ToastAndroid.showWithGravity(
-            translate('form.field.minRef'),
-            ToastAndroid.CENTER,
-            ToastAndroid.SHORT,
-          );
-        }
-        if (type === null) {
-          ToastAndroid.showWithGravity(
-            translate('form.field.unitSelect'),
-            ToastAndroid.CENTER,
-            ToastAndroid.SHORT,
-          );
-        }
-      }
-    }
-    setSave(false);
-    setChange(false);
-  };
-
-  const _handleDateChange = (_date: Date) => {
-    setDate(_date);
-    setChange(true);
-  };
-
-  const _handleReferenceChange = (_reference: string) => {
-    setReference(_reference);
-    setChange(true);
-  };
-
-  const _handleTypeChange = (_item: ActiveType) => {
-    setType(_item);
-    store.dispatch(fetchActiveType(_item.id));
-    setChange(true);
-  };
-
-  const _handleBasicAttributesChange = (_basicAttributes: Attribute[]) => {
-    setBasicAttributes([..._basicAttributes]);
-    setChange(true);
-  };
-
-  const _handleCustomAttributesChange = (_customAttributes: Attribute[]) => {
-    setCustomAttributes([..._customAttributes]);
-    setChange(true);
-  };
-
-  //component mount
-  useEffect(() => {
-    store.dispatch(fetchActiveTypes());
-    store.dispatch(fetchUnits());
+  useLayoutEffect(() => {
+    store.dispatch(fetchActiveRecords(route.params.recordId));
     store.dispatch(fetchActive(route.params.activeId));
-  }, [route.params.activeId]);
+    store.dispatch(fetchUnits());
+  }, [route.params]);
 
   useLayoutEffect(() => {
     if (activeState.active !== null) {
-      store.dispatch(fetchActiveRecord(activeState.active.activeRecord.id));
+      setFile(activeState.active.file);
+      setBasicAttributes(activeState.active.basicAttributes);
+      setCustomAttributes(activeState.active.customAttributes);
     }
   }, [activeState.active]);
-
-  useLayoutEffect(() => {
-    if (activeState.loading || recordState.loading) {
-      setLoading(true);
-    }
-    if (!activeState.loading && !recordState.loading) {
-      setLoading(false);
-    }
-  }, [activeState.loading, recordState.loading]);
-
-  useLayoutEffect(() => {
-    if (activeState.active !== null) {
-      setItem(activeState.active);
-      setReference(activeState.active.reference);
-      setDate(new Date(activeState.active.entryDate));
-      setType(activeState.active.activeType);
-      setBasicAttributes([...activeState.active.basicAttributes]);
-      setCustomAttributes([...activeState.active.customAttributes]);
-    }
-  }, [activeState.active]);
-
-  //Displayed entryDate
-  useEffect(() => {
-    if (date) {
-      setFormattedDate(dayjs(date).format('DD/MM/YYYY'));
-    }
-    1;
-  }, [date]);
 
   useLayoutEffect(() => {
     if (recordState.activeRecord !== null) {
@@ -220,33 +92,97 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
           recordState.activeRecord.dateRecord.length - 1
         ],
       );
-      setLastUpdate(dayjs(_date).format('DD/MM/YYYY'));
+      setUpdate(dayjs(_date).format('DD/MM/YYYY'));
     } else {
-      setLastUpdate(translate('record.empty'));
+      setUpdate(translate('record.empty'));
     }
   }, [recordState.activeRecord]);
 
-  useEffect(() => {
-    navigation.setOptions({title: reference});
-    if (reference.length < 2) {
-      setReferenceError('error');
-    } else {
-      setReferenceError(undefined);
+  const onSave = () => {
+    if (change && activeState.active !== null) {
+      setSaved(true);
+      const _item: Active = {
+        ...activeState.active,
+        file: file !== null ? {...file} : null,
+        description: description,
+        basicAttributes: [...basicAttributes],
+        customAttributes: [...customAttributes],
+      };
+      dispatch(updateActive(_item)).then(() => {
+        fetchActives({page: 1, itemsPerPage: 7});
+        setChange(false);
+        ToastAndroid.showWithGravity(
+          translate('success.general.saved'),
+          ToastAndroid.CENTER,
+          ToastAndroid.SHORT,
+        );
+      });
     }
-  }, [navigation, reference]);
+  };
 
-  useEffect(() => {
-    return () => {
-      store.dispatch(clearActive());
-      store.dispatch(clearActiveType());
-    };
-  }, [save]);
+  const onDelete = () => {
+    Alert.alert(
+      translate('form.active.action.delete.title') +
+        ' ' +
+        activeState.active?.reference +
+        '?',
+      translate('form.active.action.delete.message', {
+        name: 'hola',
+      }),
+      [
+        {
+          text: translate('action.general.cancel'),
+          onPress: () => null,
+        },
+        {
+          text: translate('action.general.delete'),
+          onPress: onDeleteActive,
+        },
+      ],
+    );
+  };
+
+  const onDeleteActive = () => {
+    dispatch(deleteActive(route.params.activeId)).then(() => {
+      dispatch(resetActiveState());
+      dispatch(fetchActives({page: 1, itemsPerPage: 7}));
+      navigation.goBack();
+    });
+  };
+
+  const _handleRefresh = () => {
+    dispatch(fetchActive(route.params.activeId));
+  };
+
+  const onChange = useCallback(() => {
+    if (!change) {
+      setChange(true);
+    }
+  }, [change]);
+
+  const onFileChange = (_file: File | null) => {
+    if (_file !== null) {
+      setFile({..._file});
+    } else {
+      setFile(null);
+    }
+    onChange();
+  };
+
+  const onDescriptionChange = (_description: string) => {
+    setDescription(_description);
+    onChange();
+  };
 
   return (
     <View style={styles.container} marginHorizontal="m" marginBottom="m">
-      {loading && !save ? (
+      {activeState.loading && !saved ? (
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="black" animating={loading} />
+          <ActivityIndicator
+            size="large"
+            color="black"
+            animating={activeState.loading}
+          />
         </View>
       ) : (
         <View marginBottom="xl">
@@ -255,7 +191,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
             refreshControl={
               <RefreshControl
                 refreshing={activeState.loading}
-                onRefresh={_onRefreshHandler}
+                onRefresh={_handleRefresh}
               />
             }>
             <View style={styles.header} paddingTop="m" marginRight="m">
@@ -269,7 +205,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
                     </Text>
                   </View>
                   <View>
-                    <Text>{lastUpdate ? lastUpdate : ''}</Text>
+                    <Text>{update}</Text>
                   </View>
                 </View>
                 <View style={styles.icon}>
@@ -279,7 +215,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
               {change && (
                 <View width={100}>
                   <Button
-                    onPress={_handleSave}
+                    onPress={onSave}
                     variant="secondary"
                     label={translate('action.general.save')}
                   />
@@ -290,57 +226,37 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
               children={
                 <RecordModal
                   {...{route, navigation}}
-                  activeRecord={item ? recordState.activeRecord : null}
+                  activeRecord={recordState.activeRecord}
                 />
               }
               show={openActivity}
               setVisibility={setOpenActivity}
             />
             <View alignSelf="flex-start">
-              <TouchableOpacity onPress={() => setShowCalendar(!showCalendar)}>
-                {showCalendar && (
-                  <DatePicker
-                    entryDate={date}
-                    setShowCalendar={setShowCalendar}
-                    setParentDate={_handleDateChange}
-                  />
-                )}
-                <View style={styles.entryDate} marginVertical="m">
-                  <View>
-                    <Text variant="formLabel">
-                      {translate('form.active.entryDate.label')}
-                    </Text>
-                  </View>
-                  <View marginTop="s">
-                    <Text>{formattedDate}</Text>
-                  </View>
+              <View style={styles.entryDate} marginVertical="m">
+                <View>
+                  <Text variant="formLabel">
+                    {translate('form.active.entryDate.label')}
+                  </Text>
                 </View>
-              </TouchableOpacity>
+                <View marginTop="s">
+                  <Text>
+                    {dayjs(activeState.active?.entryDate).format('DD/MM/YYYY')}
+                  </Text>
+                </View>
+              </View>
             </View>
             <View>
-              <TouchableOpacity onPress={() => setFocused(!focused)}>
-                <View flexDirection="column" alignItems="flex-start">
-                  <View>
-                    <Text variant="formLabel">
-                      {translate('form.active.reference.label')}
-                    </Text>
-                  </View>
-                  <View height={40}>
-                    <TextInput
-                      setFocused={setFocused}
-                      focused={focused}
-                      textAlign="left"
-                      value={reference}
-                      placeholder={translate(
-                        'form.active.reference.placeholder',
-                      )}
-                      autoCapitalize="none"
-                      onChangeText={_handleReferenceChange}
-                      error={referenceError}
-                    />
-                  </View>
+              <View flexDirection="column" alignItems="flex-start">
+                <View>
+                  <Text variant="formLabel">
+                    {translate('form.active.reference.label')}
+                  </Text>
                 </View>
-              </TouchableOpacity>
+                <View>
+                  <Text>{activeState.active?.reference}</Text>
+                </View>
+              </View>
             </View>
             <View marginTop="m" marginBottom="s">
               <View>
@@ -349,55 +265,69 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
                 </Text>
               </View>
               <View marginVertical="s">
-                <Dropdown
-                  selected={type}
-                  editValue={true}
-                  options={activeTypeState.activeTypes}
-                  header={translate('form.active.type.header')}
-                  placeholder={translate('form.active.type.placeholder')}
-                  setParentValue={_handleTypeChange}
+                <Text>{activeState.active?.activeType.name}</Text>
+              </View>
+            </View>
+            <View>
+              <ImageUpload file={file} saveImage={onFileChange} />
+            </View>
+            <View marginTop="l" marginBottom="m">
+              <View marginBottom="m">
+                <Text variant="formLabel">
+                  {translate('form.active.description')}
+                </Text>
+              </View>
+              <View
+                borderRadius={10}
+                borderColor="primary"
+                borderWidth={1}
+                width={280}>
+                <TextInput
+                  style={{textAlignVertical: 'top', paddingRight: 10}}
+                  numberOfLines={4}
+                  value={description}
+                  multiline={true}
+                  onChangeText={onDescriptionChange}
+                  maxLength={255}
                 />
               </View>
             </View>
-            {activeTypeState.loading ? (
-              <View>
-                <ActivityIndicator
-                  animating={activeTypeState.loading}
-                  size="large"
-                  color="black"
+            <View>
+              <View marginVertical="m">
+                <DynamicSection
+                  editValue={true}
+                  collection={basicAttributes}
+                  label={translate('form.active.basicAttribute.label')}
+                  isEditable={false}
+                  editDropdownValue={false}
+                  setChanges={(_basicAttributes) =>
+                    setBasicAttributes(_basicAttributes)
+                  }
+                  open={true}
                 />
               </View>
-            ) : (
-              <View>
-                <View marginVertical="m">
-                  <DynamicSection
-                    editValue={true}
-                    collection={basicAttributes}
-                    label={translate('form.active.basicAttribute.label')}
-                    isEditable={false}
-                    editDropdownValue={false}
-                    setChanges={_handleBasicAttributesChange}
-                    open={true}
-                  />
-                </View>
-                <View marginTop="m" marginBottom="l">
-                  <DynamicSection
-                    editValue={true}
-                    collection={customAttributes}
-                    label={translate('form.active.customAttribute.label')}
-                    isEditable={true}
-                    editDropdownValue={true}
-                    setChanges={_handleCustomAttributesChange}
-                    open={true}
-                  />
-                </View>
+              <View marginTop="m" marginBottom="l">
+                <DynamicSection
+                  editValue={true}
+                  collection={customAttributes}
+                  label={translate('form.active.customAttribute.label')}
+                  isEditable={true}
+                  editDropdownValue={true}
+                  setChanges={(_customAttributes) =>
+                    setCustomAttributes(_customAttributes)
+                  }
+                  open={true}
+                />
               </View>
-            )}
+            </View>
+            <View>
+              <UserModal user={activeState.active?.createdBy} />
+            </View>
             <View marginHorizontal="xxl" marginTop="xxl" marginBottom="xxl">
               <Button
                 variant="delete"
                 label={translate('action.general.delete')}
-                onPress={_handleDelete}
+                onPress={onDelete}
               />
             </View>
           </ScrollView>

@@ -17,12 +17,12 @@ export const RecordModal: React.FC<RecordModalProps> = ({activeRecord}) => {
 
   useEffect(() => {
     if (activeRecord !== null) {
+      console.log('0 elementos, ', activeRecord.activeObject.length);
       setActiveObject([...activeRecord.activeObject]);
     }
   }, [activeRecord]);
 
   const _handleItemPress = (item: RecordActive) => {
-    console.log(item);
     if (item) {
       navigation.navigate('RecordDetails', {
         active: {...item},

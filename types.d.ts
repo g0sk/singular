@@ -84,6 +84,7 @@ export type RootDocumentParamList = {
   };
   ActiveDetails: {
     activeId: number;
+    recordId: number;
     title: string;
   };
   TagDetails: {
@@ -256,6 +257,7 @@ export interface User {
   createdAt?: string;
   updatedAt?: string;
   deletedAt?: string;
+  groups?: string[];
   image: {
     id: number;
     contentUrl: string;
@@ -281,7 +283,7 @@ export interface UserState {
 
 //Atributes
 export interface Attribute {
-  id: number;
+  id?: number;
   name: string;
   value: string;
   unit: Unit;
@@ -340,7 +342,8 @@ export type ActiveTypes = ActiveType[];
 
 export type PaginationFilters = {
   page: number;
-  itemsPerPage: number;
+  itemsPerPage?: number;
+  filter?: {key: string; value: string};
 };
 
 //Active
@@ -348,6 +351,8 @@ export interface Active {
   id: number;
   reference: string;
   entryDate: string;
+  createdBy: User;
+  description: string;
   activeRecord: {
     id: number;
   };
@@ -360,6 +365,7 @@ export interface Active {
 export interface NewActive {
   reference: string;
   entryDate: string;
+  description: string;
   activeRecord: {
     id: number;
   } | null;
@@ -473,10 +479,7 @@ export interface UnitState {
 //Record
 export interface Record {
   id: number;
-  active: {
-    id: number;
-    reference: string;
-  };
+  active: Active;
   dateRecord: Array<string>;
   activeObject: Array<RecordActive>;
 }
@@ -489,6 +492,8 @@ export interface RecordActive {
     id: number;
     name: string;
   };
+  description: string;
+  user: User;
   basic_attributes: Attribute[];
   custom_attributes: Attribute[];
 }
@@ -559,7 +564,7 @@ export interface DropdownProps<T> {
 //DatePicker
 
 export interface DatePickerProps {
-  entryDate: Date | string;
+  entryDate: Date;
   maximumDate?: Date;
   minimumDate?: Date;
   setParentDate: (_date: Date) => void;
@@ -623,4 +628,9 @@ export type ImagePickerProps = {
   //saveImage: Dispatch<SetStateAction<ParsedImage | undefined>>;
   saveImage: (image: ParsedImage) => void;
   cameraType?: 'back' | 'front';
+};
+
+export type ImageUploadProps = {
+  file: File | null;
+  saveImage: (file: File | null) => void;
 };

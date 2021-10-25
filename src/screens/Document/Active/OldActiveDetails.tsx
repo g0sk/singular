@@ -1,59 +1,73 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {translate} from 'core';
 import dayjs from 'dayjs';
 import {
   fetchActiveType,
   fetchActiveTypes,
 } from 'store/slices/activeType/activeTypeAsyncThunk';
-import {createActive, fetchActives} from 'store/slices/active/activeAsyncThunk';
+import {
+  deleteActive,
+  fetchActive,
+  fetchActives,
+  updateActive,
+} from 'store/slices/active/activeAsyncThunk';
 import {
   Button,
   Dropdown,
   DatePicker,
   DynamicSection,
+  Modal,
   Text,
   SimpleTextInput as TextInput,
+  RecordModal,
   View,
 } from 'components';
 import {
   ActivityIndicator,
   TouchableOpacity,
+  RefreshControl,
   StyleSheet,
   ScrollView,
   ToastAndroid,
-  RefreshControl,
 } from 'react-native';
 import {
+  Active,
   ActiveState,
-  ActiveTagEvent,
   ActiveType,
   ActiveTypeState,
   Attribute,
-  NewActive,
+  RecordState,
+  ActiveDetailsScreenProps,
   ServerError,
-  TagDetailsScreenProps,
 } from 'types';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {clearActive} from 'store/slices/active/activeSlice';
 import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
+import {fetchActiveRecord} from 'store/slices/record/recordAsyncThunk';
+import {useFormik} from 'formik';
+import * as Yup from 'yup';
 
-export const TagDetails: React.FC<TagDetailsScreenProps> = ({
+export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   route,
   navigation,
 }) => {
   const dispatch = useAppDispatch();
   const [change, setChange] = useState<boolean>(false);
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
+  const [openActivity, setOpenActivity] = useState<boolean>(false);
   const [focused, setFocused] = useState<boolean>(false);
-  const [typeChange, setTypeChange] = useState<boolean>(false);
+  const [save, setSave] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  //Tag values
-  const [tag, setTag] = useState<ActiveTagEvent | null>(null);
+  //Active values
+  const [item, setItem] = useState<Active>({} as Active);
   const [reference, setReference] = useState<string>('');
   const [date, setDate] = useState<Date>(new Date());
   const [type, setType] = useState<ActiveType | null>(null);
   const [formattedDate, setFormattedDate] = useState<string>('');
+  const [lastUpdate, setLastUpdate] = useState<string>('');
   const [basicAttributes, setBasicAttributes] = useState<Attribute[]>([]);
   const [customAttributes, setCustomAttributes] = useState<Attribute[]>([]);
 
@@ -63,28 +77,44 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
   );
 
   //slices
+  const recordState: RecordState = useAppSelector((state) => state.record);
+  const activeState: ActiveState = useAppSelector((state) => state.active);
   const activeTypeState: ActiveTypeState = useAppSelector(
     (state) => state.activeType,
   );
-  const activeState: ActiveState = useAppSelector((state) => state.active);
 
   //Handlers
+  const _onRefreshHandler = () => {
+    dispatch(fetchActive(route.params.activeId));
+    dispatch(fetchActiveTypes());
+  };
+
+  const _handleDelete = () => {
+    dispatch(deleteActive(route.params.activeId)).then(() => {
+      dispatch(fetchActives());
+      navigation.goBack();
+    });
+  };
 
   const _handleSave = () => {
-    const _item: NewActive = {} as NewActive;
+    const _item = {...item};
     if (change) {
       if (reference.length >= 2 && type) {
+        setSave(true);
         _item.reference = reference;
         _item.entryDate = date.toString();
         _item.activeType = {...type};
         _item.basicAttributes = [...basicAttributes];
         _item.customAttributes = [...customAttributes];
-        _item.description = '';
-        dispatch(createActive(_item))
+        dispatch(updateActive(_item))
           .unwrap()
           .then(() => {
-            dispatch(fetchActives({page: 1, itemsPerPage: 9}));
-            navigation.navigate('DocumentList', {tab: 'active'});
+            dispatch(fetchActives());
+            ToastAndroid.showWithGravity(
+              translate('success.general.saved'),
+              ToastAndroid.CENTER,
+              ToastAndroid.SHORT,
+            );
           })
           .catch((error: ServerError) => {
             ToastAndroid.showWithGravity(
@@ -95,7 +125,6 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
               ToastAndroid.CENTER,
               ToastAndroid.LONG,
             );
-            setChange(false);
             setReferenceError('error');
           });
       } else {
@@ -108,13 +137,14 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
         }
         if (type === null) {
           ToastAndroid.showWithGravity(
-            translate('form.field.typeSelect'),
+            translate('form.field.unitSelect'),
             ToastAndroid.CENTER,
             ToastAndroid.SHORT,
           );
         }
       }
     }
+    setSave(false);
     setChange(false);
   };
 
@@ -125,12 +155,12 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
 
   const _handleReferenceChange = (_reference: string) => {
     setReference(_reference);
-    reference.length >= 0 ? setChange(true) : null;
     setChange(true);
   };
 
   const _handleTypeChange = (_item: ActiveType) => {
     setType(_item);
+    store.dispatch(fetchActiveType(_item.id));
     setChange(true);
   };
 
@@ -146,79 +176,67 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
 
   //component mount
   useEffect(() => {
-    store.dispatch(fetchActiveTypes({page: 1, itemsPerPage: 9}));
+    store.dispatch(fetchActiveTypes());
     store.dispatch(fetchUnits());
-  }, []);
-
-  useEffect(() => {
-    if (route.params.tag) {
-      setTag(route.params.tag);
-      if (route.params.tag.id !== undefined) {
-        setReference(route.params.tag.id.toString());
-        setChange(true);
-      }
-    }
-  }, [route.params.tag]);
-
-  useEffect(() => {
-    if (tag !== null) {
-      if (tag.tagType) {
-        setType(tag.tagType);
-      } else {
-        ToastAndroid.showWithGravity(
-          translate('form.tag.notFound'),
-          ToastAndroid.CENTER,
-          ToastAndroid.LONG,
-        );
-      }
-    }
-  }, [tag]);
+    store.dispatch(fetchActive(route.params.activeId));
+  }, [route.params.activeId]);
 
   useLayoutEffect(() => {
-    if (activeTypeState.activeType !== null) {
-      setBasicAttributes([...activeTypeState.activeType.basicAttributes]);
-      setCustomAttributes([...activeTypeState.activeType.customAttributes]);
+    if (activeState.active !== null) {
+      store.dispatch(fetchActiveRecord(activeState.active.activeRecord.id));
     }
-  }, [activeTypeState.activeType]);
+  }, [activeState.active]);
 
-  useEffect(() => {
-    if (type !== null) {
-      store.dispatch(fetchActiveType(type.id));
-      setTypeChange(true);
+  useLayoutEffect(() => {
+    if (activeState.loading || recordState.loading) {
+      setLoading(true);
     }
-  }, [type]);
+    if (!activeState.loading && !recordState.loading) {
+      setLoading(false);
+    }
+  }, [activeState.loading, recordState.loading]);
 
   //Displayed entryDate
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (date) {
       setFormattedDate(dayjs(date).format('DD/MM/YYYY'));
     }
   }, [date]);
 
+  useLayoutEffect(() => {
+    if (recordState.activeRecord !== null) {
+      const _date = new Date(
+        recordState.activeRecord.dateRecord[
+          recordState.activeRecord.dateRecord.length - 1
+        ],
+      );
+      setLastUpdate(dayjs(_date).format('DD/MM/YYYY'));
+    } else {
+      setLastUpdate(translate('record.empty'));
+    }
+  }, [recordState.activeRecord]);
+
   useEffect(() => {
+    navigation.setOptions({title: reference});
     if (reference.length < 2) {
       setReferenceError('error');
     } else {
       setReferenceError(undefined);
     }
-  }, [reference]);
+  }, [navigation, reference]);
 
   useEffect(() => {
     return () => {
-      dispatch(clearActive());
-      dispatch(clearActiveType());
+      store.dispatch(clearActive());
+      store.dispatch(clearActiveType());
     };
-  });
+  }, [save]);
 
   return (
     <View style={styles.container} marginHorizontal="m" marginBottom="m">
-      {activeTypeState.loading && !typeChange ? (
+      {loading && !save ? (
         <View style={styles.loading}>
-          <ActivityIndicator
-            size="large"
-            color="black"
-            animating={activeTypeState.loading}
-          />
+          <ActivityIndicator size="large" color="black" animating={loading} />
         </View>
       ) : (
         <View marginBottom="xl">
@@ -227,50 +245,74 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
             refreshControl={
               <RefreshControl
                 refreshing={activeState.loading}
-                enabled={false}
+                onRefresh={_onRefreshHandler}
               />
             }>
             <View style={styles.header} paddingTop="m" marginRight="m">
-              <View alignSelf="flex-start">
-                <TouchableOpacity
-                  onPress={() => setShowCalendar(!showCalendar)}>
-                  {showCalendar && (
-                    <DatePicker
-                      entryDate={date}
-                      setShowCalendar={setShowCalendar}
-                      setParentDate={_handleDateChange}
-                      maximumDate={new Date()}
-                      minimumDate={new Date()}
-                    />
-                  )}
-                  <View style={styles.entryDate} marginVertical="m">
-                    <View>
-                      <Text variant="formLabel">
-                        {translate('form.tag.entryDate.label')}
-                      </Text>
-                    </View>
-                    <View marginTop="s">
-                      <Text>{formattedDate}</Text>
-                    </View>
+              <TouchableOpacity
+                style={styles.info}
+                onPress={() => setOpenActivity(!openActivity)}>
+                <View style={styles.activity} marginRight="m">
+                  <View marginBottom="s">
+                    <Text variant="updated">
+                      {translate('active.lastUpdate')}
+                    </Text>
                   </View>
-                </TouchableOpacity>
-              </View>
+                  <View>
+                    <Text>{lastUpdate ? lastUpdate : ''}</Text>
+                  </View>
+                </View>
+                <View style={styles.icon}>
+                  <Icon name="file-tray-full" size={34} />
+                </View>
+              </TouchableOpacity>
               {change && (
                 <View width={100}>
                   <Button
                     onPress={_handleSave}
                     variant="secondary"
-                    label={translate('action.general.create')}
+                    label={translate('action.general.save')}
                   />
                 </View>
               )}
+            </View>
+            <Modal
+              children={
+                <RecordModal
+                  {...{route, navigation}}
+                  activeRecord={item ? recordState.activeRecord : null}
+                />
+              }
+              show={openActivity}
+              setVisibility={setOpenActivity}
+            />
+            <View alignSelf="flex-start">
+              <TouchableOpacity onPress={() => setShowCalendar(!showCalendar)}>
+                {showCalendar && (
+                  <DatePicker
+                    entryDate={date}
+                    setShowCalendar={setShowCalendar}
+                    setParentDate={_handleDateChange}
+                  />
+                )}
+                <View style={styles.entryDate} marginVertical="m">
+                  <View>
+                    <Text variant="formLabel">
+                      {translate('form.active.entryDate.label')}
+                    </Text>
+                  </View>
+                  <View marginTop="s">
+                    <Text>{formattedDate}</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
             </View>
             <View>
               <TouchableOpacity onPress={() => setFocused(!focused)}>
                 <View flexDirection="column" alignItems="flex-start">
                   <View>
                     <Text variant="formLabel">
-                      {translate('form.tag.reference.label')}
+                      {translate('form.active.reference.label')}
                     </Text>
                   </View>
                   <View height={40}>
@@ -279,7 +321,9 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
                       focused={focused}
                       textAlign="left"
                       value={reference}
-                      placeholder={translate('form.tag.reference.placeholder')}
+                      placeholder={translate(
+                        'form.active.reference.placeholder',
+                      )}
                       autoCapitalize="none"
                       onChangeText={_handleReferenceChange}
                       error={referenceError}
@@ -291,22 +335,22 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
             <View marginTop="m" marginBottom="s">
               <View>
                 <Text variant="formLabel">
-                  {translate('form.tag.type.label')}
+                  {translate('form.active.type.label')}
                 </Text>
               </View>
               <View marginVertical="s">
                 <Dropdown
-                  editValue={true}
                   selected={type}
+                  editValue={true}
                   options={activeTypeState.activeTypes}
-                  header={translate('form.tag.type.header')}
-                  placeholder={translate('form.tag.type.placeholder')}
+                  header={translate('form.active.type.header')}
+                  placeholder={translate('form.active.type.placeholder')}
                   setParentValue={_handleTypeChange}
                 />
               </View>
             </View>
             {activeTypeState.loading ? (
-              <View margin="l">
+              <View>
                 <ActivityIndicator
                   animating={activeTypeState.loading}
                   size="large"
@@ -317,30 +361,35 @@ export const TagDetails: React.FC<TagDetailsScreenProps> = ({
               <View>
                 <View marginVertical="m">
                   <DynamicSection
-                    editDropdownValue={true}
                     editValue={true}
                     collection={basicAttributes}
-                    emptyMessage={translate('form.tag.basicAttribute.empty')}
-                    label={translate('form.tag.basicAttribute.label')}
+                    label={translate('form.active.basicAttribute.label')}
                     isEditable={false}
+                    editDropdownValue={false}
                     setChanges={_handleBasicAttributesChange}
                     open={true}
                   />
                 </View>
                 <View marginTop="m" marginBottom="l">
                   <DynamicSection
-                    editDropdownValue={true}
                     editValue={true}
                     collection={customAttributes}
-                    label={translate('form.tag.customAttribute.label')}
-                    emptyMessage={translate('form.tag.customAttribute.empty')}
+                    label={translate('form.active.customAttribute.label')}
                     isEditable={true}
+                    editDropdownValue={true}
                     setChanges={_handleCustomAttributesChange}
                     open={true}
                   />
                 </View>
               </View>
             )}
+            <View marginHorizontal="xxl" marginTop="xxl" marginBottom="xxl">
+              <Button
+                variant="delete"
+                label={translate('action.general.delete')}
+                onPress={_handleDelete}
+              />
+            </View>
           </ScrollView>
         </View>
       )}

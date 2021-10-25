@@ -15,6 +15,7 @@ export const ActiveListItem: React.FC<ActiveItemFormProps> = ({
   const _itemHandler = () => {
     navigation.push('ActiveDetails', {
       activeId: active.id,
+      recordId: active.activeRecord.id,
       title: active.reference,
     });
   };

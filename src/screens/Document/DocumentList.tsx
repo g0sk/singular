@@ -4,6 +4,7 @@ import React, {
   createRef,
   RefObject,
   useCallback,
+  useLayoutEffect,
 } from 'react';
 import {Segment} from 'components';
 import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
@@ -138,7 +139,7 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
     );
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     store.dispatch(fetchActives({page: 1, itemsPerPage: 7}));
     store.dispatch(fetchActiveTypes({page: 1, itemsPerPage: 9}));
   }, []);
@@ -202,7 +203,7 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
             refreshing={activeState.loading}
             ListEmptyComponent={<EmptyList />}
             onEndReached={_handleActivesOnEndReached}
-            onEndReachedThreshold={0.1}
+            onEndReachedThreshold={0.00001}
           />
         ) : (
           <FlatList

@@ -1,11 +1,5 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {
-  Button,
-  DynamicSection,
-  SimpleTextInput as TextInput,
-  Text,
-  View,
-} from 'components';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
+import {Button, DynamicSection, Text, View} from 'components';
 import {
   ActiveTypeDetailsScreenProps,
   ActiveType,
@@ -14,10 +8,12 @@ import {
 } from 'types';
 import {
   ActivityIndicator,
+  Alert,
   RefreshControl,
   StyleSheet,
   TouchableOpacity,
   ToastAndroid,
+  TextInput,
 } from 'react-native';
 import {translate} from 'core';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
@@ -27,9 +23,14 @@ import {
   fetchActiveTypes,
   updateActiveType,
 } from 'store/slices/activeType/activeTypeAsyncThunk';
-import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
+import {
+  clearActiveType,
+  resetActiveTypeState,
+} from 'store/slices/activeType/activeTypeSlice';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useFocusEffect} from '@react-navigation/core';
+import {useTheme} from 'ui/theme';
 
 export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   route,
@@ -39,18 +40,43 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   const [save, setSave] = useState<boolean>(false);
   const [referenceError, setReferenceError] = useState<string | undefined>();
   const [name, setName] = useState<string>('');
-  const [focused, setfocused] = useState<boolean>(false);
   const [basicAttributes, setBasicAttributes] = useState<Attribute[]>([]);
   const [customAttributes, setCustomAttributes] = useState<Attribute[]>([]);
+  const [changedBasicAttributes, setChangedBasicAttributes] = useState<
+    Attribute[]
+  >([]);
+  const [changedCustomAttributes, setChangedCustomAttributes] = useState<
+    Attribute[]
+  >([]);
   const [change, setChange] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const _ref = useRef<TextInput>(null);
   const activeTypeState: ActiveTypeState = useAppSelector(
     (state) => state.activeType,
   );
 
   const _handleDelete = () => {
+    Alert.alert(
+      translate('form.activeType.action.delete.title') + ' ' + item.name + '?',
+      translate('form.activeType.action.delete.message'),
+      [
+        {
+          text: translate('action.general.cancel'),
+          onPress: () => null,
+        },
+        {
+          text: translate('action.general.delete'),
+          onPress: _deleteActiveType,
+        },
+      ],
+    );
+  };
+
+  const _deleteActiveType = () => {
     dispatch(deleteActiveType(item.id)).then(() => {
-      dispatch(fetchActiveTypes());
+      dispatch(resetActiveTypeState());
+      dispatch(fetchActiveTypes({page: 1, itemsPerPage: 9}));
       navigation.goBack();
     });
   };
@@ -61,6 +87,16 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
       store.dispatch(fetchUnits());
     }
   };
+
+  const _handleTitleChange = () => {
+    navigation.setOptions({title: name});
+    if (name.length < 2) {
+      setReferenceError('error');
+    } else {
+      setReferenceError(undefined);
+    }
+  };
+
   const _handleSave = () => {
     if (change) {
       if (name.length >= 2) {
@@ -68,10 +104,11 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
         const _item = {} as ActiveType;
         _item.id = item.id;
         _item.name = name;
-        _item.basicAttributes = [...basicAttributes];
-        _item.customAttributes = [...customAttributes];
+        _item.basicAttributes = [...changedBasicAttributes];
+        _item.customAttributes = [...changedCustomAttributes];
         dispatch(updateActiveType(_item)).then(() => {
-          dispatch(fetchActiveTypes());
+          dispatch(resetActiveTypeState());
+          dispatch(fetchActiveTypes({page: 1, itemsPerPage: 9}));
           ToastAndroid.showWithGravity(
             translate('success.general.saved'),
             ToastAndroid.BOTTOM,
@@ -85,22 +122,13 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
           ToastAndroid.SHORT,
         );
       }
+      setChange(false);
     }
-    setChange(false);
   };
 
-  const _handleName = (_name: string) => {
-    setName(_name);
+  useEffect(() => {
     setChange(true);
-  };
-  const _handleBasicAttributes = (_basicAttributes: Attribute[]) => {
-    setChange(true);
-    setBasicAttributes([..._basicAttributes]);
-  };
-  const _handleCustomAttributes = (_customAttributes: Attribute[]) => {
-    setChange(true);
-    setCustomAttributes([..._customAttributes]);
-  };
+  }, [name, basicAttributes, customAttributes]);
 
   useLayoutEffect(() => {
     if (activeTypeState.activeType !== null) {
@@ -108,6 +136,12 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
       setName(activeTypeState.activeType.name);
       setBasicAttributes([...activeTypeState.activeType.basicAttributes]);
       setCustomAttributes([...activeTypeState.activeType.customAttributes]);
+      setChangedBasicAttributes([
+        ...activeTypeState.activeType.basicAttributes,
+      ]);
+      setChangedCustomAttributes([
+        ...activeTypeState.activeType.customAttributes,
+      ]);
     }
   }, [activeTypeState]);
 
@@ -119,26 +153,11 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
     }
   }, [route.params.typeId]);
 
-  useEffect(() => {
+  useFocusEffect(() => {
     return () => {
       store.dispatch(clearActiveType());
     };
   });
-
-  useEffect(() => {
-    navigation.setOptions({title: name});
-    if (name.length < 2) {
-      setReferenceError('error');
-    } else {
-      setReferenceError(undefined);
-    }
-  }, [navigation, name]);
-
-  useEffect(() => {
-    return () => {
-      store.dispatch(clearActiveType());
-    };
-  }, [save]);
 
   return (
     <View style={styles.container} marginHorizontal="m" marginBottom="m">
@@ -163,7 +182,7 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
             }>
             <View style={styles.header} paddingTop="s" marginRight="m">
               <View marginBottom="l">
-                <TouchableOpacity onPress={() => setfocused(!focused)}>
+                <TouchableOpacity onPress={() => _ref.current?.focus()}>
                   <View>
                     <Text variant="formLabel">
                       {translate('form.activeType.name.label')}
@@ -171,15 +190,22 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
                   </View>
                   <View marginTop="s">
                     <TextInput
+                      style={{
+                        borderBottomColor: !referenceError
+                          ? theme.colors.primary
+                          : theme.colors.error,
+                        borderBottomWidth: 1,
+                        margin: 0,
+                        padding: 0,
+                      }}
+                      ref={_ref}
                       placeholder={translate(
                         'form.activeType.name.placeholder',
                       )}
                       value={name}
                       autoCapitalize="words"
-                      onChangeText={_handleName}
-                      focused={focused}
-                      setFocused={setfocused}
-                      error={referenceError}
+                      onChangeText={(text) => setName(text)}
+                      onBlur={_handleTitleChange}
                     />
                   </View>
                 </TouchableOpacity>
@@ -201,7 +227,9 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
                 collection={basicAttributes}
                 label={translate('form.activeType.basicAttribute.label')}
                 isEditable={false}
-                setChanges={_handleBasicAttributes}
+                setChanges={(_basicAttributes) =>
+                  setChangedBasicAttributes(_basicAttributes)
+                }
                 open={true}
               />
             </View>
@@ -212,7 +240,9 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
                 collection={customAttributes}
                 label={translate('form.activeType.customAttribute.label')}
                 isEditable={true}
-                setChanges={_handleCustomAttributes}
+                setChanges={(_customAttributes) =>
+                  setChangedCustomAttributes(_customAttributes)
+                }
                 open={true}
               />
             </View>

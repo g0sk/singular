@@ -108,6 +108,7 @@
           "invalid": "Fecha inválida"
         }
       },
+      "description": "Información adicional",
       "attribute": {
           "empty": "No hay attributos que mostrar"
         },
@@ -119,6 +120,17 @@
         "label": "Attributos personalizados",
         "empty": "Selecciona un tipo para heredar sus attributos"
       },
+      "user": {
+        "title": "Información",
+        "name": "Nombre",
+        "email": "Correo electrónico"
+      },
+      "action": {
+        "delete": {
+          "title": "¿Está seguro que desea borrar el tipo",
+          "message": "Si borra el activo también se borrará el histórico de documentos asociado a dicho activo"
+        }
+      },
       "type": {
         "header": "Tipos",
         "label": "Tipo",
@@ -128,6 +140,10 @@
           "required": "Campo obligatorio",
           "invalid": "Tipo inválido"
         }
+      },
+      "media": {
+        "media": "Multimedia",
+        "noMedia": "Sube una imagen"
       }
     },
     "activeType": {
@@ -145,6 +161,12 @@
       "customAttribute": {
         "label": "Attributos personalizados",
         "empty": "Selecciona un tipo para heredar sus attributos"
+      },
+      "action": {
+        "delete": {
+          "title": "¿Está seguro que desea borrar el tipo",
+          "message": "Si borra un tipo también se borrarán los activos asociados a este tipo"
+        }
       },
       "type": {
         "header": "Tipos",
@@ -242,8 +264,10 @@
       "save": "Guardar",
       "delete": "Eliminar",
       "create": "Crear",
-      "cancel": "Cancel",
-      "edit": "Editar"
+      "cancel": "Cancelar",
+      "edit": "Editar",
+      "createdBy": "Creado por",
+      "updatedBy": "Actualizado por"
     },
     "login": {
       "signIn": {
@@ -260,7 +284,7 @@
     },
     "image": {
         "title": "Seleccionar imagen",
-        "select": "Seleccionar imagen de galería",
+        "select": "Seleccionar imagen",
         "take": "Sacar foto",
         "cancel": "Cancelar",
         "updated": "Foto de perfil actualizada"

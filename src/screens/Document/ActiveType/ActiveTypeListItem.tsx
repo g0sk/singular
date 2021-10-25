@@ -19,7 +19,7 @@ export const ActiveTypeListItem: React.FC<TypeItemFormProps> = ({
     <View flexDirection="row" marginBottom="l" alignItems="center">
       <TouchableOpacity onPress={_itemHandler}>
         <View
-          borderColor="primary"
+          borderColor="orange"
           borderWidth={3}
           borderRadius={13}
           marginRight="m"

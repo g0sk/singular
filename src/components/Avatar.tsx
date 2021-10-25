@@ -29,9 +29,7 @@ export const Avatar: React.FC<AvatarProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    //padding: 5,
-  },
+  container: {},
   avatarWithBorder: {
     borderRadius: 60,
     borderWidth: 3,
@@ -39,7 +37,6 @@ const styles = StyleSheet.create({
   },
   avatarNoBorder: {
     borderRadius: 70,
-    //borderWidth: 3,
   },
   iconBorder: {
     justifyContent: 'center',

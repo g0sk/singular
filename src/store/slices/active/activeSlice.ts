@@ -5,6 +5,7 @@ import {
   updateActive,
   fetchActives,
   fetchActive,
+  fetchFilteredActive,
 } from './activeAsyncThunk';
 import {ActiveState} from 'types';
 
@@ -49,6 +50,23 @@ const activeSlice = createSlice({
         state.errorData = null;
       })
       .addCase(fetchActives.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      })
+      .addCase(fetchFilteredActive.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        state.errorData = null;
+        state.active = action.payload[0];
+        state.activesLength += action.payload.length;
+        state.page += 1;
+      })
+      .addCase(fetchFilteredActive.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+        state.errorData = null;
+      })
+      .addCase(fetchFilteredActive.rejected, (state) => {
         state.loading = false;
         state.error = true;
       })

@@ -7,19 +7,22 @@ import {useNavigation} from '@react-navigation/native';
 import ErrorScan from './ErrorScan';
 import Scanning from './Scanning';
 import SuccessScan from './SuccesScan';
-import {ActiveTagEvent} from 'types';
+import {Active, ActiveState, ActiveTagEvent} from 'types';
+import {fetchFilteredActive} from 'store/slices/active/activeAsyncThunk';
+import store, {useAppDispatch} from 'store/configureStore';
 
 const {height} = Dimensions.get('window');
 
 export const Scan = () => {
   const navigation = useNavigation();
   const [reading, setReading] = useState(false);
-  const [reset, setReset] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const [_active, setActive] = useState<Active | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [tag, setTag] = useState<ActiveTagEvent | undefined>(undefined);
   const [enabled, setEnabled] = useState<boolean>(false);
   const [supported, setSupported] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     async function init(): Promise<void> {
@@ -31,18 +34,41 @@ export const Scan = () => {
     init();
   }, []);
 
+  const fetchExistingTag = (reference: string) => {
+    dispatch(
+      fetchFilteredActive({
+        page: 1,
+        itemsPerPage: 1,
+        filter: {key: 'reference', value: reference},
+      }),
+    ).then(() => {
+      const {active}: ActiveState = store.getState().active;
+      console.log('active: ', active);
+      if (active !== null) {
+        console.log('seteo');
+        setActive(active);
+      }
+    });
+  };
+
   const goToDetails = () => {
     if (tag !== undefined) {
-      resetState();
-      navigation.navigate('TagDetails', {title: tag?.id, tag: tag});
+      if (_active === null) {
+        navigation.navigate('TagDetails', {title: tag?.id, tag: tag});
+      } else {
+        navigation.navigate('ActiveDetails', {
+          title: _active.reference,
+          activeId: _active.id,
+        });
+      }
     }
   };
 
   const resetState = () => {
     setError(false);
-    //setReset(true);
     setReading(false);
     setTag(undefined);
+    setActive(null);
   };
 
   const showToast = async () => {
@@ -78,6 +104,9 @@ export const Scan = () => {
             if (res !== null) {
               setTag(res);
               setReading(false);
+              if (res.id) {
+                fetchExistingTag(res.id.toString());
+              }
             }
           }),
         );
@@ -126,11 +155,9 @@ export const Scan = () => {
         {!error && tag && (
           <View marginVertical="l" marginHorizontal="xxl">
             <Button
-              label={translate(
-                !reset ? 'button.scan.goToDetails' : 'button.scan.scanAgain',
-              )}
+              label={translate('button.scan.goToDetails')}
               variant="primary"
-              onPress={() => (!reset ? goToDetails() : resetState())}
+              onPress={goToDetails}
             />
           </View>
         )}

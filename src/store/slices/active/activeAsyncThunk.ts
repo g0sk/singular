@@ -22,6 +22,21 @@ export const fetchActives = createAsyncThunk<Actives, PaginationFilters, {}>(
   },
 );
 
+export const fetchFilteredActive = createAsyncThunk<
+  Actives,
+  PaginationFilters,
+  {}
+>('active/fetchFilteredActives', async (pagination) => {
+  try {
+    const response = await ActiveApi.getActives(pagination);
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    throw error;
+  }
+});
+
 export const fetchActive = createAsyncThunk<Active, number, {}>(
   'active/fetchActive',
   async (id) => {

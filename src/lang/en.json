@@ -38,6 +38,15 @@
     },
     "lastUpdate": "Last update"
   },
+  "activeType": {
+    "activeTypes": "types",
+    "activeType": "type",
+    "empty": "No types to display",
+    "menu": {
+      "placeholder": "Select a type",
+      "empty": "No types found"
+    }
+  },
   "record": {
     "title": "Activity",
     "empty": "No records"
@@ -91,6 +100,7 @@
           "invalid": "This field is invalid"
         }
       },
+      "description": "Additional info",
       "attribute": {
         "empty": "No attributes to display"
       },
@@ -102,6 +112,17 @@
         "label": "Custom Attributes",
         "empty": "Select a type to inherit it's attributes"
       },
+      "user": {
+        "title": "User information",
+        "name": "Name",
+        "email": "Email"
+      },
+      "action": {
+        "delete": {
+          "title": "Are you sure you want to delete active",
+          "message": "If you delete an active all of its record will be also deleted"
+        }
+      },
       "type": {
         "header": "Types",
         "label": "Type",
@@ -111,6 +132,10 @@
           "required": "Field required",
           "invalid": "This field is invalid"
         }
+      },
+      "media": {
+        "media": "Media",
+        "noMedia": "Upload an image"
       }
     },
     "activeType": {
@@ -128,6 +153,12 @@
       "customAttribute": {
         "label": "Custom Attributes",
         "empty": "Select a type to inherit it's attributes"
+      },
+      "action": {
+        "delete": {
+          "title": "Are you sure you want to delete type",
+          "message": "If you delete a type all associated actives will be also deleted"
+        }
       },
       "type": {
         "header": "Types",
@@ -195,15 +226,6 @@
       "attributeForm": "Attributes are not correctly formed"
     }
   },
-  "activeType": {
-    "activeTypes": "types",
-    "activeType": "type",
-    "empty": "No types to display",
-    "menu": {
-      "placeholder": "Select a type",
-      "empty": "No types found"
-    }
-  },
   "messages": {
     "login": {
       "signIn": "Sign in"
@@ -215,7 +237,9 @@
       "delete": "Delete",
       "create": "Create",
       "cancel": "Cancel",
-      "edit": "Edit"
+      "edit": "Edit",
+      "createdBy": "Created by",
+      "updatedBy": "Updated by"
     },
     "login": {
       "signIn": {
@@ -232,7 +256,7 @@
     },
     "image": {
         "title": "Select image",
-        "select": "Choose from gallery",
+        "select": "Choose image",
         "take": "Take picture",
         "cancel": "Cancel",
         "updated": "Profile picture updated"

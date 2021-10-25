@@ -8,8 +8,7 @@ const getActiveTypes = ({page, itemsPerPage}: PaginationFilters) =>
       '?' +
       'page=' +
       page +
-      '&itemsPerPage=' +
-      itemsPerPage,
+      (itemsPerPage ? '&itemsPerPage=' + itemsPerPage : ''),
   );
 const createActiveType = (activeType: NewActiveType) =>
   apiURL.post('/api/active_types', activeType);

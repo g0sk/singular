@@ -24,6 +24,7 @@ const BaseTheme = {
     red: '#b9244b',
     lightBlue: '#39b4ed',
     chart: '#0caa36',
+    orange: '#df7327',
     default: '#9b9b9b',
     disabled: '#716d6d',
     description: '#393939',
@@ -161,6 +162,9 @@ const theme = createTheme({
       color: 'white',
       fontSize: 12,
     },
+    button_upload: {
+      color: 'lightText',
+    },
     button_primary: {
       color: 'lightText',
     },
@@ -222,6 +226,10 @@ const theme = createTheme({
       fontSize: 19,
       fontWeight: 'bold',
     },
+    dataLabel: {
+      fontSize: 15,
+      fontWeight: 'bold',
+    },
     version: {
       fontSize: 13,
       color: 'description',
@@ -236,10 +244,17 @@ const theme = createTheme({
     },
     edit: {
       backgroundColor: 'secondary',
-      width: 59,
+      width: 70,
       height: 28,
       paddingHorizontal: 's',
       paddingVertical: 'ss',
+      borderRadius: 10,
+      alignItems: 'center',
+    },
+    upload: {
+      backgroundColor: 'primary',
+      width: 300,
+      height: 35,
       borderRadius: 10,
       alignItems: 'center',
     },
