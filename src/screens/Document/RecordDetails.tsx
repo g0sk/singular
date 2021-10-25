@@ -1,17 +1,33 @@
-import {DynamicSection, Text, View} from 'components';
+import {DynamicSection, Modal, Text, UserModal, View} from 'components';
+import {API_URL} from '@env';
 import {translate} from 'core';
-import dayjs from 'dayjs';
-import React from 'react';
-import {ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
+import {Image, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import {RecordDetailsStackProps} from 'types';
 
 export const RecordDetails: React.FC<RecordDetailsStackProps> = ({route}) => {
+  const [showImage, setShowImage] = useState<boolean>(false);
+  let active = route.params.active;
+  let uri = active.file !== null ? API_URL + route.params.active.file : '';
+  const ImagePreview = () => {
+    return (
+      <View>
+        <Image
+          source={{uri: uri}}
+          style={{zIndex: 10}}
+          height={400}
+          width={355}
+        />
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container} marginHorizontal="m" marginBottom="m">
       <View marginBottom="xl">
         <ScrollView horizontal={false}>
-          <View alignSelf="flex-start">
-            <TouchableOpacity>
+          <View>
+            <View>
               <View style={styles.entryDate} marginVertical="m">
                 <View>
                   <Text variant="formLabel">
@@ -19,15 +35,11 @@ export const RecordDetails: React.FC<RecordDetailsStackProps> = ({route}) => {
                   </Text>
                 </View>
                 <View marginTop="s">
-                  <Text>
-                    {dayjs(route.params.active.entryDate).format('DD/MM/YYYY')}
-                  </Text>
+                  <Text>{active.entry_date.trimStart().split(' ')[0]}</Text>
                 </View>
               </View>
-            </TouchableOpacity>
-          </View>
-          <View>
-            <TouchableOpacity>
+            </View>
+            <View>
               <View flexDirection="column" alignItems="flex-start">
                 <View>
                   <Text variant="formLabel">
@@ -35,59 +47,96 @@ export const RecordDetails: React.FC<RecordDetailsStackProps> = ({route}) => {
                   </Text>
                 </View>
                 <View height={40}>
-                  <Text>{route.params.active.reference}</Text>
+                  <Text>{active.reference}</Text>
+                </View>
+              </View>
+            </View>
+            <View marginBottom="s">
+              <View>
+                <Text variant="formLabel">
+                  {translate('form.active.type.label')}
+                </Text>
+              </View>
+              <View marginVertical="s">
+                <View alignSelf="flex-start">
+                  <Text variant="listItemData">{active.type.name}</Text>
+                </View>
+              </View>
+            </View>
+            <TouchableOpacity onPress={() => setShowImage(!showImage)}>
+              <View>
+                <View marginBottom="m">
+                  <Text variant="formLabel">
+                    {translate('form.active.media.media')}
+                  </Text>
+                </View>
+                <View justifyContent="flex-start">
+                  {active.file !== null ? (
+                    <Image
+                      style={{zIndex: 10}}
+                      height={50}
+                      width={50}
+                      source={{uri: uri}}
+                    />
+                  ) : (
+                    <Text>{translate('form.active.media.noMediaShow')}</Text>
+                  )}
                 </View>
               </View>
             </TouchableOpacity>
-          </View>
-          <View marginBottom="s">
-            <View>
-              <Text variant="formLabel">
-                {translate('form.active.type.label')}
-              </Text>
+            <Modal
+              children={<ImagePreview />}
+              show={showImage}
+              setVisibility={setShowImage}
+            />
+            <View marginTop="l" marginBottom="m">
+              <View marginBottom="m">
+                <Text variant="formLabel">
+                  {translate('form.active.description.label')}
+                </Text>
+              </View>
+              {active.description.length > 0 ? (
+                <View
+                  borderRadius={10}
+                  borderColor="primary"
+                  borderWidth={1}
+                  padding="s"
+                  width={280}
+                  marginRight="xl">
+                  <Text>{active.description}</Text>
+                </View>
+              ) : (
+                <View width={250}>
+                  <Text>{translate('form.active.description.empty')}</Text>
+                </View>
+              )}
             </View>
-            <View marginVertical="s">
-              <View
-                alignSelf="flex-start"
-                style={styles.picker}
-                borderColor="primary"
-                minWidth={75}
-                maxWidth={130}>
-                <TouchableOpacity>
-                  <View
-                    paddingHorizontal="s"
-                    paddingVertical="s"
-                    alignItems="center">
-                    <Text variant="listItemData">
-                      {route.params.active.type.name}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+            <View>
+              <View marginVertical="m">
+                <DynamicSection
+                  collection={active.basic_attributes}
+                  label={translate('form.active.basicAttribute.label')}
+                  isEditable={false}
+                  editDropdownValue={false}
+                  editValue={false}
+                  setChanges={() => null}
+                  open={true}
+                />
+              </View>
+              <View marginTop="m" marginBottom="l">
+                <DynamicSection
+                  collection={active.custom_attributes}
+                  label={translate('form.active.customAttribute.label')}
+                  isEditable={false}
+                  editDropdownValue={false}
+                  editValue={false}
+                  setChanges={() => null}
+                  open={true}
+                />
               </View>
             </View>
-          </View>
-          <View>
-            <View marginVertical="m">
-              <DynamicSection
-                collection={route.params.active.basic_attributes}
-                label={translate('form.active.basicAttribute.label')}
-                isEditable={false}
-                editDropdownValue={false}
-                editValue={false}
-                setChanges={() => null}
-                open={true}
-              />
-            </View>
-            <View marginTop="m" marginBottom="l">
-              <DynamicSection
-                collection={route.params.active.custom_attributes}
-                label={translate('form.active.customAttribute.label')}
-                isEditable={false}
-                editDropdownValue={false}
-                editValue={false}
-                setChanges={() => null}
-                open={true}
-              />
+            <View>
+              <UserModal user={active.user} created={false} />
             </View>
           </View>
         </ScrollView>

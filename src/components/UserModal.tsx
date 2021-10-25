@@ -8,9 +8,10 @@ import {translate} from 'core';
 
 type UserModalProps = {
   user: User | undefined;
+  created: boolean;
 };
 
-export const UserModal: React.FC<UserModalProps> = ({user}) => {
+export const UserModal: React.FC<UserModalProps> = ({user, created}) => {
   const [show, setShow] = useState<boolean>(false);
   const [uri, setUri] = useState<string>('tuPadre');
   useEffect(() => {
@@ -24,7 +25,11 @@ export const UserModal: React.FC<UserModalProps> = ({user}) => {
         <View marginVertical="m">
           <View marginBottom="m">
             <Text variant="formLabel">
-              {translate('action.general.createdBy')}
+              {translate(
+                created
+                  ? 'action.general.createdBy'
+                  : 'action.general.updatedBy',
+              )}
             </Text>
           </View>
 

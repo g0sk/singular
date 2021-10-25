@@ -108,7 +108,11 @@
           "invalid": "Fecha inválida"
         }
       },
-      "description": "Información adicional",
+      "description": {
+        "label": "Información adicional",
+        "placeholder": "Máximo 255 caracteres",
+        "empty": "No hay información adicional para mostrar"
+      },
       "attribute": {
           "empty": "No hay attributos que mostrar"
         },
@@ -127,7 +131,7 @@
       },
       "action": {
         "delete": {
-          "title": "¿Está seguro que desea borrar el tipo",
+          "title": "¿Borrar el activo",
           "message": "Si borra el activo también se borrará el histórico de documentos asociado a dicho activo"
         }
       },
@@ -143,6 +147,7 @@
       },
       "media": {
         "media": "Multimedia",
+        "noMediaShow": "No hay multimedia para mostrar",
         "noMedia": "Sube una imagen"
       }
     },
@@ -164,7 +169,7 @@
       },
       "action": {
         "delete": {
-          "title": "¿Está seguro que desea borrar el tipo",
+          "title": "¿Borrar el tipo",
           "message": "Si borra un tipo también se borrarán los activos asociados a este tipo"
         }
       },
@@ -267,7 +272,9 @@
       "cancel": "Cancelar",
       "edit": "Editar",
       "createdBy": "Creado por",
-      "updatedBy": "Actualizado por"
+      "updatedBy": "Actualizado por",
+      "createdOn": "Creado el",
+      "updatedOn": "Actualizado el"
     },
     "login": {
       "signIn": {

@@ -485,9 +485,9 @@ export interface Record {
 }
 
 export interface RecordActive {
-  entryDate: string;
+  entry_date: string;
   reference: string;
-  file: File;
+  file: File | null;
   type: {
     id: number;
     name: string;
@@ -500,6 +500,8 @@ export interface RecordActive {
 
 export interface RecordModalProps {
   activeRecord: Record | null;
+  route: ActiveDetailsRouteProp;
+  navigation: ActiveDetailsNavigationProp;
 }
 
 export interface RecordState {

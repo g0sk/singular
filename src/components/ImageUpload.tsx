@@ -151,7 +151,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({file, saveImage}) => {
                       <TouchableOpacity onPress={updateImage}>
                         <Icon
                           name="checkmark-circle-outline"
-                          color="theme.colors.primary"
+                          color={theme.colors.primary}
                           size={35}
                         />
                       </TouchableOpacity>
@@ -194,7 +194,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({file, saveImage}) => {
   const ImagePreview = () => {
     return (
       <View justifyContent="flex-start">
-        {contentUrl ? (
+        {contentUrl.length > 0 ? (
           <Image
             style={{zIndex: 10}}
             height={50}

@@ -19,19 +19,16 @@ import {
   Button,
   Text,
   View,
-  Modal,
   RecordModal,
   DynamicSection,
   ImageUpload,
   UserModal,
 } from 'components';
-import Icon from 'react-native-vector-icons/Ionicons';
 import {
   ActivityIndicator,
   RefreshControl,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
   TextInput,
   Alert,
   ToastAndroid,
@@ -52,9 +49,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   const [file, setFile] = useState<File | null>(null);
   const [description, setDescription] = useState<string>('');
   const [change, setChange] = useState<boolean>(false);
-  const [update, setUpdate] = useState<string>('');
   const [saved, setSaved] = useState<boolean>(false);
-  const [openActivity, setOpenActivity] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const activeState: ActiveState = useAppSelector((state) => state.active);
   const recordState: RecordState = useAppSelector((state) => state.record);
@@ -62,12 +57,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   //Unmount when screen loses focus
   useFocusEffect(
     useCallback(() => {
-      return () => {
-        return () => {
-          setUpdate('');
-          clearActiveType();
-        };
-      };
+      return () => clearActiveType();
     }, []),
   );
 
@@ -85,19 +75,6 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
     }
   }, [activeState.active]);
 
-  useLayoutEffect(() => {
-    if (recordState.activeRecord !== null) {
-      const _date = new Date(
-        recordState.activeRecord.dateRecord[
-          recordState.activeRecord.dateRecord.length - 1
-        ],
-      );
-      setUpdate(dayjs(_date).format('DD/MM/YYYY'));
-    } else {
-      setUpdate(translate('record.empty'));
-    }
-  }, [recordState.activeRecord]);
-
   const onSave = () => {
     if (change && activeState.active !== null) {
       setSaved(true);
@@ -109,7 +86,10 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
         customAttributes: [...customAttributes],
       };
       dispatch(updateActive(_item)).then(() => {
-        fetchActives({page: 1, itemsPerPage: 7});
+        dispatch(fetchActives({page: 1, itemsPerPage: 7}));
+        if (activeState.active !== null) {
+          dispatch(fetchActiveRecords(activeState.active.activeRecord.id));
+        }
         setChange(false);
         ToastAndroid.showWithGravity(
           translate('success.general.saved'),
@@ -195,23 +175,12 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
               />
             }>
             <View style={styles.header} paddingTop="m" marginRight="m">
-              <TouchableOpacity
-                style={styles.info}
-                onPress={() => setOpenActivity(!openActivity)}>
-                <View style={styles.activity} marginRight="m">
-                  <View marginBottom="s">
-                    <Text variant="updated">
-                      {translate('active.lastUpdate')}
-                    </Text>
-                  </View>
-                  <View>
-                    <Text>{update}</Text>
-                  </View>
-                </View>
-                <View style={styles.icon}>
-                  <Icon name="file-tray-full" size={34} />
-                </View>
-              </TouchableOpacity>
+              <View justifyContent="space-between">
+                <RecordModal
+                  {...{route, navigation}}
+                  activeRecord={recordState.activeRecord}
+                />
+              </View>
               {change && (
                 <View width={100}>
                   <Button
@@ -222,16 +191,6 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
                 </View>
               )}
             </View>
-            <Modal
-              children={
-                <RecordModal
-                  {...{route, navigation}}
-                  activeRecord={recordState.activeRecord}
-                />
-              }
-              show={openActivity}
-              setVisibility={setOpenActivity}
-            />
             <View alignSelf="flex-start">
               <View style={styles.entryDate} marginVertical="m">
                 <View>
@@ -274,7 +233,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
             <View marginTop="l" marginBottom="m">
               <View marginBottom="m">
                 <Text variant="formLabel">
-                  {translate('form.active.description')}
+                  {translate('form.active.description.label')}
                 </Text>
               </View>
               <View
@@ -283,7 +242,8 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
                 borderWidth={1}
                 width={280}>
                 <TextInput
-                  style={{textAlignVertical: 'top', paddingRight: 10}}
+                  style={{textAlignVertical: 'top', padding: 10}}
+                  placeholder={translate('form.active.description.placeholder')}
                   numberOfLines={4}
                   value={description}
                   multiline={true}
@@ -321,9 +281,9 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
               </View>
             </View>
             <View>
-              <UserModal user={activeState.active?.createdBy} />
+              <UserModal user={activeState.active?.createdBy} created={true} />
             </View>
-            <View marginHorizontal="xxl" marginTop="xxl" marginBottom="xxl">
+            <View marginHorizontal="xxl" marginTop="l" marginBottom="xxl">
               <Button
                 variant="delete"
                 label={translate('action.general.delete')}

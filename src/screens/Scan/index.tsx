@@ -43,9 +43,7 @@ export const Scan = () => {
       }),
     ).then(() => {
       const {active}: ActiveState = store.getState().active;
-      console.log('active: ', active);
       if (active !== null) {
-        console.log('seteo');
         setActive(active);
       }
     });

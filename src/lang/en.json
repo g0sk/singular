@@ -100,7 +100,11 @@
           "invalid": "This field is invalid"
         }
       },
-      "description": "Additional info",
+      "description": {
+        "label": "Additional Info",
+        "placeholder": "Maximum 255 characters",
+        "empty": "No additional info to display"
+      },
       "attribute": {
         "empty": "No attributes to display"
       },
@@ -119,7 +123,7 @@
       },
       "action": {
         "delete": {
-          "title": "Are you sure you want to delete active",
+          "title": "Delete active",
           "message": "If you delete an active all of its record will be also deleted"
         }
       },
@@ -135,6 +139,7 @@
       },
       "media": {
         "media": "Media",
+        "noMediaShow": "No media to display",
         "noMedia": "Upload an image"
       }
     },
@@ -156,7 +161,7 @@
       },
       "action": {
         "delete": {
-          "title": "Are you sure you want to delete type",
+          "title": "Delete type",
           "message": "If you delete a type all associated actives will be also deleted"
         }
       },
@@ -239,7 +244,9 @@
       "cancel": "Cancel",
       "edit": "Edit",
       "createdBy": "Created by",
-      "updatedBy": "Updated by"
+      "updatedBy": "Updated by",
+      "createdOn": "Created on",
+      "updatedOn": "Updated on"
     },
     "login": {
       "signIn": {
