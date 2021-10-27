@@ -21,35 +21,37 @@ export const UserModal: React.FC<UserModalProps> = ({user, created}) => {
   }, [user]);
   const FormField = () => {
     return (
-      <TouchableOpacity onPress={() => setShow(!show)}>
-        <View marginVertical="m">
+      <View alignSelf="flex-start">
+        <TouchableOpacity onPress={() => setShow(!show)}>
           <View marginBottom="m">
-            <Text variant="formLabel">
-              {translate(
-                created
-                  ? 'action.general.createdBy'
-                  : 'action.general.updatedBy',
-              )}
-            </Text>
-          </View>
-
-          {user !== undefined ? (
-            <View flexDirection="row" alignItems="center">
-              <View borderRadius={70} marginRight="m">
-                <Image
-                  source={{uri: uri}}
-                  style={{zIndex: 10, borderRadius: 70}}
-                  height={60}
-                  width={60}
-                />
-              </View>
-              <View>
-                <Text>{user.name + ' ' + user.lastName}</Text>
-              </View>
+            <View marginBottom="m">
+              <Text variant="formLabel">
+                {translate(
+                  created
+                    ? 'action.general.createdBy'
+                    : 'action.general.updatedBy',
+                )}
+              </Text>
             </View>
-          ) : null}
-        </View>
-      </TouchableOpacity>
+
+            {user !== undefined ? (
+              <View flexDirection="row" alignItems="center">
+                <View borderRadius={70} marginRight="m">
+                  <Image
+                    source={{uri: uri}}
+                    style={{zIndex: 10, borderRadius: 70}}
+                    height={60}
+                    width={60}
+                  />
+                </View>
+                <View>
+                  <Text>{user.name + ' ' + user.lastName}</Text>
+                </View>
+              </View>
+            ) : null}
+          </View>
+        </TouchableOpacity>
+      </View>
     );
   };
   const UserInfo = () => {

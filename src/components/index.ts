@@ -19,3 +19,4 @@ export * from './Segment';
 export * from './RecordModal';
 export * from './ImageUpload';
 export * from './UserModal';
+export * from './Section';

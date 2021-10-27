@@ -1,14 +1,15 @@
-import {DynamicSection, Modal, Text, UserModal, View} from 'components';
-import {API_URL} from '@env';
-import {translate} from 'core';
 import React, {useState} from 'react';
+import {Modal, Section, Text, UserModal, View} from 'components';
+import {API_URL} from '@env';
 import {Image, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import {RecordDetailsStackProps} from 'types';
+import {translate} from 'core';
 
 export const RecordDetails: React.FC<RecordDetailsStackProps> = ({route}) => {
   const [showImage, setShowImage] = useState<boolean>(false);
   let active = route.params.active;
   let uri = active.file !== null ? API_URL + route.params.active.file : '';
+
   const ImagePreview = () => {
     return (
       <View>
@@ -63,27 +64,34 @@ export const RecordDetails: React.FC<RecordDetailsStackProps> = ({route}) => {
                 </View>
               </View>
             </View>
-            <TouchableOpacity onPress={() => setShowImage(!showImage)}>
+            {active.file === null ? (
               <View>
                 <View marginBottom="m">
                   <Text variant="formLabel">
                     {translate('form.active.media.media')}
                   </Text>
                 </View>
-                <View justifyContent="flex-start">
-                  {active.file !== null ? (
-                    <Image
-                      style={{zIndex: 10}}
-                      height={50}
-                      width={50}
-                      source={{uri: uri}}
-                    />
-                  ) : (
-                    <Text>{translate('form.active.media.noMediaShow')}</Text>
-                  )}
+                <View marginLeft="s" justifyContent="flex-start">
+                  <Text>{translate('form.active.media.noMediaShow')}</Text>
                 </View>
               </View>
-            </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => setShowImage(!showImage)}>
+                <View marginBottom="m">
+                  <Text variant="formLabel">
+                    {translate('form.active.media.media')}
+                  </Text>
+                </View>
+                <View justifyContent="flex-start">
+                  <Image
+                    style={{zIndex: 10}}
+                    height={50}
+                    width={50}
+                    source={{uri: uri}}
+                  />
+                </View>
+              </TouchableOpacity>
+            )}
             <Modal
               children={<ImagePreview />}
               show={showImage}
@@ -112,31 +120,23 @@ export const RecordDetails: React.FC<RecordDetailsStackProps> = ({route}) => {
               )}
             </View>
             <View>
-              <View marginVertical="m">
-                <DynamicSection
+              <View marginVertical="s">
+                <Section
                   collection={active.basic_attributes}
                   label={translate('form.active.basicAttribute.label')}
-                  isEditable={false}
-                  editDropdownValue={false}
-                  editValue={false}
-                  setChanges={() => null}
                   open={true}
                 />
               </View>
-              <View marginTop="m" marginBottom="l">
-                <DynamicSection
+              <View marginBottom="m">
+                <Section
                   collection={active.custom_attributes}
                   label={translate('form.active.customAttribute.label')}
-                  isEditable={false}
-                  editDropdownValue={false}
-                  editValue={false}
-                  setChanges={() => null}
                   open={true}
                 />
               </View>
-            </View>
-            <View>
-              <UserModal user={active.user} created={false} />
+              <View>
+                <UserModal user={active.user} created={false} />
+              </View>
             </View>
           </View>
         </ScrollView>

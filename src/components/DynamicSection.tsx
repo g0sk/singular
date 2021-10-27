@@ -9,18 +9,24 @@ import Icon from 'react-native-vector-icons/Ionicons';
 export const DynamicSection: React.FC<DynamicSectionProps> = ({
   collection,
   label,
-  isEditable,
+  canAddItems,
   editDropdownValue,
   editValue,
   setChanges,
   open,
   emptyMessage,
 }) => {
+  const [newItems, setNewItems] = useState<Attribute[]>([]);
   const [icon, setIcon] = useState<string>('chevron-down-outline');
   const [openSection, setOpenSection] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
+  const [change, setChange] = useState<boolean>(false);
 
   const theme = useTheme();
+
+  useEffect(() => {
+    setNewItems(collection);
+  }, [collection]);
 
   useEffect(() => {
     open ? setOpenSection(open) : null;
@@ -32,28 +38,45 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
     }
   }, [openSection]);
 
-  const _headerHandler = useCallback(() => {
+  const onEditMode = () => {
+    setEdit(!edit);
+    if (!edit && change) {
+      console.log('hehe');
+      setChanges([...newItems]);
+      setChange(false);
+    }
+  };
+
+  const onChange = useCallback(() => {
+    if (!change) {
+      setChange(true);
+    }
+  }, [change]);
+
+  const onHeaderPress = useCallback(() => {
     setOpenSection(!openSection);
     openSection
       ? setIcon('chevron-down-outline')
       : setIcon('chevron-up-outline');
   }, [openSection]);
 
-  const _addNewItem = (item: Attribute) => {
-    const _items = [...collection];
-    _items.unshift(item);
-    setChanges(_items);
+  const onAddNewItem = (item: Attribute) => {
+    const items = [...newItems];
+    items.unshift(item);
+    onChange();
+    setNewItems([...items]);
   };
 
-  const _removeItem = (index: number) => {
-    const _items = collection.splice(index, 1);
-    setChanges(_items);
+  const onRemoveItem = (index: number) => {
+    const items = newItems.splice(index, 1);
+    setNewItems([...items]);
+    onChange();
   };
 
-  const _handleItemChange = (item: Attribute, listIndex: number) => {
-    const _items = [...collection];
-    _items[listIndex] = {...item};
-    setChanges(_items);
+  const onItemChange = (item: Attribute, listIndex: number) => {
+    const items = [...newItems];
+    items[listIndex] = {...item};
+    setChanges(items);
   };
 
   const ListEmptyComponent = () => {
@@ -70,24 +93,17 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
 
   const ListComponent = () => {
     return (
-      <View>
-        {edit && (
-          <View marginVertical="s">
-            <DynamicNewField
-              editDropdownValue={editDropdownValue}
-              setNewItem={_addNewItem}
-            />
-          </View>
-        )}
-        {collection.length > 0 ? (
-          collection.map((item, index) => {
+      <View margin="s">
+        {edit && <DynamicNewField setNewItem={onAddNewItem} />}
+        {newItems.length > 0 ? (
+          newItems.map((item, index) => {
             return (
               <Fragment key={index}>
                 {openSection && (
                   <View style={styles.headerContainer}>
                     {edit && (
                       <View style={styles.icon} marginRight="s">
-                        <TouchableOpacity onPress={() => _removeItem(index)}>
+                        <TouchableOpacity onPress={() => onRemoveItem(index)}>
                           <Icon
                             name="remove-circle-outline"
                             size={25}
@@ -101,7 +117,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
                       editValue={editValue}
                       field={item}
                       listIndex={index}
-                      setItemChange={_handleItemChange}
+                      setItemChange={onItemChange}
                     />
                   </View>
                 )}
@@ -117,9 +133,9 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
 
   const ListHeaderComponent = () => {
     return (
-      <View style={styles.headerContainer} marginBottom="s">
+      <View style={styles.headerContainer}>
         <View marginRight="l">
-          <TouchableOpacity style={styles.header} onPress={_headerHandler}>
+          <TouchableOpacity style={styles.header} onPress={onHeaderPress}>
             <View marginRight="s">
               <Text variant="formLabel">{label}</Text>
             </View>
@@ -129,7 +145,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
           </TouchableOpacity>
         </View>
         <View justifyContent="center">
-          {isEditable && (
+          {canAddItems && (
             <View marginRight="m">
               <Button
                 label={
@@ -137,7 +153,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
                     ? translate('action.general.edit')
                     : translate('action.general.cancel')
                 }
-                onPress={() => setEdit(!edit)}
+                onPress={() => onEditMode()}
                 variant="edit"
               />
             </View>

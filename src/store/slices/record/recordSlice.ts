@@ -12,7 +12,14 @@ const initialState: RecordState = {
 const recordSlice = createSlice({
   name: 'record',
   initialState,
-  reducers: {},
+  reducers: {
+    resetRecordState: (state) => {
+      state.activeRecord = null;
+      state.recordsLength = 0;
+      state.error = false;
+      state.loading = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchActiveRecord.fulfilled, (state, action) => {
@@ -33,3 +40,4 @@ const recordSlice = createSlice({
 });
 
 export default recordSlice.reducer;
+export const {resetRecordState} = recordSlice.actions;

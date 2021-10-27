@@ -228,7 +228,8 @@
     "name": "Name",
     "newField": {
       "unitNotSelected": "Unit not selected",
-      "attributeForm": "Attributes are not correctly formed"
+      "nameMin": "Attribute name must be 2 characters long",
+      "valueMin": "Attribute value must be 1 character long"
     }
   },
   "messages": {

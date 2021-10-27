@@ -511,6 +511,13 @@ export interface RecordState {
   error: boolean;
 }
 
+//Section
+export interface SectionProps {
+  collection: Attribute[];
+  label: string;
+  open?: boolean;
+}
+
 //Dynamic form
 export interface DynamicSectionProps {
   collection: Attribute[];
@@ -518,7 +525,7 @@ export interface DynamicSectionProps {
   emptyMessage?: string;
   editDropdownValue: boolean;
   editValue: boolean;
-  isEditable: boolean;
+  canAddItems: boolean;
   setChanges: (items: Attribute[]) => void;
   open?: boolean;
 }
@@ -533,7 +540,6 @@ export interface DynamicFieldsProps {
 }
 
 export interface DynamicNewFieldProps {
-  editDropdownValue: boolean;
   setNewItem: (item: Attribute) => void;
 }
 
@@ -557,7 +563,7 @@ export type ItemGeneric = {
 export interface DropdownProps<T> {
   selected: T | null;
   options: T[];
-  editValue: boolean;
+  editSelected: boolean;
   setParentValue: (_item: T) => void;
   header: string;
   placeholder: string;

@@ -23,6 +23,11 @@ const activeSlice = createSlice({
     clearUnit: (state) => {
       state.unit = null;
     },
+    resetUnitState: (state) => {
+      state.unit = null;
+      state.units = [];
+      state.unitsLength = 0;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -84,4 +89,4 @@ const activeSlice = createSlice({
 });
 
 export default activeSlice.reducer;
-export const {clearUnit} = activeSlice.actions;
+export const {clearUnit, resetUnitState} = activeSlice.actions;

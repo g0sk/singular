@@ -237,7 +237,8 @@
     },
     "newField": {
       "unitNotSelected": "Unidad no seleccionada",
-      "attributeForm": "Los attributos no están correctamente rellenos"
+      "nameMin": "El nombre del attributo deber tener al menos 2 caracteres",
+      "valueMin": "El valor del attributo debe tener al menos 1 dígito"
     }
   },
   "messages": {

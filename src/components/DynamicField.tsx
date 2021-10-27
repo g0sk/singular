@@ -19,13 +19,13 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
   const {units}: UnitState = useAppSelector((state) => state.unit);
   const _ref = useRef<TextInput>(null);
 
-  const _handleUnitChange = (unit: Unit) => {
+  const onUnitChange = (unit: Unit) => {
     const _field = {...field};
     _field.unit = {...unit};
     setItemChange(_field, listIndex);
   };
 
-  const _setValueChange = () => {
+  const onValueChange = () => {
     if (!error) {
       const _field = {...field};
       _field.value = value;
@@ -49,7 +49,7 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.field} marginVertical="s">
+      <View style={styles.field}>
         <Pressable
           delayLongPress={700}
           onPress={() => _ref.current?.focus()}
@@ -60,7 +60,7 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
               borderRadius: pressed ? 10 : 0,
             },
           ]}>
-          <View style={styles.container}>
+          <View style={styles.container} marginVertical="s">
             <View
               style={styles.label}
               borderColor="default"
@@ -76,6 +76,8 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
                       ? theme.colors.primary
                       : theme.colors.error,
                     borderBottomWidth: 1,
+                    padding: 0,
+                    margin: 0,
                   }}
                   ref={_ref}
                   value={value}
@@ -84,7 +86,7 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
                   placeholder={translate('form.value')}
                   textAlign="center"
                   keyboardType="numeric"
-                  onBlur={_setValueChange}
+                  onBlur={() => onValueChange()}
                 />
               </View>
             ) : (
@@ -95,11 +97,11 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
             <View>
               <Dropdown
                 selected={field.unit}
-                editValue={editDropdownValue}
+                editSelected={editDropdownValue}
                 options={units}
                 placeholder={translate('form.unit.placeholder')}
                 header={translate('form.unit.header')}
-                setParentValue={_handleUnitChange}
+                setParentValue={onUnitChange}
               />
             </View>
           </View>

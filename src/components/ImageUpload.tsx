@@ -209,19 +209,16 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({file, saveImage}) => {
   };
 
   return (
-    <View>
-      <View>
-        <TouchableOpacity onPress={() => setShow(!show)}>
-          <View>
-            <View marginBottom="m">
-              <Text variant="formLabel">
-                {translate('form.active.media.media')}
-              </Text>
-            </View>
-            <ImagePreview />
-          </View>
-        </TouchableOpacity>
-      </View>
+    <View alignSelf="flex-start">
+      <TouchableOpacity
+        onPress={() => (contentUrl.length > 0 ? setShow(!show) : null)}>
+        <View marginBottom="m">
+          <Text variant="formLabel">
+            {translate('form.active.media.media')}
+          </Text>
+        </View>
+        <ImagePreview />
+      </TouchableOpacity>
       <Modal children={<ImageModal />} show={show} setVisibility={setShow} />
     </View>
   );

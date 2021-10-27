@@ -36,9 +36,10 @@ import {
 import {translate} from 'core';
 import dayjs from 'dayjs';
 import {useFocusEffect} from '@react-navigation/core';
-import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
 import {fetchActiveRecords} from 'store/slices/record/recordAsyncThunk';
-import {resetActiveState} from 'store/slices/active/activeSlice';
+import {clearActive, resetActiveState} from 'store/slices/active/activeSlice';
+import {resetRecordState} from 'store/slices/record/recordSlice';
+import {resetUnitState} from 'store/slices/unit/unitSlice';
 
 export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   route,
@@ -57,7 +58,11 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   //Unmount when screen loses focus
   useFocusEffect(
     useCallback(() => {
-      return () => clearActiveType();
+      return () => {
+        resetRecordState();
+        clearActive();
+        resetUnitState();
+      };
     }, []),
   );
 
@@ -154,6 +159,16 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
     onChange();
   };
 
+  const onBasicAttributesChange = (_basicAttributes: Attribute[]) => {
+    setBasicAttributes([..._basicAttributes]);
+    onChange();
+  };
+  const onCustomAttributesChange = (_customAttributes: Attribute[]) => {
+    console.log('holi');
+    setCustomAttributes([..._customAttributes]);
+    onChange();
+  };
+
   return (
     <View style={styles.container} marginHorizontal="m" marginBottom="m">
       {activeState.loading && !saved ? (
@@ -227,9 +242,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
                 <Text>{activeState.active?.activeType.name}</Text>
               </View>
             </View>
-            <View>
-              <ImageUpload file={file} saveImage={onFileChange} />
-            </View>
+            <ImageUpload file={file} saveImage={onFileChange} />
             <View marginTop="l" marginBottom="m">
               <View marginBottom="m">
                 <Text variant="formLabel">
@@ -253,36 +266,30 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
               </View>
             </View>
             <View>
-              <View marginVertical="m">
+              <View marginVertical="s">
                 <DynamicSection
-                  editValue={true}
                   collection={basicAttributes}
                   label={translate('form.active.basicAttribute.label')}
-                  isEditable={false}
+                  canAddItems={false}
+                  editValue={true}
                   editDropdownValue={false}
-                  setChanges={(_basicAttributes) =>
-                    setBasicAttributes(_basicAttributes)
-                  }
+                  setChanges={onBasicAttributesChange}
                   open={true}
                 />
               </View>
-              <View marginTop="m" marginBottom="l">
+              <View marginBottom="m">
                 <DynamicSection
-                  editValue={true}
                   collection={customAttributes}
                   label={translate('form.active.customAttribute.label')}
-                  isEditable={true}
+                  canAddItems={true}
+                  editValue={true}
                   editDropdownValue={true}
-                  setChanges={(_customAttributes) =>
-                    setCustomAttributes(_customAttributes)
-                  }
+                  setChanges={onCustomAttributesChange}
                   open={true}
                 />
               </View>
             </View>
-            <View>
-              <UserModal user={activeState.active?.createdBy} created={true} />
-            </View>
+            <UserModal user={activeState.active?.createdBy} created={true} />
             <View marginHorizontal="xxl" marginTop="l" marginBottom="xxl">
               <Button
                 variant="delete"

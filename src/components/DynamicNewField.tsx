@@ -16,14 +16,13 @@ const AttributeSchema = yup.object().shape({
 
 export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
   setNewItem,
-  editDropdownValue,
 }) => {
   const [unit, setUnit] = useState<Unit | null>(null);
-  const {units}: UnitState = useAppSelector((state) => state.unit);
   const [message, setMessage] = useState<string>('');
+  const {units}: UnitState = useAppSelector((state) => state.unit);
   const theme = useTheme();
 
-  const _errorHandler = () => {
+  const handleError = () => {
     ToastAndroid.showWithGravity(
       message,
       ToastAndroid.CENTER,
@@ -31,11 +30,18 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
     );
   };
 
-  const _handleUnitChange = (_unit: Unit) => {
+  const onUnitChange = (_unit: Unit) => {
     setUnit(_unit);
   };
 
-  const _saveHandler = (formValue: {name: string; value: string}) => {
+  const resetState = () => {
+    setUnit(null);
+    setFieldValue('name', '');
+    setFieldValue('value', '');
+  };
+
+  const onSave = (formValue: {name: string; value: string}) => {
+    console.log('on saVe');
     if (unit !== null) {
       const item = {
         id: 0,
@@ -43,11 +49,9 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
         value: formValue.value,
         unit: {...unit},
       };
+      resetState();
       setNewItem(item);
     }
-    setUnit(null);
-    setFieldValue('name', '');
-    setFieldValue('value', '');
   };
 
   const {
@@ -64,9 +68,18 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
       name: '',
       value: '',
     },
-    onSubmit: (formValues: {name: string; value: string}) =>
-      _saveHandler(formValues),
+    onSubmit: (formValues: {name: string; value: string}) => onSave(formValues),
   });
+
+  useEffect(() => {
+    if (values.name.length < 2) {
+      setMessage(translate('form.newField.nameMin'));
+    } else if (values.value.length < 1) {
+      setMessage(translate('form.newField.valueMin'));
+    } else if (unit === null) {
+      setMessage(translate('form.newField.unitNotSelected'));
+    }
+  }, [values, unit]);
 
   const nameBorder: string = !errors.name
     ? theme.colors.primary
@@ -75,19 +88,11 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
     ? theme.colors.primary
     : theme.colors.error;
 
-  useEffect(() => {
-    if (values.name.length < 2 || values.value.length < 1) {
-      setMessage(translate('form.newField.attributeForm'));
-    } else if (unit === null) {
-      setMessage(translate('form.newField.unitNotSelected'));
-    }
-  }, [values, unit]);
-
   return (
     <View style={styles.container}>
       <View style={styles.icon}>
         <TouchableOpacity
-          onPress={() => (isValid ? handleSubmit() : _errorHandler())}>
+          onPress={() => (isValid ? handleSubmit() : handleError())}>
           <View marginRight="m">
             <Icon
               name="checkmark-circle-outline"
@@ -140,10 +145,10 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
           <Dropdown
             selected={unit}
             options={units}
-            editValue={editDropdownValue}
+            editSelected={true}
             placeholder={translate('form.unit.placeholder')}
             header={translate('form.unit.header')}
-            setParentValue={_handleUnitChange}
+            setParentValue={onUnitChange}
           />
         </View>
       </View>

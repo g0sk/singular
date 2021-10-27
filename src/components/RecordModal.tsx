@@ -53,34 +53,32 @@ export const RecordModal: React.FC<RecordModalProps> = ({
 
   const renderListItem: ListRenderItem<RecordActive> = ({item, index}) => {
     return (
-      <View marginHorizontal="s">
-        <Pressable
-          onPress={() => onItemPress(item, index)}
-          style={({pressed}) => [
-            {
-              backgroundColor: pressed ? theme.colors.primary : 'white',
-              opacity: pressed ? 0.4 : 1,
-              borderRadius: pressed ? 10 : 0,
-            },
-          ]}>
-          <View
-            justifyContent="flex-start"
-            marginBottom="s"
-            marginHorizontal="s"
-            borderRadius={10}
-            borderBottomWidth={1}
-            borderBottomColor="primary">
+      <View marginHorizontal="l">
+        <View alignItems="center" marginBottom="m">
+          <Pressable
+            onPress={() => onItemPress(item, index)}
+            style={({pressed}) => [
+              {
+                backgroundColor: pressed ? theme.colors.primary : 'white',
+                opacity: pressed ? 0.4 : 1,
+                borderRadius: pressed ? 10 : 0,
+              },
+            ]}>
             <View
               height={46}
               flexDirection="row"
               alignItems="center"
-              justifyContent="space-between">
-              <View>
+              borderRadius={10}
+              borderWidth={2}
+              borderColor="primary"
+              justifyContent="space-between"
+              paddingHorizontal="s">
+              <View marginRight="s">
                 <View flexDirection="row">
                   <View marginRight="s">
                     <Icon name="calendar" size={20} color={theme.colors.dark} />
                   </View>
-                  <View marginRight="s">
+                  <View>
                     <Text>
                       {dayjs(activeRecord?.dateRecord[index]).format(
                         'DD/MM/YYYY',
@@ -89,23 +87,21 @@ export const RecordModal: React.FC<RecordModalProps> = ({
                   </View>
                 </View>
               </View>
-              {
-                <View flexDirection="row">
-                  <View marginRight="s">
-                    <Icon
-                      name="document-text"
-                      size={20}
-                      color={theme.colors.primary}
-                    />
-                  </View>
-                  <View>
-                    <Text>{item.reference}</Text>
-                  </View>
+              <View flexDirection="row" marginRight="s">
+                <View marginRight="s">
+                  <Icon
+                    name="document-text"
+                    size={20}
+                    color={theme.colors.primary}
+                  />
                 </View>
-              }
+                <View>
+                  <Text>{item.reference}</Text>
+                </View>
+              </View>
             </View>
-          </View>
-        </Pressable>
+          </Pressable>
+        </View>
       </View>
     );
   };
@@ -114,10 +110,10 @@ export const RecordModal: React.FC<RecordModalProps> = ({
     return (
       <View
         margin="m"
-        maxHeight={350}
-        minHeight={350}
-        paddingHorizontal="m"
+        maxHeight={380}
+        minHeight={380}
         paddingBottom="l"
+        paddingHorizontal="s"
         backgroundColor="white"
         borderRadius={15}>
         <ListHeaderComponent />
@@ -141,7 +137,7 @@ export const RecordModal: React.FC<RecordModalProps> = ({
             <Text variant="updated">{translate('active.lastUpdate')}</Text>
           </View>
           <View flexDirection="row" alignItems="center">
-            <View marginRight="m">
+            <View marginRight="l">
               <Text>{update}</Text>
             </View>
             <View marginRight="m">

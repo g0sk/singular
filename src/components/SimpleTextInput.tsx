@@ -13,7 +13,6 @@ export const SimpleTextInput = forwardRef<TextInput, SimpleTextInputProps>(
 
     return (
       <TextInput
-        {...{ref}}
         style={{
           borderBottomColor: color,
           borderBottomWidth: 1,
@@ -24,6 +23,7 @@ export const SimpleTextInput = forwardRef<TextInput, SimpleTextInputProps>(
         underlineColorAndroid="transparent"
         selectionColor={theme.colors.primary}
         placeholderTextColor={theme.colors.default}
+        {...{ref}}
         {...props}
       />
     );
