@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import {DropdownProps, ItemGeneric} from 'types';
 import {
   TouchableOpacity,
@@ -19,34 +19,20 @@ export function Dropdown<T extends ItemGeneric>({
   setParentValue,
   editSelected,
 }: DropdownProps<T>) {
-  const [value, setValue] = useState<T | null>(null);
-  const [items, setItems] = useState<T[]>();
+  const [items, setItems] = useState<T[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const theme = useTheme();
 
   useLayoutEffect(() => {
-    selected !== null ? setValue(selected) : setValue(null);
-    setItems(options);
-  }, [selected, options, placeholder]);
-
-  useEffect(() => {
     if (selected !== null) {
-      setValue(selected);
+      const _items = options.filter((_) => _.id !== selected.id);
+      setItems(_items);
+    } else {
+      setItems(options);
     }
-    setItems(options);
   }, [selected, options]);
 
-  useEffect(() => {
-    let _items: T[] = [];
-    if (value !== null) {
-      _items = options.filter((option) => option.id !== value?.id);
-    } else {
-      _items = [...options];
-    }
-    setItems(_items);
-  }, [options, value]);
-
-  const _pickerOnPressHandler = () => {
+  const onPickerPressHandler = () => {
     if (editSelected) {
       setOpen(!open);
     } else {
@@ -57,9 +43,8 @@ export function Dropdown<T extends ItemGeneric>({
       );
     }
   };
-  const _itemOnPressHandler = (item: T) => {
+  const onItemPressHandler = (item: T) => {
     setOpen(!open);
-    setValue(item);
     setParentValue(item);
   };
 
@@ -71,10 +56,10 @@ export function Dropdown<T extends ItemGeneric>({
         borderColor="primary"
         minWidth={75}
         maxWidth={130}>
-        <TouchableOpacity onPress={_pickerOnPressHandler}>
+        <TouchableOpacity onPress={onPickerPressHandler}>
           <View paddingHorizontal="s" paddingVertical="s" alignItems="center">
-            {value !== null ? (
-              <Text variant="listItemData">{value.name}</Text>
+            {selected !== null ? (
+              <Text variant="listItemData">{selected.name}</Text>
             ) : (
               <Text variant="listItemData">{placeholder}</Text>
             )}
@@ -88,7 +73,7 @@ export function Dropdown<T extends ItemGeneric>({
     return (
       <View margin="m" justifyContent="flex-start" marginVertical="m">
         <Pressable
-          onPress={() => _itemOnPressHandler(item)}
+          onPress={() => onItemPressHandler(item)}
           style={({pressed}) => [
             {
               backgroundColor: pressed ? theme.colors.primary : 'white',
