@@ -5,10 +5,25 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Attach to packager",
-      "cwd": "${workspaceFolder}",
+      "name": "Run Android",
+      "request": "launch",
       "type": "reactnative",
-      "request": "attach"
+      "cwd": "${workspaceFolder}",
+      "enableDebug": false,
+      "platform": "android"
+    },
+    {
+      "name": "Attach to packager",
+      "request": "attach",
+      "type": "reactnative",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Debug Android",
+      "request": "launch",
+      "type": "reactnative",
+      "cwd": "${workspaceFolder}",
+      "platform": "android"
     }
   ]
 }

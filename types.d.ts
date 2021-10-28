@@ -283,7 +283,7 @@ export interface UserState {
 
 //Atributes
 export interface Attribute {
-  id?: number;
+  id: number;
   name: string;
   value: string;
   unit: Unit;

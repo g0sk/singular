@@ -1,7 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {Dropdown, SimpleTextInput as TextInput, View} from 'components';
 import {UnitState, DynamicNewFieldProps, Unit} from 'types';
-import {StyleSheet, ToastAndroid, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  ToastAndroid,
+  TextInput as RNTextInput,
+  TouchableOpacity,
+} from 'react-native';
 import {useTheme} from 'ui/theme';
 import {useAppSelector} from 'store/configureStore';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -18,11 +23,19 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
   setNewItem,
 }) => {
   const [unit, setUnit] = useState<Unit | null>(null);
-  const [message, setMessage] = useState<string>('');
   const {units}: UnitState = useAppSelector((state) => state.unit);
   const theme = useTheme();
+  const valueRef = useRef<RNTextInput>(null);
 
   const handleError = () => {
+    let message = translate('form.newField.unitNotSelected');
+    if (errors !== undefined) {
+      if (values.name.length < 2) {
+        message = translate('form.newField.nameMin');
+      } else if (values.value.length < 1) {
+        message = translate('form.newField.valueMin');
+      }
+    }
     ToastAndroid.showWithGravity(
       message,
       ToastAndroid.CENTER,
@@ -71,16 +84,6 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
     onSubmit: (formValues: {name: string; value: string}) => onSave(formValues),
   });
 
-  useEffect(() => {
-    if (values.name.length < 2) {
-      setMessage(translate('form.newField.nameMin'));
-    } else if (values.value.length < 1) {
-      setMessage(translate('form.newField.valueMin'));
-    } else if (unit === null) {
-      setMessage(translate('form.newField.unitNotSelected'));
-    }
-  }, [values, unit]);
-
   const nameBorder: string = !errors.name
     ? theme.colors.primary
     : theme.colors.error;
@@ -92,7 +95,9 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
     <View style={styles.container}>
       <View style={styles.icon}>
         <TouchableOpacity
-          onPress={() => (isValid ? handleSubmit() : handleError())}>
+          onPress={() =>
+            !isValid || unit === null ? handleError() : handleSubmit()
+          }>
           <View marginRight="m">
             <Icon
               name="checkmark-circle-outline"
@@ -122,10 +127,13 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
             value={values.name}
             onChangeText={handleChange('name')}
             onBlur={handleBlur('name')}
+            returnKeyLabel="next"
+            onSubmitEditing={() => valueRef.current?.focus()}
           />
         </View>
         <View marginRight="s" paddingHorizontal="s">
           <TextInput
+            ref={valueRef}
             style={{
               minWidth: 40,
               maxWidth: 65,

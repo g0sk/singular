@@ -40,8 +40,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
 
   const onEditMode = () => {
     setEdit(!edit);
-    if (!edit && change) {
-      console.log('hehe');
+    if (edit && change) {
       setChanges([...newItems]);
       setChange(false);
     }
@@ -61,16 +60,17 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
   }, [openSection]);
 
   const onAddNewItem = (item: Attribute) => {
+    onChange();
     const items = [...newItems];
     items.unshift(item);
-    onChange();
     setNewItems([...items]);
+    console.log(newItems);
   };
 
   const onRemoveItem = (index: number) => {
-    const items = newItems.splice(index, 1);
-    setNewItems([...items]);
     onChange();
+    const items = newItems.filter((item, _index) => index !== _index);
+    setNewItems([...items]);
   };
 
   const onItemChange = (item: Attribute, listIndex: number) => {

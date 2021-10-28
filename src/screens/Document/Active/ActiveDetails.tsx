@@ -164,7 +164,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
     onChange();
   };
   const onCustomAttributesChange = (_customAttributes: Attribute[]) => {
-    console.log('holi');
+    console.log(_customAttributes.length);
     setCustomAttributes([..._customAttributes]);
     onChange();
   };

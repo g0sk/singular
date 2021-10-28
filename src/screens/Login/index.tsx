@@ -48,7 +48,6 @@ export const Login: React.FC = () => {
         );
       } else {
         if (authState.userID !== null) {
-          //Credentials are correct
           if (saveCredentials) {
             setCredentials({username, password});
           } else {
