@@ -1,11 +1,11 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {
   createActive,
-  //deleteActive,
   updateActive,
   fetchActives,
   fetchActive,
-  fetchFilteredActive,
+  fetchTag,
+  fetchFilteredActives,
 } from './activeAsyncThunk';
 import {ActiveState} from 'types';
 
@@ -13,6 +13,7 @@ const initialState: ActiveState = {
   active: null,
   actives: [],
   page: 1,
+  filtered: false,
   activesLength: 0,
   itemsPerPage: 7,
   loading: false,
@@ -29,6 +30,7 @@ const activeSlice = createSlice({
       state.actives = [];
       state.page = 1;
       state.activesLength = 0;
+      state.filtered = false;
     },
     clearActive: (state) => {
       state.active = null;
@@ -53,20 +55,38 @@ const activeSlice = createSlice({
         state.loading = false;
         state.error = true;
       })
-      .addCase(fetchFilteredActive.fulfilled, (state, action) => {
+      .addCase(fetchFilteredActives.fulfilled, (state, action) => {
         state.loading = false;
         state.error = false;
         state.errorData = null;
-        state.active = action.payload[0];
+        state.filtered = true;
+        state.actives = state.actives.concat(action.payload);
         state.activesLength += action.payload.length;
         state.page += 1;
       })
-      .addCase(fetchFilteredActive.pending, (state) => {
+      .addCase(fetchFilteredActives.pending, (state) => {
         state.loading = true;
         state.error = false;
         state.errorData = null;
       })
-      .addCase(fetchFilteredActive.rejected, (state) => {
+      .addCase(fetchFilteredActives.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      })
+      .addCase(fetchTag.fulfilled, (state, action) => {
+        state.active = action.payload[0];
+        state.activesLength += action.payload.length;
+        state.page += 1;
+        state.loading = false;
+        state.error = false;
+        state.errorData = null;
+      })
+      .addCase(fetchTag.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+        state.errorData = null;
+      })
+      .addCase(fetchTag.rejected, (state) => {
         state.loading = false;
         state.error = true;
       })

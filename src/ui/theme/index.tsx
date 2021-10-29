@@ -72,6 +72,10 @@ const BaseTheme = {
 const theme = createTheme({
   ...BaseTheme,
   textVariants: {
+    filter: {
+      fontSize: 13,
+      color: 'lightText',
+    },
     segmentLabelDark: {
       color: 'dark',
       fontSize: 15,

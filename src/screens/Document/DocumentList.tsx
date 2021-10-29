@@ -10,8 +10,14 @@ import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {Header, Text, View} from 'components';
 import {ActiveListItem, ActiveTypeListItem} from 'screens';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
-import {fetchActives} from 'store/slices/active/activeAsyncThunk';
-import {fetchActiveTypes} from 'store/slices/activeType/activeTypeAsyncThunk';
+import {
+  fetchActives,
+  fetchFilteredActives,
+} from 'store/slices/active/activeAsyncThunk';
+import {
+  fetchActiveTypes,
+  fetchFilteredActiveTypes,
+} from 'store/slices/activeType/activeTypeAsyncThunk';
 import {
   ActiveState,
   ActiveTypeState,
@@ -42,21 +48,45 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
 
   //Handlers
   const _handleActivesOnEndReached = () => {
-    dispatch(
-      fetchActives({
-        page: activeState.page,
-        itemsPerPage: activeState.itemsPerPage,
-      }),
-    );
+    if (!activeState.filtered) {
+      dispatch(
+        fetchActives({
+          page: activeState.page,
+          itemsPerPage: activeState.itemsPerPage,
+        }),
+      );
+    } else {
+      dispatch(
+        fetchFilteredActives({
+          pagination: {
+            page: activeState.page,
+            itemsPerPage: activeState.itemsPerPage,
+          },
+          filters: [],
+        }),
+      );
+    }
   };
 
   const _handleActiveTypesOnEndReached = () => {
-    dispatch(
-      fetchActiveTypes({
-        page: activeTypeState.page,
-        itemsPerPage: activeTypeState.itemsPerPage,
-      }),
-    );
+    if (!activeTypeState.filtered) {
+      dispatch(
+        fetchActiveTypes({
+          page: activeTypeState.page,
+          itemsPerPage: activeTypeState.itemsPerPage,
+        }),
+      );
+    } else {
+      dispatch(
+        fetchFilteredActiveTypes({
+          pagination: {
+            page: activeTypeState.page,
+            itemsPerPage: activeTypeState.itemsPerPage,
+          },
+          filters: [],
+        }),
+      );
+    }
   };
 
   const refreshActives = () => {
@@ -139,7 +169,12 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
   };
 
   useEffect(() => {
-    store.dispatch(fetchActives({page: 1, itemsPerPage: 7}));
+    store.dispatch(
+      fetchActives({
+        page: 1,
+        itemsPerPage: 7,
+      }),
+    );
     store.dispatch(fetchActiveTypes({page: 1, itemsPerPage: 9}));
   }, []);
 
@@ -168,6 +203,7 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
               : 'screen.activeType.title',
           )}
           labelAction={() => scrollToTop()}
+          segment={segmentMode}
         />
       </View>
       <View style={styles.subHeader}>
@@ -201,7 +237,7 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
             onRefresh={() => refreshActives()}
             refreshing={activeState.loading}
             ListEmptyComponent={<EmptyList />}
-            //onEndReached={_handleActivesOnEndReached}
+            onEndReached={_handleActivesOnEndReached}
             onEndReachedThreshold={7}
           />
         ) : (

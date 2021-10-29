@@ -331,6 +331,7 @@ export interface NewActiveType {
 export interface ActiveTypeState {
   page: number;
   itemsPerPage: number;
+  filtered: boolean;
   activeTypesLength: number;
   activeType: ActiveType | null;
   activeTypes: ActiveType[];
@@ -340,12 +341,28 @@ export interface ActiveTypeState {
 
 export type ActiveTypes = ActiveType[];
 
-export type PaginationFilters = {
-  page: number;
-  itemsPerPage?: number;
-  filter?: {key: string; value: string};
+export type SearchFilter = {
+  key: string;
+  name: string;
+  color?: string;
 };
 
+export type PaginationFilters = {
+  pagination: Pagination;
+  filters: Filters;
+};
+
+export type Pagination = {
+  page: number;
+  itemsPerPage?: number;
+};
+
+export type Filter = {
+  key: string;
+  value: string;
+};
+
+export type Filters = Filter[];
 //Active
 export interface Active {
   id: number;
@@ -381,6 +398,7 @@ export interface ActiveState {
   active: Active | null;
   actives: Actives;
   activesLength: number;
+  filtered: boolean;
   itemsPerPage: number;
   page: number;
   loading: boolean;
@@ -602,6 +620,7 @@ export interface HeaderProps {
   extraIcon?: string;
   defaultAction?: () => void;
   extraAction?: () => void;
+  segment: Mode;
 }
 
 //Avatar

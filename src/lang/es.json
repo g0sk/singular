@@ -22,11 +22,13 @@
     },
     "active": {
       "title": "Activos",
-      "newActive": "Crear nuevo activo"
+      "newActive": "Crear nuevo activo",
+      "searchActive": "Buscar activos..."
     },
     "activeType": {
       "title": "Tipos",
-      "newActiveType": "Crear nuevo tipo"
+      "newActiveType": "Crear nuevo tipo",
+      "searchActiveType": "Buscar tipos..."
     },
     "record": {
       "title": "Actividad",
@@ -56,6 +58,16 @@
     "empty": "No hay documentos"
   },
   "user": {},
+  "filter": {
+    "label": "Filtros",
+    "active": {
+      "reference": "referencia",
+      "activeType": "tipo"
+    },
+    "activeType": {
+      "name": "Nombre"
+    }
+  },
   "form": {
     "login": {
       "email": {

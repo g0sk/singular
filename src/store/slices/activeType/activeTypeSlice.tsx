@@ -6,10 +6,12 @@ import {
   createActiveType,
   deleteActiveType,
   updateActiveType,
+  fetchFilteredActiveTypes,
 } from 'store/slices/activeType/activeTypeAsyncThunk';
 const initialState: ActiveTypeState = {
   page: 1,
   itemsPerPage: 9,
+  filtered: false,
   activeTypesLength: 0,
   activeType: null,
   activeTypes: [],
@@ -26,6 +28,7 @@ export const activeTypeSlice = createSlice({
       state.page = 1;
       state.activeTypesLength = 0;
       state.activeType = null;
+      state.filtered = false;
     },
     clearActiveType: (state) => {
       state.activeType = null;
@@ -45,6 +48,22 @@ export const activeTypeSlice = createSlice({
         state.error = false;
       })
       .addCase(fetchActiveTypes.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      })
+      .addCase(fetchFilteredActiveTypes.fulfilled, (state, action) => {
+        state.activeTypes = state.activeTypes.concat(action.payload);
+        state.activeTypesLength += action.payload.length;
+        state.filtered = true;
+        state.error = false;
+        state.loading = false;
+        state.page += 1;
+      })
+      .addCase(fetchFilteredActiveTypes.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(fetchFilteredActiveTypes.rejected, (state) => {
         state.loading = false;
         state.error = true;
       })

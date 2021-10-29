@@ -22,11 +22,13 @@
     },
     "active": {
       "title": "Actives",
-      "newActive": "Create new active"
+      "newActive": "Create new active",
+      "searchActive": "Search actives..."
     },
     "activeType": {
       "title": "Types",
-      "newActiveType": "Create new type"
+      "newActiveType": "Create new type",
+      "searchActiveType": "Search types..."
     }
   },
   "active": {
@@ -52,6 +54,16 @@
     "empty": "No records"
   },
   "user": {},
+  "filter": {
+    "label": "Filters",
+    "active": {
+      "reference": "reference",
+      "activeType": "type"
+    },
+    "activeType": {
+      "name": "Name"
+    }
+  },
   "form": {
     "login": {
       "email": {

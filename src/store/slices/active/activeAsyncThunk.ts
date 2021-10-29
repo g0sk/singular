@@ -1,18 +1,20 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import ActiveApi from 'api/activeApi';
+import {createUrlParams} from 'helpers/filters';
 import {
   Active,
   Actives,
   NewActive,
-  PaginationFilters,
   ServerError,
+  PaginationFilters,
+  Pagination,
 } from 'types';
 
-export const fetchActives = createAsyncThunk<Actives, PaginationFilters, {}>(
+export const fetchActives = createAsyncThunk<Actives, Pagination, {}>(
   'active/fetchActives',
-  async (pagination) => {
+  async (params) => {
     try {
-      const response = await ActiveApi.getActives(pagination);
+      const response = await ActiveApi.getActives(params);
       if (response.status === 200) {
         return response.data;
       }
@@ -22,13 +24,14 @@ export const fetchActives = createAsyncThunk<Actives, PaginationFilters, {}>(
   },
 );
 
-export const fetchFilteredActive = createAsyncThunk<
+export const fetchFilteredActives = createAsyncThunk<
   Actives,
   PaginationFilters,
   {}
->('active/fetchFilteredActives', async (pagination) => {
+>('active/fetchFilteredActives', async (params) => {
+  const urlParams = createUrlParams(params);
   try {
-    const response = await ActiveApi.getActives(pagination);
+    const response = await ActiveApi.getFilteredActives(urlParams);
     if (response.status === 200) {
       return response.data;
     }
@@ -36,6 +39,21 @@ export const fetchFilteredActive = createAsyncThunk<
     throw error;
   }
 });
+
+export const fetchTag = createAsyncThunk<Actives, PaginationFilters, {}>(
+  'active/fetchTag',
+  async (filters) => {
+    const formattedFilters = createUrlParams(filters);
+    try {
+      const response = await ActiveApi.getTag(formattedFilters);
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+);
 
 export const fetchActive = createAsyncThunk<Active, number, {}>(
   'active/fetchActive',

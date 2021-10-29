@@ -1,14 +1,35 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import ActiveTypeApi from 'api/activeTypeApi';
-import {ActiveType, ActiveTypes, NewActiveType, PaginationFilters} from 'types';
+import {createUrlParams} from 'helpers/filters';
+import {
+  ActiveType,
+  ActiveTypes,
+  NewActiveType,
+  Pagination,
+  PaginationFilters,
+} from 'types';
 
-export const fetchActiveTypes = createAsyncThunk<
+export const fetchActiveTypes = createAsyncThunk<ActiveTypes, Pagination, {}>(
+  'activeType/fetchActiveTypes',
+  async (pagination) => {
+    try {
+      const response = await ActiveTypeApi.getActiveTypes(pagination);
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+);
+export const fetchFilteredActiveTypes = createAsyncThunk<
   ActiveTypes,
   PaginationFilters,
   {}
->('activeType/fetchActiveTypes', async (pagination) => {
+>('activeType/fetchFilteredActiveTypes', async (params) => {
+  const urlParams = createUrlParams(params);
   try {
-    const response = await ActiveTypeApi.getActiveTypes(pagination);
+    const response = await ActiveTypeApi.getFilteredActiveTypes(urlParams);
     if (response.status === 200) {
       return response.data;
     }
