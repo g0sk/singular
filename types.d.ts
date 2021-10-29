@@ -1,6 +1,5 @@
 import {Dispatch, SetStateAction} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Image} from 'react-native';
 import {TagEvent} from 'react-native-nfc-manager';
 import {
   SpacingProps,
@@ -258,10 +257,7 @@ export interface User {
   updatedAt?: string;
   deletedAt?: string;
   groups?: string[];
-  image: {
-    id: number;
-    contentUrl: string;
-  } | null;
+  image: File | null;
 }
 
 //Updated user
@@ -612,7 +608,6 @@ export type ButtonProps = SpacingProps<Theme> &
 
 //Header
 export interface HeaderProps {
-  disabled: boolean;
   label: string;
   labelAction?: () => void;
   defaultIcon?: string;
@@ -623,15 +618,10 @@ export interface HeaderProps {
   segment: Mode;
 }
 
-//Avatar
-export interface AvatarProps {
-  hasBorder?: boolean;
-  placeholderImg?: Image;
-  uri?: string;
-  height?: number;
-  width?: number;
-  longPress: () => void;
-  press: () => void;
+//Simple header
+export interface SimpleHeaderProps {
+  label: string;
+  labelAction?: () => void;
 }
 
 //Image Picker
@@ -648,14 +638,6 @@ export type ParsedImage = {
   height: number | undefined;
   fileSize: number | undefined;
   fileName: string | undefined;
-};
-
-export type ImagePickerProps = {
-  visible: boolean;
-  setModalVisibility: Dispatch<SetStateAction<boolean>>;
-  //saveImage: Dispatch<SetStateAction<ParsedImage | undefined>>;
-  saveImage: (image: ParsedImage) => void;
-  cameraType?: 'back' | 'front';
 };
 
 export type ImageUploadProps = {

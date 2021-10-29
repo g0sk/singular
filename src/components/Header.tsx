@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
 import {TouchableOpacity} from 'react-native';
-import {Search, View, Text} from 'components';
+import {Search, View, Text} from './';
 import Icon from 'react-native-vector-icons/Feather';
 import {HeaderProps, SearchFilter} from 'types';
 import {translate} from 'core';
 
 export const Header: React.FC<HeaderProps> = ({
-  disabled,
   label,
   labelAction = () => null,
   defaultIcon,
@@ -48,7 +47,7 @@ export const Header: React.FC<HeaderProps> = ({
       {!openSearch ? (
         <View flexDirection="row" justifyContent="space-between" height={45}>
           <View>
-            <TouchableOpacity onPress={labelAction} disabled={disabled}>
+            <TouchableOpacity onPress={labelAction}>
               <Text variant="headerTitle">{label}</Text>
             </TouchableOpacity>
           </View>

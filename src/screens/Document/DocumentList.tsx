@@ -192,7 +192,6 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
     <View>
       <View margin="m">
         <Header
-          disabled={false}
           defaultIcon="plus-circle"
           defaultAction={_createItem}
           hasExtraIcon={true}

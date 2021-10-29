@@ -1,42 +1,28 @@
-import React, {useState} from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import {VERSION} from '@env';
 import {Alert, StyleSheet, ToastAndroid} from 'react-native';
-import {
-  Avatar,
-  Button,
-  Header,
-  ImagePicker,
-  View,
-  Text,
-  TextInput,
-} from 'components';
-import {useFormik} from 'formik';
-import * as Yup from 'yup';
-import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
+import {Button, SimpleHeader, View, Text, Avatar} from 'components';
+import {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {useAuth, translate} from 'core';
-import {UserState, ParsedImage, UserFormValues} from 'types';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {createMediaObject} from 'store/slices/mediaObject/mediaObjectAsyncThunk';
+import {File, UserState} from 'types';
+import Icon from 'react-native-vector-icons/Feather';
+import {useTheme} from 'ui/theme';
 import {updateUser} from 'store/slices/user/userAsyncThunk';
-import {getCredentials, setCredentials} from 'utils/storage';
-
-const UserSchema = Yup.object().shape({
-  username: Yup.string()
-    .email('Incorrect email format')
-    .required('Email required'),
-  name: Yup.string().required('Name required').min(3),
-  lastName: Yup.string().required('Lastname required').min(3),
-});
 
 export const Profile: React.FC = () => {
+  const theme = useTheme();
+  const [file, setFile] = useState<File | null>(null);
   const dispatch = useAppDispatch();
-  const {user, error}: UserState = useAppSelector((state) => state.user);
-  const [userNameChange, setUsernameChange] = useState<boolean>(false);
-  const [nameChange, setNameChange] = useState<boolean>(false);
-  const [lastNameChange, setLastNameChange] = useState<boolean>(false);
-  const [modal, setModal] = useState<boolean>(false);
   const {signOut} = useAuth();
+  const {user, error, loading}: UserState = useAppSelector(
+    (state) => state.user,
+  );
 
+  useLayoutEffect(() => {
+    if (user !== null) {
+      setFile(user.image);
+    }
+  }, [user]);
   const logOut = () => {
     Alert.alert(
       translate('action.login.logOut.title'),
@@ -54,167 +40,91 @@ export const Profile: React.FC = () => {
     );
   };
 
-  const saveImage = (resImage: ParsedImage) => {
-    if (resImage !== undefined && user !== null) {
-      dispatch(createMediaObject(resImage)).then(() => {
-        const {image} = store.getState().mediaObject;
-        if (image !== null) {
-          const updatedUser = {...user, image: image};
-          dispatch(updateUser(updatedUser)).then(() => {
-            const {loading, error: userError} = store.getState().user;
-            if (!loading && !userError) {
-              ToastAndroid.showWithGravity(
-                translate('action.image.updated'),
-                ToastAndroid.CENTER,
-                ToastAndroid.SHORT,
-              );
-            }
-          });
+  const saveImage = (_file: File | null) => {
+    if (user !== null && _file !== null) {
+      const _user = {...user};
+      _user.image = {..._file};
+      dispatch(updateUser(_user)).then(() => {
+        if (!loading && !error) {
+          ToastAndroid.showWithGravity(
+            translate('action.image.updated'),
+            ToastAndroid.CENTER,
+            ToastAndroid.SHORT,
+          );
         }
       });
     }
   };
 
-  const submitForm = ({name, lastName, username}: UserFormValues) => {
-    if (user !== null) {
-      if (nameChange || lastNameChange || userNameChange) {
-        const updatedUser = {
-          id: user.id,
-          username: username,
-          name: name,
-          lastName: lastName,
-          image: user.image,
-        };
-        dispatch(updateUser(updatedUser)).then(async () => {
-          const message = !error
-            ? 'Profile Updated'
-            : 'Error while updating profile';
-          ToastAndroid.showWithGravity(
-            message,
-            ToastAndroid.CENTER,
-            ToastAndroid.SHORT,
-          );
-          if (userNameChange) {
-            try {
-              const credentials = await getCredentials();
-              if (credentials !== null) {
-                await setCredentials({
-                  username,
-                  password: credentials?.password,
-                });
-              }
-            } catch (e) {
-              throw e;
-            }
-          }
-        });
-      }
-    }
-    setUsernameChange(false);
-    setNameChange(false);
-    setLastNameChange(false);
-  };
-  const {
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    errors,
-    touched,
-    values,
-  } = useFormik({
-    validationSchema: UserSchema,
-    initialValues: {
-      name: user ? user.name : '',
-      lastName: user ? user.lastName : '',
-      username: user ? user.username : '',
-    },
-    onSubmit: (formValues: UserFormValues) => {
-      submitForm(formValues);
-    },
-    validateOnBlur: false,
-    validateOnChange: false,
-  });
-  const openImagePicker = () => setModal(true);
-  const customHandleBlur = (a: string) => {
-    handleBlur(a);
-    handleSubmit();
-  };
   return (
-    <KeyboardAwareScrollView>
+    <View>
       <View margin="m">
-        <Header label={translate('screen.profile.title')} disabled={true} />
+        <SimpleHeader label={translate('screen.profile.title')} />
       </View>
       <View marginHorizontal="xl" marginVertical="l">
-        <View style={styles.avatar} marginBottom="l">
-          <Avatar
-            uri={user?.image?.contentUrl}
-            hasBorder={true}
-            height={90}
-            width={90}
-            press={openImagePicker}
-            longPress={() => null}
-          />
-          <ImagePicker
-            setModalVisibility={setModal}
-            visible={modal}
-            saveImage={saveImage}
-          />
+        <View alignItems="center">
+          <Avatar file={file} saveImage={saveImage} />
         </View>
         <View style={styles.formData} marginHorizontal="m">
           <View marginBottom="m">
             <Text variant="formLabel" marginBottom="s">
               {translate('form.user.name.label')}
             </Text>
-            <TextInput
-              icon="user"
-              placeholder={translate('form.user.name.label')}
-              value={values.name}
-              autoCapitalize="words"
-              autoCompleteType="name"
-              onChangeText={handleChange('name')}
-              onChange={() => setNameChange(true)}
-              onBlur={() => customHandleBlur('name')}
-              error={errors.name}
-              touched={nameChange ? touched.name : false}
-              onSubmitEditing={() => handleSubmit()}
-            />
+            <View
+              height={48}
+              flexDirection="row"
+              alignItems="center"
+              paddingHorizontal="m"
+              borderColor="default"
+              borderWidth={2}
+              borderRadius={12}>
+              <View marginRight="m">
+                <Icon name="user" color={theme.colors.default} size={20} />
+              </View>
+              <View>
+                <Text>{user?.name}</Text>
+              </View>
+            </View>
           </View>
           <View marginBottom="m">
             <Text variant="formLabel" marginBottom="s">
               {translate('form.user.lastName.label')}
             </Text>
-            <TextInput
-              icon="users"
-              placeholder={translate('form.user.lastName.placeholder')}
-              value={values.lastName}
-              autoCapitalize="words"
-              autoCompleteType="username"
-              onChangeText={handleChange('lastName')}
-              onChange={() => setLastNameChange(true)}
-              onBlur={() => customHandleBlur('lastName')}
-              error={errors.name}
-              touched={lastNameChange ? touched.lastName : false}
-              onSubmitEditing={() => handleSubmit()}
-            />
+            <View
+              height={48}
+              flexDirection="row"
+              alignItems="center"
+              paddingHorizontal="m"
+              borderColor="default"
+              borderWidth={2}
+              borderRadius={12}>
+              <View marginRight="m">
+                <Icon name="users" color={theme.colors.default} size={20} />
+              </View>
+              <View>
+                <Text>{user?.lastName}</Text>
+              </View>
+            </View>
           </View>
           <View marginBottom="m">
             <Text variant="formLabel" marginBottom="s">
               {translate('form.user.email.label')}
             </Text>
-            <TextInput
-              icon="mail"
-              placeholder={translate('form.user.email.placeholder')}
-              value={values.username}
-              autoCapitalize="none"
-              autoCompleteType="email"
-              onChangeText={handleChange('username')}
-              onBlur={() => customHandleBlur('username')}
-              error={errors.username}
-              touched={userNameChange ? touched.username : false}
-              onChange={() => setUsernameChange(true)}
-              returnKeyLabel="go"
-              onSubmitEditing={() => handleSubmit()}
-            />
+            <View
+              height={48}
+              flexDirection="row"
+              alignItems="center"
+              paddingHorizontal="m"
+              borderColor="default"
+              borderWidth={2}
+              borderRadius={12}>
+              <View marginRight="m">
+                <Icon name="mail" color={theme.colors.default} size={20} />
+              </View>
+              <View>
+                <Text>{user?.username}</Text>
+              </View>
+            </View>
           </View>
           <View marginHorizontal="l" marginVertical="l">
             <Button
@@ -230,7 +140,7 @@ export const Profile: React.FC = () => {
           </View>
         </View>
       </View>
-    </KeyboardAwareScrollView>
+    </View>
   );
 };
 

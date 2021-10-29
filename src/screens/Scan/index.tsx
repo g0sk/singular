@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Button, Header, Screen, View} from 'components';
+import {Button, SimpleHeader, Screen, View} from 'components';
 import {Dimensions, ToastAndroid} from 'react-native';
 import {initNfc, readNdef, isEnabled, isSupported} from 'utils/nfc_scanner';
 import {translate} from 'core';
@@ -8,7 +8,7 @@ import ErrorScan from './ErrorScan';
 import Scanning from './Scanning';
 import SuccessScan from './SuccesScan';
 import {Active, ActiveState, ActiveTagEvent} from 'types';
-import {fetchFilteredActive} from 'store/slices/active/activeAsyncThunk';
+import {fetchTag} from 'store/slices/active/activeAsyncThunk';
 import store, {useAppDispatch} from 'store/configureStore';
 
 const {height} = Dimensions.get('window');
@@ -36,10 +36,12 @@ export const Scan = () => {
 
   const fetchExistingTag = (reference: string) => {
     dispatch(
-      fetchFilteredActive({
-        page: 1,
-        itemsPerPage: 1,
-        filter: {key: 'reference', value: reference},
+      fetchTag({
+        pagination: {
+          page: 1,
+          itemsPerPage: 1,
+        },
+        filters: [{key: 'reference', value: reference}],
       }),
     ).then(() => {
       const {active}: ActiveState = store.getState().active;
@@ -62,12 +64,12 @@ export const Scan = () => {
     }
   };
 
-  const resetState = () => {
+  /* const resetState = () => {
     setError(false);
     setReading(false);
     setTag(undefined);
     setActive(null);
-  };
+  }; */
 
   const showToast = async () => {
     const nfc_enabled = await isEnabled();
@@ -118,7 +120,7 @@ export const Scan = () => {
     <Screen>
       <View height={height - 60}>
         <View margin="m">
-          <Header label={translate('screen.scan.title')} disabled={true} />
+          <SimpleHeader label={translate('screen.scan.title')} />
         </View>
         <View margin="m" height={450}>
           {tag && !error && <SuccessScan tag={tag} />}
