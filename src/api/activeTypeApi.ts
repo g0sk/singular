@@ -1,18 +1,14 @@
 import {apiURL} from 'api';
-import {ActiveType, NewActiveType, Pagination} from 'types';
+import {ActiveType, NewActiveTypeProps, Pagination} from 'types';
 
 const getActiveType = (id: number) => apiURL.get('/api/active_types/' + id);
 const getActiveTypes = ({page, itemsPerPage}: Pagination) =>
   apiURL.get(
-    '/api/active_types' +
-      '?' +
-      'page=' +
-      page +
-      (itemsPerPage ? '&itemsPerPage=' + itemsPerPage : ''),
+    `/api/active_types?page=${page}&itemsPerPage=${itemsPerPage}&order[entryDate]=desc`,
   );
 const getFilteredActiveTypes = (urlParams: string) =>
   apiURL.get('/api/active_types' + urlParams);
-const createActiveType = (activeType: NewActiveType) =>
+const createActiveType = (activeType: NewActiveTypeProps) =>
   apiURL.post('/api/active_types', activeType);
 const updateActiveType = (activeType: ActiveType, id: number) =>
   apiURL.put('/api/active_types/' + id, activeType);

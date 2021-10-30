@@ -31,7 +31,7 @@ export const ActiveListItem: React.FC<ActiveItemFormProps> = ({
   }, [entryDate]);
 
   return (
-    <View flexDirection="row" marginBottom="l" alignItems="center">
+    <View flexDirection="row" marginBottom="m" alignItems="center">
       <TouchableOpacity onPress={_itemHandler}>
         <View
           borderColor="primary"

@@ -176,6 +176,10 @@ const theme = createTheme({
       color: 'lightText',
       fontSize: 15,
     },
+    button_create: {
+      color: 'lightText',
+      fontSize: 15,
+    },
     button_secondary: {
       color: 'lightText',
       fontSize: 15,
@@ -277,6 +281,9 @@ const theme = createTheme({
     delete: {
       backgroundColor: 'error',
     },
+    create: {
+      backgroundColor: 'secondary',
+    },
   },
   navigation: {
     dark: false,
@@ -293,6 +300,4 @@ const theme = createTheme({
 
 export type Theme = typeof theme;
 export const useTheme = () => useReTheme<Theme>();
-export const ThemeProvider = ({children}: {children: React.ReactNode}) => (
-  <RestyleProvider theme={theme}>{children}</RestyleProvider>
-);
+export

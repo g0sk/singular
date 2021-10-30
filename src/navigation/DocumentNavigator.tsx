@@ -3,10 +3,10 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {
   DocumentList,
   ActiveDetails,
-  ActiveNewItem,
+  NewActive,
   ActiveTypeDetails,
-  ActiveTypeNewItem,
-  TagDetails,
+  NewActiveType,
+  NewTag,
   RecordDetails,
 } from 'screens';
 import {RootDocumentParamList} from 'types';
@@ -37,15 +37,15 @@ export const DocumentNavigator = () => {
       />
       <Stack.Screen
         name="NewActive"
-        component={ActiveNewItem}
+        component={NewActive}
         options={({route}) => ({
           headerShown: true,
           title: route.params.title,
         })}
       />
       <Stack.Screen
-        name="TagDetails"
-        component={TagDetails}
+        name="NewTag"
+        component={NewTag}
         options={({route}) => ({
           headerShown: true,
           title: route.params.title,
@@ -63,7 +63,7 @@ export const DocumentNavigator = () => {
       />
       <Stack.Screen
         name="NewActiveType"
-        component={ActiveTypeNewItem}
+        component={NewActiveType}
         options={({route}) => ({
           headerShown: true,
           title: route.params.title,

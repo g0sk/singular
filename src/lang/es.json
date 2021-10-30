@@ -179,6 +179,7 @@
         "label": "Attributos personalizados",
         "empty": "Selecciona un tipo para heredar sus attributos"
       },
+      "activeTypeCount": "Activos asociados",
       "action": {
         "delete": {
           "title": "¿Borrar el tipo",
@@ -198,7 +199,7 @@
 
     },
     "tag": {
-      "notFound": "Tipo no encontrado en la etiqueta",
+      "notFound": "No se han encontrado datos en la etiqueta",
       "reference": {
         "label": "Referencia",
         "placeholder": "Referencia"
@@ -242,7 +243,8 @@
     "value": "Valor",
     "name": "Nombre",
     "field": {
-      "minRef": "La referencia debe tener al menos 2 caracteres",
+      "minName": "El nombre debe tener al menos 2 caracteres",
+      "minRef": "La referencia debe tener al menos 8 caracteres",
       "unitSelect": "Debe seleccionar una unidad",
       "typeSelect": "A type must be selected",
       "noItems": "No hay elementos que mostrar"

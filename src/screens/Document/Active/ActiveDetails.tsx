@@ -37,7 +37,7 @@ import {translate} from 'core';
 import dayjs from 'dayjs';
 import {useFocusEffect} from '@react-navigation/core';
 import {fetchActiveRecords} from 'store/slices/record/recordAsyncThunk';
-import {clearActive, resetActiveState} from 'store/slices/active/activeSlice';
+import {clearActive} from 'store/slices/active/activeSlice';
 import {resetRecordState} from 'store/slices/record/recordSlice';
 import {resetUnitState} from 'store/slices/unit/unitSlice';
 
@@ -55,17 +55,6 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   const activeState: ActiveState = useAppSelector((state) => state.active);
   const recordState: RecordState = useAppSelector((state) => state.record);
 
-  //Unmount when screen loses focus
-  useFocusEffect(
-    useCallback(() => {
-      return () => {
-        resetRecordState();
-        clearActive();
-        resetUnitState();
-      };
-    }, []),
-  );
-
   useLayoutEffect(() => {
     store.dispatch(fetchActiveRecords(route.params.recordId));
     store.dispatch(fetchActive(route.params.activeId));
@@ -80,20 +69,31 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
     }
   }, [activeState.active]);
 
+  //Unmount when screen loses focus
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        store.dispatch(resetRecordState());
+        store.dispatch(resetUnitState());
+        store.dispatch(clearActive());
+      };
+    }, []),
+  );
+
   const onSave = () => {
     if (change && activeState.active !== null) {
       setSaved(true);
-      const _item: Active = {
+      const active: Active = {
         ...activeState.active,
         file: file !== null ? {...file} : null,
         description: description,
         basicAttributes: [...basicAttributes],
         customAttributes: [...customAttributes],
       };
-      dispatch(updateActive(_item)).then(() => {
-        dispatch(fetchActives({page: 1, itemsPerPage: 7}));
+      dispatch(updateActive(active)).then(() => {
         if (activeState.active !== null) {
           dispatch(fetchActiveRecords(activeState.active.activeRecord.id));
+          dispatch(fetchActives({page: 1, itemsPerPage: 7}));
         }
         setChange(false);
         ToastAndroid.showWithGravity(
@@ -129,7 +129,6 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
 
   const onDeleteActive = () => {
     dispatch(deleteActive(route.params.activeId)).then(() => {
-      dispatch(resetActiveState());
       dispatch(fetchActives({page: 1, itemsPerPage: 7}));
       navigation.goBack();
     });
@@ -164,7 +163,6 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
     onChange();
   };
   const onCustomAttributesChange = (_customAttributes: Attribute[]) => {
-    console.log(_customAttributes.length);
     setCustomAttributes([..._customAttributes]);
     onChange();
   };

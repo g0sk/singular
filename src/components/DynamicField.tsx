@@ -87,6 +87,7 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
                   textAlign="center"
                   keyboardType="numeric"
                   onBlur={() => onValueChange()}
+                  selectionColor={theme.colors.primary}
                 />
               </View>
             ) : (

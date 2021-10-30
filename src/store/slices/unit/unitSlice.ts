@@ -1,11 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {
-  createUnit,
-  //deleteUnit,
-  updateUnit,
-  fetchUnits,
-  fetchUnit,
-} from './unitAsyncThunk';
+import {createUnit, updateUnit, fetchUnits, fetchUnit} from './unitAsyncThunk';
 import {UnitState} from 'types';
 
 const initialState: UnitState = {

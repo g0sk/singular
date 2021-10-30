@@ -1,3 +1,3 @@
 export * from './ActiveTypeDetails';
 export * from './ActiveTypeListItem';
-export * from './ActiveTypeNewItem';
+export * from './NewActiveType';

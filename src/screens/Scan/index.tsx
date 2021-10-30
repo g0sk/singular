@@ -10,6 +10,7 @@ import SuccessScan from './SuccesScan';
 import {Active, ActiveState, ActiveTagEvent} from 'types';
 import {fetchTag} from 'store/slices/active/activeAsyncThunk';
 import store, {useAppDispatch} from 'store/configureStore';
+import {clearActive} from 'store/slices/active/activeSlice';
 
 const {height} = Dimensions.get('window');
 
@@ -17,7 +18,7 @@ export const Scan = () => {
   const navigation = useNavigation();
   const [reading, setReading] = useState(false);
   const [error, setError] = useState<boolean>(false);
-  const [_active, setActive] = useState<Active | null>(null);
+  const [active, setActive] = useState<Active | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [tag, setTag] = useState<ActiveTagEvent | undefined>(undefined);
   const [enabled, setEnabled] = useState<boolean>(false);
@@ -35,6 +36,7 @@ export const Scan = () => {
   }, []);
 
   const fetchExistingTag = (reference: string) => {
+    dispatch(clearActive());
     dispatch(
       fetchTag({
         pagination: {
@@ -44,32 +46,33 @@ export const Scan = () => {
         filters: [{key: 'reference', value: reference}],
       }),
     ).then(() => {
-      const {active}: ActiveState = store.getState().active;
-      if (active !== null) {
-        setActive(active);
+      const activeState: ActiveState = store.getState().active;
+      if (activeState.active !== null) {
+        setActive(activeState.active);
       }
     });
   };
 
   const goToDetails = () => {
     if (tag !== undefined) {
-      if (_active === null) {
+      if (active === null) {
         navigation.navigate('TagDetails', {title: tag?.id, tag: tag});
       } else {
         navigation.navigate('ActiveDetails', {
-          title: _active.reference,
-          activeId: _active.id,
+          title: active.reference,
+          activeId: active.id,
         });
       }
+      resetState();
     }
   };
 
-  /* const resetState = () => {
+  const resetState = () => {
     setError(false);
     setReading(false);
     setTag(undefined);
     setActive(null);
-  }; */
+  };
 
   const showToast = async () => {
     const nfc_enabled = await isEnabled();

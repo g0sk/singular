@@ -1,4 +1,10 @@
-import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import {DynamicField, DynamicNewField, View, Text, Button} from 'components';
 import {TouchableOpacity, StyleSheet} from 'react-native';
 import {translate} from 'core';
@@ -13,7 +19,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
   editDropdownValue,
   editValue,
   setChanges,
-  open,
+  open = true,
   emptyMessage,
 }) => {
   const [newItems, setNewItems] = useState<Attribute[]>([]);
@@ -24,7 +30,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
 
   const theme = useTheme();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setNewItems(collection);
   }, [collection]);
 

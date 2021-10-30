@@ -11,7 +11,14 @@ const initialState: BasicAttributeState = {
 const basicAttributeSlice = createSlice({
   name: 'basicAttribute',
   initialState,
-  reducers: {},
+  reducers: {
+    resetBasicAttributeState: (state) => {
+      state.basicAttribute = null;
+      state.basicAttributes = [];
+      state.loading = false;
+      state.error = false;
+    },
+  },
   extraReducers: (build) => {
     build
       .addCase(fetchBasicAttributes.fulfilled, (state, action) => {
@@ -31,3 +38,4 @@ const basicAttributeSlice = createSlice({
 });
 
 export default basicAttributeSlice.reducer;
+export const {resetBasicAttributeState} = basicAttributeSlice.actions;

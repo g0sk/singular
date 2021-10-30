@@ -1,4 +1,10 @@
-import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import {Button, DynamicSection, Text, View} from 'components';
 import {
   ActiveTypeDetailsScreenProps,
@@ -23,42 +29,31 @@ import {
   fetchActiveTypes,
   updateActiveType,
 } from 'store/slices/activeType/activeTypeAsyncThunk';
-import {
-  clearActiveType,
-  resetActiveTypeState,
-} from 'store/slices/activeType/activeTypeSlice';
+import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useFocusEffect} from '@react-navigation/core';
-import {useTheme} from 'ui/theme';
+import {resetUnitState} from 'store/slices/unit/unitSlice';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   route,
   navigation,
 }) => {
-  const [item, setItem] = useState<ActiveType>({} as ActiveType);
-  const [save, setSave] = useState<boolean>(false);
-  const [referenceError, setReferenceError] = useState<string | undefined>();
-  const [name, setName] = useState<string>('');
+  const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const [basicAttributes, setBasicAttributes] = useState<Attribute[]>([]);
   const [customAttributes, setCustomAttributes] = useState<Attribute[]>([]);
-  const [changedBasicAttributes, setChangedBasicAttributes] = useState<
-    Attribute[]
-  >([]);
-  const [changedCustomAttributes, setChangedCustomAttributes] = useState<
-    Attribute[]
-  >([]);
   const [change, setChange] = useState<boolean>(false);
+
   const dispatch = useAppDispatch();
-  const theme = useTheme();
   const _ref = useRef<TextInput>(null);
   const activeTypeState: ActiveTypeState = useAppSelector(
     (state) => state.activeType,
   );
 
-  const _handleDelete = () => {
+  const onDelete = () => {
     Alert.alert(
-      translate('form.activeType.action.delete.title') + ' ' + item.name + '?',
+      translate('form.activeType.action.delete.title') + ' ' + '?',
       translate('form.activeType.action.delete.message'),
       [
         {
@@ -67,15 +62,14 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
         },
         {
           text: translate('action.general.delete'),
-          onPress: _deleteActiveType,
+          onPress: handleDeleteActiveType,
         },
       ],
     );
   };
 
-  const _deleteActiveType = () => {
-    dispatch(deleteActiveType(item.id)).then(() => {
-      dispatch(resetActiveTypeState());
+  const handleDeleteActiveType = () => {
+    dispatch(deleteActiveType(route.params.typeId)).then(() => {
       dispatch(fetchActiveTypes({page: 1, itemsPerPage: 9}));
       navigation.goBack();
     });
@@ -88,80 +82,62 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
     }
   };
 
-  const _handleTitleChange = () => {
-    navigation.setOptions({title: name});
-    if (name.length < 2) {
-      setReferenceError('error');
-    } else {
-      setReferenceError(undefined);
-    }
-  };
-
-  const _handleSave = () => {
-    if (change) {
-      if (name.length >= 2) {
-        setSave(true);
-        const _item = {} as ActiveType;
-        _item.id = item.id;
-        _item.name = name;
-        _item.basicAttributes = [...changedBasicAttributes];
-        _item.customAttributes = [...changedCustomAttributes];
-        dispatch(updateActiveType(_item)).then(() => {
-          dispatch(resetActiveTypeState());
-          dispatch(fetchActiveTypes({page: 1, itemsPerPage: 9}));
-          ToastAndroid.showWithGravity(
-            translate('success.general.saved'),
-            ToastAndroid.BOTTOM,
-            ToastAndroid.SHORT,
-          );
-        });
-      } else {
+  const onSave = () => {
+    if (change && activeTypeState.activeType !== null) {
+      const activeType: ActiveType = {
+        ...activeTypeState.activeType,
+        basicAttributes: [...basicAttributes],
+        customAttributes: [...customAttributes],
+      };
+      dispatch(updateActiveType(activeType)).then(() => {
+        dispatch(fetchActiveTypes({page: 1, itemsPerPage: 9}));
         ToastAndroid.showWithGravity(
-          translate('form.field.minRef'),
-          ToastAndroid.CENTER,
+          translate('success.general.saved'),
+          ToastAndroid.BOTTOM,
           ToastAndroid.SHORT,
         );
-      }
-      setChange(false);
+      });
     }
+    setChange(false);
+  };
+
+  const onBasicAttributesChange = (_basicAttributes: Attribute[]) => {
+    setChange(true);
+    setBasicAttributes(_basicAttributes);
+  };
+
+  const onCustomAttributesChange = (_customAttributes: Attribute[]) => {
+    setChange(true);
+    setCustomAttributes(_customAttributes);
   };
 
   useEffect(() => {
-    setChange(true);
-  }, [name, basicAttributes, customAttributes]);
-
-  useLayoutEffect(() => {
-    if (activeTypeState.activeType !== null) {
-      setItem(activeTypeState.activeType);
-      setName(activeTypeState.activeType.name);
-      setBasicAttributes([...activeTypeState.activeType.basicAttributes]);
-      setCustomAttributes([...activeTypeState.activeType.customAttributes]);
-      setChangedBasicAttributes([
-        ...activeTypeState.activeType.basicAttributes,
-      ]);
-      setChangedCustomAttributes([
-        ...activeTypeState.activeType.customAttributes,
-      ]);
-    }
-  }, [activeTypeState]);
-
-  useEffect(() => {
-    setSave(false);
     store.dispatch(fetchUnits());
     if (route.params.typeId !== null) {
       store.dispatch(fetchActiveType(route.params.typeId));
     }
   }, [route.params.typeId]);
 
-  useFocusEffect(() => {
-    return () => {
-      store.dispatch(clearActiveType());
-    };
-  });
+  useLayoutEffect(() => {
+    if (activeTypeState.activeType !== null) {
+      setInitialLoad(false);
+      setBasicAttributes([...activeTypeState.activeType.basicAttributes]);
+      setCustomAttributes([...activeTypeState.activeType.customAttributes]);
+    }
+  }, [activeTypeState.activeType]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        store.dispatch(clearActiveType());
+        store.dispatch(resetUnitState());
+      };
+    }, []),
+  );
 
   return (
     <View style={styles.container} marginHorizontal="m" marginBottom="m">
-      {activeTypeState.loading && !save ? (
+      {activeTypeState.loading && initialLoad ? (
         <View style={styles.loading}>
           <ActivityIndicator
             size="large"
@@ -189,36 +165,34 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
                     </Text>
                   </View>
                   <View marginTop="s">
-                    <TextInput
-                      style={{
-                        borderBottomColor: !referenceError
-                          ? theme.colors.primary
-                          : theme.colors.error,
-                        borderBottomWidth: 1,
-                        margin: 0,
-                        padding: 0,
-                      }}
-                      ref={_ref}
-                      placeholder={translate(
-                        'form.activeType.name.placeholder',
-                      )}
-                      value={name}
-                      autoCapitalize="words"
-                      onChangeText={(text) => setName(text)}
-                      onBlur={_handleTitleChange}
-                    />
+                    <Text>{activeTypeState.activeType?.name}</Text>
                   </View>
                 </TouchableOpacity>
               </View>
               {change && (
                 <View width={100}>
                   <Button
-                    onPress={_handleSave}
+                    onPress={onSave}
                     variant="secondary"
                     label={translate('action.general.save')}
                   />
                 </View>
               )}
+            </View>
+            <View flexDirection="column" marginBottom="m">
+              <View marginBottom="m">
+                <Text variant="formLabel">
+                  {translate('form.activeType.activeTypeCount')}
+                </Text>
+              </View>
+              <View flexDirection="row">
+                <View marginRight="s">
+                  <Icon name="document-text" size={20} />
+                </View>
+                <View>
+                  <Text>{activeTypeState.activeType?.activesCount}</Text>
+                </View>
+              </View>
             </View>
             <View marginBottom="m">
               <DynamicSection
@@ -226,11 +200,8 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
                 editDropdownValue={true}
                 collection={basicAttributes}
                 label={translate('form.activeType.basicAttribute.label')}
-                isEditable={false}
-                setChanges={(_basicAttributes) =>
-                  setChangedBasicAttributes(_basicAttributes)
-                }
-                open={true}
+                canAddItems={false}
+                setChanges={onBasicAttributesChange}
               />
             </View>
             <View marginVertical="m">
@@ -239,18 +210,15 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
                 editDropdownValue={true}
                 collection={customAttributes}
                 label={translate('form.activeType.customAttribute.label')}
-                isEditable={true}
-                setChanges={(_customAttributes) =>
-                  setChangedCustomAttributes(_customAttributes)
-                }
-                open={true}
+                canAddItems={true}
+                setChanges={onCustomAttributesChange}
               />
             </View>
             <View marginHorizontal="xxl" marginTop="xl" marginBottom="xxl">
               <Button
                 variant="delete"
                 label={translate('action.general.delete')}
-                onPress={_handleDelete}
+                onPress={onDelete}
               />
             </View>
           </KeyboardAwareScrollView>
@@ -273,9 +241,6 @@ const styles = StyleSheet.create({
   },
   activity: {
     flexDirection: 'column',
-  },
-  date: {
-    //alignItems: 'center',
   },
   info: {
     flexDirection: 'row',

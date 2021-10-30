@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from 'react';
 import {Segment} from 'components';
-import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import {Dimensions, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {Header, Text, View} from 'components';
 import {ActiveListItem, ActiveTypeListItem} from 'screens';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
@@ -28,6 +28,7 @@ import {translate} from 'core';
 import {resetActiveState} from 'store/slices/active/activeSlice';
 import {resetActiveTypeState} from 'store/slices/activeType/activeTypeSlice';
 
+const {height} = Dimensions.get('window');
 export const DocumentList: React.FC<DocumentListStackProps> = ({
   navigation,
   route,
@@ -47,7 +48,7 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
   );
 
   //Handlers
-  const _handleActivesOnEndReached = () => {
+  const onActivesOnEndReached = () => {
     if (!activeState.filtered) {
       dispatch(
         fetchActives({
@@ -68,7 +69,7 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
     }
   };
 
-  const _handleActiveTypesOnEndReached = () => {
+  const onActiveTypesOnEndReached = () => {
     if (!activeTypeState.filtered) {
       dispatch(
         fetchActiveTypes({
@@ -222,12 +223,15 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
           />
         </View>
       </View>
-      <View height={590} marginHorizontal="m" marginTop="m">
+      <View
+        height={height - 60}
+        marginHorizontal="m"
+        marginTop="m"
+        paddingBottom="dxxl">
         {segmentMode === 'active' ? (
           <FlatList
             ref={flatListRef}
             data={activeState.actives}
-            initialNumToRender={7}
             scrollEnabled={true}
             renderItem={({item}) => (
               <ActiveListItem {...{navigation, route, active: {...item}}} />
@@ -236,8 +240,8 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
             onRefresh={() => refreshActives()}
             refreshing={activeState.loading}
             ListEmptyComponent={<EmptyList />}
-            onEndReached={_handleActivesOnEndReached}
-            onEndReachedThreshold={7}
+            onEndReached={onActivesOnEndReached}
+            onEndReachedThreshold={0}
           />
         ) : (
           <FlatList
@@ -251,9 +255,8 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
             onRefresh={() => refreshTypes()}
             refreshing={activeTypeState.loading}
             ListEmptyComponent={<EmptyList />}
-            initialNumToRender={9}
-            onEndReached={_handleActiveTypesOnEndReached}
-            onEndReachedThreshold={0.1}
+            onEndReached={onActiveTypesOnEndReached}
+            onEndReachedThreshold={0}
           />
         )}
       </View>

@@ -132,15 +132,11 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({file, saveImage}) => {
         <View>
           {contentUrl.length > 0 ? (
             <View flexDirection="column">
-              <View
-                paddingVertical="s"
-                marginHorizontal="m"
-                flexDirection="row"
-                justifyContent="flex-end">
+              <View flexDirection="row" justifyContent="flex-end">
                 {isNew && (
                   <View>
                     {mediaObjectState.loading ? (
-                      <View marginHorizontal="m" marginVertical="s">
+                      <View marginTop="m" marginHorizontal="l">
                         <ActivityIndicator
                           animating={mediaObjectState.loading}
                           size="small"
@@ -149,17 +145,19 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({file, saveImage}) => {
                       </View>
                     ) : (
                       <TouchableOpacity onPress={updateImage}>
-                        <Icon
-                          name="checkmark-circle-outline"
-                          color={theme.colors.primary}
-                          size={35}
-                        />
+                        <View marginTop="m" marginHorizontal="l">
+                          <Icon
+                            name="checkmark-circle-outline"
+                            color={theme.colors.primary}
+                            size={35}
+                          />
+                        </View>
                       </TouchableOpacity>
                     )}
                   </View>
                 )}
               </View>
-              <View margin="m" alignItems="center">
+              <View marginVertical="l" alignItems="center">
                 <Image
                   style={{zIndex: 10}}
                   source={{uri: contentUrl}}
@@ -174,7 +172,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({file, saveImage}) => {
             </View>
           )}
         </View>
-        <View flexDirection="column" alignItems="center">
+        <View flexDirection="column" alignItems="center" marginBottom="m">
           <Button
             marginBottom="m"
             variant="upload"
@@ -210,8 +208,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({file, saveImage}) => {
 
   return (
     <View alignSelf="flex-start">
-      <TouchableOpacity
-        onPress={() => (contentUrl.length > 0 ? setShow(!show) : null)}>
+      <TouchableOpacity onPress={() => setShow(!show)}>
         <View marginBottom="m">
           <Text variant="formLabel">
             {translate('form.active.media.media')}

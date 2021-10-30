@@ -26,7 +26,7 @@ export const ActiveTypeListItem: React.FC<TypeItemFormProps> = ({
           width={350}
           flexDirection="row"
           paddingHorizontal="m"
-          height={60}
+          height={62}
           alignItems="center"
           justifyContent="space-between">
           <View>

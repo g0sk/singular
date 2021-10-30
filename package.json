@@ -46,6 +46,11 @@
     "react-redux": "^7.2.3",
     "yup": "^0.32.9"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@babel/runtime": "^7.12.5",

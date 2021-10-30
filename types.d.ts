@@ -86,7 +86,7 @@ export type RootDocumentParamList = {
     recordId: number;
     title: string;
   };
-  TagDetails: {
+  NewTag: {
     tag: ActiveTagEvent;
     title: string;
   };
@@ -162,17 +162,14 @@ export type NewActiveScreenProps = {
 };
 
 //Tag Details Screen
-export type TagDetailsRouteProp = RouteProp<
+export type NewTagRouteProp = RouteProp<RootDocumentParamList, 'NewTag'>;
+export type NewTagNavigationProp = StackNavigationProp<
   RootDocumentParamList,
-  'TagDetails'
+  'NewTag'
 >;
-export type TagDetailsNavigationProp = StackNavigationProp<
-  RootDocumentParamList,
-  'TagDetails'
->;
-export type TagDetailsScreenProps = {
-  route: TagDetailsRouteProp;
-  navigation: TagDetailsNavigationProp;
+export type NewTagScreenProps = {
+  route: NewTagRouteProp;
+  navigation: NewTagNavigationProp;
 };
 
 //Type Details Screen
@@ -313,12 +310,12 @@ export interface CustomAttributeState {
 export interface ActiveType {
   id: number;
   name: string;
-  activesCount: number;
+  activesCount?: number;
   basicAttributes: Attribute[];
   customAttributes: Attribute[];
 }
 
-export interface NewActiveType {
+export interface NewActiveTypeProps {
   name: string;
   basicAttributes: NewAttribute[];
   customAttributes: NewAttribute[];
@@ -375,13 +372,9 @@ export interface Active {
   customAttributes: Attribute[];
 }
 
-export interface NewActive {
+export interface NewActiveProps {
   reference: string;
-  entryDate: string;
   description: string;
-  activeRecord: {
-    id: number;
-  } | null;
   file: File | null;
   activeType: ActiveType | null;
   basicAttributes: NewAttribute[];
@@ -436,7 +429,9 @@ interface ScanErrorProps {
 }
 
 export interface ActiveTagEvent extends TagEvent {
-  tagType?: ActiveType;
+  reference?: number[];
+  activeType?: ActiveType;
+  file?: File | null;
   basicAttributes?: Attribute[];
   customAttributes?: Attribute[];
 }

@@ -171,6 +171,7 @@
         "label": "Custom Attributes",
         "empty": "Select a type to inherit it's attributes"
       },
+      "activeTypeCount": "Related actives",
       "action": {
         "delete": {
           "title": "Delete type",
@@ -189,7 +190,7 @@
       }
     },
     "tag": {
-      "notFound": "Type not found on tag",
+      "notFound": "Data not found on tag",
       "reference": {
         "label": "Reference",
         "placeholder": "Reference"
@@ -231,7 +232,8 @@
         "noEditRecord": "Values can't be changed on records"
       },
     "field": {
-      "minRef": "Reference must be 2 characters at least",
+      "minName": "Name must be 2 characters at least",
+      "minRef": "Reference must be 8 characters at least",
       "unitSelect": "A unit must be selected",
       "typeSelect": "A type must be selected",
       "noItems": "No items to display"
