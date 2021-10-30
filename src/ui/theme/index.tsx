@@ -300,4 +300,6 @@ const theme = createTheme({
 
 export type Theme = typeof theme;
 export const useTheme = () => useReTheme<Theme>();
-export
+export const ThemeProvider = ({children}: {children: React.ReactNode}) => (
+  <RestyleProvider theme={theme}>{children}</RestyleProvider>
+);
