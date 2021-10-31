@@ -37,9 +37,11 @@ import {translate} from 'core';
 import dayjs from 'dayjs';
 import {useFocusEffect} from '@react-navigation/core';
 import {fetchActiveRecords} from 'store/slices/record/recordAsyncThunk';
-import {clearActive} from 'store/slices/active/activeSlice';
+import {clearActive, resetActiveState} from 'store/slices/active/activeSlice';
 import {resetRecordState} from 'store/slices/record/recordSlice';
 import {resetUnitState} from 'store/slices/unit/unitSlice';
+import {resetActiveTypeState} from 'store/slices/activeType/activeTypeSlice';
+import {fetchActiveTypes} from 'store/slices/activeType/activeTypeAsyncThunk';
 
 export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   route,
@@ -93,7 +95,13 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
       dispatch(updateActive(active)).then(() => {
         if (activeState.active !== null) {
           dispatch(fetchActiveRecords(activeState.active.activeRecord.id));
-          dispatch(fetchActives({page: 1, itemsPerPage: 7}));
+          dispatch(resetActiveState());
+          dispatch(
+            fetchActives({
+              pagination: {page: 1, itemsPerPage: 7},
+              filters: [{key: 'order[entryDate]', value: 'desc'}],
+            }),
+          );
         }
         setChange(false);
         ToastAndroid.showWithGravity(
@@ -129,7 +137,20 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
 
   const onDeleteActive = () => {
     dispatch(deleteActive(route.params.activeId)).then(() => {
-      dispatch(fetchActives({page: 1, itemsPerPage: 7}));
+      dispatch(resetActiveState());
+      dispatch(
+        fetchActives({
+          pagination: {page: 1, itemsPerPage: 7},
+          filters: [{key: 'order[entryDate]', value: 'desc'}],
+        }),
+      );
+      dispatch(resetActiveTypeState());
+      dispatch(
+        fetchActiveTypes({
+          pagination: {page: 1, itemsPerPage: 9},
+          filters: [{key: 'order[id]', value: 'desc'}],
+        }),
+      );
       navigation.goBack();
     });
   };

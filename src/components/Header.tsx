@@ -43,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({
   const currentFilters =
     segment === 'active' ? activeFilters : activeTypeFilters;
   return (
-    <View>
+    <View marginRight="m">
       {!openSearch ? (
         <View flexDirection="row" justifyContent="space-between" height={45}>
           <View>

@@ -33,8 +33,11 @@ import {resetUnitState} from 'store/slices/unit/unitSlice';
 import {
   fetchActiveType,
   fetchActiveTypes,
+  fetchActiveTypesList,
 } from 'store/slices/activeType/activeTypeAsyncThunk';
 import {useTheme} from 'ui/theme';
+import {clearActive, resetActiveState} from 'store/slices/active/activeSlice';
+import {resetActiveTypeState} from 'store/slices/activeType/activeTypeSlice';
 
 export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
   route,
@@ -51,13 +54,21 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const dispatch = useAppDispatch();
   const activeState = useAppSelector((state) => state.active);
-  const {activeTypes, loading} = useAppSelector((state) => state.activeType);
+  const {activeTypesList, loading} = useAppSelector(
+    (state) => state.activeType,
+  );
   const referenceRef = useRef<TextInput>(null);
+  const refScrollView = useRef<ScrollView>(null);
   const theme = useTheme();
 
   useEffect(() => {
     store.dispatch(fetchUnits());
-    store.dispatch(fetchActiveTypes({page: 1, itemsPerPage: 30}));
+    store.dispatch(
+      fetchActiveTypesList({
+        pagination: {page: 1, itemsPerPage: 30},
+        filters: [],
+      }),
+    );
   }, [route.params]);
 
   useEffect(() => {
@@ -76,6 +87,7 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
   useFocusEffect(
     useCallback(() => {
       return () => {
+        store.dispatch(clearActive());
         store.dispatch(resetUnitState());
       };
     }, []),
@@ -90,6 +102,8 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
         ToastAndroid.CENTER,
         ToastAndroid.LONG,
       );
+      refScrollView.current?.scrollTo({x: 0, y: 0, animated: true});
+      referenceRef.current?.focus();
     } else if (type === null) {
       setChange(false);
       ToastAndroid.showWithGravity(
@@ -115,7 +129,20 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
       dispatch(createActive(newActive))
         .unwrap()
         .then(() => {
-          dispatch(fetchActives({page: 1, itemsPerPage: 7}));
+          dispatch(resetActiveState());
+          dispatch(resetActiveTypeState());
+          dispatch(
+            fetchActives({
+              pagination: {page: 1, itemsPerPage: 7},
+              filters: [{key: 'order[entryDate]', value: 'desc'}],
+            }),
+          );
+          dispatch(
+            fetchActiveTypes({
+              pagination: {page: 1, itemsPerPage: 9},
+              filters: [{key: 'order[id]', value: 'desc'}],
+            }),
+          );
           navigation.goBack();
         })
         .catch((refError: ServerError) => {
@@ -178,7 +205,7 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
   };
 
   return (
-    <View style={styles.container} marginHorizontal="m" marginBottom="m">
+    <View style={styles.container} marginHorizontal="m" marginBottom="xxl">
       {loading && initialLoad ? (
         <View style={styles.loading}>
           <ActivityIndicator animating={loading} size="large" color="black" />
@@ -186,6 +213,7 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
       ) : (
         <ScrollView
           horizontal={false}
+          ref={refScrollView}
           refreshControl={<RefreshControl refreshing={activeState.loading} />}>
           <View marginTop="m">
             <TouchableOpacity onPress={() => referenceRef.current?.focus()}>
@@ -224,7 +252,7 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
             <View marginVertical="s">
               <Dropdown
                 selected={type}
-                options={activeTypes}
+                options={activeTypesList}
                 editSelected={true}
                 setParentValue={onTypeChange}
                 header={translate('form.activeType.type.header')}
@@ -256,7 +284,7 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
             </View>
           </View>
           {loading ? (
-            <View margin="m">
+            <View marginVertical="dxxl">
               <ActivityIndicator
                 animating={loading}
                 size={'large'}
@@ -287,10 +315,9 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
               </View>
             </View>
           )}
-          {change && (
+          {change && !loading && (
             <View marginHorizontal="xxl" marginTop="l" marginBottom="xxl">
               <Button
-                disabled={loading}
                 onPress={onHandleSave}
                 variant="secondary"
                 label={translate('action.general.create')}

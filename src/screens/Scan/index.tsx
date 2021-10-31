@@ -55,13 +55,13 @@ export const Scan = () => {
 
   const goToDetails = () => {
     if (tag !== undefined) {
-      if (active === null) {
-        navigation.navigate('TagDetails', {title: tag?.id, tag: tag});
-      } else {
+      if (active !== null && active !== undefined) {
         navigation.navigate('ActiveDetails', {
           title: active.reference,
           activeId: active.id,
         });
+      } else {
+        navigation.navigate('NewTag', {title: tag?.id, tag: tag});
       }
       resetState();
     }

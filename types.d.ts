@@ -321,11 +321,19 @@ export interface NewActiveTypeProps {
   customAttributes: NewAttribute[];
 }
 
-export interface ActiveTypeState {
+export interface ActiveTypesResponse {
+  types: ActiveType[];
   page: number;
+  count: number;
+  itemsPerPage: number;
+}
+
+export interface ActiveTypeState {
+  nextPage: number;
   itemsPerPage: number;
   filtered: boolean;
   activeTypesLength: number;
+  activeTypesList: ActiveType[];
   activeType: ActiveType | null;
   activeTypes: ActiveType[];
   loading: boolean;
@@ -356,6 +364,15 @@ export type Filter = {
 };
 
 export type Filters = Filter[];
+
+//Actives Response
+export interface ActivesResponse {
+  actives: Active[];
+  page: number;
+  itemsPerPage: number;
+  count: number;
+}
+
 //Active
 export interface Active {
   id: number;
@@ -389,7 +406,7 @@ export interface ActiveState {
   activesLength: number;
   filtered: boolean;
   itemsPerPage: number;
-  page: number;
+  nextPage: number;
   loading: boolean;
   error: boolean;
   errorData: ServerError | null;
@@ -429,7 +446,6 @@ interface ScanErrorProps {
 }
 
 export interface ActiveTagEvent extends TagEvent {
-  reference?: number[];
   activeType?: ActiveType;
   file?: File | null;
   basicAttributes?: Attribute[];

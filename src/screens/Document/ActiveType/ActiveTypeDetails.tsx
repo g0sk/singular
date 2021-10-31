@@ -29,12 +29,17 @@ import {
   fetchActiveTypes,
   updateActiveType,
 } from 'store/slices/activeType/activeTypeAsyncThunk';
-import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
+import {
+  clearActiveType,
+  resetActiveTypeState,
+} from 'store/slices/activeType/activeTypeSlice';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useFocusEffect} from '@react-navigation/core';
 import {resetUnitState} from 'store/slices/unit/unitSlice';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {fetchActives} from 'store/slices/active/activeAsyncThunk';
+import {resetActiveState} from 'store/slices/active/activeSlice';
 
 export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   route,
@@ -70,7 +75,20 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
 
   const handleDeleteActiveType = () => {
     dispatch(deleteActiveType(route.params.typeId)).then(() => {
-      dispatch(fetchActiveTypes({page: 1, itemsPerPage: 9}));
+      dispatch(resetActiveTypeState());
+      dispatch(
+        fetchActiveTypes({
+          pagination: {page: 1, itemsPerPage: 9},
+          filters: [{key: 'order[id]', value: 'desc'}],
+        }),
+      );
+      dispatch(resetActiveState());
+      dispatch(
+        fetchActives({
+          pagination: {page: 1, itemsPerPage: 7},
+          filters: [{key: 'order[entryDate]', value: 'desc'}],
+        }),
+      );
       navigation.goBack();
     });
   };
@@ -90,7 +108,13 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
         customAttributes: [...customAttributes],
       };
       dispatch(updateActiveType(activeType)).then(() => {
-        dispatch(fetchActiveTypes({page: 1, itemsPerPage: 9}));
+        dispatch(resetActiveTypeState());
+        dispatch(
+          fetchActiveTypes({
+            pagination: {page: 1, itemsPerPage: 9},
+            filters: [{key: 'order[id]', value: 'desc'}],
+          }),
+        );
         ToastAndroid.showWithGravity(
           translate('success.general.saved'),
           ToastAndroid.BOTTOM,
@@ -248,5 +272,4 @@ const styles = StyleSheet.create({
   icon: {
     justifyContent: 'center',
   },
-  entryDate: {},
 });

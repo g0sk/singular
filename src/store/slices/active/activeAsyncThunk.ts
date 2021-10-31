@@ -2,30 +2,31 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import ActiveApi from 'api/activeApi';
 import {createUrlParams} from 'helpers/filters';
 import {
+  ActivesResponse,
   Active,
-  Actives,
-  NewActive,
+  NewActiveProps,
   ServerError,
   PaginationFilters,
-  Pagination,
 } from 'types';
 
-export const fetchActives = createAsyncThunk<Actives, Pagination, {}>(
-  'active/fetchActives',
-  async (params) => {
-    try {
-      const response = await ActiveApi.getActives(params);
-      if (response.status === 200) {
-        return response.data;
-      }
-    } catch (error) {
-      throw error;
+export const fetchActives = createAsyncThunk<
+  ActivesResponse,
+  PaginationFilters,
+  {}
+>('active/fetchActives', async (params) => {
+  const urlParams = createUrlParams(params);
+  try {
+    const response = await ActiveApi.getActives(urlParams);
+    if (response.status === 200) {
+      return response.data;
     }
-  },
-);
+  } catch (error) {
+    throw error;
+  }
+});
 
 export const fetchFilteredActives = createAsyncThunk<
-  Actives,
+  ActivesResponse,
   PaginationFilters,
   {}
 >('active/fetchFilteredActives', async (params) => {
@@ -40,20 +41,21 @@ export const fetchFilteredActives = createAsyncThunk<
   }
 });
 
-export const fetchTag = createAsyncThunk<Actives, PaginationFilters, {}>(
-  'active/fetchTag',
-  async (filters) => {
-    const formattedFilters = createUrlParams(filters);
-    try {
-      const response = await ActiveApi.getTag(formattedFilters);
-      if (response.status === 200) {
-        return response.data;
-      }
-    } catch (error) {
-      throw error;
+export const fetchTag = createAsyncThunk<
+  ActivesResponse,
+  PaginationFilters,
+  {}
+>('active/fetchTag', async (filters) => {
+  const formattedFilters = createUrlParams(filters);
+  try {
+    const response = await ActiveApi.getTag(formattedFilters);
+    if (response.status === 200) {
+      return response.data;
     }
-  },
-);
+  } catch (error) {
+    throw error;
+  }
+});
 
 export const fetchActive = createAsyncThunk<Active, number, {}>(
   'active/fetchActive',
@@ -71,7 +73,7 @@ export const fetchActive = createAsyncThunk<Active, number, {}>(
 
 export const createActive = createAsyncThunk<
   Active,
-  NewActive,
+  NewActiveProps,
   {rejectValue: ServerError}
 >('active/createActive', async (active, {rejectWithValue}) => {
   try {

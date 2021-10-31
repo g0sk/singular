@@ -34,9 +34,14 @@ import {resetUnitState} from 'store/slices/unit/unitSlice';
 import {
   fetchActiveType,
   fetchActiveTypes,
+  fetchActiveTypesList,
 } from 'store/slices/activeType/activeTypeAsyncThunk';
 import {useTheme} from 'ui/theme';
-import {clearActive} from 'store/slices/active/activeSlice';
+import {clearActive, resetActiveState} from 'store/slices/active/activeSlice';
+import {
+  clearActiveTypeList,
+  resetActiveTypeState,
+} from 'store/slices/activeType/activeTypeSlice';
 
 export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
   const [tag, setTag] = useState<ActiveTagEvent | null>(null);
@@ -51,13 +56,21 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const dispatch = useAppDispatch();
   const activeState = useAppSelector((state) => state.active);
-  const {activeTypes, loading} = useAppSelector((state) => state.activeType);
+  const {activeTypesList, loading} = useAppSelector(
+    (state) => state.activeType,
+  );
   const referenceRef = useRef<TextInput>(null);
+  const refScrollView = useRef<ScrollView>(null);
   const theme = useTheme();
 
   useEffect(() => {
     store.dispatch(fetchUnits());
-    store.dispatch(fetchActiveTypes({page: 1, itemsPerPage: 30}));
+    store.dispatch(
+      fetchActiveTypesList({
+        pagination: {page: 1, itemsPerPage: 30},
+        filters: [],
+      }),
+    );
   }, [route.params]);
 
   useEffect(() => {
@@ -77,6 +90,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
     useCallback(() => {
       return () => {
         store.dispatch(clearActive());
+        store.dispatch(clearActiveTypeList());
         store.dispatch(resetUnitState());
       };
     }, []),
@@ -124,6 +138,8 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
         ToastAndroid.CENTER,
         ToastAndroid.LONG,
       );
+      refScrollView.current?.scrollTo({x: 0, y: 0, animated: true});
+      referenceRef.current?.focus();
     } else if (type === null) {
       setChange(false);
       ToastAndroid.showWithGravity(
@@ -149,7 +165,20 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
       dispatch(createActive(newActive))
         .unwrap()
         .then(() => {
-          dispatch(fetchActives({page: 1, itemsPerPage: 7}));
+          dispatch(resetActiveState());
+          dispatch(
+            fetchActives({
+              pagination: {page: 1, itemsPerPage: 7},
+              filters: [{key: 'order[entryDate]', value: 'desc'}],
+            }),
+          );
+          dispatch(resetActiveTypeState());
+          dispatch(
+            fetchActiveTypes({
+              pagination: {page: 1, itemsPerPage: 9},
+              filters: [{key: 'order[id]', value: 'desc'}],
+            }),
+          );
           navigation.goBack();
         })
         .catch((refError: ServerError) => {
@@ -212,7 +241,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
   };
 
   return (
-    <View style={styles.container} marginHorizontal="m" marginBottom="m">
+    <View style={styles.container} marginHorizontal="m" marginBottom="xxl">
       {loading && initialLoad ? (
         <View style={styles.loading}>
           <ActivityIndicator animating={loading} size="large" color="black" />
@@ -220,6 +249,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
       ) : (
         <ScrollView
           horizontal={false}
+          ref={refScrollView}
           refreshControl={<RefreshControl refreshing={activeState.loading} />}>
           <View marginTop="m">
             <TouchableOpacity onPress={() => referenceRef.current?.focus()}>
@@ -258,7 +288,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
             <View marginVertical="s">
               <Dropdown
                 selected={type}
-                options={activeTypes}
+                options={activeTypesList}
                 editSelected={true}
                 setParentValue={onTypeChange}
                 header={translate('form.activeType.type.header')}
@@ -290,7 +320,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
             </View>
           </View>
           {loading ? (
-            <View margin="m">
+            <View margin="dxxl">
               <ActivityIndicator
                 animating={loading}
                 size={'large'}
@@ -321,7 +351,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
               </View>
             </View>
           )}
-          {change && (
+          {change && !activeState.loading && (
             <View marginHorizontal="xxl" marginTop="l" marginBottom="xxl">
               <Button
                 disabled={loading}

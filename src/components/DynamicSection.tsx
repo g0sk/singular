@@ -139,7 +139,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
 
   const ListHeaderComponent = () => {
     return (
-      <View style={styles.headerContainer}>
+      <View style={styles.headerContainer} marginBottom="m">
         <View marginRight="l">
           <TouchableOpacity style={styles.header} onPress={onHeaderPress}>
             <View marginRight="s">

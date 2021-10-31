@@ -3,27 +3,43 @@ import ActiveTypeApi from 'api/activeTypeApi';
 import {createUrlParams} from 'helpers/filters';
 import {
   ActiveType,
-  ActiveTypes,
-  NewActiveType,
-  Pagination,
+  ActiveTypesResponse,
+  NewActiveTypeProps,
   PaginationFilters,
 } from 'types';
 
-export const fetchActiveTypes = createAsyncThunk<ActiveTypes, Pagination, {}>(
-  'activeType/fetchActiveTypes',
-  async (pagination) => {
-    try {
-      const response = await ActiveTypeApi.getActiveTypes(pagination);
-      if (response.status === 200) {
-        return response.data;
-      }
-    } catch (error) {
-      throw error;
+export const fetchActiveTypes = createAsyncThunk<
+  ActiveTypesResponse,
+  PaginationFilters,
+  {}
+>('activeType/fetchActiveTypes', async (params) => {
+  const urlParams = createUrlParams(params);
+  try {
+    const response = await ActiveTypeApi.getActiveTypes(urlParams);
+    if (response.status === 200) {
+      return response.data;
     }
-  },
-);
+  } catch (error) {
+    throw error;
+  }
+});
+export const fetchActiveTypesList = createAsyncThunk<
+  ActiveTypesResponse,
+  PaginationFilters,
+  {}
+>('activeType/fetchActiveTypesList', async (params) => {
+  const urlParams = createUrlParams(params);
+  try {
+    const response = await ActiveTypeApi.getActiveTypes(urlParams);
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    throw error;
+  }
+});
 export const fetchFilteredActiveTypes = createAsyncThunk<
-  ActiveTypes,
+  ActiveTypesResponse,
   PaginationFilters,
   {}
 >('activeType/fetchFilteredActiveTypes', async (params) => {
@@ -52,19 +68,20 @@ export const fetchActiveType = createAsyncThunk<ActiveType, number, {}>(
   },
 );
 
-export const createActiveType = createAsyncThunk<ActiveType, NewActiveType, {}>(
-  'activeType/createActiveType',
-  async (activeType) => {
-    try {
-      const response = await ActiveTypeApi.createActiveType(activeType);
-      if (response.status === 201) {
-        return response.data;
-      }
-    } catch (error) {
-      throw error;
+export const createActiveType = createAsyncThunk<
+  ActiveType,
+  NewActiveTypeProps,
+  {}
+>('activeType/createActiveType', async (activeType) => {
+  try {
+    const response = await ActiveTypeApi.createActiveType(activeType);
+    if (response.status === 201) {
+      return response.data;
     }
-  },
-);
+  } catch (error) {
+    throw error;
+  }
+});
 
 export const updateActiveType = createAsyncThunk<ActiveType, ActiveType, {}>(
   'activeType/updateActiveType',

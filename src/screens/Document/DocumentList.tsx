@@ -52,18 +52,21 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
     if (!activeState.filtered) {
       dispatch(
         fetchActives({
-          page: activeState.page,
-          itemsPerPage: activeState.itemsPerPage,
+          pagination: {
+            page: activeState.nextPage,
+            itemsPerPage: activeState.itemsPerPage,
+          },
+          filters: [{key: 'order[entryDate]', value: 'desc'}],
         }),
       );
     } else {
       dispatch(
         fetchFilteredActives({
           pagination: {
-            page: activeState.page,
+            page: activeState.nextPage,
             itemsPerPage: activeState.itemsPerPage,
           },
-          filters: [],
+          filters: [{key: 'order[entryDate]', value: 'desc'}],
         }),
       );
     }
@@ -73,18 +76,21 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
     if (!activeTypeState.filtered) {
       dispatch(
         fetchActiveTypes({
-          page: activeTypeState.page,
-          itemsPerPage: activeTypeState.itemsPerPage,
+          pagination: {
+            page: activeTypeState.nextPage,
+            itemsPerPage: activeTypeState.itemsPerPage,
+          },
+          filters: [{key: 'order[id]', value: 'desc'}],
         }),
       );
     } else {
       dispatch(
         fetchFilteredActiveTypes({
           pagination: {
-            page: activeTypeState.page,
+            page: activeTypeState.nextPage,
             itemsPerPage: activeTypeState.itemsPerPage,
           },
-          filters: [],
+          filters: [{key: 'order[id]', value: 'desc'}],
         }),
       );
     }
@@ -94,8 +100,11 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
     dispatch(resetActiveState());
     dispatch(
       fetchActives({
-        page: 1,
-        itemsPerPage: activeState.itemsPerPage,
+        pagination: {
+          page: 1,
+          itemsPerPage: activeState.itemsPerPage,
+        },
+        filters: [{key: 'order[entryDate]', value: 'desc'}],
       }),
     );
   };
@@ -103,8 +112,11 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
     dispatch(resetActiveTypeState());
     dispatch(
       fetchActiveTypes({
-        page: 1,
-        itemsPerPage: activeTypeState.itemsPerPage,
+        pagination: {
+          page: 1,
+          itemsPerPage: activeTypeState.itemsPerPage,
+        },
+        filters: [{key: 'order[id]', value: 'desc'}],
       }),
     );
   };
@@ -172,11 +184,19 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
   useEffect(() => {
     store.dispatch(
       fetchActives({
-        page: 1,
-        itemsPerPage: 7,
+        pagination: {
+          page: 1,
+          itemsPerPage: 7,
+        },
+        filters: [{key: 'order[entryDate]', value: 'desc'}],
       }),
     );
-    store.dispatch(fetchActiveTypes({page: 1, itemsPerPage: 9}));
+    store.dispatch(
+      fetchActiveTypes({
+        pagination: {page: 1, itemsPerPage: 9},
+        filters: [{key: 'order[id]', value: 'desc'}],
+      }),
+    );
   }, []);
 
   useEffect(() => {
@@ -212,7 +232,7 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
             <Items />
           </TouchableOpacity>
         </View>
-        <View style={styles.segment}>
+        <View style={styles.segment} marginRight="m">
           <Segment
             labels={[
               {name: translate('screen.active.title'), id: 'active'},
@@ -224,41 +244,52 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
         </View>
       </View>
       <View
-        height={height - 60}
-        marginHorizontal="m"
+        height={height - 70}
         marginTop="m"
-        paddingBottom="dxxl">
-        {segmentMode === 'active' ? (
-          <FlatList
-            ref={flatListRef}
-            data={activeState.actives}
-            scrollEnabled={true}
-            renderItem={({item}) => (
-              <ActiveListItem {...{navigation, route, active: {...item}}} />
-            )}
-            keyExtractor={(item, index) => index.toString()}
-            onRefresh={() => refreshActives()}
-            refreshing={activeState.loading}
-            ListEmptyComponent={<EmptyList />}
-            onEndReached={onActivesOnEndReached}
-            onEndReachedThreshold={0}
-          />
-        ) : (
-          <FlatList
-            scrollEnabled={true}
-            ref={flatListRef}
-            data={activeTypeState.activeTypes}
-            renderItem={({item}) => (
-              <ActiveTypeListItem {...{navigation, route, type: {...item}}} />
-            )}
-            keyExtractor={(item, index) => index.toString()}
-            onRefresh={() => refreshTypes()}
-            refreshing={activeTypeState.loading}
-            ListEmptyComponent={<EmptyList />}
-            onEndReached={onActiveTypesOnEndReached}
-            onEndReachedThreshold={0}
-          />
-        )}
+        marginHorizontal="m"
+        paddingBottom="dxxl"
+        visible={segmentMode === 'active'}>
+        <FlatList
+          ref={flatListRef}
+          data={activeState.actives}
+          scrollEnabled={true}
+          renderItem={({item}) => (
+            <ActiveListItem {...{navigation, route, active: {...item}}} />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          onRefresh={() => refreshActives()}
+          refreshing={activeState.loading}
+          ListEmptyComponent={<EmptyList />}
+          initialNumToRender={7}
+          onEndReached={
+            activeState.activesLength >= 7 ? onActivesOnEndReached : null
+          }
+          onEndReachedThreshold={0}
+        />
+      </View>
+      <View
+        height={height - 70}
+        marginTop="m"
+        marginHorizontal="m"
+        paddingBottom="dxxl"
+        visible={segmentMode === 'activeType'}>
+        <FlatList
+          scrollEnabled={true}
+          ref={flatListRef}
+          data={activeTypeState.activeTypes}
+          renderItem={({item}) => (
+            <ActiveTypeListItem {...{navigation, route, type: {...item}}} />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          onRefresh={() => refreshTypes()}
+          refreshing={activeTypeState.loading}
+          ListEmptyComponent={<EmptyList />}
+          onEndReached={
+            activeState.activesLength >= 9 ? onActiveTypesOnEndReached : null
+          }
+          initialNumToRender={9}
+          onEndReachedThreshold={0}
+        />
       </View>
     </View>
   );

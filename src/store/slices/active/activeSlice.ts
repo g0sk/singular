@@ -12,7 +12,7 @@ import {ActiveState} from 'types';
 const initialState: ActiveState = {
   active: null,
   actives: [],
-  page: 1,
+  nextPage: 1,
   filtered: false,
   activesLength: 0,
   itemsPerPage: 7,
@@ -28,7 +28,7 @@ const activeSlice = createSlice({
     resetActiveState: (state) => {
       state.active = null;
       state.actives = [];
-      state.page = 1;
+      state.nextPage = 1;
       state.activesLength = 0;
       state.filtered = false;
     },
@@ -42,9 +42,9 @@ const activeSlice = createSlice({
         state.loading = false;
         state.error = false;
         state.errorData = null;
-        state.actives = state.actives.concat(action.payload);
-        state.activesLength += action.payload.length;
-        state.page += 1;
+        state.actives = state.actives.concat(action.payload.actives);
+        state.activesLength += action.payload.count;
+        state.nextPage = action.payload.page + 1;
       })
       .addCase(fetchActives.pending, (state) => {
         state.loading = true;
@@ -60,9 +60,9 @@ const activeSlice = createSlice({
         state.error = false;
         state.errorData = null;
         state.filtered = true;
-        state.actives = state.actives.concat(action.payload);
-        state.activesLength += action.payload.length;
-        state.page += 1;
+        state.actives = state.actives.concat(action.payload.actives);
+        state.activesLength += action.payload.count;
+        state.nextPage = action.payload.page + 1;
       })
       .addCase(fetchFilteredActives.pending, (state) => {
         state.loading = true;
@@ -74,9 +74,7 @@ const activeSlice = createSlice({
         state.error = true;
       })
       .addCase(fetchTag.fulfilled, (state, action) => {
-        state.active = action.payload[0];
-        state.activesLength += action.payload.length;
-        state.page += 1;
+        state.active = action.payload.actives[0];
         state.loading = false;
         state.error = false;
         state.errorData = null;

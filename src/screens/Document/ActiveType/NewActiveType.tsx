@@ -32,7 +32,11 @@ import {useFocusEffect} from '@react-navigation/core';
 import {resetUnitState} from 'store/slices/unit/unitSlice';
 import {useTheme} from 'ui/theme';
 import {resetBasicAttributeState} from 'store/slices/basicAttribute/basicAttributeSlice';
-import {clearActiveType} from 'store/slices/activeType/activeTypeSlice';
+import {
+  clearActiveType,
+  resetActiveTypeState,
+} from 'store/slices/activeType/activeTypeSlice';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export const NewActiveType: React.FC<NewActiveTypeScreenProps> = ({
   navigation,
@@ -44,6 +48,7 @@ export const NewActiveType: React.FC<NewActiveTypeScreenProps> = ({
   const [change, setChange] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const nameRef = useRef<TextInput>(null);
+  const refScrollView = useRef<ScrollView>(null);
   const theme = useTheme();
 
   const basicAttributeState: BasicAttributeState = useAppSelector(
@@ -59,6 +64,8 @@ export const NewActiveType: React.FC<NewActiveTypeScreenProps> = ({
         ToastAndroid.CENTER,
         ToastAndroid.LONG,
       );
+      refScrollView.current?.scrollTo({x: 0, y: 0, animated: true});
+      nameRef.current?.focus();
     } else {
       onSave();
     }
@@ -72,7 +79,13 @@ export const NewActiveType: React.FC<NewActiveTypeScreenProps> = ({
         customAttributes: [...customAttributes],
       };
       dispatch(createActiveType(activeType)).then(() => {
-        dispatch(fetchActiveTypes({page: 1, itemsPerPage: 9}));
+        dispatch(resetActiveTypeState());
+        dispatch(
+          fetchActiveTypes({
+            pagination: {page: 1, itemsPerPage: 9},
+            filters: [{key: 'order[id]', value: 'desc'}],
+          }),
+        );
         navigation.goBack();
       });
     } else {
@@ -222,9 +235,6 @@ const styles = StyleSheet.create({
   },
   activity: {
     flexDirection: 'column',
-  },
-  date: {
-    //alignItems: 'center',
   },
   info: {
     flexDirection: 'row',

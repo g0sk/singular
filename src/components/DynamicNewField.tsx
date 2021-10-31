@@ -54,7 +54,6 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
   };
 
   const onSave = (formValue: {name: string; value: string}) => {
-    console.log('on saVe');
     if (unit !== null) {
       const item = {
         id: 0,

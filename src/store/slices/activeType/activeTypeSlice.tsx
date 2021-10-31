@@ -7,14 +7,16 @@ import {
   deleteActiveType,
   updateActiveType,
   fetchFilteredActiveTypes,
+  fetchActiveTypesList,
 } from 'store/slices/activeType/activeTypeAsyncThunk';
 const initialState: ActiveTypeState = {
-  page: 1,
+  nextPage: 1,
   itemsPerPage: 9,
   filtered: false,
   activeTypesLength: 0,
   activeType: null,
   activeTypes: [],
+  activeTypesList: [],
   loading: false,
   error: false,
 };
@@ -25,10 +27,14 @@ export const activeTypeSlice = createSlice({
   reducers: {
     resetActiveTypeState: (state) => {
       state.activeTypes = [];
-      state.page = 1;
+      state.nextPage = 1;
+      state.activeTypesList = [];
       state.activeTypesLength = 0;
       state.activeType = null;
       state.filtered = false;
+    },
+    clearActiveTypeList: (state) => {
+      state.activeTypesList = [];
     },
     clearActiveType: (state) => {
       state.activeType = null;
@@ -37,11 +43,11 @@ export const activeTypeSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchActiveTypes.fulfilled, (state, action) => {
-        state.activeTypes = state.activeTypes.concat(action.payload);
-        state.activeTypesLength += action.payload.length;
+        state.activeTypes = state.activeTypes.concat(action.payload.types);
+        state.activeTypesLength += action.payload.count;
         state.error = false;
         state.loading = false;
-        state.page += 1;
+        state.nextPage = action.payload.page + 1;
       })
       .addCase(fetchActiveTypes.pending, (state) => {
         state.loading = true;
@@ -51,13 +57,26 @@ export const activeTypeSlice = createSlice({
         state.loading = false;
         state.error = true;
       })
+      .addCase(fetchActiveTypesList.fulfilled, (state, action) => {
+        state.activeTypesList = [...action.payload.types];
+        state.error = false;
+        state.loading = false;
+      })
+      .addCase(fetchActiveTypesList.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(fetchActiveTypesList.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      })
       .addCase(fetchFilteredActiveTypes.fulfilled, (state, action) => {
-        state.activeTypes = state.activeTypes.concat(action.payload);
-        state.activeTypesLength += action.payload.length;
+        state.activeTypes = state.activeTypes.concat(action.payload.types);
+        state.activeTypesLength += action.payload.count;
         state.filtered = true;
         state.error = false;
         state.loading = false;
-        state.page += 1;
+        state.nextPage += action.payload.page + 1;
       })
       .addCase(fetchFilteredActiveTypes.pending, (state) => {
         state.loading = true;
@@ -123,4 +142,8 @@ export const activeTypeSlice = createSlice({
 });
 
 export default activeTypeSlice.reducer;
-export const {resetActiveTypeState, clearActiveType} = activeTypeSlice.actions;
+export const {
+  resetActiveTypeState,
+  clearActiveType,
+  clearActiveTypeList,
+} = activeTypeSlice.actions;

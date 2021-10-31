@@ -34,7 +34,6 @@ export const Search: React.FC<{
   const [query, setQuery] = useState<string>('');
   const theme = useTheme();
   const searchRef = useRef<TextInput>(null);
-
   useEffect(() => {
     if (segment === 'active') {
       setFilter({
@@ -58,7 +57,12 @@ export const Search: React.FC<{
   const debounceSearch = useMemo(
     () =>
       debounce((_filter) => {
+        const orderFilter = {
+          key: segment === 'active' ? 'order[entryDate]' : 'order[id]',
+          value: 'desc',
+        };
         const _filters = [];
+        _filters.push(orderFilter);
         if (segment === 'active') {
           _filters.push(_filter);
           store.dispatch(resetActiveState());
