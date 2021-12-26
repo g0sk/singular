@@ -26,8 +26,8 @@ export const CheckBox: React.FC<CheckBoxProps> = ({
           borderRadius={theme.borderRadius.s}
           justifyContent="center"
           alignItems="center"
-          borderWidth={1}
-          borderColor="primary"
+          borderWidth={checked ? 0 : 1}
+          borderColor={checked ? 'white' : 'primary'}
           backgroundColor={checked ? 'primary' : 'white'}>
           <Icon name="check" color="white" />
         </View>

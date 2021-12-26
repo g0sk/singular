@@ -21,3 +21,4 @@ export * from './UserModal';
 export * from './Section';
 export * from './Search';
 export * from './FilterModal';
+export * from './Chart';
