@@ -24,7 +24,7 @@ export const TabNavigator = () => {
           tabBarIcon: ({focused}) => (
             <Icon
               name={focused ? 'file-tray' : 'file-tray-outline'}
-              size={28}
+              size={focused ? 34 : 28}
               color={focused ? theme.colors.primary : theme.colors.default}
             />
           ),
@@ -37,7 +37,7 @@ export const TabNavigator = () => {
           tabBarIcon: ({focused}) => (
             <Icon
               name={focused ? 'radio' : 'radio-outline'}
-              size={28}
+              size={focused ? 34 : 28}
               color={focused ? theme.colors.primary : theme.colors.default}
             />
           ),
@@ -50,7 +50,7 @@ export const TabNavigator = () => {
           tabBarIcon: ({focused}) => (
             <Icon
               name={focused ? 'person-circle' : 'person-circle-outline'}
-              size={28}
+              size={focused ? 34 : 28}
               color={focused ? theme.colors.primary : theme.colors.default}
             />
           ),
