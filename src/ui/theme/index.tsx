@@ -19,6 +19,7 @@ const BaseTheme = {
     blue: '#1f155e',
     dark: '#000',
     gray: '#393939',
+    lightGray: '#8f8b8b',
     card: '#ffffff',
     darkText: '#000',
     red: '#b9244b',
@@ -33,6 +34,7 @@ const BaseTheme = {
     lightText: '#ffffff',
     placeholderText: '#716d6d',
     primary: '#593ac1',
+    primaryLight: '#a389fa',
     secondary: '#ffc107',
     white: '#fff',
   },
@@ -155,6 +157,11 @@ const theme = createTheme({
       fontSize: 30,
       textAlign: 'center',
     },
+    scanMode: {
+      color: 'darkText',
+      fontSize: 19,
+      fontWeight: 'bold',
+    },
     button_disabled: {
       color: 'lightText',
     },
@@ -183,6 +190,10 @@ const theme = createTheme({
     button_secondary: {
       color: 'lightText',
       fontSize: 15,
+    },
+    button_write: {
+      color: 'lightText',
+      fontSize: 12,
     },
     checkBox: {
       color: 'description',
@@ -283,6 +294,13 @@ const theme = createTheme({
     },
     create: {
       backgroundColor: 'secondary',
+    },
+    write: {
+      backgroundColor: 'darkText',
+      width: 90,
+      heigth: 60,
+      paddingVertical: 's',
+      alignItems: 'center',
     },
   },
   navigation: {

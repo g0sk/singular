@@ -14,7 +14,12 @@
       "header": "Comienza a leer etiquetas",
       "description": "Para empezar a leer etiquetas, pulsa el botón y acerca el dispositivo a la etiqueta.",
       "tip": "Acerca el dispositivo a la etiqueta.",
-      "successDescription": "Etiqueta leída correctamente. Ahora puedes consultar y modificar su información antes de guardarla."
+      "successDescription": "Etiqueta leída correctamente. Ahora puedes consultar y modificar su información antes de guardarla.",
+      "write": {
+        "header": "Escribe en una etiqueta",
+        "description": "Para empezar a escribir una etiqueta, pulsa el botón y rellena los datos a insertar.",
+        "sucessDescription": "La etiqueta ha sido escrita correctamente. A continuación puedes leer la etiqueta para ver los nuevos datos."
+      }
     },
     "login": {
       "title": "Bienvenido a Singular",
@@ -273,6 +278,7 @@
     },
     "scan": {
       "scan": "Escanear",
+      "write": "Escribir",
       "scanAgain": "Volver a escanear",
       "cancel": "Cancelar",
       "retry": "Volver a intentar",
@@ -302,7 +308,9 @@
     },
     "scan": {
       "search": "Buscando etiqueta",
-      "scan": "Leyendo etiqueta"
+      "scan": "Escaneando etiqueta",
+      "read": "Escanear",
+      "write": "Escribir"
     },
     "image": {
         "title": "Seleccionar imagen",

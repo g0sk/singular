@@ -14,7 +14,12 @@
       "header": "Start reading tags",
       "description": "To begin reading tags, press the scan button and bring the device close to the tag.",
       "tip": "Bring the device close to the tag.",
-      "successDescription": "Tag succesfully read. Now you can check and modify its information before saving it."
+      "successDescription": "Tag successfully read. Now you can check and modify its information before saving it.",
+      "write": {
+        "header": "Write data on a tag",
+        "description": "To begin writing on a tag, lets fill the data form first.",
+        "sucessDescription": "Tag successfully written. Now you can read the new data on the tag."
+      }
     },
     "login": {
       "title": "Welcome to Singular",
@@ -274,7 +279,9 @@
     },
     "scan": {
         "search": "Searching tag",
-        "scan": "Reading tag"
+        "scan": "Reading tag",
+        "read": "Scan",
+        "write": "Write"
     },
     "image": {
         "title": "Select image",
@@ -302,6 +309,7 @@
     },
     "scan": {
       "scan": "Scan",
+      "write": "Write",
       "cancel": "Cancel",
       "retry": "Retry",
       "goToDetails": "Go to details",

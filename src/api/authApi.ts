@@ -1,6 +1,5 @@
 import {apiURL} from './index';
 import {Credentials} from 'types';
-type Token = string;
 
 const fetchToken = (credentials: Credentials) =>
   apiURL.post('/authentication_token', {

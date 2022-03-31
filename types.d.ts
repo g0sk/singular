@@ -87,7 +87,7 @@ export type RootDocumentParamList = {
     title: string;
   };
   NewTag: {
-    tag: ActiveTagEvent;
+    type: string | null;
     title: string;
   };
   NewActive: {
@@ -452,11 +452,23 @@ export interface ActiveTagEvent extends TagEvent {
   customAttributes?: Attribute[];
 }
 
+type TagInfo = {
+  tag: TagResponse;
+  activeInfo: ActiveInfo;
+} | null;
+
+type TagResponse = TagEvent | null;
+
+type ActiveInfo = {
+  id: string;
+  type: string;
+} | null;
+
 interface ScanProps {
   reading: boolean;
 }
 interface ScanSuccessProps {
-  tag: ActiveTagEvent;
+  tag: TagInfo;
 }
 
 //Components

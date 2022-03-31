@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View} from 'components';
 import {translate} from 'core';
 import {useTheme} from 'ui/theme';
@@ -7,6 +7,18 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const SuccessScan: React.FC<ScanSuccessProps> = ({tag}) => {
   const {colors} = useTheme();
+  const [title, setTitle] = useState<string>('');
+  useEffect(() => {
+    if (tag) {
+      if (tag.activeInfo?.id) {
+        setTitle(tag.activeInfo.id);
+      } else {
+        if (tag.tag && tag.tag.id) {
+          setTitle(tag.tag.id.toString());
+        }
+      }
+    }
+  }, [tag]);
   return (
     <View margin="m">
       <View margin="m">
@@ -23,7 +35,7 @@ const SuccessScan: React.FC<ScanSuccessProps> = ({tag}) => {
           />
         </View>
         <Text variant="scanSuccessId">
-          {translate('active.data.id') + ' ' + tag.id}
+          {translate('active.data.id') + ' ' + title}
         </Text>
       </View>
       <View marginVertical="ss" marginHorizontal="l" alignItems="center">
