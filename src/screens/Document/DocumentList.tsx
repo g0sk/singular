@@ -18,17 +18,13 @@ import {
   fetchActiveTypes,
   fetchFilteredActiveTypes,
 } from 'store/slices/activeType/activeTypeAsyncThunk';
-import {
-  ActiveState,
-  ActiveTypeState,
-  Mode,
-  DocumentListStackProps,
-} from 'types';
+import {ActiveState, ActiveTypeState, DocumentListStackProps} from 'types';
 import {translate} from 'core';
 import {resetActiveState} from 'store/slices/active/activeSlice';
 import {resetActiveTypeState} from 'store/slices/activeType/activeTypeSlice';
 
 const {height} = Dimensions.get('window');
+type Mode = 'active' | 'activeType';
 export const DocumentList: React.FC<DocumentListStackProps> = ({
   navigation,
   route,

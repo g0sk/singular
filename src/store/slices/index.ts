@@ -7,6 +7,8 @@ import activeTypeReducer from './activeType/activeTypeSlice';
 import unitReducer from './unit/unitSlice';
 import customAttributeReducer from './customAttribute/customAttributeSlice';
 import basicAttributeReducer from './basicAttribute/basicAttributeSlice';
+import tagReducer from './tag/tagSlice';
+
 export default {
   authReducer,
   activeReducer,
@@ -17,4 +19,5 @@ export default {
   unitReducer,
   customAttributeReducer,
   basicAttributeReducer,
+  tagReducer,
 };

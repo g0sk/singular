@@ -3,11 +3,11 @@ import {Text, View} from 'components';
 import {TouchableOpacity, StyleSheet} from 'react-native';
 import {SegmentProps} from 'types';
 
-export const Segment: React.FC<SegmentProps> = ({
+export const Segment = <T extends unknown>({
   labels,
   segmentHandler,
   mode,
-}: SegmentProps) => {
+}: SegmentProps<T>) => {
   const styles = StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -16,6 +16,8 @@ export const Segment: React.FC<SegmentProps> = ({
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 25,
+      minWidth: 60,
+      minHeight: 40,
     },
     segmentSelected: {
       justifyContent: 'center',

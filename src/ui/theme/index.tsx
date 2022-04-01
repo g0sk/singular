@@ -48,6 +48,7 @@ const BaseTheme = {
     ss: 4,
     s: 8,
     m: 16,
+    sm: 17,
     dm: 19,
     l: 24,
     xl: 40,
@@ -59,6 +60,7 @@ const BaseTheme = {
   margin: {
     ss: 5,
     s: 10,
+    sm: 28,
     m: 40,
     dm: 55,
     l: 75,
@@ -141,8 +143,8 @@ const theme = createTheme({
     },
     scanErrorDescription: {
       color: 'darkText',
-      fontSize: 17,
-      lineHeight: 22,
+      fontSize: 19,
+      lineHeight: 30,
       textAlign: 'justify',
       fontWeight: 'bold',
     },

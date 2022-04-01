@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Profile, Scan} from 'screens';
+import {Profile, TagHome} from 'screens';
 import {useTheme} from 'ui/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {DocumentNavigator} from './DocumentNavigator';
@@ -31,8 +31,8 @@ export const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Scan"
-        component={Scan}
+        name="TagNavigator"
+        component={TagHome}
         options={{
           tabBarIcon: ({focused}) => (
             <Icon

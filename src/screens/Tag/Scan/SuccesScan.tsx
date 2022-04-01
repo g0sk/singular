@@ -5,7 +5,7 @@ import {useTheme} from 'ui/theme';
 import {ScanSuccessProps} from 'types';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const SuccessScan: React.FC<ScanSuccessProps> = ({tag}) => {
+export const SuccessScan: React.FC<ScanSuccessProps> = ({tag}) => {
   const {colors} = useTheme();
   const [title, setTitle] = useState<string>('');
   useEffect(() => {
@@ -46,5 +46,3 @@ const SuccessScan: React.FC<ScanSuccessProps> = ({tag}) => {
     </View>
   );
 };
-
-export default SuccessScan;

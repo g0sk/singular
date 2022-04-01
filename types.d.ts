@@ -65,7 +65,7 @@ export type TabStackProps = {
 //TabNavigator
 export type TabNavigatorParamList = {
   Home: undefined;
-  Scan: undefined;
+  TagNavigator: RootTagParamList;
   DocumentNavigator: RootDocumentParamList;
   Profile: undefined;
 };
@@ -76,6 +76,7 @@ export type AuthParamList = {
 };
 
 type Segment = 'active' | 'activeType';
+
 //Routes Document
 export type RootDocumentParamList = {
   DocumentList: {
@@ -89,6 +90,7 @@ export type RootDocumentParamList = {
   NewTag: {
     type: string | null;
     title: string;
+    tag: TagInfo;
   };
   NewActive: {
     title: string;
@@ -104,6 +106,12 @@ export type RootDocumentParamList = {
     active: RecordActive;
     title: string;
   };
+};
+
+export type RootTagParamList = {
+  TagHome: {};
+  TagScan: {};
+  TagWrite: {};
 };
 
 //Route
@@ -212,6 +220,39 @@ export type RecordDetailsNavigationProp = StackNavigationProp<
 export type RecordDetailsStackProps = {
   route: RecordDetailsRouteProp;
   navigation: RecordDetailsNavigationProp;
+};
+
+//Tag home
+export type TagHomeRouteProp = RouteProp<RootTagParamList, 'TagHome'>;
+export type TagHomeNavigationProp = StackNavigationProp<
+  RootTagParamList,
+  'TagHome'
+>;
+export type TagHomeStackProps = {
+  route: DocumentListRouteProp;
+  navigation: DocumentListNavigationProp;
+};
+
+//Tag Scan
+export type TagScanRouteProp = RouteProp<RootTagParamList, 'TagScan'>;
+export type TagScanNavigationProp = StackNavigationProp<
+  RootTagParamList,
+  'TagScan'
+>;
+export type TagScanStackProps = {
+  route: TagScanRouteProp;
+  navigation: TagScanNavigationProp;
+};
+
+//Tag Write
+export type TagWriteRouteProp = RouteProp<RootTagParamList, 'TagWrite'>;
+export type TagWriteNavigationProp = StackNavigationProp<
+  RootTagParamList,
+  'TagWrite'
+>;
+export type TagWriteStackProps = {
+  route: TagWriteRouteProp;
+  navigation: TagWriteNavigationProp;
 };
 
 export interface FormLoginValues {
@@ -412,6 +453,12 @@ export interface ActiveState {
   errorData: ServerError | null;
 }
 
+//Tag
+export interface TagState {
+  lastTag: TagInfo;
+  time: Date | null;
+}
+
 //Media object
 
 export type MediaObjectPayload = {
@@ -464,24 +511,21 @@ type ActiveInfo = {
   type: string;
 } | null;
 
-interface ScanProps {
-  reading: boolean;
-}
 interface ScanSuccessProps {
-  tag: TagInfo;
+  tag?: TagInfo;
 }
 
 //Components
 
-export type Mode = 'active' | 'activeType';
-export type SegmentLabel = {
+type Mode = 'active' | 'activeType';
+export type SegmentLabel<T> = {
   name: string;
-  id: Mode;
+  id: T;
 };
-export interface SegmentProps {
-  labels: SegmentLabel[];
-  segmentHandler: Dispatch<SetStateAction<Mode>>;
-  mode: Mode;
+export interface SegmentProps<T> {
+  labels: SegmentLabel<T>[];
+  segmentHandler: Dispatch<SetStateAction<T>>;
+  mode: T;
 }
 
 export interface ModalProps {

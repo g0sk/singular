@@ -5,7 +5,7 @@ import {translate} from 'core';
 import {useTheme} from 'ui/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const Writing: React.FC = () => {
+export const TagWrite: React.FC = () => {
   const theme = useTheme();
 
   return (
@@ -26,5 +26,3 @@ const Writing: React.FC = () => {
     </View>
   );
 };
-
-export default Writing;
