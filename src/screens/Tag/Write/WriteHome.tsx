@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, Text} from 'components';
 import {translate} from 'core';
-//import {ActivityIndicator} from 'react-native';
 import {useTheme} from 'ui/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {TagHomeStackProps} from 'types';
 
-export const TagWrite: React.FC = () => {
+export const WriteHome: React.FC<TagHomeStackProps> = () => {
   const theme = useTheme();
 
   return (

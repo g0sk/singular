@@ -110,8 +110,19 @@ export type RootDocumentParamList = {
 
 export type RootTagParamList = {
   TagHome: {};
-  TagScan: {};
-  TagWrite: {};
+  ScanHome: {};
+  Scanning: {};
+  ScanTagSuccess: {
+    tag: TagInfo;
+    resetState: () => void;
+  };
+  ScanActiveSuccess: {
+    active: Active;
+    resetState: () => void;
+  };
+  WriteHome: {};
+  Writting: {};
+  WriteSuccess: {};
 };
 
 //Route
@@ -229,30 +240,88 @@ export type TagHomeNavigationProp = StackNavigationProp<
   'TagHome'
 >;
 export type TagHomeStackProps = {
-  route: DocumentListRouteProp;
-  navigation: DocumentListNavigationProp;
+  route: TagHomeRouteProp;
+  navigation: TagHomeNavigationProp;
 };
 
-//Tag Scan
-export type TagScanRouteProp = RouteProp<RootTagParamList, 'TagScan'>;
-export type TagScanNavigationProp = StackNavigationProp<
+export type ScanHomeRouteProp = RouteProp<RootTagParamList, 'ScanHome'>;
+export type ScanHomeNavigationProp = StackNavigationProp<
   RootTagParamList,
-  'TagScan'
+  'ScanHome'
 >;
-export type TagScanStackProps = {
-  route: TagScanRouteProp;
-  navigation: TagScanNavigationProp;
+export type ScanHomeStackProps = {
+  route: ScanHomeRouteProp;
+  navigation: ScanHomeNavigationProp;
 };
 
-//Tag Write
-export type TagWriteRouteProp = RouteProp<RootTagParamList, 'TagWrite'>;
-export type TagWriteNavigationProp = StackNavigationProp<
+export type TagWriteHomeRouteProp = RouteProp<RootTagParamList, 'WriteHome'>;
+export type TagWriteHomeNavigationProp = StackNavigationProp<
   RootTagParamList,
-  'TagWrite'
+  'WriteHome'
 >;
-export type TagWriteStackProps = {
-  route: TagWriteRouteProp;
-  navigation: TagWriteNavigationProp;
+export type TagWriteHomeStackProps = {
+  route: TagWriteHomeRouteProp;
+  navigation: TagWriteHomeNavigationProp;
+};
+
+//Tag Writting
+export type TagWrittingRouteProp = RouteProp<RootTagParamList, 'Writting'>;
+export type TagWrittingNavigationProp = StackNavigationProp<
+  RootTagParamList,
+  'Writting'
+>;
+export type TagWrittingStackProps = {
+  route: TagWrittingRouteProp;
+  navigation: TagWrittingNavigationProp;
+};
+
+//Tag Write Success
+export type WriteSuccessRouteProp = RouteProp<RootTagParamList, 'WriteSuccess'>;
+export type WriteSuccessNavigationProp = StackNavigationProp<
+  RootTagParamList,
+  'WriteSuccess'
+>;
+export type WriteSuccessStackProps = {
+  route: WriteSuccessRouteProp;
+  navigation: WriteSuccessNavigationProp;
+};
+
+//Tag Scanning
+export type TagScanningRouteProp = RouteProp<RootTagParamList, 'Scanning'>;
+export type TagScanningNavigationProp = StackNavigationProp<
+  RootTagParamList,
+  'Scanning'
+>;
+export type TagScanningStackProps = {
+  route: TagScanningRouteProp;
+  navigation: TagScanningNavigationProp;
+};
+
+//Tag Scan Success
+export type ScanTagSuccessRouteProp = RouteProp<
+  RootTagParamList,
+  'ScanTagSuccess'
+>;
+export type ScanTagSuccessNavigationProp = StackNavigationProp<
+  RootTagParamList,
+  'ScanTagSuccess'
+>;
+export type ScanTagSuccessStackProps = {
+  route: ScanTagSuccessRouteProp;
+  navigation: ScanTagSuccessNavigationProp;
+};
+
+export type ScanActiveSuccessRouteProp = RouteProp<
+  RootTagParamList,
+  'ScanActiveSuccess'
+>;
+export type ScanActiveSuccessNavigationProp = StackNavigationProp<
+  RootTagParamList,
+  'ScanActiveSuccess'
+>;
+export type ScanActiveSuccessStackProps = {
+  route: ScanActiveSuccessRouteProp;
+  navigation: ScanActiveSuccessNavigationProp;
 };
 
 export interface FormLoginValues {
@@ -487,16 +556,11 @@ interface UserFormValues {
 }
 
 //Scan Screen
-interface ScanErrorProps {
-  supported: boolean;
-  enabled: boolean;
-}
 
-export interface ActiveTagEvent extends TagEvent {
-  activeType?: ActiveType;
-  file?: File | null;
-  basicAttributes?: Attribute[];
-  customAttributes?: Attribute[];
+type OperationMode = 'read' | 'write';
+
+interface ScanErrorProps {
+  error: OperationMode;
 }
 
 type TagInfo = {
@@ -507,9 +571,9 @@ type TagInfo = {
 type TagResponse = TagEvent | null;
 
 type ActiveInfo = {
-  id: string;
+  reference: string;
   type: string;
-} | null;
+};
 
 interface ScanSuccessProps {
   tag?: TagInfo;

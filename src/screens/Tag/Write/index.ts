@@ -1,3 +1,3 @@
-export * from './ErrorWrite';
-export * from './TagWrite';
-export * from './SuccessWrite';
+export * from './WriteHome';
+export * from './WriteSuccess';
+export * from './Writting';

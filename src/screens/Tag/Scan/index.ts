@@ -1,3 +1,4 @@
-export * from './ErrorScan';
-export * from './TagScan';
-export * from './SuccesScan';
+export * from './ScanHome';
+export * from './ScanTagSuccess';
+export * from './ScanActiveSuccess';
+export * from './Scanning';

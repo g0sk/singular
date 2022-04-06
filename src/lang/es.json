@@ -14,7 +14,8 @@
       "header": "Comienza a leer etiquetas",
       "description": "Para empezar a leer etiquetas, pulsa el botón y acerca el dispositivo a la etiqueta.",
       "tip": "Acerca el dispositivo a la etiqueta.",
-      "successDescription": "Etiqueta leída correctamente. Ahora puedes consultar y modificar su información antes de guardarla.",
+      "successActiveDescription": "Etiqueta leída correctamente. Ahora puedes consultar la información del activo.",
+      "successTagDescription": "Nueva etiqueta leída correctamente. Ahora puedes añadirlo a la base de datos.",
       "write": {
         "header": "Escribe en una etiqueta",
         "description": "Para empezar a escribir una etiqueta, pulsa el botón y rellena los datos a insertar.",
@@ -45,7 +46,7 @@
     "actives": "activos",
     "empty": "No hay activos que mostrar",
     "data": {
-      "id": "ID"
+      "ref": "REF"
     },
     "lastUpdate": "Última actualización"
   },
@@ -331,8 +332,10 @@
       "saved": "Los cambios se han guardado"
     },
     "scan": {
-      "tagFound": "Etiqueta leída correctamente"
-    }
+      "newTagFound": "Nueva etiqueta leída correctamente",
+      "activeFound": "Etiqueta de activo leído correctamente"
+    },
+    "write": "Etiqueta actualizada correctamente"
   },
   "error": {
     "general": {
@@ -340,6 +343,8 @@
       "used": "Este valor ya está en uso"
     },
     "scan": {
+      "scan": "No se ha podido leer la etiqueta correctamente.",
+      "write": "La etiqueta no ha podido ser escrita.",
       "nfcNotEnabled": "NFC desactivado",
       "enableNfc": "Es necesario activar NFC en el dispositivo para poder leer las etiquetas RFID.",
       "nfcNotSupported": "NFC no disponible",

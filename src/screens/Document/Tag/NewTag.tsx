@@ -6,7 +6,7 @@ import {
   File,
   NewActiveProps,
   ServerError,
-  ActiveTagEvent,
+  TagInfo,
 } from 'types';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {createActive, fetchActives} from 'store/slices/active/activeAsyncThunk';
@@ -44,7 +44,7 @@ import {
 } from 'store/slices/activeType/activeTypeSlice';
 
 export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
-  const [tag, setTag] = useState<ActiveTagEvent | null>(null);
+  const [tag, setTag] = useState<TagInfo | null>(null);
   const [basicAttributes, setBasicAttributes] = useState<Attribute[]>([]);
   const [customAttributes, setCustomAttributes] = useState<Attribute[]>([]);
   const [file, setFile] = useState<File | null>(null);

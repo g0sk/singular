@@ -14,7 +14,8 @@
       "header": "Start reading tags",
       "description": "To begin reading tags, press the scan button and bring the device close to the tag.",
       "tip": "Bring the device close to the tag.",
-      "successDescription": "Tag successfully read. Now you can check and modify its information before saving it.",
+      "successActiveDescription": "Tag successfully read. Now you can check or modify the active data.",
+      "successTagDescription": "New tag successfully read. Now you can added to the database.",
       "write": {
         "header": "Write data on a tag",
         "description": "To begin writing on a tag, lets fill the data form first.",
@@ -322,8 +323,10 @@
       "saved": "Changes saved correctly"
     },
     "scan": {
-      "tagFound": "Tag succesfully read"
-    }
+      "newTagFound": "New tag succesfully read",
+      "activeFound": "Active tag succesfully read"
+    },
+    "write": "Tag successfully written"
   },
   "error": {
     "general": {
@@ -331,6 +334,8 @@
       "used": "This value is already used"
     },
     "scan": {
+      "scan": "Tag couldn't be read. Try again.",
+      "write": "Tag couldn't be written. Try again",
       "nfcNotEnabled": "NFC not enabled",
       "enableNfc": "NFC must be enabled on the device, in order to read RFID tags.",
       "nfcNotSupported": "NFC not supported",

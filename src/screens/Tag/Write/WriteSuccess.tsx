@@ -1,29 +1,24 @@
-import React, {useEffect, useState} from 'react';
-import {Text, View} from 'components';
+import React from 'react';
+import {Button, Text, View} from 'components';
 import {translate} from 'core';
 import {useTheme} from 'ui/theme';
-import {ScanSuccessProps} from 'types';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {WriteSuccessStackProps} from 'types';
 
-export const SuccessScan: React.FC<ScanSuccessProps> = ({tag}) => {
+export const WriteSuccess: React.FC<WriteSuccessStackProps> = ({
+  navigation,
+}) => {
   const {colors} = useTheme();
-  const [title, setTitle] = useState<string>('');
-  useEffect(() => {
-    if (tag) {
-      if (tag.activeInfo?.id) {
-        setTitle(tag.activeInfo.id);
-      } else {
-        if (tag.tag && tag.tag.id) {
-          setTitle(tag.tag.id.toString());
-        }
-      }
-    }
-  }, [tag]);
+
+  const goBackTagHome = () => {
+    navigation.pop();
+  };
+
   return (
     <View margin="m">
       <View margin="m">
         <Text variant="scanSuccessHeader">
-          {translate('success.scan.tagFound')}
+          {translate('success.scan.activeFound')}
         </Text>
       </View>
       <View height={175} alignItems="center" margin="m">
@@ -35,13 +30,20 @@ export const SuccessScan: React.FC<ScanSuccessProps> = ({tag}) => {
           />
         </View>
         <Text variant="scanSuccessId">
-          {translate('active.data.id') + ' ' + title}
+          {translate('active.data.ref') + ' '}
         </Text>
       </View>
       <View marginVertical="ss" marginHorizontal="l" alignItems="center">
         <Text variant="scanDescription">
-          {translate('screen.scan.successDescription')}
+          {translate('screen.scan.successActiveDescription')}
         </Text>
+      </View>
+      <View marginVertical="l" marginHorizontal="xxl">
+        <Button
+          label={translate('button.scan.goToDetails')}
+          variant="primary"
+          onPress={goBackTagHome}
+        />
       </View>
     </View>
   );

@@ -1,6 +1,7 @@
 import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 
-import {TagInfo, TagResponse} from 'types';
+import {TagInfo} from 'types';
+import {TagResponse} from '../../types';
 
 export async function isSupported() {
   return await NfcManager.isSupported();
@@ -60,7 +61,7 @@ export async function readNdefTag(): Promise<TagInfo> {
         tagFormatted = {
           tag: tag,
           activeInfo: {
-            id: Ndef.text.decodePayload(
+            reference: Ndef.text.decodePayload(
               Uint8Array.from(tag.ndefMessage[0].payload),
             ),
             type: Ndef.text.decodePayload(
@@ -79,62 +80,3 @@ export async function readNdefTag(): Promise<TagInfo> {
     return tagFormatted;
   }
 }
-/*
-//Old way of reading nfc tags
-//reads ndef_message its ndef_records
-export function readTag(): Promise<TagInfo> {
-  console.log('Start readNdef');
-  console.log(loadingDots);
-  const cleanUp = () => {
-    NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
-    NfcManager.setEventListener(NfcEvents.SessionClosed, null);
-    console.log('Clean up events');
-  };
-  return new Promise((resolve, reject) => {
-    let tagFound: TagResponse = null;
-
-    console.log('Discovering tags');
-    console.log(loadingDots);
-    NfcManager.setEventListener(NfcEvents.DiscoverTag, (evt: TagEvent) => {
-      if (evt !== null) {
-        tagFound = evt;
-        let aInfo: ActiveInfo = {id: '', type: ''};
-        if (
-          evt.ndefMessage[0].payload.length === 0 ||
-          evt.ndefMessage[1].payload.length === 0
-        ) {
-          aInfo = null;
-        } else {
-          aInfo.id = Ndef.text.decodePayload(
-            Uint8Array.from(evt.ndefMessage[0].payload),
-          );
-          aInfo.type = Ndef.text.decodePayload(
-            Uint8Array.from(evt.ndefMessage[1].payload),
-          );
-        }
-        let tagInfo: TagInfo = {
-          tag: {...evt},
-          activeInfo: aInfo !== null ? {...aInfo} : null,
-        };
-        resolve(tagInfo);
-        NfcManager.setAlertMessage('TAG FOUND');
-        console.log('TAG FOUND', tagFound);
-        NfcManager.unregisterTagEvent().catch(() => 0);
-      } else {
-        reject(null);
-      }
-    });
-
-    NfcManager.setEventListener(NfcEvents.SessionClosed, () => {
-      console.log('SESSION CLOSED');
-      console.log(loadingDots);
-      cleanUp();
-      if (!tagFound) {
-        console.log("TimeOut: Couldn't find any tag");
-        resolve(null);
-      }
-    });
-    NfcManager.registerTagEvent();
-  });
-}
-*/
