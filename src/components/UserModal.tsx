@@ -13,12 +13,13 @@ type UserModalProps = {
 
 export const UserModal: React.FC<UserModalProps> = ({user, created}) => {
   const [show, setShow] = useState<boolean>(false);
-  const [uri, setUri] = useState<string>('tuPadre');
+  const [uri, setUri] = useState<string>('');
   useEffect(() => {
     if (user !== undefined && user.image !== null) {
       setUri(API_URL + user.image.contentUrl);
     }
   }, [user]);
+
   const FormField = () => {
     return (
       <View alignSelf="flex-start">
@@ -36,10 +37,20 @@ export const UserModal: React.FC<UserModalProps> = ({user, created}) => {
 
             {user !== undefined ? (
               <View flexDirection="row" alignItems="center">
-                <View borderRadius={70} marginRight="m">
+                <View
+                  borderRadius={70}
+                  marginRight="m"
+                  borderWidth={uri.length > 0 ? 0 : 1}>
                   <Image
-                    source={{uri: uri}}
-                    style={{zIndex: 10, borderRadius: 70}}
+                    source={
+                      uri.length > 0
+                        ? {uri: uri}
+                        : require('../../assets/images/user.png')
+                    }
+                    style={{
+                      zIndex: 10,
+                      borderRadius: 70,
+                    }}
                     height={60}
                     width={60}
                   />
@@ -61,10 +72,17 @@ export const UserModal: React.FC<UserModalProps> = ({user, created}) => {
           <Text variant="formLabel">{translate('form.active.user.title')}</Text>
         </View>
         <View flexDirection="row" margin="m" alignItems="center">
-          <View borderRadius={70} marginRight="l">
+          <View
+            borderRadius={70}
+            marginRight="l"
+            borderWidth={uri.length > 0 ? 0 : 1}>
             <Image
               style={{zIndex: 10, width: 140, height: 140, borderRadius: 90}}
-              source={{uri: uri}}
+              source={
+                uri.length > 0
+                  ? {uri: uri}
+                  : require('../../assets/images/user.png')
+              }
             />
           </View>
           {user !== undefined ? (

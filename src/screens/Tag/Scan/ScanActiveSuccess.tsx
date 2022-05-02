@@ -3,10 +3,10 @@ import {Button, Text, View} from 'components';
 import {translate} from 'core';
 import {useTheme} from 'ui/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {ScanActiveSuccessStackProps} from 'types';
+import {ScanActiveSuccessScreenProps} from 'types';
 import {useNavigation} from '@react-navigation/native';
 
-export const ScanActiveSuccess: React.FC<ScanActiveSuccessStackProps> = ({
+export const ScanActiveSuccess: React.FC<ScanActiveSuccessScreenProps> = ({
   route,
 }) => {
   const {colors} = useTheme();
@@ -20,7 +20,6 @@ export const ScanActiveSuccess: React.FC<ScanActiveSuccessStackProps> = ({
         recordId: route.params.active.activeRecord.id,
       });
     }
-    route.params.resetState();
   };
 
   return (
@@ -42,12 +41,16 @@ export const ScanActiveSuccess: React.FC<ScanActiveSuccessStackProps> = ({
           {translate('active.data.ref') + ' ' + route.params.active.reference}
         </Text>
       </View>
-      <View marginVertical="ss" marginHorizontal="l" alignItems="center">
+      <View
+        marginTop="m"
+        marginBottom="dxxl"
+        marginHorizontal="l"
+        alignItems="center">
         <Text variant="scanDescription">
           {translate('screen.scan.successActiveDescription')}
         </Text>
       </View>
-      <View marginVertical="l" marginHorizontal="xxl">
+      <View marginVertical="xl" marginHorizontal="xxl">
         <Button
           label={translate('button.scan.goToDetails')}
           variant="primary"

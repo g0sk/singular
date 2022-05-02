@@ -7,9 +7,12 @@ import {ThemeProvider} from './ui/theme';
 import {initialize} from 'helpers/general';
 import {setI18nConfig} from 'core';
 import RNBootSplash from 'react-native-bootsplash';
+import {enableScreens} from 'react-native-screens';
 
 const App = () => {
   useEffect(() => {
+    //Use native nativigation component (FragmentActivity) for navigation-screens
+    enableScreens();
     initialize();
     setI18nConfig();
     //Delay so login screen is not displayed when navigator is loaded

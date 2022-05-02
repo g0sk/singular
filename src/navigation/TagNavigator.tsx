@@ -1,34 +1,73 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {
   TagHome,
   ScanHome,
-  Scanning,
   ScanTagSuccess,
   ScanActiveSuccess,
   WriteHome,
-  Writting,
   WriteSuccess,
+  Write,
 } from 'screens';
 import {RootTagParamList} from 'types';
 
-const Stack = createStackNavigator<RootTagParamList>();
+const Stack = createNativeStackNavigator<RootTagParamList>();
 
 export const TagNavigator = () => {
   return (
     <Stack.Navigator
       initialRouteName="TagHome"
-      headerMode="float"
-      screenOptions={{headerShown: false, cardShadowEnabled: true}}
-      detachInactiveScreens={true}>
+      screenOptions={{
+        animation: 'slide_from_right',
+        headerShown: false,
+        headerBlurEffect: 'systemChromeMaterial',
+      }}>
       <Stack.Screen name="TagHome" component={TagHome} />
-      <Stack.Screen name="ScanHome" component={ScanHome} />
-      <Stack.Screen name="Scanning" component={Scanning} />
-      <Stack.Screen name="ScanTagSuccess" component={ScanTagSuccess} />
-      <Stack.Screen name="ScanActiveSuccess" component={ScanActiveSuccess} />
-      <Stack.Screen name="WriteHome" component={WriteHome} />
-      <Stack.Screen name="Writting" component={Writting} />
-      <Stack.Screen name="WriteSuccess" component={WriteSuccess} />
+      <Stack.Screen
+        name="ScanHome"
+        component={ScanHome}
+        options={({}) => ({
+          headerShown: true,
+        })}
+      />
+      <Stack.Screen
+        name="ScanTagSuccess"
+        component={ScanTagSuccess}
+        options={({route}) => ({
+          headerShown: true,
+          title: route.params.title,
+        })}
+      />
+      <Stack.Screen
+        name="ScanActiveSuccess"
+        component={ScanActiveSuccess}
+        options={({route}) => ({
+          headerShown: true,
+          title: route.params.title,
+        })}
+      />
+      <Stack.Screen
+        name="WriteHome"
+        component={WriteHome}
+        options={() => ({
+          headerShown: true,
+        })}
+      />
+      <Stack.Screen
+        name="Write"
+        component={Write}
+        options={() => ({
+          headerShown: true,
+        })}
+      />
+      <Stack.Screen
+        name="WriteSuccess"
+        component={WriteSuccess}
+        options={({route}) => ({
+          headerShown: true,
+          title: route.params.title,
+        })}
+      />
     </Stack.Navigator>
   );
 };

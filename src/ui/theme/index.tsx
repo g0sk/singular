@@ -129,11 +129,19 @@ const theme = createTheme({
       lineHeight: 22,
       textAlign: 'justify',
     },
-    scanSuccessId: {
-      color: 'primary',
-      fontSize: 16,
+    scanSuccessData: {
+      color: 'darkText',
+      fontSize: 17,
       lineHeight: 30,
       textAlign: 'justify',
+      fontWeight: 'bold',
+    },
+    scanSuccessId: {
+      color: 'primary',
+      fontSize: 17,
+      lineHeight: 30,
+      textAlign: 'justify',
+      fontWeight: 'bold',
     },
     scanSuccessDescription: {
       color: 'primary',

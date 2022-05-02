@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import * as Yup from 'yup';
 import {useFormik} from 'formik';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -17,6 +17,7 @@ import {ErrorHandler} from 'handlers/error';
 import {removeCredentials, setCredentials} from 'utils/storage';
 import {translate} from 'core';
 import {FormLoginValues} from 'types';
+import {getCredentials} from 'utils/storage';
 
 const {height, width} = Dimensions.get('window');
 
@@ -35,6 +36,36 @@ export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const {signIn} = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
+
+  const {
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    errors,
+    touched,
+    values,
+    setFieldValue,
+    isValid,
+  } = useFormik({
+    validationSchema: LoginSchema,
+    initialValues: {
+      username: '',
+      password: '',
+      saveCredentials: true,
+    },
+    onSubmit: (formValues: FormLoginValues) => login(formValues),
+  });
+
+  useEffect(() => {
+    const init = async () => {
+      const credentials = await getCredentials();
+      if (credentials) {
+        setFieldValue('username', credentials.username);
+        setFieldValue('password', credentials.password);
+      }
+    };
+    init();
+  }, [setFieldValue]);
 
   const login = ({username, password, saveCredentials}: FormLoginValues) => {
     setLoading(true);
@@ -59,6 +90,7 @@ export const Login: React.FC = () => {
       setLoading(false);
     });
   };
+  const password = useRef<RNTextInput>(null);
 
   const navigatorSignIn = async () => {
     try {
@@ -74,25 +106,6 @@ export const Login: React.FC = () => {
     }
   };
 
-  const password = useRef<RNTextInput>(null);
-  const {
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    errors,
-    touched,
-    values,
-    setFieldValue,
-    isValid,
-  } = useFormik({
-    validationSchema: LoginSchema,
-    initialValues: {
-      username: '',
-      password: '',
-      saveCredentials: true,
-    },
-    onSubmit: (formValues: FormLoginValues) => login(formValues),
-  });
   return (
     <ErrorHandler>
       <KeyboardAwareScrollView style={{height, width}}>
@@ -120,6 +133,7 @@ export const Login: React.FC = () => {
                     placeholder={translate('form.login.email.placeholder')}
                     autoCapitalize="none"
                     autoCompleteType="email"
+                    value={values.username}
                     onChangeText={handleChange('username')}
                     onBlur={handleBlur('username')}
                     error={errors.username}
@@ -134,6 +148,7 @@ export const Login: React.FC = () => {
                       placeholder={translate('form.login.password.placeholder')}
                       secureTextEntry={true}
                       autoCapitalize="none"
+                      value={values.password}
                       autoCompleteType="password"
                       onChangeText={handleChange('password')}
                       onBlur={handleBlur('password')}

@@ -1,13 +1,20 @@
 import React from 'react';
-import {Text, Button} from 'react-native';
-import {View, Screen} from 'components';
+import {View, Screen, Button, Text} from 'components';
 
 export function ErrorFallback({resetErrorBoundary}: any) {
   return (
     <Screen>
-      <View>
-        <Text>Something went wrong: </Text>
-        <Button title="Try Again" onPress={resetErrorBoundary} />
+      <View justifyContent="center" flexDirection="row">
+        <View margin="l">
+          <Text variant="header1">Something went wrong: </Text>
+        </View>
+        <View>
+          <Button
+            variant="delete"
+            label="Try Again"
+            onPress={resetErrorBoundary}
+          />
+        </View>
       </View>
     </Screen>
   );

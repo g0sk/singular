@@ -1,26 +1,31 @@
 import React from 'react';
-import {ActivityIndicator} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import {View, Text} from 'components';
-import {useTheme} from 'ui/theme';
 import {translate} from 'core';
+import {ActivityIndicator} from 'react-native';
+import {useTheme} from 'ui/theme';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-export const Scanning: React.FC = () => {
+const Scanning = () => {
   const theme = useTheme();
   return (
     <View>
-      <View margin="m">
+      <View marginHorizontal="m">
         <View margin="m">
           <Text variant="scanHeader">{translate('action.scan.scan')}</Text>
         </View>
         <View
-          height={215}
+          height={175}
           alignItems="center"
-          margin="m"
+          marginVertical="m"
           justifyContent="center">
           <ActivityIndicator size="large" color="purple" />
         </View>
-        <View flexDirection="row" marginVertical="s" marginHorizontal="xl">
+        <View
+          flexDirection="row"
+          marginVertical="l"
+          marginHorizontal="l"
+          alignItems="center"
+          height={112}>
           <View marginRight="ss">
             <Icon
               name="information-circle-outline"
@@ -28,9 +33,13 @@ export const Scanning: React.FC = () => {
               color={theme.colors.primary}
             />
           </View>
-          <Text variant="tip">{translate('screen.scan.tip')}</Text>
+          <View>
+            <Text variant="tip">{translate('screen.scan.tip')}</Text>
+          </View>
         </View>
       </View>
     </View>
   );
 };
+
+export default Scanning;

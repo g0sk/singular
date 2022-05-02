@@ -1,111 +1,125 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Text, View} from 'components';
-import {translate} from 'core';
-import {useTheme} from 'ui/theme';
 import IconF from 'react-native-vector-icons/Feather';
 import IconI from 'react-native-vector-icons/Ionicons';
-import {ActiveState, TagInfo, TagHomeStackProps} from 'types';
-import {useAppDispatch, useAppSelector} from 'store/configureStore';
-import {initNfc, isEnabled, readNdefTag} from 'utils/nfc_scanner';
+import {translate} from 'core';
+import {useTheme} from 'ui/theme';
+import store, {useAppDispatch} from 'store/configureStore';
+import {readNdefTag, isEnabled, cancelRequest} from 'utils/nfc_scanner';
 import {fetchTag} from 'store/slices/active/activeAsyncThunk';
 import {clearActive} from 'store/slices/active/activeSlice';
-import {Scanning} from './Scanning';
-import {Error} from '../Error';
+import Scanning from './Scanning';
+import {ScanHomeScreenProps, ActiveState, TagInfo} from 'types';
 
-export const ScanHome: React.FC<TagHomeStackProps> = ({navigation}) => {
+export const ScanHome: React.FC<ScanHomeScreenProps> = ({
+  navigation,
+  setEnabled,
+}) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const activeState: ActiveState = useAppSelector((state) => state.active);
-  const [tag, setTag] = useState<TagInfo>(null);
-  //const [activeFound, setActiveFound] = useState<boolean>(false);
   const [reading, setReading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
 
-  const resetState = () => {
-    setTag(null);
-    setReading(false);
-    setError(false);
-  };
+  useEffect(() => {
+    const ready = async () => {
+      setEnabled(await isEnabled());
+    };
+    ready();
+  });
 
   const scanTag = async () => {
-    setReading(true);
-    if (await isEnabled()) {
-      initNfc().then(() => {
-        readNdefTag()
-          .then((res) => {
-            if (res !== null) {
-              setTag(res);
-              if (res.activeInfo !== null) {
-                fetchExistingTag(res.activeInfo.reference);
-              }
-            } else {
-              //showNotif()
-            }
-          })
-          .catch(() => {
-            setError(true);
+    setReading(!reading);
+    if (!reading) {
+      readNdefTag()
+        .then((res) => {
+          if (res !== null && res.activeInfo !== null) {
+            fetchExistingTag(res);
+          }
+        })
+        .catch(() => {
+          console.log('Scan aborted in screen');
+        })
+        .finally(() => cancelRequest());
+    }
+  };
+
+  const fetchExistingTag = (tag: TagInfo) => {
+    dispatch(clearActive());
+    if (tag) {
+      dispatch(
+        fetchTag({
+          pagination: {
+            page: 1,
+            itemsPerPage: 1,
+          },
+          filters: [
+            {
+              key: 'reference',
+              value: tag.activeInfo.reference ? tag.activeInfo.reference : '',
+            },
+          ],
+        }),
+      ).then(() => {
+        const {active}: ActiveState = store.getState().active;
+        if (active === null) {
+          navigation.navigate('ScanTagSuccess', {
+            tag: tag,
+            title: translate('screen.scan.home'),
           });
+        } else {
+          navigation.navigate('ScanActiveSuccess', {
+            title: active.reference,
+            active,
+          });
+        }
       });
     }
     setReading(false);
   };
 
-  const fetchExistingTag = (reference: string) => {
-    dispatch(clearActive());
-    dispatch(
-      fetchTag({
-        pagination: {
-          page: 1,
-          itemsPerPage: 1,
-        },
-        filters: [{key: 'reference', value: reference}],
-      }),
-    ).then(() => {
-      if (activeState.active !== null) {
-        const existingActive = activeState.active;
-        navigation.push('ScanActiveSuccess', {
-          active: existingActive,
-          resetState,
-        });
-      } else {
-        if (tag !== null) {
-          navigation.push('ScanTagSuccess', {tag: tag, resetState});
-        }
-      }
-    });
-  };
-
   return (
-    <View margin="m">
-      {!reading && !error && (
-        <View>
-          <View margin="m">
-            <Text variant="scanHeader">{translate('screen.scan.header')}</Text>
+    <View>
+      <View>
+        {!reading ? (
+          <View marginHorizontal="m">
+            <View margin="m">
+              <Text variant="scanHeader">
+                {translate('screen.scan.header')}
+              </Text>
+            </View>
+            <View height={175} alignItems="center" marginVertical="m">
+              <IconI
+                name="radio-outline"
+                color={theme.colors.primary}
+                size={100}
+              />
+              <IconF name="smartphone" color={theme.colors.primary} size={60} />
+            </View>
+            <View
+              marginHorizontal="l"
+              marginTop="l"
+              marginBottom="m"
+              alignItems="center"
+              height={120}>
+              <Text variant="scanDescription">
+                {translate('screen.scan.description')}
+              </Text>
+            </View>
           </View>
-          <View height={175} alignItems="center" margin="m">
-            <IconI
-              name="radio-outline"
-              color={theme.colors.primary}
-              size={100}
-            />
-            <IconF name="smartphone" color={theme.colors.primary} size={60} />
-          </View>
-          <View marginVertical="s" marginHorizontal="l" alignItems="center">
-            <Text variant="scanDescription">
-              {translate('screen.scan.description')}
-            </Text>
-          </View>
-          <View marginVertical="l" marginHorizontal="xxl">
-            <Button
-              label={translate('button.scan.scan')}
-              variant="primary"
-              onPress={() => scanTag()}
-            />
-          </View>
+        ) : (
+          <Scanning />
+        )}
+        <View marginTop="xl" marginHorizontal="xxl">
+          <Button
+            label={
+              !reading
+                ? translate('button.scan.scan')
+                : translate('button.scan.cancel')
+            }
+            variant="primary"
+            onPress={() => scanTag()}
+          />
         </View>
-      )}
-      {reading && !error && <Scanning />}
-      {error && <Error error="read" />}
+      </View>
     </View>
   );
 };

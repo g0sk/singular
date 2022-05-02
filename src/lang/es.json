@@ -19,8 +19,10 @@
       "write": {
         "header": "Escribe en una etiqueta",
         "description": "Para empezar a escribir una etiqueta, pulsa el botón y rellena los datos a insertar.",
-        "sucessDescription": "La etiqueta ha sido escrita correctamente. A continuación puedes leer la etiqueta para ver los nuevos datos."
-      }
+        "successDescription": "La etiqueta ha sido escrita correctamente. A continuación puedes leer la etiqueta para ver los nuevos datos.",
+        "goBack": "Volver"
+      },
+      "home": "Inicio"
     },
     "login": {
       "title": "Bienvenido a Singular",
@@ -46,7 +48,8 @@
     "actives": "activos",
     "empty": "No hay activos que mostrar",
     "data": {
-      "ref": "REF"
+      "ref": "REFERENCIA",
+      "type": "TIPO"
     },
     "lastUpdate": "Última actualización"
   },
@@ -75,6 +78,17 @@
     }
   },
   "form": {
+    "write": {
+      "title": "Datos a escribir",
+      "reference": {
+        "label": "Referencia",
+        "placeholder": "Introduce una referencia"
+      },
+      "type": {
+        "label": "Tipo",
+        "placeholder": "Seleccione un tipo"
+      }
+    },
     "login": {
       "email": {
         "label": "Correo electrónico",
@@ -283,7 +297,8 @@
       "scanAgain": "Volver a escanear",
       "cancel": "Cancelar",
       "retry": "Volver a intentar",
-      "goToDetails": "Ir a detalles"
+      "goToDetails": "Ir a detalles",
+      "goBack": "Volver"
     }
   },
   "action": {
@@ -291,6 +306,7 @@
       "save": "Guardar",
       "delete": "Eliminar",
       "create": "Crear",
+      "Close": "Cerrar",
       "cancel": "Cancelar",
       "edit": "Editar",
       "createdBy": "Creado por",
@@ -332,7 +348,7 @@
       "saved": "Los cambios se han guardado"
     },
     "scan": {
-      "newTagFound": "Nueva etiqueta leída correctamente",
+      "tagFound": "Nueva etiqueta leída correctamente",
       "activeFound": "Etiqueta de activo leído correctamente"
     },
     "write": "Etiqueta actualizada correctamente"

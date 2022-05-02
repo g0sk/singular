@@ -1,5 +1,5 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {
   DocumentList,
   ActiveDetails,
@@ -11,15 +11,17 @@ import {
 } from 'screens';
 import {RootDocumentParamList} from 'types';
 
-const Stack = createStackNavigator<RootDocumentParamList>();
+const Stack = createNativeStackNavigator<RootDocumentParamList>();
 
 export const DocumentNavigator = () => {
   return (
     <Stack.Navigator
       initialRouteName="DocumentList"
-      headerMode="float"
-      screenOptions={{headerShown: false, cardShadowEnabled: true}}
-      detachInactiveScreens={true}>
+      screenOptions={{
+        presentation: 'card',
+        animation: 'slide_from_right',
+        headerShown: false,
+      }}>
       <Stack.Screen
         name="DocumentList"
         component={DocumentList}

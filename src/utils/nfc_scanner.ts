@@ -1,7 +1,7 @@
 import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 
 import {TagInfo} from 'types';
-import {TagResponse} from '../../types';
+import {TagResponse} from 'types';
 
 export async function isSupported() {
   return await NfcManager.isSupported();
@@ -14,6 +14,11 @@ export async function isEnabled() {
 //Start nfc manager before using it
 export async function initNfc() {
   await NfcManager.start();
+}
+
+export async function cancelRequest() {
+  console.log('Scan aborted');
+  await NfcManager.cancelTechnologyRequest();
 }
 
 //writes ndef message on tag. First Ndef array position is for the activeID.
@@ -41,22 +46,27 @@ export async function writeNdefTextRecord(
   }
 }
 
-export async function readNdefTag(): Promise<TagInfo> {
-  let tagFormatted = {} as TagInfo;
+export async function readNdefTag(): Promise<TagInfo | null> {
+  let tagFormatted: TagInfo = null;
   try {
-    console.warn('Requesting NDEF technology');
+    //define intent so android doesnt read it default
+    console.log('Starting NFC MANAGER');
+    await NfcManager.start();
+
+    console.log('Requesting NDEF technology');
     await NfcManager.requestTechnology(NfcTech.Ndef);
-    console.log('NDEF technology available');
-    console.log('Scanning for tag');
+
+    console.log('Scanning tag');
     const tag: TagResponse = await NfcManager.getTag();
+
     if (tag !== null) {
-      console.log('Tag found');
+      console.log('Raw tag data: ', tag);
       if (
         tag.ndefMessage[0].payload.length === 0 ||
         tag.ndefMessage[1].payload.length === 0
       ) {
-        tagFormatted = null;
         console.error('NDEF message empty');
+        console.error('Cancelling');
       } else {
         tagFormatted = {
           tag: tag,
@@ -69,11 +79,13 @@ export async function readNdefTag(): Promise<TagInfo> {
             ),
           },
         };
+        console.log('Formatted tag data: ', tagFormatted);
       }
+    } else {
+      console.error('TAG EMPTY');
     }
   } catch (e) {
-    console.error(e);
-    return null;
+    throw e;
   } finally {
     console.log('Tag reading ended');
     NfcManager.cancelTechnologyRequest();

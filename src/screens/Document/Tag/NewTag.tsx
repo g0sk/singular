@@ -6,7 +6,7 @@ import {
   File,
   NewActiveProps,
   ServerError,
-  TagInfo,
+  ActiveTypeState,
 } from 'types';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {createActive, fetchActives} from 'store/slices/active/activeAsyncThunk';
@@ -39,12 +39,12 @@ import {
 import {useTheme} from 'ui/theme';
 import {clearActive, resetActiveState} from 'store/slices/active/activeSlice';
 import {
+  clearActiveType,
   clearActiveTypeList,
   resetActiveTypeState,
 } from 'store/slices/activeType/activeTypeSlice';
 
 export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
-  const [tag, setTag] = useState<TagInfo | null>(null);
   const [basicAttributes, setBasicAttributes] = useState<Attribute[]>([]);
   const [customAttributes, setCustomAttributes] = useState<Attribute[]>([]);
   const [file, setFile] = useState<File | null>(null);
@@ -71,7 +71,24 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
         filters: [],
       }),
     );
-  }, [route.params]);
+  }, []);
+
+  useEffect(() => {
+    if (route.params.tag) {
+      setReference(route.params.tag.reference);
+      store
+        .dispatch(fetchActiveType(parseInt(route.params.tag.type, 10)))
+        .then(() => {
+          const {activeType}: ActiveTypeState = store.getState().activeType;
+          if (activeType !== null) {
+            setType(activeType);
+            setBasicAttributes(activeType.basicAttributes);
+            setCustomAttributes(activeType.customAttributes);
+          }
+        });
+      setChange(true);
+    }
+  }, [route.params.tag]);
 
   useEffect(() => {
     if (type !== null) {
@@ -90,44 +107,12 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
     useCallback(() => {
       return () => {
         store.dispatch(clearActive());
+        store.dispatch(clearActiveType());
         store.dispatch(clearActiveTypeList());
         store.dispatch(resetUnitState());
       };
     }, []),
   );
-
-  useEffect(() => {
-    if (route.params.tag) {
-      setTag(route.params.tag);
-      if (route.params.tag.id !== undefined) {
-        setReference(route.params.tag.id.toString());
-        setChange(true);
-      }
-    }
-  }, [route.params.tag]);
-
-  useEffect(() => {
-    if (tag !== null) {
-      if (tag.activeType !== undefined) {
-        setType(tag.activeType);
-      }
-      if (tag.file !== undefined) {
-        setFile(tag.file);
-      }
-      if (tag.basicAttributes !== undefined) {
-        setBasicAttributes(tag.basicAttributes);
-      }
-      if (tag.customAttributes !== undefined) {
-        setCustomAttributes(tag.customAttributes);
-      }
-    } else {
-      ToastAndroid.showWithGravity(
-        translate('form.tag.notFound'),
-        ToastAndroid.CENTER,
-        ToastAndroid.LONG,
-      );
-    }
-  }, [tag]);
 
   const onHandleSave = () => {
     if (reference.length < 8) {
@@ -166,13 +151,13 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
         .unwrap()
         .then(() => {
           dispatch(resetActiveState());
+          dispatch(resetActiveTypeState());
           dispatch(
             fetchActives({
               pagination: {page: 1, itemsPerPage: 7},
               filters: [{key: 'order[entryDate]', value: 'desc'}],
             }),
           );
-          dispatch(resetActiveTypeState());
           dispatch(
             fetchActiveTypes({
               pagination: {page: 1, itemsPerPage: 9},
@@ -241,7 +226,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
   };
 
   return (
-    <View style={styles.container} marginHorizontal="m" marginBottom="xxl">
+    <View style={styles.container} marginHorizontal="m" marginBottom="xl">
       {loading && initialLoad ? (
         <View style={styles.loading}>
           <ActivityIndicator animating={loading} size="large" color="black" />

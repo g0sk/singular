@@ -5,11 +5,7 @@ import {StatusBar} from 'react-native';
 import {useTheme} from '@shopify/restyle';
 import {Theme} from 'ui/theme';
 
-export const NavigationContainer = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+const NavigationContainer = ({children}: {children: React.ReactNode}) => {
   const {navigation} = useTheme<Theme>();
   return (
     <SafeAreaProvider>
@@ -23,3 +19,5 @@ export const NavigationContainer = ({
     </SafeAreaProvider>
   );
 };
+
+export default NavigationContainer;

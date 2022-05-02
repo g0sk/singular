@@ -7,7 +7,7 @@ import IconI from 'react-native-vector-icons/Ionicons';
 import nfcManager from 'react-native-nfc-manager';
 import {ScanErrorProps} from 'types';
 
-export const Error: React.FC<ScanErrorProps> = ({error}) => {
+export const ErrorScan: React.FC<ScanErrorProps> = ({error}) => {
   const {colors} = useTheme();
   return (
     <View margin="m">

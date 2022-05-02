@@ -42,6 +42,7 @@ import {resetRecordState} from 'store/slices/record/recordSlice';
 import {resetUnitState} from 'store/slices/unit/unitSlice';
 import {resetActiveTypeState} from 'store/slices/activeType/activeTypeSlice';
 import {fetchActiveTypes} from 'store/slices/activeType/activeTypeAsyncThunk';
+import {useTheme} from 'ui/theme';
 
 export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   route,
@@ -54,6 +55,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   const [change, setChange] = useState<boolean>(false);
   const [saved, setSaved] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const {colors} = useTheme();
   const activeState: ActiveState = useAppSelector((state) => state.active);
   const recordState: RecordState = useAppSelector((state) => state.record);
 
@@ -194,7 +196,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
         <View style={styles.loading}>
           <ActivityIndicator
             size="large"
-            color="black"
+            color={colors.primary}
             animating={activeState.loading}
           />
         </View>

@@ -77,6 +77,11 @@ export type AuthParamList = {
 
 type Segment = 'active' | 'activeType';
 
+type TagData = {
+  reference: string;
+  type: string;
+};
+
 //Routes Document
 export type RootDocumentParamList = {
   DocumentList: {
@@ -90,7 +95,7 @@ export type RootDocumentParamList = {
   NewTag: {
     type: string | null;
     title: string;
-    tag: TagInfo;
+    tag: TagData;
   };
   NewActive: {
     title: string;
@@ -111,18 +116,21 @@ export type RootDocumentParamList = {
 export type RootTagParamList = {
   TagHome: {};
   ScanHome: {};
-  Scanning: {};
   ScanTagSuccess: {
     tag: TagInfo;
-    resetState: () => void;
+    title: string;
   };
   ScanActiveSuccess: {
     active: Active;
-    resetState: () => void;
+    title: string;
   };
   WriteHome: {};
-  Writting: {};
-  WriteSuccess: {};
+  Write: {};
+  WriteSuccess: {
+    reference: string;
+    title: string;
+    type: string;
+  };
 };
 
 //Route
@@ -244,35 +252,16 @@ export type TagHomeStackProps = {
   navigation: TagHomeNavigationProp;
 };
 
-export type ScanHomeRouteProp = RouteProp<RootTagParamList, 'ScanHome'>;
-export type ScanHomeNavigationProp = StackNavigationProp<
-  RootTagParamList,
-  'ScanHome'
->;
-export type ScanHomeStackProps = {
-  route: ScanHomeRouteProp;
-  navigation: ScanHomeNavigationProp;
+export type WriteHomeScreenProps = {
+  route: TagHomeRouteProp;
+  navigation: TagHomeNavigationProp;
+  setEnabled: Dispatch<SetStateAction<boolean>>;
 };
 
-export type TagWriteHomeRouteProp = RouteProp<RootTagParamList, 'WriteHome'>;
-export type TagWriteHomeNavigationProp = StackNavigationProp<
-  RootTagParamList,
-  'WriteHome'
->;
-export type TagWriteHomeStackProps = {
-  route: TagWriteHomeRouteProp;
-  navigation: TagWriteHomeNavigationProp;
-};
-
-//Tag Writting
-export type TagWrittingRouteProp = RouteProp<RootTagParamList, 'Writting'>;
-export type TagWrittingNavigationProp = StackNavigationProp<
-  RootTagParamList,
-  'Writting'
->;
-export type TagWrittingStackProps = {
-  route: TagWrittingRouteProp;
-  navigation: TagWrittingNavigationProp;
+export type ScanHomeScreenProps = {
+  route: TagHomeRouteProp;
+  navigation: TagHomeNavigationProp;
+  setEnabled: Dispatch<SetStateAction<boolean>>;
 };
 
 //Tag Write Success
@@ -281,20 +270,20 @@ export type WriteSuccessNavigationProp = StackNavigationProp<
   RootTagParamList,
   'WriteSuccess'
 >;
-export type WriteSuccessStackProps = {
+export type WriteSuccessScreenProps = {
   route: WriteSuccessRouteProp;
   navigation: WriteSuccessNavigationProp;
 };
 
-//Tag Scanning
-export type TagScanningRouteProp = RouteProp<RootTagParamList, 'Scanning'>;
-export type TagScanningNavigationProp = StackNavigationProp<
+//Tag Writting
+export type WriteRouteProp = RouteProp<RootTagParamList, 'Write'>;
+export type WriteNavigationProp = StackNavigationProp<
   RootTagParamList,
-  'Scanning'
+  'Write'
 >;
-export type TagScanningStackProps = {
-  route: TagScanningRouteProp;
-  navigation: TagScanningNavigationProp;
+export type WriteScreenProps = {
+  route: WriteRouteProp;
+  navigation: WriteNavigationProp;
 };
 
 //Tag Scan Success
@@ -306,7 +295,7 @@ export type ScanTagSuccessNavigationProp = StackNavigationProp<
   RootTagParamList,
   'ScanTagSuccess'
 >;
-export type ScanTagSuccessStackProps = {
+export type ScanTagSuccessScreenProps = {
   route: ScanTagSuccessRouteProp;
   navigation: ScanTagSuccessNavigationProp;
 };
@@ -319,7 +308,7 @@ export type ScanActiveSuccessNavigationProp = StackNavigationProp<
   RootTagParamList,
   'ScanActiveSuccess'
 >;
-export type ScanActiveSuccessStackProps = {
+export type ScanActiveSuccessScreenProps = {
   route: ScanActiveSuccessRouteProp;
   navigation: ScanActiveSuccessNavigationProp;
 };

@@ -15,12 +15,13 @@
       "description": "To begin reading tags, press the scan button and bring the device close to the tag.",
       "tip": "Bring the device close to the tag.",
       "successActiveDescription": "Tag successfully read. Now you can check or modify the active data.",
-      "successTagDescription": "New tag successfully read. Now you can added to the database.",
+      "successTagDescription": "New tag successfully read. Now you can add it to the database.",
       "write": {
         "header": "Write data on a tag",
         "description": "To begin writing on a tag, lets fill the data form first.",
-        "sucessDescription": "Tag successfully written. Now you can read the new data on the tag."
-      }
+        "successDescription": "Tag successfully written. Now you can read the new data on the tag."
+      },
+      "home": "Home"
     },
     "login": {
       "title": "Welcome to Singular",
@@ -42,7 +43,8 @@
     "actives": "actives",
     "empty": "No actives to display",
     "data": {
-      "id": "ID"
+      "ref": "REFERENCE",
+      "type": "TYPE"
     },
     "lastUpdate": "Last update"
   },
@@ -71,6 +73,17 @@
     }
   },
   "form": {
+    "write": {
+      "title": "Data to write",
+      "reference": {
+        "label": "Reference",
+        "placeholder": "Enter a reference"
+      },
+      "type": {
+        "label": "Type",
+        "placeholder": "Select a type"
+      }
+    },
     "login": {
       "email": {
         "label": "Email",
@@ -263,6 +276,7 @@
       "delete": "Delete",
       "create": "Create",
       "cancel": "Cancel",
+      "close": "Close",
       "edit": "Edit",
       "createdBy": "Created by",
       "updatedBy": "Updated by",
@@ -314,7 +328,8 @@
       "cancel": "Cancel",
       "retry": "Retry",
       "goToDetails": "Go to details",
-      "scanAgain": "Scan again"
+      "scanAgain": "Scan again",
+      "goBack": "Go back"
     }
   },
   "success": {
@@ -323,7 +338,7 @@
       "saved": "Changes saved correctly"
     },
     "scan": {
-      "newTagFound": "New tag succesfully read",
+      "tagFound": "New tag succesfully read",
       "activeFound": "Active tag succesfully read"
     },
     "write": "Tag successfully written"

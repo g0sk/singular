@@ -1,21 +1,25 @@
 import * as React from 'react';
 import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Profile, TagHome} from 'screens';
+import {Profile} from 'screens';
 import {useTheme} from 'ui/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {DocumentNavigator} from './DocumentNavigator';
+import {TagNavigator} from './TagNavigator';
 import {TabNavigatorParamList} from 'types';
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
-export const TabNavigator = () => {
+const TabNavigator = () => {
   const theme = useTheme();
   return (
     <Tab.Navigator
       initialRouteName="DocumentNavigator"
-      tabBarOptions={{
-        showLabel: false,
-        style: styles.container,
+      detachInactiveScreens={false}
+      screenOptions={{
+        lazy: false,
+        tabBarShowLabel: false,
+        tabBarStyle: styles.container,
+        headerShown: false,
       }}>
       <Tab.Screen
         name="DocumentNavigator"
@@ -32,7 +36,7 @@ export const TabNavigator = () => {
       />
       <Tab.Screen
         name="TagNavigator"
-        component={TagHome}
+        component={TagNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <Icon
@@ -68,3 +72,5 @@ const styles = StyleSheet.create({
     height: 60,
   },
 });
+
+export default TabNavigator;

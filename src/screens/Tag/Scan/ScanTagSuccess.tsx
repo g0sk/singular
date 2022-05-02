@@ -3,10 +3,12 @@ import {Button, Text, View} from 'components';
 import {translate} from 'core';
 import {useTheme} from 'ui/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {ScanTagSuccessStackProps} from 'types';
+import {ScanTagSuccessScreenProps} from 'types';
 import {useNavigation} from '@react-navigation/native';
 
-export const ScanTagSuccess: React.FC<ScanTagSuccessStackProps> = ({route}) => {
+export const ScanTagSuccess: React.FC<ScanTagSuccessScreenProps> = ({
+  route,
+}) => {
   const {colors} = useTheme();
   const globalNavigation = useNavigation();
 
@@ -14,10 +16,9 @@ export const ScanTagSuccess: React.FC<ScanTagSuccessStackProps> = ({route}) => {
     if (route.params.tag !== null) {
       globalNavigation.navigate('NewTag', {
         title: route.params.tag.activeInfo.reference,
-        tag: route.params.tag,
+        tag: route.params.tag.activeInfo,
       });
     }
-    route.params.resetState();
   };
 
   return (
@@ -41,12 +42,16 @@ export const ScanTagSuccess: React.FC<ScanTagSuccessStackProps> = ({route}) => {
             route.params.tag?.activeInfo.reference}
         </Text>
       </View>
-      <View marginVertical="ss" marginHorizontal="l" alignItems="center">
+      <View
+        marginTop="m"
+        marginBottom="xxl"
+        marginHorizontal="l"
+        alignItems="center">
         <Text variant="scanDescription">
           {translate('screen.scan.successTagDescription')}
         </Text>
       </View>
-      <View marginVertical="l" marginHorizontal="xxl">
+      <View marginVertical="dxxl" marginHorizontal="xxl">
         <Button
           label={translate('button.scan.goToDetails')}
           variant="primary"

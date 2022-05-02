@@ -62,7 +62,7 @@ const activeSlice = createSlice({
         state.filtered = true;
         state.actives = state.actives.concat(action.payload.actives);
         state.activesLength += action.payload.count;
-        state.nextPage = action.payload.page + 1;
+        state.nextPage = action.payload.page++;
       })
       .addCase(fetchFilteredActives.pending, (state) => {
         state.loading = true;
@@ -74,7 +74,10 @@ const activeSlice = createSlice({
         state.error = true;
       })
       .addCase(fetchTag.fulfilled, (state, action) => {
-        state.active = action.payload.actives[0];
+        state.active =
+          action.payload.actives.length === 1
+            ? {...action.payload.actives[0]}
+            : null;
         state.loading = false;
         state.error = false;
         state.errorData = null;

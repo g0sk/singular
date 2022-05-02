@@ -1,9 +1,9 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {TabNavigator} from './TabNavigator';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import TabNavigator from './TabNavigator';
 import {AppNavigatorParamList} from 'types';
 
-const Stack = createStackNavigator<AppNavigatorParamList>();
+const Stack = createNativeStackNavigator<AppNavigatorParamList>();
 
 export const AppNavigator = () => {
   return (

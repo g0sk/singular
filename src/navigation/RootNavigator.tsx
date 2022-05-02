@@ -1,22 +1,19 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useAuth} from 'core';
-import {NavigationContainer} from './NavigationContainer';
-import {TabNavigator} from './TabNavigator';
-//import {AppNavigator} from './AppNavigator';
-import {AuthNavigator} from './AuthNavigator';
+import NavigationContainer from './NavigationContainer';
+import TabNavigator from './TabNavigator';
+import AuthNavigator from './AuthNavigator';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export const Root = () => {
   const {status} = useAuth();
   return (
     <Stack.Navigator
-      headerMode="none"
       screenOptions={{
-        cardOverlayEnabled: false,
         gestureEnabled: true,
-        animationTypeForReplace: status === 'signIn' ? 'push' : 'pop',
+        headerShown: false,
       }}>
       {status === 'signIn' ? (
         <Stack.Screen name="App" component={TabNavigator} />

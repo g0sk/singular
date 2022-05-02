@@ -1,20 +1,20 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {TagHome, TagScan, TagWrite} from 'screens';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {TagHome, ScanHome, WriteHome} from 'screens';
 import {RootTagParamList} from 'types';
 
-const Stack = createStackNavigator<RootTagParamList>();
+const Stack = createNativeStackNavigator<RootTagParamList>();
 
 export const TagNavigator = () => {
   return (
     <Stack.Navigator
       initialRouteName="TagHome"
       headerMode="float"
-      screenOptions={{headerShown: false, cardShadowEnabled: true}}
+      screenOptions={{headerShown: false}}
       detachInactiveScreens={true}>
       <Stack.Screen name="TagHome" component={TagHome} />
-      <Stack.Screen name="TagScan" component={TagScan} />
-      <Stack.Screen name="TagWrite" component={TagWrite} />
+      <Stack.Screen name="ScanHome" component={ScanHome} />
+      <Stack.Screen name="WriteHome" component={WriteHome} />
     </Stack.Navigator>
   );
 };

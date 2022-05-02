@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
+import {API_URL} from '@env';
 import {Text, View} from 'components';
-import {TouchableOpacity} from 'react-native';
+import {Image, TouchableOpacity} from 'react-native';
 import {ActiveItemFormProps} from 'types';
 import Icon from 'react-native-vector-icons/Ionicons';
 import dayjs from 'dayjs';
+import {translate} from 'core';
 
 export const ActiveListItem: React.FC<ActiveItemFormProps> = ({
   navigation,
   active,
 }: ActiveItemFormProps) => {
-  const [entryDate, setEntryDate] = useState<Date>();
   const [activeDate, setActiveDate] = useState<string>();
 
   const _itemHandler = () => {
@@ -21,14 +22,8 @@ export const ActiveListItem: React.FC<ActiveItemFormProps> = ({
   };
 
   useEffect(() => {
-    setEntryDate(new Date(active.entryDate));
+    setActiveDate(dayjs(new Date(active.entryDate)).format('DD-MM-YYYY'));
   }, [active]);
-
-  useEffect(() => {
-    if (entryDate) {
-      setActiveDate(dayjs(entryDate).format('DD-MM-YYYY'));
-    }
-  }, [entryDate]);
 
   return (
     <View flexDirection="row" marginBottom="l" alignItems="center">
@@ -53,15 +48,59 @@ export const ActiveListItem: React.FC<ActiveItemFormProps> = ({
               <Text variant="listItemData">{active.activeType.name}</Text>
             </View>
           </View>
-          <View
-            justifyContent="center"
-            flexDirection="column"
-            alignItems="center">
-            <View marginBottom="s">
-              <Text variant="listItemData">{activeDate}</Text>
-            </View>
+          <View flexDirection="row" alignItems="center">
             <View>
-              <Icon name="image" size={15} />
+              <View marginRight="l" marginLeft="s">
+                {active.createdBy.image ? (
+                  <View borderWidth={2} borderRadius={20} borderColor="primary">
+                    <Image
+                      source={{
+                        uri: API_URL + active.createdBy.image.contentUrl,
+                      }}
+                      style={{
+                        borderRadius: 10,
+                        borderWidth: active.file ? 0 : 1,
+                      }}
+                      height={26}
+                      width={26}
+                    />
+                  </View>
+                ) : (
+                  <Icon name="person-circle-outline" size={30} />
+                )}
+              </View>
+              <View>
+                <Text>{active.createdBy.name}</Text>
+              </View>
+            </View>
+            <View flexDirection="row">
+              <View
+                justifyContent="center"
+                flexDirection="column"
+                alignItems="center">
+                {!active.file && active.description.length === 0 && (
+                  <View marginBottom="s">
+                    <Text variant="dataLabel">
+                      {translate('active.lastUpdate')}
+                    </Text>
+                  </View>
+                )}
+                <View marginBottom="s">
+                  <Text variant="listItemData">{activeDate}</Text>
+                </View>
+                <View flexDirection="row">
+                  {active.file && (
+                    <View marginRight="m">
+                      <Icon name="image" size={15} />
+                    </View>
+                  )}
+                  {active.description.length > 0 && (
+                    <View>
+                      <Icon name="reader" size={15} />
+                    </View>
+                  )}
+                </View>
+              </View>
             </View>
           </View>
         </View>

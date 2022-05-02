@@ -45,6 +45,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
   }, [openSection]);
 
   const onEditMode = () => {
+    setOpenSection(true);
     setEdit(!edit);
     if (edit && change) {
       setChanges([...newItems]);
@@ -157,7 +158,7 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
                 label={
                   !edit
                     ? translate('action.general.edit')
-                    : translate('action.general.cancel')
+                    : translate('action.general.close')
                 }
                 onPress={() => onEditMode()}
                 variant="edit"
