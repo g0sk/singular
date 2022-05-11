@@ -115,6 +115,9 @@ export type RootDocumentParamList = {
     active: RecordActive;
     title: string;
   };
+  RecordStats: {
+    recordId: number;
+  };
 };
 
 export type RootTagParamList = {

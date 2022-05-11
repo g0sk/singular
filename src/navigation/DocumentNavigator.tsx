@@ -9,6 +9,7 @@ import {
   NewTag,
   RecordList,
   RecordDetails,
+  RecordStats,
 } from 'screens';
 import {RootDocumentParamList} from 'types';
 
@@ -88,6 +89,14 @@ export const DocumentNavigator = () => {
           headerShown: true,
           active: route.params.active,
           title: route.params.title,
+        })}
+      />
+      <Stack.Screen
+        name="RecordStats"
+        component={RecordStats}
+        options={({route}) => ({
+          headerShown: true,
+          recordId: route.params.recordId,
         })}
       />
     </Stack.Navigator>

@@ -41,6 +41,10 @@ export const RecordList: React.FC<RecordListProps> = ({route, navigation}) => {
     });
   };
 
+  const goToRecordStats = () => {
+    navigation.navigate('RecordStats', {recordId: route.params.recordId});
+  };
+
   const scrollToTop = () => {
     if (records.length > 0) {
       flatListRef.current?.scrollToIndex({animated: true, index: 0});
@@ -49,7 +53,7 @@ export const RecordList: React.FC<RecordListProps> = ({route, navigation}) => {
 
   const ItemsLabel = () => {
     return (
-      <Text>
+      <Text variant="headerTitle">
         {records.length +
           ' ' +
           translate(records.length !== 1 ? 'record.records' : 'record.record')}
@@ -79,32 +83,48 @@ export const RecordList: React.FC<RecordListProps> = ({route, navigation}) => {
   return (
     <Screen>
       <View margin="m">
-        <View
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center">
-          <View>
+        <View flexDirection="column">
+          <View marginBottom="l">
             <TouchableOpacity onPress={() => scrollToTop()}>
               <ItemsLabel />
             </TouchableOpacity>
           </View>
-          <View marginHorizontal="m">
-            <TouchableOpacity onPress={changeIcon}>
-              <View flexDirection="row" alignItems="center">
-                <View marginRight="m">
-                  <Icon name={iconName} size={30} color={colors.primary} />
+          <View
+            flexDirection="row"
+            justifyContent="space-between"
+            marginHorizontal="s">
+            <View>
+              <TouchableOpacity onPress={goToRecordStats}>
+                <View flexDirection="row" alignItems="center">
+                  <View marginRight="s">
+                    <Icon name="stats-chart" size={20} color={colors.primary} />
+                  </View>
+                  <View>
+                    <Text variant="recordFilter">
+                      {translate('record.chart')}
+                    </Text>
+                  </View>
                 </View>
-                <View>
-                  <Text variant="recordFilter">
-                    {translate(
-                      order === 'latest'
-                        ? 'filter.record.latest'
-                        : 'filter.record.oldest',
-                    )}
-                  </Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity onPress={changeIcon}>
+                <View flexDirection="row" alignItems="center">
+                  <View marginRight="s">
+                    <Icon name={iconName} size={30} color={colors.primary} />
+                  </View>
+                  <View>
+                    <Text variant="recordFilter">
+                      {translate(
+                        order === 'latest'
+                          ? 'filter.record.latest'
+                          : 'filter.record.oldest',
+                      )}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>

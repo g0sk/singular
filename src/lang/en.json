@@ -61,7 +61,8 @@
     "title": "Activity",
     "empty": "No records",
     "record": "record",
-    "records": "records"
+    "records": "records",
+    "chart": "Chart"
   },
   "user": {},
   "filter": {

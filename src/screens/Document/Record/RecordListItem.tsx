@@ -16,7 +16,7 @@ export const RecordListItem: React.FC<RecordListItemProps> = ({
   return (
     <View
       borderRadius={9}
-      borderColor="secondary"
+      borderColor="primary"
       borderWidth={2}
       margin="m"
       flexDirection="row">

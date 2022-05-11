@@ -24,6 +24,7 @@ const BaseTheme = {
     darkText: '#000',
     red: '#b9244b',
     lightBlue: '#39b4ed',
+    record: '#45c49a',
     chart: '#0caa36',
     orange: '#df7327',
     default: '#9b9b9b',
@@ -87,7 +88,7 @@ const theme = createTheme({
     },
     recordFilter: {
       fontWeight: 'bold',
-      fontSize: 18,
+      fontSize: 17,
     },
     segmentLabelDark: {
       color: 'dark',
