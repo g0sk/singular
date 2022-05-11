@@ -5,26 +5,19 @@ import React, {
   RefObject,
   useCallback,
 } from 'react';
-import {Segment} from 'components';
-import {Dimensions, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import {Screen, Segment} from 'components';
+import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {Header, Text, View} from 'components';
-import {ActiveListItem, ActiveTypeListItem} from 'screens';
-import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
+import {ActiveList, ActiveTypeList} from 'screens';
+import {useAppSelector} from 'store/configureStore';
 import {
-  fetchActives,
-  fetchFilteredActives,
-} from 'store/slices/active/activeAsyncThunk';
-import {
-  fetchActiveTypes,
-  fetchFilteredActiveTypes,
-} from 'store/slices/activeType/activeTypeAsyncThunk';
-import {ActiveState, ActiveTypeState, DocumentListStackProps} from 'types';
+  ActiveState,
+  ActiveTypeState,
+  DocumentListStackProps,
+  Mode,
+} from 'types';
 import {translate} from 'core';
-import {resetActiveState} from 'store/slices/active/activeSlice';
-import {resetActiveTypeState} from 'store/slices/activeType/activeTypeSlice';
 
-const {height} = Dimensions.get('window');
-type Mode = 'active' | 'activeType';
 export const DocumentList: React.FC<DocumentListStackProps> = ({
   navigation,
   route,
@@ -32,93 +25,20 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
   const [segmentMode, setSegmentMode] = useState<Mode>('active');
   const activeListRef = createRef<FlatList<any>>();
   const typeListRef = createRef<FlatList<any>>();
-  const dispatch = useAppDispatch();
   const [flatListRef, setFlatListRef] = useState<RefObject<FlatList>>(
     activeListRef,
   );
 
   //States
-  const activeState: ActiveState = useAppSelector((state) => state.active);
-  const activeTypeState: ActiveTypeState = useAppSelector(
+  const {activesLength}: ActiveState = useAppSelector((state) => state.active);
+  const {activeTypesLength}: ActiveTypeState = useAppSelector(
     (state) => state.activeType,
   );
 
   //Handlers
-  const onActivesOnEndReached = () => {
-    if (!activeState.filtered) {
-      dispatch(
-        fetchActives({
-          pagination: {
-            page: activeState.nextPage,
-            itemsPerPage: activeState.itemsPerPage,
-          },
-          filters: [{key: 'order[entryDate]', value: 'desc'}],
-        }),
-      );
-    } else {
-      dispatch(
-        fetchFilteredActives({
-          pagination: {
-            page: activeState.nextPage,
-            itemsPerPage: activeState.itemsPerPage,
-          },
-          filters: [{key: 'order[entryDate]', value: 'desc'}],
-        }),
-      );
-    }
-  };
-
-  const onActiveTypesOnEndReached = () => {
-    if (!activeTypeState.filtered) {
-      dispatch(
-        fetchActiveTypes({
-          pagination: {
-            page: activeTypeState.nextPage,
-            itemsPerPage: activeTypeState.itemsPerPage,
-          },
-          filters: [{key: 'order[id]', value: 'desc'}],
-        }),
-      );
-    } else {
-      dispatch(
-        fetchFilteredActiveTypes({
-          pagination: {
-            page: activeTypeState.nextPage,
-            itemsPerPage: activeTypeState.itemsPerPage,
-          },
-          filters: [{key: 'order[id]', value: 'desc'}],
-        }),
-      );
-    }
-  };
-
-  const refreshActives = () => {
-    dispatch(resetActiveState());
-    dispatch(
-      fetchActives({
-        pagination: {
-          page: 1,
-          itemsPerPage: activeState.itemsPerPage,
-        },
-        filters: [{key: 'order[entryDate]', value: 'desc'}],
-      }),
-    );
-  };
-  const refreshTypes = () => {
-    dispatch(resetActiveTypeState());
-    dispatch(
-      fetchActiveTypes({
-        pagination: {
-          page: 1,
-          itemsPerPage: activeTypeState.itemsPerPage,
-        },
-        filters: [{key: 'order[id]', value: 'desc'}],
-      }),
-    );
-  };
 
   const scrollToTop = () => {
-    if (activeState.activesLength > 0) {
+    if (activesLength > 0) {
       flatListRef.current?.scrollToIndex({animated: true, index: 0});
     }
   };
@@ -142,58 +62,29 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
   };
 
   //Components
-  const Items = () => {
-    if (segmentMode === 'active') {
-      return (
-        <Text>
-          {activeState.activesLength +
-            ' ' +
-            (activeState.activesLength > 1
-              ? translate('active.actives')
-              : translate('active.active'))}
-        </Text>
-      );
-    } else {
-      return (
-        <Text>
-          {activeTypeState.activeTypesLength +
-            ' ' +
-            (activeTypeState.activeTypesLength > 1
-              ? translate('activeType.activeTypes')
-              : translate('activeType.activeType'))}
-        </Text>
-      );
-    }
-  };
-  const EmptyList = () => {
+  const ActiveTypesLabel = () => {
     return (
-      <View margin="l">
-        <Text variant="emptyHeader">
-          {translate(
-            segmentMode === 'active' ? 'active.empty' : 'activeType.empty',
-          )}
-        </Text>
-      </View>
+      <Text>
+        {activeTypesLength +
+          ' ' +
+          (activeTypesLength > 1
+            ? translate('activeType.activeTypes')
+            : translate('activeType.activeType'))}
+      </Text>
     );
   };
 
-  useEffect(() => {
-    store.dispatch(
-      fetchActives({
-        pagination: {
-          page: 1,
-          itemsPerPage: 7,
-        },
-        filters: [{key: 'order[entryDate]', value: 'desc'}],
-      }),
+  const ActivesLabel = () => {
+    return (
+      <Text>
+        {activesLength +
+          ' ' +
+          (activesLength > 1
+            ? translate('active.actives')
+            : translate('active.active'))}
+      </Text>
     );
-    store.dispatch(
-      fetchActiveTypes({
-        pagination: {page: 1, itemsPerPage: 9},
-        filters: [{key: 'order[id]', value: 'desc'}],
-      }),
-    );
-  }, []);
+  };
 
   useEffect(() => {
     if (route.params.tab !== null) {
@@ -206,7 +97,7 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
   }, [_modeHandler]);
 
   return (
-    <View>
+    <Screen>
       <View margin="m">
         <Header
           defaultIcon="plus-circle"
@@ -225,7 +116,7 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
       <View style={styles.subHeader}>
         <View marginHorizontal="m">
           <TouchableOpacity onPress={() => scrollToTop()}>
-            <Items />
+            {segmentMode === 'active' ? <ActivesLabel /> : <ActiveTypesLabel />}
           </TouchableOpacity>
         </View>
         <View style={styles.segment} marginRight="m">
@@ -239,55 +130,17 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
           />
         </View>
       </View>
-      <View
-        height={height - 70}
-        marginTop="m"
-        marginHorizontal="m"
-        paddingBottom="dxxl"
-        visible={segmentMode === 'active'}>
-        <FlatList
-          ref={flatListRef}
-          data={activeState.actives}
-          scrollEnabled={true}
-          renderItem={({item}) => (
-            <ActiveListItem {...{navigation, route, active: {...item}}} />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          onRefresh={() => refreshActives()}
-          refreshing={activeState.loading}
-          ListEmptyComponent={<EmptyList />}
-          initialNumToRender={7}
-          onEndReached={
-            activeState.activesLength >= 7 ? onActivesOnEndReached : null
-          }
-          onEndReachedThreshold={0}
-        />
-      </View>
-      <View
-        height={height - 70}
-        marginTop="m"
-        marginHorizontal="m"
-        paddingBottom="dxxl"
-        visible={segmentMode === 'activeType'}>
-        <FlatList
-          scrollEnabled={true}
-          ref={flatListRef}
-          data={activeTypeState.activeTypes}
-          renderItem={({item}) => (
-            <ActiveTypeListItem {...{navigation, route, type: {...item}}} />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          onRefresh={() => refreshTypes()}
-          refreshing={activeTypeState.loading}
-          ListEmptyComponent={<EmptyList />}
-          onEndReached={
-            activeState.activesLength >= 9 ? onActiveTypesOnEndReached : null
-          }
-          initialNumToRender={9}
-          onEndReachedThreshold={0}
-        />
-      </View>
-    </View>
+      <ActiveList
+        ref={activeListRef}
+        visible={segmentMode === 'active'}
+        {...{navigation, route}}
+      />
+      <ActiveTypeList
+        ref={typeListRef}
+        visible={segmentMode === 'activeType'}
+        {...{navigation, route}}
+      />
+    </Screen>
   );
 };
 

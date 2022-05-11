@@ -9,7 +9,7 @@ export const RecordDetails: React.FC<RecordDetailsStackProps> = ({route}) => {
   const [showImage, setShowImage] = useState<boolean>(false);
   let active = route.params.active;
   let uri = active.file !== null ? API_URL + route.params.active.file : '';
-
+  console.log(route.params.active);
   const ImagePreview = () => {
     return (
       <View>

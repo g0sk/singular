@@ -14,7 +14,7 @@ export const ActiveListItem: React.FC<ActiveItemFormProps> = ({
   const [activeDate, setActiveDate] = useState<string>();
 
   const _itemHandler = () => {
-    navigation.push('ActiveDetails', {
+    navigation.navigate('ActiveDetails', {
       activeId: active.id,
       recordId: active.activeRecord.id,
       title: active.reference,

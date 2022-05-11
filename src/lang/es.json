@@ -64,7 +64,9 @@
   },
   "record": {
     "title": "Actividad",
-    "empty": "No hay documentos"
+    "empty": "No hay documentos",
+    "record": "registro",
+    "records": "registros"
   },
   "user": {},
   "filter": {
@@ -75,6 +77,10 @@
     },
     "activeType": {
       "name": "Nombre"
+    },
+    "record": {
+      "latest": "Más reciente",
+      "oldest": "Más antiguo"
     }
   },
   "form": {
@@ -356,7 +362,8 @@
   "error": {
     "general": {
       "error": "Error",
-      "used": "Este valor ya está en uso"
+      "used": "Este valor ya está en uso",
+      "oops": "Algo ha ido mal"
     },
     "scan": {
       "scan": "No se ha podido leer la etiqueta correctamente.",

@@ -5,7 +5,6 @@ import {
   ActiveState,
   Attribute,
   File,
-  RecordState,
 } from 'types';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
 import {
@@ -19,7 +18,6 @@ import {
   Button,
   Text,
   View,
-  RecordModal,
   DynamicSection,
   ImageUpload,
   UserModal,
@@ -32,17 +30,20 @@ import {
   TextInput,
   Alert,
   ToastAndroid,
+  TouchableOpacity,
 } from 'react-native';
 import {translate} from 'core';
 import dayjs from 'dayjs';
 import {useFocusEffect} from '@react-navigation/core';
 import {fetchActiveRecords} from 'store/slices/record/recordAsyncThunk';
-import {clearActive, resetActiveState} from 'store/slices/active/activeSlice';
+import {resetActiveState} from 'store/slices/active/activeSlice';
+//import {clearActive, resetActiveState} from 'store/slices/active/activeSlice';
 import {resetRecordState} from 'store/slices/record/recordSlice';
 import {resetUnitState} from 'store/slices/unit/unitSlice';
 import {resetActiveTypeState} from 'store/slices/activeType/activeTypeSlice';
 import {fetchActiveTypes} from 'store/slices/activeType/activeTypeAsyncThunk';
 import {useTheme} from 'ui/theme';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   route,
@@ -57,7 +58,6 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   const dispatch = useAppDispatch();
   const {colors} = useTheme();
   const activeState: ActiveState = useAppSelector((state) => state.active);
-  const recordState: RecordState = useAppSelector((state) => state.record);
 
   useLayoutEffect(() => {
     store.dispatch(fetchActiveRecords(route.params.recordId));
@@ -79,10 +79,18 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
       return () => {
         store.dispatch(resetRecordState());
         store.dispatch(resetUnitState());
-        store.dispatch(clearActive());
+        //store.dispatch(clearActive());
       };
     }, []),
   );
+
+  const goToRecordList = () => {
+    if (activeState.active) {
+      navigation.navigate('RecordList', {
+        recordId: activeState.active.activeRecord.id,
+      });
+    }
+  };
 
   const onSave = () => {
     if (change && activeState.active !== null) {
@@ -111,6 +119,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
           ToastAndroid.CENTER,
           ToastAndroid.SHORT,
         );
+        navigation.goBack();
       });
     }
   };
@@ -212,10 +221,23 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
             }>
             <View style={styles.header} paddingTop="m" marginRight="m">
               <View justifyContent="space-between">
-                <RecordModal
-                  {...{route, navigation}}
-                  activeRecord={recordState.activeRecord}
-                />
+                <TouchableOpacity onPress={goToRecordList}>
+                  <View flexDirection="column" marginRight="m">
+                    <View marginBottom="s">
+                      <Text variant="updated">
+                        {translate('active.lastUpdate')}
+                      </Text>
+                    </View>
+                    <View flexDirection="row" alignItems="center">
+                      <View marginRight="m">
+                        <Text>{'09/09/09'}</Text>
+                      </View>
+                      <View marginRight="m">
+                        <Icon name="file-tray-full" size={28} />
+                      </View>
+                    </View>
+                  </View>
+                </TouchableOpacity>
               </View>
               {change && (
                 <View width={100}>

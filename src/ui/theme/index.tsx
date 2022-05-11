@@ -76,9 +76,18 @@ const BaseTheme = {
 const theme = createTheme({
   ...BaseTheme,
   textVariants: {
+    errorHeader: {
+      color: 'darkText',
+      fontWeight: 'bold',
+      fontSize: 30,
+    },
     filter: {
       fontSize: 13,
       color: 'lightText',
+    },
+    recordFilter: {
+      fontWeight: 'bold',
+      fontSize: 18,
     },
     segmentLabelDark: {
       color: 'dark',

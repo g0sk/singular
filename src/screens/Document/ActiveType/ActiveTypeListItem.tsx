@@ -9,7 +9,7 @@ export const ActiveTypeListItem: React.FC<TypeItemFormProps> = ({
   type,
 }) => {
   const _itemHandler = () => {
-    navigation.push('ActiveTypeDetails', {
+    navigation.navigate('ActiveTypeDetails', {
       typeId: type.id,
       title: type.name,
     });

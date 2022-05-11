@@ -7,6 +7,7 @@ import {
   ActiveTypeDetails,
   NewActiveType,
   NewTag,
+  RecordList,
   RecordDetails,
 } from 'screens';
 import {RootDocumentParamList} from 'types';
@@ -71,6 +72,15 @@ export const DocumentNavigator = () => {
           title: route.params.title,
         })}
       />
+      <Stack.Screen
+        name="RecordList"
+        component={RecordList}
+        options={({route}) => ({
+          headerShown: true,
+          recordId: route.params.recordId,
+        })}
+      />
+
       <Stack.Screen
         name="RecordDetails"
         component={RecordDetails}

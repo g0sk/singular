@@ -59,7 +59,9 @@
   },
   "record": {
     "title": "Activity",
-    "empty": "No records"
+    "empty": "No records",
+    "record": "record",
+    "records": "records"
   },
   "user": {},
   "filter": {
@@ -70,6 +72,10 @@
     },
     "activeType": {
       "name": "Name"
+    },
+    "record": {
+      "latest": "Latest",
+      "oldest": "Oldest"
     }
   },
   "form": {
@@ -346,7 +352,8 @@
   "error": {
     "general": {
       "error": "Error",
-      "used": "This value is already used"
+      "used": "This value is already used",
+      "oops": "Oops, something went wrong"
     },
     "scan": {
       "scan": "Tag couldn't be read. Try again.",

@@ -1,4 +1,4 @@
-import {Dispatch, SetStateAction} from 'react';
+import {Dispatch, RefObject, SetStateAction} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {TagEvent} from 'react-native-nfc-manager';
 import {
@@ -10,6 +10,7 @@ import {
 import {Theme} from 'ui/Theme';
 import {AnyObjectSchema} from 'yup';
 import {RouteProp} from '@react-navigation/core';
+import {FlatList} from 'react-native';
 
 //Geral types
 export type Credentials = {
@@ -106,6 +107,9 @@ export type RootDocumentParamList = {
   ActiveTypeDetails: {
     typeId: number;
     title: string;
+  };
+  RecordList: {
+    recordId: number;
   };
   RecordDetails: {
     active: RecordActive;
@@ -226,6 +230,23 @@ export type NewActiveTypeScreenProps = {
   route: NewActiveTypeRouteProp;
   navigation: NewActiveTypeNavigationProp;
 };
+
+//Record List
+export type RecordListNavigationProp = StackNavigationProp<
+  RootDocumentParamList,
+  'RecordList'
+>;
+
+export type RecordListRouteProp = RouteProp<
+  RootDocumentParamList,
+  'RecordList'
+>;
+
+export interface RecordListProps {
+  activeId: number;
+  route: RecordListRouteProp;
+  navigation: RecordListNavigationProp;
+}
 
 //Record details
 export type RecordDetailsRouteProp = RouteProp<
@@ -488,6 +509,19 @@ export interface Active {
   customAttributes: Attribute[];
 }
 
+export interface ActiveListProps {
+  ref: RefObject<FlatList>;
+  visible: boolean;
+  navigation: DocumentListNavigationProp;
+  route: DocumentListRouteProp;
+}
+export interface ActiveTypeListProps {
+  ref: RefObject<FlatList>;
+  visible: boolean;
+  navigation: DocumentListNavigationProp;
+  route: DocumentListRouteProp;
+}
+
 export interface NewActiveProps {
   reference: string;
   description: string;
@@ -616,6 +650,12 @@ export interface Record {
   active: Active;
   dateRecord: Array<string>;
   activeObject: Array<RecordActive>;
+}
+
+export interface RecordListItemProps {
+  record: RecordActive;
+  navigation: RecordListNavigationProp;
+  route: RecordListRouteProp;
 }
 
 export interface RecordActive {
