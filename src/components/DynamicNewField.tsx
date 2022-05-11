@@ -2,7 +2,6 @@ import React, {useRef, useState} from 'react';
 import {Dropdown, SimpleTextInput as TextInput, View} from 'components';
 import {UnitState, DynamicNewFieldProps, Unit} from 'types';
 import {
-  StyleSheet,
   ToastAndroid,
   TextInput as RNTextInput,
   TouchableOpacity,
@@ -91,8 +90,8 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
     : theme.colors.error;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.icon}>
+    <View flexDirection="row">
+      <View flexDirection="row" alignItems="center">
         <TouchableOpacity
           onPress={() =>
             !isValid || unit === null ? handleError() : handleSubmit()
@@ -110,8 +109,8 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
           </View>
         </TouchableOpacity>
       </View>
-      <View style={styles.field}>
-        <View style={styles.label} paddingHorizontal="s" marginRight="m">
+      <View flexDirection="row" alignItems="center">
+        <View flexDirection="row" paddingHorizontal="s" marginRight="m">
           <TextInput
             style={{
               minWidth: 90,
@@ -162,23 +161,3 @@ export const DynamicNewField: React.FC<DynamicNewFieldProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-  },
-  icon: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  field: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  label: {
-    flexDirection: 'row',
-  },
-  value: {
-    color: 'black',
-  },
-});

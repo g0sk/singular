@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Modal, Section, Text, UserModal, View} from 'components';
 import {API_URL} from '@env';
-import {Image, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
+import {Image, ScrollView, TouchableOpacity} from 'react-native';
 import {RecordDetailsStackProps} from 'types';
 import {translate} from 'core';
 
@@ -24,12 +24,12 @@ export const RecordDetails: React.FC<RecordDetailsStackProps> = ({route}) => {
   };
 
   return (
-    <View style={styles.container} marginHorizontal="m" marginBottom="m">
+    <View marginHorizontal="m" marginBottom="m">
       <View marginBottom="xl">
         <ScrollView horizontal={false}>
           <View>
             <View>
-              <View style={styles.entryDate} marginVertical="m">
+              <View marginVertical="m">
                 <View>
                   <Text variant="formLabel">
                     {translate('form.active.entryDate.label')}
@@ -144,31 +144,3 @@ export const RecordDetails: React.FC<RecordDetailsStackProps> = ({route}) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {},
-  picker: {
-    borderRadius: 12,
-    borderWidth: 2,
-    minHeight: 30,
-  },
-  loading: {
-    alignItems: 'center',
-    height: 400,
-    justifyContent: 'center',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  activity: {
-    flexDirection: 'column',
-  },
-  info: {
-    flexDirection: 'row',
-  },
-  icon: {
-    justifyContent: 'center',
-  },
-  entryDate: {},
-});

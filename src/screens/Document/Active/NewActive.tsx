@@ -21,11 +21,11 @@ import {
 import {
   RefreshControl,
   ScrollView,
-  StyleSheet,
   ToastAndroid,
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import {translate} from 'core';
 import {useFocusEffect} from '@react-navigation/core';
@@ -38,6 +38,8 @@ import {
 import {useTheme} from 'ui/theme';
 import {clearActive, resetActiveState} from 'store/slices/active/activeSlice';
 import {resetActiveTypeState} from 'store/slices/activeType/activeTypeSlice';
+
+const height = Dimensions.get('window').height;
 
 export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
   route,
@@ -205,9 +207,9 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
   };
 
   return (
-    <View style={styles.container} marginHorizontal="m" marginBottom="xxl">
+    <View marginHorizontal="m" marginBottom="xxl">
       {loading && initialLoad ? (
-        <View style={styles.loading}>
+        <View alignItems="center" height={height - 100} justifyContent="center">
           <ActivityIndicator animating={loading} size="large" color="black" />
         </View>
       ) : (
@@ -329,26 +331,3 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {},
-  loading: {
-    alignItems: 'center',
-    height: 400,
-    justifyContent: 'center',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  activity: {
-    flexDirection: 'column',
-  },
-  info: {
-    flexDirection: 'row',
-  },
-  icon: {
-    justifyContent: 'center',
-  },
-  entryDate: {},
-});

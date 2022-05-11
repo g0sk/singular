@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Dropdown, Text, View} from 'components';
-import {TextInput, Pressable, StyleSheet} from 'react-native';
+import {TextInput, Pressable} from 'react-native';
 import {useAppSelector} from 'store/configureStore';
 import {DynamicFieldsProps, Unit, UnitState} from 'types';
 import {useTheme} from 'ui/theme';
@@ -48,8 +48,8 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
   }, [field]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.field}>
+    <View flexDirection="row" alignItems="center">
+      <View>
         <Pressable
           delayLongPress={700}
           onPress={() => _ref.current?.focus()}
@@ -60,9 +60,11 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
               borderRadius: pressed ? 10 : 0,
             },
           ]}>
-          <View style={styles.container} marginVertical="s">
+          <View flexDirection="row" alignItems="center" marginVertical="s">
             <View
-              style={styles.label}
+              flexDirection="row"
+              borderRadius={10}
+              borderWidth={1}
               borderColor="default"
               padding="s"
               marginRight="m">
@@ -111,19 +113,3 @@ export const DynamicField: React.FC<DynamicFieldsProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  field: {},
-  label: {
-    flexDirection: 'row',
-    borderRadius: 10,
-    borderWidth: 1,
-  },
-  value: {
-    color: 'black',
-  },
-});

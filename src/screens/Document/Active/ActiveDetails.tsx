@@ -21,29 +21,31 @@ import {
   DynamicSection,
   ImageUpload,
   UserModal,
+  Screen,
 } from 'components';
 import {
   ActivityIndicator,
   RefreshControl,
   ScrollView,
-  StyleSheet,
   TextInput,
   Alert,
   ToastAndroid,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import {translate} from 'core';
 import dayjs from 'dayjs';
 import {useFocusEffect} from '@react-navigation/core';
 import {fetchActiveRecords} from 'store/slices/record/recordAsyncThunk';
 import {resetActiveState} from 'store/slices/active/activeSlice';
-//import {clearActive, resetActiveState} from 'store/slices/active/activeSlice';
 import {resetRecordState} from 'store/slices/record/recordSlice';
 import {resetUnitState} from 'store/slices/unit/unitSlice';
 import {resetActiveTypeState} from 'store/slices/activeType/activeTypeSlice';
 import {fetchActiveTypes} from 'store/slices/activeType/activeTypeAsyncThunk';
 import {useTheme} from 'ui/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
+
+const height = Dimensions.get('window').height;
 
 export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   route,
@@ -200,172 +202,162 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
   };
 
   return (
-    <View style={styles.container} marginHorizontal="m" marginBottom="m">
-      {activeState.loading && !saved ? (
-        <View style={styles.loading}>
-          <ActivityIndicator
-            size="large"
-            color={colors.primary}
-            animating={activeState.loading}
-          />
-        </View>
-      ) : (
-        <View marginBottom="xl">
-          <ScrollView
-            horizontal={false}
-            refreshControl={
-              <RefreshControl
-                refreshing={activeState.loading}
-                onRefresh={_handleRefresh}
-              />
-            }>
-            <View style={styles.header} paddingTop="m" marginRight="m">
-              <View justifyContent="space-between">
-                <TouchableOpacity onPress={goToRecordList}>
-                  <View flexDirection="column" marginRight="m">
-                    <View marginBottom="s">
-                      <Text variant="updated">
-                        {translate('active.lastUpdate')}
-                      </Text>
-                    </View>
-                    <View flexDirection="row" alignItems="center">
-                      <View marginRight="m">
-                        <Text>{'09/09/09'}</Text>
+    <Screen>
+      <View marginHorizontal="m" marginBottom="m">
+        {activeState.loading && !saved ? (
+          <View
+            justifyContent="center"
+            alignItems="center"
+            height={height - 60}>
+            <ActivityIndicator
+              size="large"
+              color={colors.primary}
+              animating={activeState.loading}
+            />
+          </View>
+        ) : (
+          <View marginBottom="xl">
+            <ScrollView
+              horizontal={false}
+              refreshControl={
+                <RefreshControl
+                  refreshing={activeState.loading}
+                  onRefresh={_handleRefresh}
+                />
+              }>
+              <View
+                flexDirection="row"
+                justifyContent="space-between"
+                paddingTop="m"
+                marginRight="m">
+                <View justifyContent="space-between">
+                  <TouchableOpacity onPress={goToRecordList}>
+                    <View flexDirection="column" marginRight="m">
+                      <View marginBottom="s">
+                        <Text variant="updated">
+                          {translate('active.lastUpdate')}
+                        </Text>
                       </View>
-                      <View marginRight="m">
-                        <Icon name="file-tray-full" size={28} />
+                      <View flexDirection="row" alignItems="center">
+                        <View marginRight="m">
+                          <Text>{'09/09/09'}</Text>
+                        </View>
+                        <View marginRight="m">
+                          <Icon name="file-tray-full" size={28} />
+                        </View>
                       </View>
                     </View>
+                  </TouchableOpacity>
+                </View>
+                {change && (
+                  <View width={100}>
+                    <Button
+                      onPress={onSave}
+                      variant="secondary"
+                      label={translate('action.general.save')}
+                    />
                   </View>
-                </TouchableOpacity>
+                )}
               </View>
-              {change && (
-                <View width={100}>
-                  <Button
-                    onPress={onSave}
-                    variant="secondary"
-                    label={translate('action.general.save')}
+              <View alignSelf="flex-start">
+                <View marginVertical="m">
+                  <View>
+                    <Text variant="formLabel">
+                      {translate('form.active.entryDate.label')}
+                    </Text>
+                  </View>
+                  <View marginTop="s">
+                    <Text>
+                      {dayjs(activeState.active?.entryDate).format(
+                        'DD/MM/YYYY',
+                      )}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <View>
+                <View flexDirection="column" alignItems="flex-start">
+                  <View>
+                    <Text variant="formLabel">
+                      {translate('form.active.reference.label')}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text>{activeState.active?.reference}</Text>
+                  </View>
+                </View>
+              </View>
+              <View marginTop="m" marginBottom="s">
+                <View>
+                  <Text variant="formLabel">
+                    {translate('form.active.type.label')}
+                  </Text>
+                </View>
+                <View marginVertical="s">
+                  <Text>{activeState.active?.activeType.name}</Text>
+                </View>
+              </View>
+              <ImageUpload file={file} saveImage={onFileChange} />
+              <View marginTop="l" marginBottom="m">
+                <View marginBottom="m">
+                  <Text variant="formLabel">
+                    {translate('form.active.description.label')}
+                  </Text>
+                </View>
+                <View
+                  borderRadius={10}
+                  borderColor="primary"
+                  borderWidth={1}
+                  width={280}>
+                  <TextInput
+                    style={{textAlignVertical: 'top', padding: 10}}
+                    placeholder={translate(
+                      'form.active.description.placeholder',
+                    )}
+                    numberOfLines={4}
+                    value={description}
+                    multiline={true}
+                    onChangeText={onDescriptionChange}
+                    maxLength={255}
                   />
                 </View>
-              )}
-            </View>
-            <View alignSelf="flex-start">
-              <View style={styles.entryDate} marginVertical="m">
-                <View>
-                  <Text variant="formLabel">
-                    {translate('form.active.entryDate.label')}
-                  </Text>
-                </View>
-                <View marginTop="s">
-                  <Text>
-                    {dayjs(activeState.active?.entryDate).format('DD/MM/YYYY')}
-                  </Text>
-                </View>
               </View>
-            </View>
-            <View>
-              <View flexDirection="column" alignItems="flex-start">
-                <View>
-                  <Text variant="formLabel">
-                    {translate('form.active.reference.label')}
-                  </Text>
-                </View>
-                <View>
-                  <Text>{activeState.active?.reference}</Text>
-                </View>
-              </View>
-            </View>
-            <View marginTop="m" marginBottom="s">
               <View>
-                <Text variant="formLabel">
-                  {translate('form.active.type.label')}
-                </Text>
+                <View marginVertical="s">
+                  <DynamicSection
+                    collection={basicAttributes}
+                    label={translate('form.active.basicAttribute.label')}
+                    canAddItems={false}
+                    editValue={true}
+                    editDropdownValue={false}
+                    setChanges={onBasicAttributesChange}
+                    open={true}
+                  />
+                </View>
+                <View marginBottom="m">
+                  <DynamicSection
+                    collection={customAttributes}
+                    label={translate('form.active.customAttribute.label')}
+                    canAddItems={true}
+                    editValue={true}
+                    editDropdownValue={true}
+                    setChanges={onCustomAttributesChange}
+                    open={true}
+                  />
+                </View>
               </View>
-              <View marginVertical="s">
-                <Text>{activeState.active?.activeType.name}</Text>
-              </View>
-            </View>
-            <ImageUpload file={file} saveImage={onFileChange} />
-            <View marginTop="l" marginBottom="m">
-              <View marginBottom="m">
-                <Text variant="formLabel">
-                  {translate('form.active.description.label')}
-                </Text>
-              </View>
-              <View
-                borderRadius={10}
-                borderColor="primary"
-                borderWidth={1}
-                width={280}>
-                <TextInput
-                  style={{textAlignVertical: 'top', padding: 10}}
-                  placeholder={translate('form.active.description.placeholder')}
-                  numberOfLines={4}
-                  value={description}
-                  multiline={true}
-                  onChangeText={onDescriptionChange}
-                  maxLength={255}
+              <UserModal user={activeState.active?.createdBy} created={true} />
+              <View marginHorizontal="xxl" marginTop="l" marginBottom="xxl">
+                <Button
+                  variant="delete"
+                  label={translate('action.general.delete')}
+                  onPress={onDelete}
                 />
               </View>
-            </View>
-            <View>
-              <View marginVertical="s">
-                <DynamicSection
-                  collection={basicAttributes}
-                  label={translate('form.active.basicAttribute.label')}
-                  canAddItems={false}
-                  editValue={true}
-                  editDropdownValue={false}
-                  setChanges={onBasicAttributesChange}
-                  open={true}
-                />
-              </View>
-              <View marginBottom="m">
-                <DynamicSection
-                  collection={customAttributes}
-                  label={translate('form.active.customAttribute.label')}
-                  canAddItems={true}
-                  editValue={true}
-                  editDropdownValue={true}
-                  setChanges={onCustomAttributesChange}
-                  open={true}
-                />
-              </View>
-            </View>
-            <UserModal user={activeState.active?.createdBy} created={true} />
-            <View marginHorizontal="xxl" marginTop="l" marginBottom="xxl">
-              <Button
-                variant="delete"
-                label={translate('action.general.delete')}
-                onPress={onDelete}
-              />
-            </View>
-          </ScrollView>
-        </View>
-      )}
-    </View>
+            </ScrollView>
+          </View>
+        )}
+      </View>
+    </Screen>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {},
-  loading: {
-    alignItems: 'center',
-    height: 400,
-    justifyContent: 'center',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  activity: {
-    flexDirection: 'column',
-  },
-  info: {
-    flexDirection: 'row',
-  },
-  icon: {
-    justifyContent: 'center',
-  },
-  entryDate: {},
-});

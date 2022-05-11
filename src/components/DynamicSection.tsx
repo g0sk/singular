@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import {DynamicField, DynamicNewField, View, Text, Button} from 'components';
-import {TouchableOpacity, StyleSheet} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import {translate} from 'core';
 import {useTheme} from 'ui/theme';
 import {Attribute, DynamicSectionProps} from 'types';
@@ -107,9 +107,9 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
             return (
               <Fragment key={index}>
                 {openSection && (
-                  <View style={styles.headerContainer}>
+                  <View flexDirection="row">
                     {edit && (
-                      <View style={styles.icon} marginRight="s">
+                      <View justifyContent="center" marginRight="s">
                         <TouchableOpacity onPress={() => onRemoveItem(index)}>
                           <Icon
                             name="remove-circle-outline"
@@ -140,14 +140,16 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
 
   const ListHeaderComponent = () => {
     return (
-      <View style={styles.headerContainer} marginBottom="m">
+      <View flexDirection="row" marginBottom="m">
         <View marginRight="l">
-          <TouchableOpacity style={styles.header} onPress={onHeaderPress}>
-            <View marginRight="s">
-              <Text variant="formLabel">{label}</Text>
-            </View>
-            <View style={styles.icon}>
-              <Icon name={icon} size={15} color="black" />
+          <TouchableOpacity onPress={onHeaderPress}>
+            <View flexDirection="row">
+              <View marginRight="s">
+                <Text variant="formLabel">{label}</Text>
+              </View>
+              <View justifyContent="center">
+                <Icon name={icon} size={15} color="black" />
+              </View>
             </View>
           </TouchableOpacity>
         </View>
@@ -177,18 +179,3 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  formValue: {
-    justifyContent: 'flex-start',
-  },
-  headerContainer: {
-    flexDirection: 'row',
-  },
-  header: {
-    flexDirection: 'row',
-  },
-  icon: {
-    justifyContent: 'center',
-  },
-});

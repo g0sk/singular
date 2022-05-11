@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from 'react';
 import {Screen, Segment} from 'components';
-import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import {FlatList, TouchableOpacity} from 'react-native';
 import {Header, Text, View} from 'components';
 import {ActiveList, ActiveTypeList} from 'screens';
 import {useAppSelector} from 'store/configureStore';
@@ -113,13 +113,16 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
           segment={segmentMode}
         />
       </View>
-      <View style={styles.subHeader}>
+      <View
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center">
         <View marginHorizontal="m">
           <TouchableOpacity onPress={() => scrollToTop()}>
             {segmentMode === 'active' ? <ActivesLabel /> : <ActiveTypesLabel />}
           </TouchableOpacity>
         </View>
-        <View style={styles.segment} marginRight="m">
+        <View flexDirection="row" marginRight="m">
           <Segment
             labels={[
               {name: translate('screen.active.title'), id: 'active'},
@@ -143,14 +146,3 @@ export const DocumentList: React.FC<DocumentListStackProps> = ({
     </Screen>
   );
 };
-
-const styles = StyleSheet.create({
-  subHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  segment: {
-    flexDirection: 'row',
-  },
-});

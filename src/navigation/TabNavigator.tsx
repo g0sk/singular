@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Profile} from 'screens';
 import {useTheme} from 'ui/theme';
@@ -18,7 +17,12 @@ const TabNavigator = () => {
       screenOptions={{
         lazy: false,
         tabBarShowLabel: false,
-        tabBarStyle: styles.container,
+        tabBarStyle: {
+          position: 'absolute',
+          flex: 1,
+          backgroundColor: '#ffffff',
+          height: 60,
+        },
         headerShown: false,
       }}>
       <Tab.Screen
@@ -63,14 +67,5 @@ const TabNavigator = () => {
     </Tab.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    flex: 1,
-    backgroundColor: '#ffffff',
-    height: 60,
-  },
-});
 
 export default TabNavigator;

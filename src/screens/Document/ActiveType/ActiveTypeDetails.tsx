@@ -16,10 +16,10 @@ import {
   ActivityIndicator,
   Alert,
   RefreshControl,
-  StyleSheet,
   TouchableOpacity,
   ToastAndroid,
   TextInput,
+  Dimensions,
 } from 'react-native';
 import {translate} from 'core';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
@@ -40,6 +40,9 @@ import {resetUnitState} from 'store/slices/unit/unitSlice';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {fetchActives} from 'store/slices/active/activeAsyncThunk';
 import {resetActiveState} from 'store/slices/active/activeSlice';
+import {useTheme} from 'ui/theme';
+
+const height = Dimensions.get('window').height;
 
 export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   route,
@@ -49,7 +52,7 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   const [basicAttributes, setBasicAttributes] = useState<Attribute[]>([]);
   const [customAttributes, setCustomAttributes] = useState<Attribute[]>([]);
   const [change, setChange] = useState<boolean>(false);
-
+  const {colors} = useTheme();
   const dispatch = useAppDispatch();
   const _ref = useRef<TextInput>(null);
   const activeTypeState: ActiveTypeState = useAppSelector(
@@ -160,12 +163,12 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
   );
 
   return (
-    <View style={styles.container} marginHorizontal="m" marginBottom="m">
+    <View marginHorizontal="m" marginBottom="m">
       {activeTypeState.loading && initialLoad ? (
-        <View style={styles.loading}>
+        <View alignItems="center" height={height - 100} justifyContent="center">
           <ActivityIndicator
             size="large"
-            color="black"
+            color={colors.primary}
             animating={activeTypeState.loading}
           />
         </View>
@@ -180,7 +183,11 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
                 onRefresh={_handleRefresh}
               />
             }>
-            <View style={styles.header} paddingTop="s" marginRight="m">
+            <View
+              flexDirection="row"
+              justifyContent="space-between"
+              paddingTop="s"
+              marginRight="m">
               <View marginBottom="l">
                 <TouchableOpacity onPress={() => _ref.current?.focus()}>
                   <View>
@@ -251,25 +258,3 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {},
-  loading: {
-    alignItems: 'center',
-    height: 400,
-    justifyContent: 'center',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  activity: {
-    flexDirection: 'column',
-  },
-  info: {
-    flexDirection: 'row',
-  },
-  icon: {
-    justifyContent: 'center',
-  },
-});

@@ -22,11 +22,11 @@ import {
 import {
   RefreshControl,
   ScrollView,
-  StyleSheet,
   ToastAndroid,
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import {translate} from 'core';
 import {useFocusEffect} from '@react-navigation/core';
@@ -43,6 +43,8 @@ import {
   clearActiveTypeList,
   resetActiveTypeState,
 } from 'store/slices/activeType/activeTypeSlice';
+
+const height = Dimensions.get('window').height;
 
 export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
   const [basicAttributes, setBasicAttributes] = useState<Attribute[]>([]);
@@ -226,9 +228,9 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
   };
 
   return (
-    <View style={styles.container} marginHorizontal="m" marginBottom="xl">
+    <View marginHorizontal="m" marginBottom="xl">
       {loading && initialLoad ? (
-        <View style={styles.loading}>
+        <View alignItems="center" height={height - 100} justifyContent="center">
           <ActivityIndicator animating={loading} size="large" color="black" />
         </View>
       ) : (
@@ -351,26 +353,3 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {},
-  loading: {
-    alignItems: 'center',
-    height: 400,
-    justifyContent: 'center',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  activity: {
-    flexDirection: 'column',
-  },
-  info: {
-    flexDirection: 'row',
-  },
-  icon: {
-    justifyContent: 'center',
-  },
-  entryDate: {},
-});

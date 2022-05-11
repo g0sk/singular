@@ -3,7 +3,6 @@ import {API_URL} from '@env';
 import {
   Image,
   TouchableOpacity,
-  StyleSheet,
   ActivityIndicator,
   ToastAndroid,
 } from 'react-native';
@@ -195,10 +194,10 @@ export const Avatar: React.FC<ImageUploadProps> = ({file, saveImage}) => {
 
   const AvatarComponent = () => {
     return (
-      <View style={styles.container}>
+      <View>
         <TouchableOpacity onPress={() => setShow(!show)}>
           <Image
-            style={styles.avatarWithBorder}
+            style={{borderRadius: 60, borderWidth: 3, borderColor: '#593ac1'}}
             height={100}
             width={100}
             source={
@@ -218,24 +217,3 @@ export const Avatar: React.FC<ImageUploadProps> = ({file, saveImage}) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {},
-  avatarWithBorder: {
-    borderRadius: 60,
-    borderWidth: 3,
-    borderColor: '#593ac1',
-  },
-  avatarNoBorder: {
-    borderRadius: 70,
-  },
-  iconBorder: {
-    justifyContent: 'center',
-    borderRadius: 30,
-    borderWidth: 3,
-    borderColor: '#593ac1',
-  },
-  iconNoBorder: {
-    borderRadius: 70,
-  },
-});

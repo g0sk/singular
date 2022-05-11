@@ -3,7 +3,6 @@ import {DropdownProps, ItemGeneric} from 'types';
 import {
   TouchableOpacity,
   FlatList,
-  StyleSheet,
   Pressable,
   ToastAndroid,
 } from 'react-native';
@@ -52,7 +51,9 @@ export function Dropdown<T extends ItemGeneric>({
     return (
       <View
         alignSelf="flex-start"
-        style={styles.picker}
+        borderRadius={12}
+        borderWidth={2}
+        minHeight={30}
         borderColor="primary"
         minWidth={75}
         maxWidth={130}>
@@ -92,17 +93,17 @@ export function Dropdown<T extends ItemGeneric>({
   const ListHeaderComponent = () => {
     return (
       <View margin="m">
-        <Text variant="formLabel" style={styles.header}>
-          {header}
-        </Text>
+        <Text variant="formLabel">{header}</Text>
       </View>
     );
   };
 
   const ListEmptyComponent = () => {
     return (
-      <View style={styles.emptyComponent}>
-        <Text>{translate('form.field.noItems')}</Text>
+      <View height={200} justifyContent="center" alignItems="center">
+        <Text textAlign="center" fontSize={25}>
+          {translate('form.field.noItems')}
+        </Text>
       </View>
     );
   };
@@ -110,7 +111,9 @@ export function Dropdown<T extends ItemGeneric>({
   const OptionList = () => {
     return (
       <View
-        style={styles.options}
+        borderRadius={15}
+        backgroundColor="white"
+        minHeight={200}
         margin="m"
         paddingHorizontal="m"
         paddingBottom="l"
@@ -128,42 +131,11 @@ export function Dropdown<T extends ItemGeneric>({
   };
 
   return (
-    <View style={styles.container}>
+    <View>
       <Picker />
-      <View style={styles.modal}>
+      <View>
         <Modal show={open} children={<OptionList />} setVisibility={setOpen} />
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {},
-  modal: {},
-  picker: {
-    borderRadius: 12,
-    borderWidth: 2,
-    minHeight: 30,
-  },
-  entryDate: {},
-  options: {
-    borderRadius: 15,
-    backgroundColor: 'white',
-    minHeight: 200,
-  },
-  item: {
-    borderBottomColor: '#593ac1',
-    borderBottomWidth: 1,
-    textTransform: 'uppercase',
-  },
-  emptyComponent: {
-    height: 200,
-    textAlign: 'center',
-    fontSize: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  header: {
-    color: 'black',
-  },
-});

@@ -14,10 +14,10 @@ import {
 } from 'types';
 import {
   ActivityIndicator,
-  StyleSheet,
   ToastAndroid,
   TouchableOpacity,
   TextInput,
+  Dimensions,
 } from 'react-native';
 import {translate} from 'core';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
@@ -37,6 +37,8 @@ import {
   resetActiveTypeState,
 } from 'store/slices/activeType/activeTypeSlice';
 import {ScrollView} from 'react-native-gesture-handler';
+
+const height = Dimensions.get('window').height;
 
 export const NewActiveType: React.FC<NewActiveTypeScreenProps> = ({
   navigation,
@@ -141,9 +143,9 @@ export const NewActiveType: React.FC<NewActiveTypeScreenProps> = ({
   );
 
   return (
-    <View style={styles.container} marginHorizontal="m" marginBottom="m">
+    <View marginHorizontal="m" marginBottom="m">
       {basicAttributeState.loading ? (
-        <View style={styles.loading}>
+        <View alignItems="center" height={height - 100} justifyContent="center">
           <ActivityIndicator
             size="large"
             color="black"
@@ -153,7 +155,11 @@ export const NewActiveType: React.FC<NewActiveTypeScreenProps> = ({
       ) : (
         <View marginBottom="xl">
           <KeyboardAwareScrollView scrollEnabled={true} horizontal={false}>
-            <View style={styles.header} paddingTop="s" marginRight="m">
+            <View
+              flexDirection="row"
+              justifyContent="space-between"
+              paddingTop="s"
+              marginRight="m">
               <View marginBottom="l">
                 <TouchableOpacity onPress={() => nameRef.current?.focus()}>
                   <View>
@@ -221,26 +227,3 @@ export const NewActiveType: React.FC<NewActiveTypeScreenProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {},
-  loading: {
-    alignItems: 'center',
-    height: 400,
-    justifyContent: 'center',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  activity: {
-    flexDirection: 'column',
-  },
-  info: {
-    flexDirection: 'row',
-  },
-  icon: {
-    justifyContent: 'center',
-  },
-  entryDate: {},
-});

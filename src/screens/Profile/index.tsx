@@ -1,6 +1,6 @@
 import React, {useLayoutEffect, useState} from 'react';
 import {VERSION} from '@env';
-import {Alert, StyleSheet, ToastAndroid} from 'react-native';
+import {Alert, ToastAndroid} from 'react-native';
 import {Button, SimpleHeader, View, Text, Avatar} from 'components';
 import {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {useAuth, translate} from 'core';
@@ -65,7 +65,7 @@ export const Profile: React.FC = () => {
         <View alignItems="center">
           <Avatar file={file} saveImage={saveImage} />
         </View>
-        <View style={styles.formData} marginHorizontal="m">
+        <View flexDirection="column" marginHorizontal="m">
           <View marginBottom="m">
             <Text variant="formLabel" marginBottom="s">
               {translate('form.user.name.label')}
@@ -133,7 +133,7 @@ export const Profile: React.FC = () => {
               label={translate('action.login.logOut.title')}
             />
           </View>
-          <View style={styles.version} margin="l">
+          <View alignItems="center" margin="l">
             <Text variant="version">
               {translate('app.data.version') + ' ' + VERSION}
             </Text>
@@ -143,19 +143,3 @@ export const Profile: React.FC = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  formData: {
-    flexDirection: 'column',
-  },
-  avatar: {
-    alignItems: 'center',
-  },
-  version: {
-    alignItems: 'center',
-  },
-});

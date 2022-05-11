@@ -1,6 +1,5 @@
 import React, {forwardRef} from 'react';
 import {
-  StyleSheet,
   TextInput as RNTextInput,
   TextInputProps as RNTextInputProps,
 } from 'react-native';
@@ -23,11 +22,6 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
       ? 'error'
       : 'primary';
     const iconColor = theme.colors[color];
-    const styles = StyleSheet.create({
-      input: {
-        color: theme.colors.darkText,
-      },
-    });
     return (
       <View
         flexDirection="row"
@@ -44,7 +38,7 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(
         )}
         <View flex={1}>
           <RNTextInput
-            style={styles.input}
+            style={{color: theme.colors.darkText}}
             underlineColorAndroid="transparent"
             selectionColor={theme.colors.primary}
             placeholderTextColor={iconColor}
