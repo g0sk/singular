@@ -8,15 +8,13 @@ import React, {
 } from 'react';
 import {TextInput, TouchableOpacity} from 'react-native';
 import debounce from 'lodash.debounce';
-import {Text, View} from './';
-import {FilterModal} from './';
+import {Text, View, FilterModal} from './';
 import {useTheme} from 'ui/theme';
 import {fetchFilteredActives} from 'store/slices/active/activeAsyncThunk';
 import store from 'store/configureStore';
 import {Mode, SearchFilter} from 'types';
 import {resetActiveState} from 'store/slices/active/activeSlice';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {translate} from 'core';
 import {fetchFilteredActiveTypes} from 'store/slices/activeType/activeTypeAsyncThunk';
 import {resetActiveTypeState} from 'store/slices/activeType/activeTypeSlice';
 
@@ -26,29 +24,18 @@ export const Search: React.FC<{
   filters: SearchFilter[];
   segment: Mode;
 }> = ({setOpen, placeholder, filters, segment}) => {
-  const [filter, setFilter] = useState<SearchFilter>({
-    key: 'reference',
-    name: translate('filter.active.reference'),
-    color: 'primary',
-  });
+  const [filter, setFilter] = useState<SearchFilter>({} as SearchFilter);
   const [query, setQuery] = useState<string>('');
   const theme = useTheme();
   const searchRef = useRef<TextInput>(null);
+
   useEffect(() => {
     if (segment === 'active') {
-      setFilter({
-        key: 'reference',
-        name: translate('filter.active.reference'),
-        color: 'primary',
-      });
+      setFilter(filters[0]);
     } else {
-      setFilter({
-        key: 'name',
-        name: translate('filter.activeType.name'),
-        color: 'orange',
-      });
+      setFilter(filters[0]);
     }
-  }, [segment]);
+  }, [filters, segment]);
 
   useEffect(() => {
     searchRef.current?.focus();
@@ -122,7 +109,7 @@ export const Search: React.FC<{
         </TouchableOpacity>
         <TouchableOpacity onPress={() => searchRef.current?.focus()}>
           <View alignItems="center" flexDirection="row" borderRadius={20}>
-            <View width={180}>
+            <View width={165}>
               <TextInput
                 ref={searchRef}
                 placeholder={placeholder}
@@ -137,14 +124,19 @@ export const Search: React.FC<{
               />
             </View>
             <View
-              borderRadius={8}
+              overflow="hidden"
+              borderRadius={20}
               backgroundColor={filter.color}
-              paddingHorizontal="ss"
               paddingVertical="ss"
+              marginRight="m"
+              marginLeft="s"
               alignItems="center"
-              minWidth={70}
+              minWidth={80}
               maxWidth={80}>
-              <Text textAlign="center" variant="filter">
+              <Text
+                textAlign="center"
+                textTransform="capitalize"
+                variant="filter">
                 {filter.name}
               </Text>
             </View>

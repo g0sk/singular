@@ -52,11 +52,10 @@ export const FilterModal: React.FC<{
             },
           ]}>
           <View flexDirection="row" alignItems="center">
-            <View
-              height={16}
-              width={16}
-              borderRadius={8}
-              backgroundColor={item.color}
+            <Icon
+              name={item.icon}
+              size={20}
+              color={theme.colors[item.color as keyof typeof theme.colors]}
             />
             <View height={30} justifyContent="center" paddingHorizontal="s">
               <Text textTransform="capitalize">{item.name}</Text>

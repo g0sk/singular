@@ -1,9 +1,32 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Search, View, Text} from './';
 import Icon from 'react-native-vector-icons/Feather';
 import {HeaderProps, SearchFilter} from 'types';
 import {translate} from 'core';
+
+const activeFilters: SearchFilter[] = [
+  {
+    key: 'reference',
+    name: translate('filter.active.reference'),
+    color: 'primary',
+    icon: 'document-text-outline',
+  },
+  {
+    key: 'activeType.name',
+    name: translate('filter.active.activeType'),
+    color: 'orange',
+    icon: 'pricetags-outline',
+  },
+];
+const activeTypeFilters: SearchFilter[] = [
+  {
+    key: 'name',
+    name: translate('filter.activeType.name'),
+    color: 'orange',
+    icon: 'pricetags-outline',
+  },
+];
 
 export const Header: React.FC<HeaderProps> = ({
   label,
@@ -15,33 +38,21 @@ export const Header: React.FC<HeaderProps> = ({
   segment,
 }) => {
   const [openSearch, setOpenSearch] = useState<boolean>(false);
+  const [currentFilters, setCurrentFilters] = useState<SearchFilter[]>([]);
+
   const placeholder =
     segment === 'active'
       ? translate('screen.active.searchActive')
       : translate('screen.activeType.searchActiveType');
 
-  const activeFilters: SearchFilter[] = [
-    {
-      key: 'reference',
-      name: translate('filter.active.reference'),
-      color: 'primary',
-    },
-    {
-      key: 'activeType.name',
-      name: translate('filter.active.activeType'),
-      color: 'orange',
-    },
-  ];
-  const activeTypeFilters: SearchFilter[] = [
-    {
-      key: 'name',
-      name: translate('filter.activeType.name'),
-      color: 'orange',
-    },
-  ];
+  useEffect(() => {
+    if (segment === 'active') {
+      setCurrentFilters(activeFilters);
+    } else {
+      setCurrentFilters(activeTypeFilters);
+    }
+  }, [segment]);
 
-  const currentFilters =
-    segment === 'active' ? activeFilters : activeTypeFilters;
   return (
     <View marginRight="m">
       {!openSearch ? (

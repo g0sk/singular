@@ -465,7 +465,8 @@ export type ActiveTypes = ActiveType[];
 export type SearchFilter = {
   key: string;
   name: string;
-  color?: string;
+  color: string;
+  icon: string;
 };
 
 export type PaginationFilters = {
