@@ -94,7 +94,6 @@ export type RootDocumentParamList = {
     title: string;
   };
   NewTag: {
-    type: string | null;
     title: string;
     tag: TagData;
   };

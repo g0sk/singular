@@ -3,14 +3,17 @@ import {Button, Text, View} from 'components';
 import {translate} from 'core';
 import {useTheme} from 'ui/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {ScanTagSuccessScreenProps} from 'types';
+import {RootDocumentParamList, ScanTagSuccessScreenProps} from 'types';
 import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 export const ScanTagSuccess: React.FC<ScanTagSuccessScreenProps> = ({
   route,
 }) => {
   const {colors} = useTheme();
-  const globalNavigation = useNavigation();
+  const globalNavigation = useNavigation<
+    NativeStackNavigationProp<RootDocumentParamList>
+  >();
 
   const goToDetails = () => {
     if (route.params.tag !== null) {

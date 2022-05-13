@@ -3,20 +3,23 @@ import {Button, Text, View} from 'components';
 import {translate} from 'core';
 import {useTheme} from 'ui/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {ScanActiveSuccessScreenProps} from 'types';
+import {RootDocumentParamList, ScanActiveSuccessScreenProps} from 'types';
 import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 export const ScanActiveSuccess: React.FC<ScanActiveSuccessScreenProps> = ({
   route,
 }) => {
   const {colors} = useTheme();
-  const globalNavigation = useNavigation();
+  const globalNavigation = useNavigation<
+    NativeStackNavigationProp<RootDocumentParamList>
+  >();
 
   const goToDetails = () => {
     if (route.params.active !== null) {
       globalNavigation.navigate('ActiveDetails', {
         title: route.params.active.reference,
-        active: route.params.active,
+        activeId: route.params.active.id,
         recordId: route.params.active.activeRecord.id,
       });
     }

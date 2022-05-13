@@ -9,9 +9,7 @@ export const TagNavigator = () => {
   return (
     <Stack.Navigator
       initialRouteName="TagHome"
-      headerMode="float"
-      screenOptions={{headerShown: false}}
-      detachInactiveScreens={true}>
+      screenOptions={{headerShown: false}}>
       <Stack.Screen name="TagHome" component={TagHome} />
       <Stack.Screen name="ScanHome" component={ScanHome} />
       <Stack.Screen name="WriteHome" component={WriteHome} />

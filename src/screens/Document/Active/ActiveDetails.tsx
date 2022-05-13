@@ -69,6 +69,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
 
   useLayoutEffect(() => {
     if (activeState.active !== null) {
+      setDescription(activeState.active.description);
       setFile(activeState.active.file);
       setBasicAttributes(activeState.active.basicAttributes);
       setCustomAttributes(activeState.active.customAttributes);
