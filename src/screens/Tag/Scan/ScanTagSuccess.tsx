@@ -17,6 +17,7 @@ export const ScanTagSuccess: React.FC<ScanTagSuccessScreenProps> = ({
 
   const goToDetails = () => {
     if (route.params.tag !== null) {
+      globalNavigation.popToTop();
       globalNavigation.navigate('NewTag', {
         title: route.params.tag.activeInfo.reference,
         tag: route.params.tag.activeInfo,

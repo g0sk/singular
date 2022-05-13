@@ -17,6 +17,7 @@ export const ScanActiveSuccess: React.FC<ScanActiveSuccessScreenProps> = ({
 
   const goToDetails = () => {
     if (route.params.active !== null) {
+      globalNavigation.popToTop();
       globalNavigation.navigate('ActiveDetails', {
         title: route.params.active.reference,
         activeId: route.params.active.id,
