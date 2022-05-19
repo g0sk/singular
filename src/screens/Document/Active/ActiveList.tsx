@@ -55,7 +55,6 @@ export const ActiveList = forwardRef<FlatList, ActiveListProps>(
     };
 
     const refreshActives = () => {
-      console.log('update');
       dispatch(resetActiveState());
       dispatch(
         fetchActives({

@@ -22,7 +22,7 @@ export const ActiveListItem: React.FC<ActiveItemFormProps> = ({
   };
 
   useEffect(() => {
-    setActiveDate(dayjs(new Date(active.entryDate)).format('DD-MM-YYYY'));
+    setActiveDate(dayjs(new Date(active.updatedAt)).format('DD-MM-YYYY'));
   }, [active]);
 
   return (
@@ -70,7 +70,7 @@ export const ActiveListItem: React.FC<ActiveItemFormProps> = ({
                 )}
               </View>
               <View>
-                <Text>{active.createdBy.name}</Text>
+                <Text>{active.updatedBy.name}</Text>
               </View>
             </View>
             <View flexDirection="row">

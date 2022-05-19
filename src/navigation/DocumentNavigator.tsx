@@ -79,6 +79,8 @@ export const DocumentNavigator = () => {
         options={({route}) => ({
           headerShown: true,
           recordId: route.params.recordId,
+          activeId: route.params.activeId,
+          title: route.params.title,
         })}
       />
 
@@ -87,7 +89,8 @@ export const DocumentNavigator = () => {
         component={RecordDetails}
         options={({route}) => ({
           headerShown: true,
-          active: route.params.active,
+          recordActive: route.params.recordActive,
+          recordInfo: route.params.recordInfo,
           title: route.params.title,
         })}
       />

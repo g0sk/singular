@@ -109,9 +109,12 @@ export type RootDocumentParamList = {
   };
   RecordList: {
     recordId: number;
+    activeId: number;
+    title: string;
   };
   RecordDetails: {
-    active: RecordActive;
+    recordActive: RecordActive;
+    recordInfo: string;
     title: string;
   };
   RecordStats: {
@@ -379,6 +382,19 @@ export interface User {
   image: File | null;
 }
 
+//Used only on recordListItem
+export interface UserInfo {
+  id: number;
+  username: string;
+  name: string;
+  lastName: string;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string;
+  groups?: string[];
+  image: string;
+}
+
 //Updated user
 export interface UpdateUser {
   username: string;
@@ -502,6 +518,9 @@ export interface Active {
   reference: string;
   entryDate: string;
   createdBy: User;
+  updatedBy: User;
+  updatedAt: string;
+  createdAt: string;
   description: string;
   activeRecord: {
     id: number;
@@ -653,10 +672,15 @@ export interface Record {
   active: Active;
   dateRecord: Array<string>;
   activeObject: Array<RecordActive>;
+  createdBy: User;
+  updatedBy: UserInfo;
+  updatedAt: string;
+  createdAt: string;
 }
 
 export interface RecordListItemProps {
-  record: RecordActive;
+  recordActive: RecordActive;
+  recordInfo: string;
   navigation: RecordListNavigationProp;
   route: RecordListRouteProp;
 }
@@ -750,10 +774,12 @@ export interface DropdownProps<T> {
 //DatePicker
 
 export interface DatePickerProps {
+  open: boolean;
   entryDate: Date;
   maximumDate?: Date;
   minimumDate?: Date;
   setParentDate: (_date: Date) => void;
+  onCancel: () => void;
   setShowCalendar: Dispatch<SetStateAction<boolean>>;
 }
 

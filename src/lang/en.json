@@ -30,7 +30,8 @@
     "active": {
       "title": "Actives",
       "newActive": "Create new active",
-      "searchActive": "Search actives..."
+      "searchActive": "Search actives...",
+      "details": "Details"
     },
     "activeType": {
       "title": "Types",
@@ -46,7 +47,8 @@
       "ref": "REFERENCE",
       "type": "TYPE"
     },
-    "lastUpdate": "Last update"
+    "lastUpdate": "Last update",
+    "updatedOn": "Updated on"
   },
   "activeType": {
     "activeTypes": "types",
@@ -76,7 +78,11 @@
     },
     "record": {
       "latest": "Latest",
-      "oldest": "Oldest"
+      "oldest": "Oldest",
+      "date": {
+        "name": "Date",
+        "title": "Select a date"
+      }
     }
   },
   "form": {
@@ -322,7 +328,8 @@
     "general": {
       "cancel": "Cancel",
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "confirm": "Confirmar"
     },
     "login": {
       "logIn": "Log in",

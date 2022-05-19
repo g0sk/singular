@@ -16,3 +16,17 @@ export const createMediaObject = createAsyncThunk<
     throw error;
   }
 });
+
+export const fetchMediaObject = createAsyncThunk(
+  'user/fetchUserImage',
+  async (contentUrl: string) => {
+    try {
+      const response = await MediaObjectApi.getMediaImage(contentUrl);
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+);

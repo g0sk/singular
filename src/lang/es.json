@@ -31,7 +31,8 @@
     "active": {
       "title": "Activos",
       "newActive": "Crear nuevo activo",
-      "searchActive": "Buscar activos..."
+      "searchActive": "Buscar activos...",
+      "details": "Detalles"
     },
     "activeType": {
       "title": "Tipos",
@@ -51,7 +52,8 @@
       "ref": "REFERENCIA",
       "type": "TIPO"
     },
-    "lastUpdate": "Última actualización"
+    "lastUpdate": "Última actualización",
+    "updatedOn": "Actualizado el"
   },
   "activeType": {
     "activeTypes": "tipos",
@@ -81,7 +83,11 @@
     },
     "record": {
       "latest": "Más reciente",
-      "oldest": "Más antiguo"
+      "oldest": "Más antiguo",
+      "date": {
+        "name": "Fecha",
+        "title": "Seleccione una fecha"
+      }
     }
   },
   "form": {
@@ -291,7 +297,8 @@
     "general": {
       "cancel": "Cancelar",
       "yes": "Sí",
-      "no": "No"
+      "no": "No",
+      "confirm": "Confirmar"
     },
     "login": {
       "logIn": "Iniciar sesión",

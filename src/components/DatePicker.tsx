@@ -1,46 +1,41 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
+import RNDatePicker from 'react-native-date-picker';
 import {DatePickerProps} from 'types';
-import DateTimePicker, {
-  AndroidEvent,
-} from '@react-native-community/datetimepicker';
-import dayjs from 'dayjs';
-
-type CalendarMode = 'date' | 'time';
+import {View} from './View';
+import {locale} from 'i18n-js';
+import {translate} from 'core';
 
 export const DatePicker: React.FC<DatePickerProps> = ({
+  open,
   entryDate,
   maximumDate = new Date(),
-  minimumDate = new Date('01/01/1950'),
-  setParentDate,
+  minimumDate = new Date('2010-01-01'),
+  onCancel,
   setShowCalendar,
+  setParentDate,
 }) => {
-  const [date, setDate] = useState<Date>(new Date());
-  const mode: CalendarMode = 'date';
-
-  useEffect(() => {
-    const newDate = new Date(entryDate);
-    setDate(newDate);
-  }, [entryDate]);
-
-  const _calendarOnChange = (evt: AndroidEvent, selectedDate?: Date) => {
+  const _onConfirm = (_date: Date) => {
+    setParentDate(_date);
     setShowCalendar(false);
-    if (
-      evt.type === 'set' &&
-      selectedDate &&
-      !dayjs(selectedDate).isSame(date)
-    ) {
-      setParentDate(selectedDate);
-    }
   };
+
   return (
-    <DateTimePicker
-      value={date}
-      mode={mode}
-      is24Hour={true}
-      display="default"
-      onChange={_calendarOnChange}
-      maximumDate={maximumDate}
-      minimumDate={minimumDate}
-    />
+    <View borderRadius={25}>
+      <RNDatePicker
+        open={open}
+        modal
+        date={entryDate}
+        mode="date"
+        locale={locale}
+        title={translate('filter.record.date.title')}
+        confirmText={translate('button.general.confirm')}
+        cancelText={translate('button.general.cancel')}
+        maximumDate={maximumDate}
+        minimumDate={minimumDate}
+        androidVariant="nativeAndroid"
+        onConfirm={_onConfirm}
+        onCancel={onCancel}
+      />
+    </View>
   );
 };

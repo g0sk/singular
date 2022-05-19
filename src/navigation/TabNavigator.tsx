@@ -31,7 +31,7 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({focused}) => (
             <Icon
-              name={focused ? 'file-tray' : 'file-tray-outline'}
+              name={focused ? 'file-tray-full' : 'file-tray-full-outline'}
               size={focused ? 34 : 28}
               color={focused ? theme.colors.primary : theme.colors.default}
             />

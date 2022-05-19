@@ -1,44 +1,86 @@
 import React, {createRef, useEffect, useLayoutEffect, useState} from 'react';
-import {Screen, Text, View} from 'components';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {DatePicker, Screen, Text, View} from 'components';
+import {ActivityIndicator, FlatList, TouchableOpacity} from 'react-native';
 import {RecordListProps, RecordState, RecordActive} from 'types';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
-import {fetchActiveRecord} from 'store/slices/record/recordAsyncThunk';
+import {
+  fetchActiveRecord,
+  fetchFilteredActiveRecord,
+} from 'store/slices/record/recordAsyncThunk';
 import {RecordListItem} from './RecordListItem';
 import {translate} from 'core';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from 'ui/theme';
+import {resetRecordState} from 'store/slices/record/recordSlice';
+import {formatDate, formatDisplayDate} from 'helpers/dates';
 
-type Order = 'latest' | 'oldest';
+type Order = 'oldest' | 'latest';
 type FilterIcon = 'trending-up-outline' | 'trending-down-outline';
 
 export const RecordList: React.FC<RecordListProps> = ({route, navigation}) => {
   const dispatch = useAppDispatch();
   const {colors} = useTheme();
-  const [order, setOrder] = useState<Order>('latest');
+  const [order, setOrder] = useState<Order>('oldest');
   const [records, setRecords] = useState<Array<RecordActive>>([]);
+  const [dateRecords, setDateRecords] = useState<Array<string>>([]);
   const [iconName, setIconName] = useState<FilterIcon>('trending-up-outline');
+  const [open, setOpen] = useState<boolean>(false);
+  const [dateFilter, setDateFilter] = useState<Date | null>(null);
+  const [formattedDate, setFormattedDate] = useState<string>('');
+  const [filterEnabled, setFilterEnabled] = useState<boolean>(false);
+
   const flatListRef = createRef<FlatList>();
-  const {loading}: RecordState = useAppSelector((state) => state.record);
+  const recordState: RecordState = useAppSelector((state) => state.record);
 
   useLayoutEffect(() => {
-    store.dispatch(fetchActiveRecord(route.params.recordId)).then(() => {
-      const recordState: RecordState = store.getState().record;
-      if (recordState.activeRecord) {
-        setRecords([...recordState.activeRecord.activeObject]);
-      }
-    });
+    store.dispatch(fetchActiveRecord(route.params.recordId));
   }, [route.params.recordId]);
 
-  useEffect(() => {}, [order]);
+  useEffect(() => {
+    if (recordState.activeRecord) {
+      if (order === 'oldest') {
+        setRecords([...recordState.activeRecord.activeObject]);
+        setDateRecords([...recordState.activeRecord.dateRecord]);
+      } else {
+        setRecords([...recordState.activeRecord.activeObject].reverse());
+        setDateRecords([...recordState.activeRecord.dateRecord].reverse());
+      }
+    } else {
+      setRecords([]);
+      setDateRecords([]);
+    }
+  }, [recordState.activeRecord, order]);
+
+  useEffect(() => {
+    return () => {
+      store.dispatch(resetRecordState());
+    };
+  }, []);
+
+  const selectedDate = (_date: Date) => {
+    const _formattedDate = formatDisplayDate(_date, false);
+    setFilterEnabled(true);
+    setDateFilter(_date);
+    setFormattedDate(_formattedDate);
+    store.dispatch(
+      fetchFilteredActiveRecord([
+        {key: 'dateRecord', value: formatDisplayDate(_date, true)},
+        {key: 'active.id', value: route.params.activeId.toString()},
+      ]),
+    );
+  };
 
   const refreshRecords = () => {
-    dispatch(fetchActiveRecord(route.params.recordId)).then(() => {
-      const recordState: RecordState = store.getState().record;
-      if (recordState.activeRecord) {
-        setRecords([...recordState.activeRecord.activeObject]);
-      }
-    });
+    if (filterEnabled && dateFilter) {
+      dispatch(
+        fetchFilteredActiveRecord([
+          {key: 'dateRecord', value: formatDate(dateFilter)},
+          {key: 'active.id', value: route.params.recordId.toString()},
+        ]),
+      );
+    } else {
+      dispatch(fetchActiveRecord(route.params.recordId));
+    }
   };
 
   const goToRecordStats = () => {
@@ -69,45 +111,111 @@ export const RecordList: React.FC<RecordListProps> = ({route, navigation}) => {
     );
   };
 
+  const onFilterCancel = () => {
+    setOpen(false);
+    if (filterEnabled) {
+      dispatch(fetchActiveRecord(route.params.recordId)).then(() => {
+        setFilterEnabled(false);
+        setDateFilter(null);
+      });
+    }
+  };
+
   const changeIcon = () => {
-    setRecords(records.reverse());
-    if (order === 'latest') {
-      setOrder('oldest');
+    if (order === 'oldest') {
+      setOrder('latest');
       setIconName('trending-down-outline');
     } else {
-      setOrder('latest');
+      setOrder('oldest');
       setIconName('trending-up-outline');
     }
+  };
+
+  const DateFilter = () => {
+    return (
+      <View>
+        {!filterEnabled ? (
+          <View>
+            <TouchableOpacity onPress={() => setOpen(true)}>
+              <View flexDirection="row" alignItems="center">
+                <View marginRight="s">
+                  <Icon name="calendar" size={20} color={colors.primary} />
+                </View>
+                <View>
+                  <Text variant="recordFilter">
+                    {translate('filter.record.date.name')}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View flexDirection="row" alignItems="center">
+            <View marginRight="m">
+              <TouchableOpacity onPress={() => setOpen(true)}>
+                <View borderBottomColor="primary" borderBottomWidth={1}>
+                  <Text variant="recordFilter">{formattedDate}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity onPress={onFilterCancel}>
+                <View>
+                  <Icon name="close-circle" size={25} color={colors.error} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      </View>
+    );
   };
 
   return (
     <Screen>
       <View margin="m">
         <View flexDirection="column">
-          <View marginBottom="l">
-            <TouchableOpacity onPress={() => scrollToTop()}>
-              <ItemsLabel />
-            </TouchableOpacity>
-          </View>
           <View
+            marginBottom="l"
             flexDirection="row"
             justifyContent="space-between"
-            marginHorizontal="s">
+            alignItems="center">
+            <View>
+              <TouchableOpacity onPress={() => scrollToTop()}>
+                <ItemsLabel />
+              </TouchableOpacity>
+            </View>
             <View>
               <TouchableOpacity onPress={goToRecordStats}>
-                <View flexDirection="row" alignItems="center">
+                <View
+                  flexDirection="row"
+                  alignItems="center"
+                  padding="s"
+                  backgroundColor="primary"
+                  borderRadius={8}>
                   <View marginRight="s">
-                    <Icon name="stats-chart" size={20} color={colors.primary} />
+                    <Icon
+                      name="stats-chart"
+                      size={20}
+                      color={colors.lightBackground}
+                    />
                   </View>
                   <View>
-                    <Text variant="recordFilter">
+                    <Text variant="recordStats">
                       {translate('record.chart')}
                     </Text>
                   </View>
                 </View>
               </TouchableOpacity>
             </View>
-            <View>
+          </View>
+          <View
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="space-between"
+            marginHorizontal="s">
+            <DateFilter />
+            <View width={140}>
               <TouchableOpacity onPress={changeIcon}>
                 <View flexDirection="row" alignItems="center">
                   <View marginRight="s">
@@ -128,19 +236,41 @@ export const RecordList: React.FC<RecordListProps> = ({route, navigation}) => {
           </View>
         </View>
       </View>
+      <DatePicker
+        open={open}
+        onCancel={onFilterCancel}
+        entryDate={dateFilter ? dateFilter : new Date()}
+        setShowCalendar={setOpen}
+        setParentDate={selectedDate}
+      />
       <View>
-        <FlatList
-          data={records}
-          scrollEnabled={true}
-          keyExtractor={(item, index) => index.toString()}
-          onRefresh={refreshRecords}
-          refreshing={loading}
-          ref={flatListRef}
-          ListEmptyComponent={<EmptyList />}
-          renderItem={({item}) => (
-            <RecordListItem {...{navigation, route, record: {...item}}} />
-          )}
-        />
+        {recordState.loading ? (
+          <ActivityIndicator
+            size="large"
+            color={colors.primary}
+            animating={recordState.loading}
+          />
+        ) : (
+          <FlatList
+            data={records}
+            scrollEnabled={true}
+            keyExtractor={(item, index) => index.toString()}
+            onRefresh={refreshRecords}
+            refreshing={recordState.loading}
+            ref={flatListRef}
+            ListEmptyComponent={<EmptyList />}
+            renderItem={({item, index}) => (
+              <RecordListItem
+                {...{
+                  navigation,
+                  route,
+                }}
+                recordActive={item}
+                recordInfo={dateRecords[index]}
+              />
+            )}
+          />
+        )}
       </View>
     </Screen>
   );

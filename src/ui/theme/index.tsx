@@ -90,6 +90,11 @@ const theme = createTheme({
       fontWeight: 'bold',
       fontSize: 17,
     },
+    recordStats: {
+      fontWeight: 'bold',
+      color: 'lightText',
+      fontSize: 17,
+    },
     segmentLabelDark: {
       color: 'dark',
       fontSize: 15,

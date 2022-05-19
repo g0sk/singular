@@ -91,6 +91,8 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
     if (activeState.active) {
       navigation.navigate('RecordList', {
         recordId: activeState.active.activeRecord.id,
+        activeId: activeState.active.id,
+        title: activeState.active.reference,
       });
     }
   };
@@ -241,7 +243,11 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
                       </View>
                       <View flexDirection="row" alignItems="center">
                         <View marginRight="m">
-                          <Text>{'09/09/09'}</Text>
+                          <Text>
+                            {dayjs(activeState.active?.updatedAt).format(
+                              'DD/MM/YYYY',
+                            )}
+                          </Text>
                         </View>
                         <View marginRight="m">
                           <Icon name="file-tray-full" size={28} />
