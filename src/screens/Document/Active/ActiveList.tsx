@@ -1,105 +1,153 @@
-import React, {forwardRef, useEffect} from 'react';
-import {Text, View} from 'components';
-import {Dimensions, FlatList} from 'react-native';
+import React, {createRef, useEffect} from 'react';
+import {Header, Screen, Text, View} from 'components';
+import {Dimensions, FlatList, TouchableOpacity} from 'react-native';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {resetActiveState} from 'store/slices/active/activeSlice';
 import {
   fetchActives,
   fetchFilteredActives,
 } from 'store/slices/active/activeAsyncThunk';
-import {ActiveListProps, ActiveState} from 'types';
+import {ActiveListScreenProps, ActiveState} from 'types';
 import {translate} from 'core';
 import {ActiveListItem} from './ActiveListItem';
 
 const height = Dimensions.get('window').height;
 
-export const ActiveList = forwardRef<FlatList, ActiveListProps>(
-  ({visible, navigation, route}, ref) => {
-    const dispatch = useAppDispatch();
-    const activeState: ActiveState = useAppSelector((state) => state.active);
+export const ActiveList: React.FC<ActiveListScreenProps> = ({
+  navigation,
+  route,
+}) => {
+  const dispatch = useAppDispatch();
+  const activeListRef = createRef<FlatList<any>>();
+  const {
+    actives,
+    filtered,
+    activesLength,
+    nextPage,
+    itemsPerPage,
+    loading,
+  }: ActiveState = useAppSelector((state) => state.active);
 
-    useEffect(() => {
-      store.dispatch(
-        fetchActives({
-          pagination: {
-            page: 1,
-            itemsPerPage: 7,
-          },
-          filters: [{key: 'order[entryDate]', value: 'desc'}],
-        }),
-      );
-    }, []);
+  useEffect(() => {
+    store.dispatch(
+      fetchActives({
+        pagination: {
+          page: 1,
+          itemsPerPage: 7,
+        },
+        filters: [{key: 'order[entryDate]', value: 'desc'}],
+      }),
+    );
+  }, []);
 
-    const onActivesOnEndReached = () => {
-      if (!activeState.filtered) {
-        dispatch(
-          fetchActives({
-            pagination: {
-              page: activeState.nextPage,
-              itemsPerPage: activeState.itemsPerPage,
-            },
-            filters: [{key: 'order[entryDate]', value: 'desc'}],
-          }),
-        );
-      } else {
-        dispatch(
-          fetchFilteredActives({
-            pagination: {
-              page: activeState.nextPage,
-              itemsPerPage: activeState.itemsPerPage,
-            },
-            filters: [{key: 'order[entryDate]', value: 'desc'}],
-          }),
-        );
-      }
-    };
+  const scrollToTop = () => {
+    if (activesLength > 0) {
+      activeListRef.current?.scrollToIndex({animated: true, index: 0});
+    }
+  };
 
-    const refreshActives = () => {
-      dispatch(resetActiveState());
+  const _createItem = () => {
+    navigation.navigate('NewActive', {
+      title: translate('screen.active.newActive'),
+    });
+  };
+
+  const onActivesOnEndReached = () => {
+    if (!filtered) {
       dispatch(
         fetchActives({
           pagination: {
-            page: 1,
-            itemsPerPage: activeState.itemsPerPage,
+            page: nextPage,
+            itemsPerPage: itemsPerPage,
           },
           filters: [{key: 'order[entryDate]', value: 'desc'}],
         }),
       );
-    };
-
-    const EmptyList = () => {
-      return (
-        <View margin="l">
-          <Text variant="emptyHeader">{translate('active.empty')}</Text>
-        </View>
+    } else {
+      dispatch(
+        fetchFilteredActives({
+          pagination: {
+            page: nextPage,
+            itemsPerPage: itemsPerPage,
+          },
+          filters: [{key: 'order[entryDate]', value: 'desc'}],
+        }),
       );
-    };
+    }
+  };
 
+  const refreshActives = () => {
+    dispatch(resetActiveState());
+    dispatch(
+      fetchActives({
+        pagination: {
+          page: 1,
+          itemsPerPage: itemsPerPage,
+        },
+        filters: [{key: 'order[entryDate]', value: 'desc'}],
+      }),
+    );
+  };
+
+  const ActivesLabel = () => {
     return (
+      <Text>
+        {activesLength +
+          ' ' +
+          (activesLength > 1
+            ? translate('active.actives')
+            : translate('active.active'))}
+      </Text>
+    );
+  };
+
+  const EmptyList = () => {
+    return (
+      <View margin="l">
+        <Text variant="emptyHeader">{translate('active.empty')}</Text>
+      </View>
+    );
+  };
+
+  return (
+    <Screen>
+      <View margin="m">
+        <Header
+          defaultIcon="plus-circle"
+          defaultAction={_createItem}
+          hasExtraIcon={true}
+          extraIcon="search"
+          label={translate('screen.active.title')}
+          labelAction={() => scrollToTop()}
+          segment={'active'}
+        />
+      </View>
+      <View marginHorizontal="m">
+        <TouchableOpacity onPress={() => scrollToTop()}>
+          <ActivesLabel />
+        </TouchableOpacity>
+      </View>
       <View
         height={height - 70}
         marginTop="m"
         marginHorizontal="m"
-        paddingBottom="dxxl"
-        visible={visible}>
+        paddingBottom="dxxl">
         <FlatList
-          ref={ref}
-          data={activeState.actives}
+          ref={activeListRef}
+          data={actives}
           scrollEnabled={true}
           renderItem={({item}) => (
             <ActiveListItem {...{navigation, route, active: {...item}}} />
           )}
           keyExtractor={(item, index) => index.toString()}
           onRefresh={() => refreshActives()}
-          refreshing={activeState.loading}
+          refreshing={loading}
           ListEmptyComponent={<EmptyList />}
           initialNumToRender={7}
           onEndReachedThreshold={0}
-          onEndReached={
-            activeState.activesLength >= 7 ? onActivesOnEndReached : null
-          }
+          onEndReached={activesLength >= 7 ? onActivesOnEndReached : null}
         />
       </View>
-    );
-  },
-);
+    </Screen>
+  );
+};

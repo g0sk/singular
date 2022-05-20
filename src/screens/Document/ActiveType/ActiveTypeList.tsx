@@ -1,103 +1,157 @@
-import {Text, View} from 'components';
+import {Header, Screen, Text, View} from 'components';
 import {translate} from 'core';
-import React, {forwardRef, useEffect} from 'react';
-import {Dimensions, FlatList} from 'react-native';
+import React, {createRef, useEffect} from 'react';
+import {Dimensions, FlatList, TouchableOpacity} from 'react-native';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {
   fetchActiveTypes,
   fetchFilteredActiveTypes,
 } from 'store/slices/activeType/activeTypeAsyncThunk';
 import {resetActiveTypeState} from 'store/slices/activeType/activeTypeSlice';
-import {ActiveTypeListProps} from 'types';
+import {ActiveTypeListsScreenProps, ActiveTypeState} from 'types';
 import {ActiveTypeListItem} from './ActiveTypeListItem';
 
 const height = Dimensions.get('window').height;
 
-export const ActiveTypeList = forwardRef<FlatList, ActiveTypeListProps>(
-  ({visible, navigation, route}, ref) => {
-    const dispatch = useAppDispatch();
-    const activeTypeState = useAppSelector((state) => state.activeType);
+export const ActiveTypeList: React.FC<ActiveTypeListsScreenProps> = ({
+  navigation,
+  route,
+}) => {
+  const dispatch = useAppDispatch();
+  const activeTypeListRef = createRef<FlatList<any>>();
+  const {
+    activeTypes,
+    activeTypesLength,
+    loading,
+    filtered,
+    nextPage,
+    itemsPerPage,
+  }: ActiveTypeState = useAppSelector((state) => state.activeType);
 
-    useEffect(() => {
-      store.dispatch(
-        fetchActiveTypes({
-          pagination: {page: 1, itemsPerPage: 9},
-          filters: [{key: 'order[id]', value: 'desc'}],
-        }),
-      );
-    }, []);
+  useEffect(() => {
+    store.dispatch(
+      fetchActiveTypes({
+        pagination: {page: 1, itemsPerPage: 9},
+        filters: [{key: 'order[id]', value: 'desc'}],
+      }),
+    );
+  }, []);
 
-    const onActiveTypesOnEndReached = () => {
-      if (!activeTypeState.filtered) {
-        dispatch(
-          fetchActiveTypes({
-            pagination: {
-              page: activeTypeState.nextPage,
-              itemsPerPage: activeTypeState.itemsPerPage,
-            },
-            filters: [{key: 'order[id]', value: 'desc'}],
-          }),
-        );
-      } else {
-        dispatch(
-          fetchFilteredActiveTypes({
-            pagination: {
-              page: activeTypeState.nextPage,
-              itemsPerPage: activeTypeState.itemsPerPage,
-            },
-            filters: [{key: 'order[id]', value: 'desc'}],
-          }),
-        );
-      }
-    };
+  //Components
+  const ActiveTypesLabel = () => {
+    return (
+      <Text>
+        {activeTypesLength +
+          ' ' +
+          (activeTypesLength > 1
+            ? translate('activeType.activeTypes')
+            : translate('activeType.activeType'))}
+      </Text>
+    );
+  };
 
-    const refreshTypes = () => {
-      dispatch(resetActiveTypeState());
+  const _createItem = () => {
+    navigation.navigate('NewActiveType', {
+      title: translate('screen.activeType.newActiveType'),
+    });
+  };
+
+  const scrollToTop = () => {
+    if (activeTypesLength > 0) {
+      activeTypeListRef.current?.scrollToIndex({animated: true, index: 0});
+    }
+  };
+
+  const onActiveTypesOnEndReached = () => {
+    if (!filtered) {
       dispatch(
         fetchActiveTypes({
           pagination: {
-            page: 1,
-            itemsPerPage: activeTypeState.itemsPerPage,
+            page: nextPage,
+            itemsPerPage: itemsPerPage,
           },
           filters: [{key: 'order[id]', value: 'desc'}],
         }),
       );
-    };
-
-    const EmptyList = () => {
-      return (
-        <View margin="l">
-          <Text variant="emptyHeader">{translate('activeType.empty')}</Text>
-        </View>
+    } else {
+      dispatch(
+        fetchFilteredActiveTypes({
+          pagination: {
+            page: nextPage,
+            itemsPerPage: itemsPerPage,
+          },
+          filters: [{key: 'order[id]', value: 'desc'}],
+        }),
       );
-    };
+    }
+  };
+
+  const refreshTypes = () => {
+    dispatch(resetActiveTypeState());
+    dispatch(
+      fetchActiveTypes({
+        pagination: {
+          page: 1,
+          itemsPerPage: itemsPerPage,
+        },
+        filters: [{key: 'order[id]', value: 'desc'}],
+      }),
+    );
+  };
+
+  const EmptyList = () => {
     return (
+      <View margin="l">
+        <Text variant="emptyHeader">{translate('activeType.empty')}</Text>
+      </View>
+    );
+  };
+  return (
+    <Screen>
+      <View margin="m">
+        <Header
+          defaultIcon="plus-circle"
+          defaultAction={_createItem}
+          hasExtraIcon={true}
+          extraIcon="search"
+          label={translate('screen.activeType.title')}
+          labelAction={() => scrollToTop()}
+          segment={'activeType'}
+        />
+      </View>
+      <View
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center">
+        <View marginHorizontal="m">
+          <TouchableOpacity onPress={() => scrollToTop()}>
+            <ActiveTypesLabel />
+          </TouchableOpacity>
+        </View>
+      </View>
       <View
         height={height - 70}
         marginTop="m"
         marginHorizontal="m"
-        paddingBottom="dxxl"
-        visible={visible}>
+        paddingBottom="dxxl">
         <FlatList
           scrollEnabled={true}
-          ref={ref}
-          data={activeTypeState.activeTypes}
+          ref={activeTypeListRef}
+          data={activeTypes}
           renderItem={({item}) => (
             <ActiveTypeListItem {...{navigation, route, type: {...item}}} />
           )}
           keyExtractor={(item, index) => index.toString()}
           onRefresh={() => refreshTypes()}
-          refreshing={activeTypeState.loading}
+          refreshing={loading}
           ListEmptyComponent={<EmptyList />}
           initialNumToRender={9}
           onEndReachedThreshold={0}
           onEndReached={
-            activeTypeState.activesLength >= 9
-              ? onActiveTypesOnEndReached
-              : null
+            activeTypesLength >= 9 ? onActiveTypesOnEndReached : null
           }
         />
       </View>
-    );
-  },
-);
+    </Screen>
+  );
+};

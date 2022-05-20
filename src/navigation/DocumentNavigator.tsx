@@ -1,11 +1,9 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {
-  DocumentList,
+  ActiveList,
   ActiveDetails,
   NewActive,
-  ActiveTypeDetails,
-  NewActiveType,
   NewTag,
   RecordList,
   RecordDetails,
@@ -18,15 +16,15 @@ const Stack = createNativeStackNavigator<RootDocumentParamList>();
 export const DocumentNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="DocumentList"
+      initialRouteName="ActiveList"
       screenOptions={{
         presentation: 'card',
         animation: 'slide_from_right',
         headerShown: false,
       }}>
       <Stack.Screen
-        name="DocumentList"
-        component={DocumentList}
+        name="ActiveList"
+        component={ActiveList}
         initialParams={{tab: 'active'}}
       />
       <Stack.Screen
@@ -57,23 +55,6 @@ export const DocumentNavigator = () => {
         })}
       />
       <Stack.Screen
-        name="ActiveTypeDetails"
-        component={ActiveTypeDetails}
-        options={({route}) => ({
-          headerShown: true,
-          title: route.params.title,
-          typeId: route.params.typeId,
-        })}
-      />
-      <Stack.Screen
-        name="NewActiveType"
-        component={NewActiveType}
-        options={({route}) => ({
-          headerShown: true,
-          title: route.params.title,
-        })}
-      />
-      <Stack.Screen
         name="RecordList"
         component={RecordList}
         options={({route}) => ({
@@ -90,7 +71,6 @@ export const DocumentNavigator = () => {
         options={({route}) => ({
           headerShown: true,
           recordActive: route.params.recordActive,
-          recordInfo: route.params.recordInfo,
           title: route.params.title,
         })}
       />

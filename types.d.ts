@@ -1,4 +1,4 @@
-import {Dispatch, RefObject, SetStateAction} from 'react';
+import {Dispatch, SetStateAction} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {TagEvent} from 'react-native-nfc-manager';
 import {
@@ -10,7 +10,6 @@ import {
 import {Theme} from 'ui/Theme';
 import {AnyObjectSchema} from 'yup';
 import {RouteProp} from '@react-navigation/core';
-import {FlatList} from 'react-native';
 
 //Geral types
 export type Credentials = {
@@ -65,9 +64,9 @@ export type TabStackProps = {
 
 //TabNavigator
 export type TabNavigatorParamList = {
-  Home: undefined;
-  TagNavigator: RootTagParamList;
   DocumentNavigator: RootDocumentParamList;
+  ActiveTypeNavigator: RootActiveTypeParamList;
+  TagNavigator: RootTagParamList;
   Profile: undefined;
 };
 
@@ -85,9 +84,7 @@ type TagData = {
 
 //Routes Document
 export type RootDocumentParamList = {
-  DocumentList: {
-    tab: Segment | null;
-  };
+  ActiveList: {};
   ActiveDetails: {
     activeId: number;
     recordId: number;
@@ -98,13 +95,6 @@ export type RootDocumentParamList = {
     tag: TagData;
   };
   NewActive: {
-    title: string;
-  };
-  NewActiveType: {
-    title: string;
-  };
-  ActiveTypeDetails: {
-    typeId: number;
     title: string;
   };
   RecordList: {
@@ -118,6 +108,17 @@ export type RootDocumentParamList = {
   };
   RecordStats: {
     recordId: number;
+  };
+};
+
+export type RootActiveTypeParamList = {
+  ActiveTypeList: {};
+  ActiveTypeDetails: {
+    typeId: number;
+    title: string;
+  };
+  NewActiveType: {
+    title: string;
   };
 };
 
@@ -146,29 +147,29 @@ export type RootTagParamList = {
 //DocumentList items
 export type ActiveItemFormProps = {
   active: Active;
-  navigation: DocumentListNavigationProp;
+  navigation: ActiveListNavigationProp;
 };
 
 export type TypeItemFormProps = {
   type: ActiveType;
-  navigation: DocumentListNavigationProp;
-  route: DocumentListRouteProp;
+  navigation: ActiveTypeListNavigationProp;
+  route: ActiveTypeListRouteProp;
 };
 
 //Document navigator types
 
 //Documents screen
-export type DocumentListRouteProp = RouteProp<
+export type ActiveListRouteProp = RouteProp<
   RootDocumentParamList,
-  'DocumentList'
+  'ActiveList'
 >;
-export type DocumentListNavigationProp = StackNavigationProp<
+export type ActiveListNavigationProp = StackNavigationProp<
   RootDocumentParamList,
-  'DocumentList'
+  'ActiveList'
 >;
-export type DocumentListStackProps = {
-  route: DocumentListRouteProp;
-  navigation: DocumentListNavigationProp;
+export type ActiveListScreenProps = {
+  route: ActiveListRouteProp;
+  navigation: ActiveListNavigationProp;
 };
 
 //Active details screen
@@ -208,12 +209,25 @@ export type NewTagScreenProps = {
 };
 
 //Type Details Screen
+export type ActiveTypeListRouteProp = RouteProp<
+  RootActiveTypeParamList,
+  'ActiveTypeDetails'
+>;
+export type ActiveTypeListNavigationProp = StackNavigationProp<
+  RootActiveTypeParamList,
+  'ActiveTypeDetails'
+>;
+export type ActiveTypeListsScreenProps = {
+  route: ActiveTypeListRouteProp;
+  navigation: ActiveTypeListNavigationProp;
+};
+
 export type ActiveTypeDetailsRouteProp = RouteProp<
-  RootDocumentParamList,
+  RootActiveTypeParamList,
   'ActiveTypeDetails'
 >;
 export type ActiveTypeDetailsNavigationProp = StackNavigationProp<
-  RootDocumentParamList,
+  RootActiveTypeParamList,
   'ActiveTypeDetails'
 >;
 export type ActiveTypeDetailsScreenProps = {
@@ -223,11 +237,11 @@ export type ActiveTypeDetailsScreenProps = {
 
 //New ActiveType screen
 export type NewActiveTypeRouteProp = RouteProp<
-  RootDocumentParamList,
+  RootActiveTypeParamList,
   'NewActiveType'
 >;
 export type NewActiveTypeNavigationProp = StackNavigationProp<
-  RootDocumentParamList,
+  RootActiveTypeParamList,
   'ActiveTypeDetails'
 >;
 export type NewActiveTypeScreenProps = {
@@ -528,19 +542,6 @@ export interface Active {
   activeType: ActiveType;
   basicAttributes: Attribute[];
   customAttributes: Attribute[];
-}
-
-export interface ActiveListProps {
-  ref: RefObject<FlatList>;
-  visible: boolean;
-  navigation: DocumentListNavigationProp;
-  route: DocumentListRouteProp;
-}
-export interface ActiveTypeListProps {
-  ref: RefObject<FlatList>;
-  visible: boolean;
-  navigation: DocumentListNavigationProp;
-  route: DocumentListRouteProp;
 }
 
 export interface NewActiveProps {

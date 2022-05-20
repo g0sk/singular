@@ -5,6 +5,7 @@ import {useTheme} from 'ui/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {DocumentNavigator} from './DocumentNavigator';
 import {TagNavigator} from './TagNavigator';
+import {ActiveTypeNavigator} from './ActiveTypeNavigator';
 import {TabNavigatorParamList} from 'types';
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
@@ -32,6 +33,19 @@ const TabNavigator = () => {
           tabBarIcon: ({focused}) => (
             <Icon
               name={focused ? 'file-tray-full' : 'file-tray-full-outline'}
+              size={focused ? 34 : 28}
+              color={focused ? theme.colors.primary : theme.colors.default}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="ActiveTypeNavigator"
+        component={ActiveTypeNavigator}
+        options={{
+          tabBarIcon: ({focused}) => (
+            <Icon
+              name={focused ? 'pricetags' : 'pricetags-outline'}
               size={focused ? 34 : 28}
               color={focused ? theme.colors.primary : theme.colors.default}
             />
