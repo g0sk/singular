@@ -2,6 +2,7 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import RecordApi from 'api/recordApi';
 import {createUrlFilterParams} from 'helpers/filters';
 import {Filters, Record} from 'types';
+import {RecordActive} from 'types';
 
 export const fetchActiveRecords = createAsyncThunk<Record, number, {}>(
   'active/fetchActiveRecords',
@@ -32,13 +33,16 @@ export const fetchActiveRecord = createAsyncThunk<Record, number, {}>(
 );
 
 export const fetchFilteredActiveRecord = createAsyncThunk<
-  Record[],
-  Filters,
+  RecordActive[],
+  {activeId: number; filters: Filters},
   {}
 >('record/fetchFilteredActiveRecord', async (params) => {
-  const urlParams = createUrlFilterParams(params);
+  const urlParams = createUrlFilterParams(params.filters);
   try {
-    const response = await RecordApi.getFilteredActiveRecord(urlParams);
+    const response = await RecordApi.getFilteredActiveRecord(
+      params.activeId,
+      urlParams,
+    );
     if (response.status === 200) {
       return response.data;
     }

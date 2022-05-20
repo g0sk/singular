@@ -10,14 +10,12 @@ import {useTheme} from 'ui/theme';
 
 export const RecordListItem: React.FC<RecordListItemProps> = ({
   recordActive,
-  recordInfo,
   navigation,
 }) => {
   const {colors} = useTheme();
   const goToDetails = () => {
     navigation.navigate('RecordDetails', {
       recordActive,
-      recordInfo,
       title: recordActive.reference,
     });
   };
@@ -97,7 +95,9 @@ export const RecordListItem: React.FC<RecordListItemProps> = ({
                 <View>
                   <View>
                     <Text variant="updated">
-                      {dayjs(new Date(recordInfo)).format('DD-MM-YYYY')}
+                      {dayjs(new Date(recordActive.updatedAt.date)).format(
+                        'DD-MM-YYYY',
+                      )}
                     </Text>
                   </View>
                 </View>

@@ -4,6 +4,8 @@ import {RecordState} from 'types';
 
 const initialState: RecordState = {
   activeRecord: null,
+  filteredRecords: [],
+  dateRecords: [],
   recordsLength: 0,
   error: false,
   loading: false,
@@ -24,6 +26,8 @@ const recordSlice = createSlice({
     builder
       .addCase(fetchActiveRecord.fulfilled, (state, action) => {
         state.activeRecord = {...action.payload};
+        state.dateRecords = [...action.payload.dateRecord];
+        state.filteredRecords = [...action.payload.activeObject];
         state.recordsLength = action.payload.dateRecord.length;
         state.error = false;
         state.loading = false;
@@ -37,13 +41,12 @@ const recordSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchFilteredActiveRecord.fulfilled, (state, action) => {
-        if (action.payload.length > 0) {
-          state.activeRecord = {...action.payload[0]};
-          state.recordsLength = action.payload[0].dateRecord.length;
-        } else {
-          state.activeRecord = null;
-          state.recordsLength = 0;
-        }
+        state.filteredRecords = [...action.payload];
+        state.dateRecords = [];
+        action.payload.forEach((_record) => {
+          state.dateRecords.push(_record.updatedAt.date);
+        });
+        state.recordsLength = action.payload.length;
         state.error = false;
         state.loading = false;
       })

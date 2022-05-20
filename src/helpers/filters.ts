@@ -1,5 +1,5 @@
 import {PaginationFilters} from 'types';
-import {Filters} from '../../types';
+import {Filters} from 'types';
 
 export function createUrlParams(params: PaginationFilters): string {
   const {pagination, filters} = params;

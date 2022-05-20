@@ -114,7 +114,6 @@ export type RootDocumentParamList = {
   };
   RecordDetails: {
     recordActive: RecordActive;
-    recordInfo: string;
     title: string;
   };
   RecordStats: {
@@ -680,7 +679,6 @@ export interface Record {
 
 export interface RecordListItemProps {
   recordActive: RecordActive;
-  recordInfo: string;
   navigation: RecordListNavigationProp;
   route: RecordListRouteProp;
 }
@@ -697,6 +695,14 @@ export interface RecordActive {
   user: User;
   basic_attributes: Attribute[];
   custom_attributes: Attribute[];
+  createdBy: User;
+  updatedBy: UserInfo;
+  createdAt: string;
+  updatedAt: {
+    date: string;
+    timezone: string;
+    timezone_type: string;
+  };
 }
 
 export interface RecordModalProps {
@@ -707,6 +713,8 @@ export interface RecordModalProps {
 
 export interface RecordState {
   activeRecord: Record | null;
+  filteredRecords: RecordActive[];
+  dateRecords: string[];
   recordsLength: number;
   loading: boolean;
   error: boolean;

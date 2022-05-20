@@ -92,7 +92,7 @@ const activeSlice = createSlice({
         state.error = true;
       })
       .addCase(fetchActive.fulfilled, (state, action) => {
-        state.active = action.payload;
+        state.active = action.payload[0];
         state.loading = false;
         state.error = false;
       })

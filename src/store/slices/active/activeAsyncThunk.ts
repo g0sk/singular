@@ -57,7 +57,7 @@ export const fetchTag = createAsyncThunk<
   }
 });
 
-export const fetchActive = createAsyncThunk<Active, number, {}>(
+export const fetchActive = createAsyncThunk<Active[], number, {}>(
   'active/fetchActive',
   async (id) => {
     try {

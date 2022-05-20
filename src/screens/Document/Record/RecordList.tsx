@@ -12,7 +12,7 @@ import {translate} from 'core';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from 'ui/theme';
 import {resetRecordState} from 'store/slices/record/recordSlice';
-import {formatDate, formatDisplayDate} from 'helpers/dates';
+import {formatDisplayDate} from 'helpers/dates';
 
 type Order = 'oldest' | 'latest';
 type FilterIcon = 'trending-up-outline' | 'trending-down-outline';
@@ -22,7 +22,6 @@ export const RecordList: React.FC<RecordListProps> = ({route, navigation}) => {
   const {colors} = useTheme();
   const [order, setOrder] = useState<Order>('oldest');
   const [records, setRecords] = useState<Array<RecordActive>>([]);
-  const [dateRecords, setDateRecords] = useState<Array<string>>([]);
   const [iconName, setIconName] = useState<FilterIcon>('trending-up-outline');
   const [open, setOpen] = useState<boolean>(false);
   const [dateFilter, setDateFilter] = useState<Date | null>(null);
@@ -37,19 +36,12 @@ export const RecordList: React.FC<RecordListProps> = ({route, navigation}) => {
   }, [route.params.recordId]);
 
   useEffect(() => {
-    if (recordState.activeRecord) {
-      if (order === 'oldest') {
-        setRecords([...recordState.activeRecord.activeObject]);
-        setDateRecords([...recordState.activeRecord.dateRecord]);
-      } else {
-        setRecords([...recordState.activeRecord.activeObject].reverse());
-        setDateRecords([...recordState.activeRecord.dateRecord].reverse());
-      }
+    if (order === 'oldest') {
+      setRecords([...recordState.filteredRecords]);
     } else {
-      setRecords([]);
-      setDateRecords([]);
+      setRecords([...recordState.filteredRecords].reverse());
     }
-  }, [recordState.activeRecord, order]);
+  }, [recordState.filteredRecords, order]);
 
   useEffect(() => {
     return () => {
@@ -63,20 +55,20 @@ export const RecordList: React.FC<RecordListProps> = ({route, navigation}) => {
     setDateFilter(_date);
     setFormattedDate(_formattedDate);
     store.dispatch(
-      fetchFilteredActiveRecord([
-        {key: 'dateRecord', value: formatDisplayDate(_date, true)},
-        {key: 'active.id', value: route.params.activeId.toString()},
-      ]),
+      fetchFilteredActiveRecord({
+        activeId: route.params.recordId,
+        filters: [{key: 'date', value: formatDisplayDate(_date, false)}],
+      }),
     );
   };
 
   const refreshRecords = () => {
     if (filterEnabled && dateFilter) {
       dispatch(
-        fetchFilteredActiveRecord([
-          {key: 'dateRecord', value: formatDate(dateFilter)},
-          {key: 'active.id', value: route.params.recordId.toString()},
-        ]),
+        fetchFilteredActiveRecord({
+          activeId: route.params.recordId,
+          filters: [{key: 'date', value: formatDisplayDate(dateFilter, false)}],
+        }),
       );
     } else {
       dispatch(fetchActiveRecord(route.params.recordId));
@@ -259,14 +251,13 @@ export const RecordList: React.FC<RecordListProps> = ({route, navigation}) => {
             refreshing={recordState.loading}
             ref={flatListRef}
             ListEmptyComponent={<EmptyList />}
-            renderItem={({item, index}) => (
+            renderItem={({item}) => (
               <RecordListItem
                 {...{
                   navigation,
                   route,
                 }}
                 recordActive={item}
-                recordInfo={dateRecords[index]}
               />
             )}
           />

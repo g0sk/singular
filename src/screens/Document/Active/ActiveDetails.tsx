@@ -135,9 +135,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
         ' ' +
         activeState.active?.reference +
         '?',
-      translate('form.active.action.delete.message', {
-        name: 'hola',
-      }),
+      translate('form.active.action.delete.message'),
       [
         {
           text: translate('action.general.cancel'),
