@@ -5,14 +5,31 @@ import {
   DrawerContentComponentProps,
 } from '@react-navigation/drawer';
 import {VERSION} from '@env';
-import {ImageBackground} from 'react-native';
+import {Alert, ImageBackground} from 'react-native';
 import {SmallAvatar} from 'components/SmallAvatar';
 import {Button, Text, View} from 'components';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {translate} from 'core';
+import {translate, useAuth} from 'core';
 
 const CustomDrawerContent = (props: DrawerContentComponentProps) => {
   const insets = useSafeAreaInsets();
+  const {signOut} = useAuth();
+  const logOut = () => {
+    Alert.alert(
+      translate('action.login.logOut.title'),
+      translate('action.login.logOut.message'),
+      [
+        {
+          text: translate('button.general.cancel'),
+          onPress: () => null,
+        },
+        {
+          text: translate('button.login.logOut'),
+          onPress: () => signOut(),
+        },
+      ],
+    );
+  };
   return (
     <View flex={1}>
       <DrawerContentScrollView
@@ -32,7 +49,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
           <Button
             variant="logOutDrawer"
             label={translate('button.login.logOut')}
-            onPress={() => null}
+            onPress={logOut}
           />
         </View>
         <View alignItems="center">

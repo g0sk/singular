@@ -16,12 +16,11 @@ export const SmallAvatar: React.FC = () => {
             width: 80,
             borderRadius: 80,
           }}
-          source={{
-            uri:
-              user && user.image
-                ? API_URL + user.image.contentUrl
-                : require('../../assets/images/user.png'),
-          }}
+          source={
+            user && user.image
+              ? {uri: API_URL + user.image.contentUrl}
+              : require('../../assets/images/user.png')
+          }
         />
       </View>
       <View marginBottom="s">
