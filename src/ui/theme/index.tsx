@@ -15,6 +15,8 @@ const createTheme = <T extends ThemeType>(themeObject: T): T => themeObject;
 
 const BaseTheme = {
   colors: {
+    purple: '#b43bc9',
+    darkPurple: '#8e14a3',
     background: '#000b31',
     blue: '#1f155e',
     dark: '#000',
@@ -77,6 +79,15 @@ const BaseTheme = {
 const theme = createTheme({
   ...BaseTheme,
   textVariants: {
+    drawerName: {
+      color: 'white',
+      fontWeight: 'bold',
+      fontSize: 19,
+    },
+    drawerEmail: {
+      color: 'white',
+      fontSize: 15,
+    },
     errorHeader: {
       color: 'darkText',
       fontWeight: 'bold',
@@ -187,6 +198,9 @@ const theme = createTheme({
       fontSize: 19,
       fontWeight: 'bold',
     },
+    button_logOutDrawer: {
+      color: 'white',
+    },
     button_disabled: {
       color: 'lightText',
     },
@@ -280,6 +294,12 @@ const theme = createTheme({
     },
   },
   buttonVariants: {
+    logOutDrawer: {
+      backgroundColor: 'purple',
+      width: 130,
+      height: 35,
+      borderRadius: 7,
+    },
     primary: {
       backgroundColor: 'primary',
     },

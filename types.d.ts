@@ -10,6 +10,7 @@ import {
 import {Theme} from 'ui/Theme';
 import {AnyObjectSchema} from 'yup';
 import {RouteProp} from '@react-navigation/core';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
 
 //Geral types
 export type Credentials = {
@@ -49,7 +50,18 @@ type ServerError = {
 //Route
 export type AppNavigatorParamList = {
   Tab: TabNavigatorParamList;
+  Drawer: DrawerNavigatorParamList;
 };
+
+export type DrawerStackNavigationProp = DrawerNavigationProp<
+  AppNavigatorParamList,
+  'Drawer'
+>;
+
+export type DrawerStackProps = {
+  navigation: DrawerStackNavigationProp;
+};
+
 export type TabRouteProp = StackNavigationProp<AppNavigatorParamList, 'Tab'>;
 
 export type TabNavigationProp = StackNavigationProp<
@@ -60,6 +72,11 @@ export type TabNavigationProp = StackNavigationProp<
 export type TabStackProps = {
   navigation: TabNavigationProp;
   route: TabRouteProp;
+};
+
+export type DrawerNavigatorParamList = {
+  Home: TabNavigatorParamList;
+  Profile: undefined;
 };
 
 //TabNavigator
@@ -143,6 +160,8 @@ export type RootTagParamList = {
 };
 
 //Route
+
+//Drawer
 
 //DocumentList items
 export type ActiveItemFormProps = {

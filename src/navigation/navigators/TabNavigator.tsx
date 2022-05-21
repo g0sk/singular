@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Profile} from 'screens';
 import {useTheme} from 'ui/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {DocumentNavigator} from './DocumentNavigator';
@@ -40,19 +39,6 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="ActiveTypeNavigator"
-        component={ActiveTypeNavigator}
-        options={{
-          tabBarIcon: ({focused}) => (
-            <Icon
-              name={focused ? 'pricetags' : 'pricetags-outline'}
-              size={focused ? 34 : 28}
-              color={focused ? theme.colors.primary : theme.colors.default}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
         name="TagNavigator"
         component={TagNavigator}
         options={{
@@ -66,12 +52,12 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="ActiveTypeNavigator"
+        component={ActiveTypeNavigator}
         options={{
           tabBarIcon: ({focused}) => (
             <Icon
-              name={focused ? 'person-circle' : 'person-circle-outline'}
+              name={focused ? 'pricetags' : 'pricetags-outline'}
               size={focused ? 34 : 28}
               color={focused ? theme.colors.primary : theme.colors.default}
             />
