@@ -130,7 +130,7 @@ export const ActiveTypeList: React.FC<ActiveTypeListsScreenProps> = ({
         </View>
       </View>
       <View
-        height={height - 70}
+        height={height - 60}
         marginTop="m"
         marginHorizontal="m"
         paddingBottom="dxxl">

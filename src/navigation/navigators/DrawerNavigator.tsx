@@ -6,6 +6,8 @@ import TabNavigator from './TabNavigator';
 import CustomDrawerContent from 'navigation/DrawerContent';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from 'ui/theme';
+import {translate} from 'core';
+import {TagNavigator} from './TagNavigator';
 
 const Drawer = createDrawerNavigator<DrawerNavigatorParamList>();
 
@@ -15,6 +17,7 @@ const DrawerNavigator = () => {
     <Drawer.Navigator
       defaultStatus="closed"
       drawerContent={(props) => <CustomDrawerContent {...props} />}
+      backBehavior="none"
       screenOptions={{
         drawerType: 'back',
         headerShown: false,
@@ -33,6 +36,17 @@ const DrawerNavigator = () => {
         component={TabNavigator}
         options={{
           drawerIcon: ({color}) => <Icon name="home" size={20} color={color} />,
+          drawerLabel: translate('screen.drawer.home'),
+        }}
+      />
+      <Drawer.Screen
+        name="Tag"
+        component={TagNavigator}
+        options={{
+          drawerIcon: ({color}) => (
+            <Icon name="radio" size={20} color={color} />
+          ),
+          drawerLabel: translate('screen.drawer.tags'),
         }}
       />
       <Drawer.Screen
@@ -42,6 +56,7 @@ const DrawerNavigator = () => {
           drawerIcon: ({color}) => (
             <Icon name="person" size={20} color={color} />
           ),
+          drawerLabel: translate('screen.drawer.profile'),
         }}
       />
     </Drawer.Navigator>

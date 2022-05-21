@@ -3,7 +3,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useTheme} from 'ui/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {DocumentNavigator} from './DocumentNavigator';
-import {TagNavigator} from './TagNavigator';
 import {ActiveTypeNavigator} from './ActiveTypeNavigator';
 import {TabNavigatorParamList} from 'types';
 
@@ -39,19 +38,6 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="TagNavigator"
-        component={TagNavigator}
-        options={{
-          tabBarIcon: ({focused}) => (
-            <Icon
-              name={focused ? 'radio' : 'radio-outline'}
-              size={focused ? 34 : 28}
-              color={focused ? theme.colors.primary : theme.colors.default}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
         name="ActiveTypeNavigator"
         component={ActiveTypeNavigator}
         options={{
@@ -59,7 +45,7 @@ const TabNavigator = () => {
             <Icon
               name={focused ? 'pricetags' : 'pricetags-outline'}
               size={focused ? 34 : 28}
-              color={focused ? theme.colors.primary : theme.colors.default}
+              color={focused ? theme.colors.orange : theme.colors.default}
             />
           ),
         }}

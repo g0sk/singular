@@ -76,6 +76,7 @@ export type TabStackProps = {
 
 export type DrawerNavigatorParamList = {
   Home: TabNavigatorParamList;
+  Tag: TagNavigatorParamList;
   Profile: undefined;
 };
 
@@ -83,7 +84,7 @@ export type DrawerNavigatorParamList = {
 export type TabNavigatorParamList = {
   DocumentNavigator: RootDocumentParamList;
   ActiveTypeNavigator: RootActiveTypeParamList;
-  TagNavigator: RootTagParamList;
+  TagNavigator: TagNavigatorParamList;
   Profile: undefined;
 };
 
@@ -139,7 +140,7 @@ export type RootActiveTypeParamList = {
   };
 };
 
-export type RootTagParamList = {
+export type TagNavigatorParamList = {
   TagHome: {};
   ScanHome: {};
   ScanTagSuccess: {
@@ -300,9 +301,9 @@ export type RecordDetailsStackProps = {
 };
 
 //Tag home
-export type TagHomeRouteProp = RouteProp<RootTagParamList, 'TagHome'>;
+export type TagHomeRouteProp = RouteProp<TagNavigatorParamList, 'TagHome'>;
 export type TagHomeNavigationProp = StackNavigationProp<
-  RootTagParamList,
+  TagNavigatorParamList,
   'TagHome'
 >;
 export type TagHomeStackProps = {
@@ -323,9 +324,12 @@ export type ScanHomeScreenProps = {
 };
 
 //Tag Write Success
-export type WriteSuccessRouteProp = RouteProp<RootTagParamList, 'WriteSuccess'>;
+export type WriteSuccessRouteProp = RouteProp<
+  TagNavigatorParamList,
+  'WriteSuccess'
+>;
 export type WriteSuccessNavigationProp = StackNavigationProp<
-  RootTagParamList,
+  TagNavigatorParamList,
   'WriteSuccess'
 >;
 export type WriteSuccessScreenProps = {
@@ -334,9 +338,9 @@ export type WriteSuccessScreenProps = {
 };
 
 //Tag Writting
-export type WriteRouteProp = RouteProp<RootTagParamList, 'Write'>;
+export type WriteRouteProp = RouteProp<TagNavigatorParamList, 'Write'>;
 export type WriteNavigationProp = StackNavigationProp<
-  RootTagParamList,
+  TagNavigatorParamList,
   'Write'
 >;
 export type WriteScreenProps = {
@@ -346,11 +350,11 @@ export type WriteScreenProps = {
 
 //Tag Scan Success
 export type ScanTagSuccessRouteProp = RouteProp<
-  RootTagParamList,
+  TagNavigatorParamList,
   'ScanTagSuccess'
 >;
 export type ScanTagSuccessNavigationProp = StackNavigationProp<
-  RootTagParamList,
+  TagNavigatorParamList,
   'ScanTagSuccess'
 >;
 export type ScanTagSuccessScreenProps = {
@@ -359,11 +363,11 @@ export type ScanTagSuccessScreenProps = {
 };
 
 export type ScanActiveSuccessRouteProp = RouteProp<
-  RootTagParamList,
+  TagNavigatorParamList,
   'ScanActiveSuccess'
 >;
 export type ScanActiveSuccessNavigationProp = StackNavigationProp<
-  RootTagParamList,
+  TagNavigatorParamList,
   'ScanActiveSuccess'
 >;
 export type ScanActiveSuccessScreenProps = {

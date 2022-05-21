@@ -128,7 +128,7 @@ export const ActiveList: React.FC<ActiveListScreenProps> = ({
         </TouchableOpacity>
       </View>
       <View
-        height={height - 70}
+        height={height - 60}
         marginTop="m"
         marginHorizontal="m"
         paddingBottom="dxxl">

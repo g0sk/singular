@@ -1,5 +1,10 @@
 {
   "screen": {
+    "drawer": {
+      "home": "Home",
+      "tags": "Tags",
+      "profile": "Profile"
+    },
     "document": {
       "title": "Document"
     },
