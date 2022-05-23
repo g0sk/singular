@@ -28,18 +28,27 @@ export async function writeNdefTextRecord(
 ): Promise<boolean> {
   let success: boolean = false;
   try {
+    console.log('TAG WRITING');
+    console.log('Requesting NDEF technology');
     await NfcManager.requestTechnology(NfcTech.Ndef);
+    console.log('Encoding message');
+    console.log('Reference: ' + id);
+    console.log('Type: ' + activeType);
     const bytes = Ndef.encodeMessage([
       Ndef.textRecord(id),
       Ndef.textRecord(activeType),
     ]);
+    console.log('Message encoded');
     if (bytes.length > 0) {
+      console.log('Writing NdefMessage');
       await NfcManager.ndefHandler.writeNdefMessage(bytes);
       success = true;
+      console.log('NdefMessage Written');
     }
-  } catch (e: any) {
-    console.warn(e);
+  } catch (e) {
+    throw e;
   } finally {
+    console.log('Tag Writing ended');
     NfcManager.cancelTechnologyRequest();
     return success;
   }
@@ -49,6 +58,7 @@ export async function readNdefTag(): Promise<TagInfo | null> {
   let tagFormatted: TagInfo = null;
   try {
     //define intent so android doesnt read it default
+    console.log('TAG READING');
     console.log('Starting NFC MANAGER');
     await NfcManager.start();
 

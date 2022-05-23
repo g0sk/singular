@@ -7,8 +7,10 @@ import {useTheme} from 'ui/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const Stack = createBottomTabNavigator<TagTabNavigatorParamList>();
+
 const TagTabNavigator = () => {
   const {colors} = useTheme();
+
   return (
     <Stack.Navigator
       initialRouteName="Scan"

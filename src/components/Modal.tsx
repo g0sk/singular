@@ -18,11 +18,10 @@ export const Modal: React.FC<ModalProps> = ({
       hasBackdrop={true}
       backdropColor="black"
       backdropOpacity={0.8}
-      animationIn="zoomIn"
-      animationOut="zoomOut"
       onBackdropPress={_onBackdropPressHandler}
       children={children}
       useNativeDriver={true}
+      useNativeDriverForBackdrop={true}
     />
   );
 };

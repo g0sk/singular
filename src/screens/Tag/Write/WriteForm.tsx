@@ -11,14 +11,25 @@ import {ActiveType} from 'types';
 import {ActiveTypeState, WriteFormScreenProps} from 'types';
 import store, {useAppSelector} from 'store/configureStore';
 import {fetchActiveTypesList} from 'store/slices/activeType/activeTypeAsyncThunk';
-import {initNfc, writeNdefTextRecord} from 'core/nfc/nfc_scanner';
-import {TextInput as RNTextInput, ToastAndroid} from 'react-native';
+import {
+  cancelRequest,
+  initNfc,
+  writeNdefTextRecord,
+} from 'core/nfc/nfc_scanner';
+import {
+  ActivityIndicator,
+  TextInput as RNTextInput,
+  ToastAndroid,
+} from 'react-native';
 import {clearActiveTypeList} from 'store/slices/activeType/activeTypeSlice';
 import {useTheme} from 'ui/theme';
-import Writting from './Writting';
+import {isEnabled} from 'core/nfc/nfc_scanner';
+import {useNfc} from 'core/nfc';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export const WriteForm: React.FC<WriteFormScreenProps> = ({navigation}) => {
   const {colors} = useTheme();
+  const {checkNfcEnabled} = useNfc();
   const {activeTypes}: ActiveTypeState = useAppSelector(
     (state) => state.activeType,
   );
@@ -45,6 +56,14 @@ export const WriteForm: React.FC<WriteFormScreenProps> = ({navigation}) => {
   useEffect(() => {
     referenceRef.current?.focus();
   }, [referenceRef]);
+
+  useEffect(() => {
+    if (writing) {
+      navigation.setOptions({headerShown: false});
+    } else {
+      navigation.setOptions({headerShown: true});
+    }
+  }, [writing, navigation]);
 
   const resetState = () => {
     setReference('');
@@ -78,37 +97,46 @@ export const WriteForm: React.FC<WriteFormScreenProps> = ({navigation}) => {
     }
   };
 
-  const writeTag = () => {
-    if (activeType !== null && !error) {
-      setWriting(true);
-      initNfc()
-        .then(() => {
-          writeNdefTextRecord(reference, activeType.id.toString()).then(() => {
-            navigation.navigate('WriteSuccess', {
-              title: translate('screen.scan.home'),
-              reference,
-              type: activeType.name,
-            });
-            resetState();
+  const writeTag = async () => {
+    const _enabled = await isEnabled();
+    if (_enabled && activeType && !error) {
+      setWriting(!writing);
+      if (!writing) {
+        initNfc()
+          .then(() => {
+            writeNdefTextRecord(reference, activeType.id.toString()).then(
+              (res) => {
+                if (res) {
+                  navigation.navigate('WriteSuccess', {
+                    title: translate('screen.scan.home'),
+                    reference,
+                    type: activeType.name,
+                  });
+                  resetState();
+                }
+              },
+            );
+          })
+          .catch(() => {
+            console.log('Writing aborted in screen');
           });
-        })
-        .catch(() => {
-          setError(true);
-        });
+      } else {
+        cancelRequest();
+      }
+    } else {
+      checkNfcEnabled();
     }
   };
 
   return (
-    <View>
+    <View margin="m">
       {!writing ? (
-        <View height={507}>
-          <View margin="m">
+        <View height={491}>
+          <View marginHorizontal="m" marginTop="m" marginBottom="m">
             <Text variant="header1">{translate('form.write.title')}</Text>
           </View>
           <View
-            marginVertical="m"
             marginHorizontal="m"
-            padding="m"
             flexDirection="column"
             borderRadius={25}
             borderWidth={2}
@@ -158,10 +186,46 @@ export const WriteForm: React.FC<WriteFormScreenProps> = ({navigation}) => {
           </View>
         </View>
       ) : (
-        <Writting />
+        <View marginHorizontal="xl" height={491}>
+          <View>
+            <View>
+              <Text variant="scanHeader">{translate('action.scan.write')}</Text>
+            </View>
+            <View marginVertical="xxl">
+              <View marginTop="l">
+                <ActivityIndicator size="large" color={colors.primary} />
+              </View>
+              <View
+                flexDirection="row"
+                marginHorizontal="m"
+                marginTop="dxxl"
+                marginBottom="m"
+                alignItems="center">
+                <View marginRight="s">
+                  <Icon
+                    name="information-circle-outline"
+                    size={30}
+                    color={colors.primary}
+                  />
+                </View>
+                <View>
+                  <Text variant="tip">{translate('screen.scan.tip')}</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
       )}
-      <View marginHorizontal="xxl" paddingHorizontal="m" marginTop="xl">
-        <Button label="Write" onPress={() => handleWrite()} />
+      <View marginHorizontal="xxl" marginTop="xl">
+        <Button
+          variant="primary"
+          label={
+            !writing
+              ? translate('button.scan.write')
+              : translate('button.scan.cancel')
+          }
+          onPress={handleWrite}
+        />
       </View>
     </View>
   );

@@ -352,7 +352,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
                 </View>
               </View>
               <UserModal user={activeState.active?.createdBy} created={true} />
-              <View marginHorizontal="xxl" marginTop="l" marginBottom="xxl">
+              <View marginHorizontal="xxl" marginTop="xxl" marginBottom="dxxl">
                 <Button
                   variant="delete"
                   label={translate('action.general.delete')}

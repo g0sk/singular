@@ -22,35 +22,37 @@ export const ScanTagSuccess: React.FC<ScanTagSuccessScreenProps> = ({
 
   return (
     <View margin="m">
-      <View margin="m">
-        <Text variant="scanSuccessHeader">
-          {translate('success.scan.tagFound')}
-        </Text>
-      </View>
-      <View height={175} alignItems="center" margin="m">
-        <View marginBottom="m">
-          <Icon
-            name="checkmark-circle-outline"
-            color={colors.primary}
-            size={100}
-          />
+      <View marginTop="xl" marginHorizontal="m" height={507}>
+        <View>
+          <Text variant="scanSuccessHeader">
+            {translate('success.scan.tagFound')}
+          </Text>
         </View>
-        <Text variant="scanSuccessId">
-          {translate('active.data.ref') +
-            ' ' +
-            route.params.tag?.activeInfo.reference}
-        </Text>
+        <View height={200} alignItems="center" marginTop="xl" marginBottom="m">
+          <View marginBottom="m">
+            <Icon
+              name="checkmark-circle-outline"
+              color={colors.primary}
+              size={100}
+            />
+          </View>
+          <Text variant="scanSuccessId">
+            {translate('active.data.ref') +
+              ' ' +
+              route.params.tag?.activeInfo.reference}
+          </Text>
+        </View>
+        <View
+          marginTop="xl"
+          marginBottom="m"
+          marginHorizontal="m"
+          alignItems="center">
+          <Text variant="scanDescription">
+            {translate('screen.scan.successTagDescription')}
+          </Text>
+        </View>
       </View>
-      <View
-        marginTop="m"
-        marginBottom="xxl"
-        marginHorizontal="l"
-        alignItems="center">
-        <Text variant="scanDescription">
-          {translate('screen.scan.successTagDescription')}
-        </Text>
-      </View>
-      <View marginVertical="dxxl" marginHorizontal="xxl">
+      <View marginVertical="xl" marginHorizontal="xxl">
         <Button
           label={translate('button.scan.goToDetails')}
           variant="primary"

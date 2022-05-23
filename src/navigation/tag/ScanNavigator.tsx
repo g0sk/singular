@@ -15,7 +15,7 @@ const ScanNavigator = () => {
         name="ScanTagSuccess"
         component={ScanTagSuccess}
         options={({route}) => ({
-          headerShown: true,
+          headerShown: false,
           title: route.params.title,
         })}
       />
@@ -23,7 +23,7 @@ const ScanNavigator = () => {
         name="ScanActiveSuccess"
         component={ScanActiveSuccess}
         options={({route}) => ({
-          headerShown: true,
+          headerShown: false,
           title: route.params.title,
         })}
       />

@@ -250,6 +250,11 @@
           "invalid": "Fecha inválida"
         }
       },
+      "action": {
+        "error": {
+          "write": "Error al escribir en la etiqueta"
+        }
+      },
       "attribute": {
           "empty": "No hay attributos que mostrar"
         },

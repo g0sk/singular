@@ -173,7 +173,7 @@
       "action": {
         "delete": {
           "title": "Delete active",
-          "message": "If you delete an active all of its record will be also deleted"
+          "message": "If you delete an active, all records associated will also be deleted"
         }
       },
       "type": {
@@ -238,6 +238,11 @@
         "error": {
           "required": "This field is required",
           "invalid": "This field is invalid"
+        }
+      },
+       "action": {
+        "error": {
+          "write": "Failed to write on tag"
         }
       },
       "attribute": {

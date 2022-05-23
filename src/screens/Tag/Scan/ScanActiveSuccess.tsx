@@ -28,31 +28,33 @@ export const ScanActiveSuccess: React.FC<ScanActiveSuccessScreenProps> = ({
 
   return (
     <View margin="m">
-      <View margin="m">
-        <Text variant="scanSuccessHeader">
-          {translate('success.scan.activeFound')}
-        </Text>
-      </View>
-      <View height={175} alignItems="center" margin="m">
-        <View marginBottom="m">
-          <Icon
-            name="checkmark-circle-outline"
-            color={colors.primary}
-            size={100}
-          />
+      <View marginTop="xl" marginHorizontal="m" height={507}>
+        <View>
+          <Text variant="scanSuccessHeader">
+            {translate('success.scan.activeFound')}
+          </Text>
         </View>
-        <Text variant="scanSuccessId">
-          {translate('active.data.ref') + ' ' + route.params.active.reference}
-        </Text>
-      </View>
-      <View
-        marginTop="m"
-        marginBottom="dxxl"
-        marginHorizontal="l"
-        alignItems="center">
-        <Text variant="scanDescription">
-          {translate('screen.scan.successActiveDescription')}
-        </Text>
+        <View height={200} alignItems="center" marginTop="xl" marginBottom="m">
+          <View marginBottom="m">
+            <Icon
+              name="checkmark-circle-outline"
+              color={colors.primary}
+              size={100}
+            />
+          </View>
+          <Text variant="scanSuccessId">
+            {translate('active.data.ref') + ' ' + route.params.active.reference}
+          </Text>
+        </View>
+        <View
+          marginHorizontal="m"
+          marginTop="xl"
+          marginBottom="m"
+          alignItems="center">
+          <Text variant="scanDescription">
+            {translate('screen.scan.successActiveDescription')}
+          </Text>
+        </View>
       </View>
       <View marginVertical="xl" marginHorizontal="xxl">
         <Button

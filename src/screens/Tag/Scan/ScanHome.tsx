@@ -12,15 +12,17 @@ import {ScanHomeScreenProps, ActiveState, TagInfo} from 'types';
 import {useNfc} from 'core/nfc';
 import {ActivityIndicator} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {isEnabled} from 'core/nfc/nfc_scanner';
 
 export const ScanHome: React.FC<ScanHomeScreenProps> = ({navigation}) => {
   const theme = useTheme();
-  const {enabled} = useNfc();
+  const {checkNfcEnabled} = useNfc();
   const dispatch = useAppDispatch();
   const [reading, setReading] = useState<boolean>(false);
 
   const scanTag = async () => {
-    if (enabled) {
+    const _enabled: boolean = await isEnabled();
+    if (_enabled) {
       setReading(!reading);
       if (!reading) {
         readNdefTag()
@@ -31,9 +33,12 @@ export const ScanHome: React.FC<ScanHomeScreenProps> = ({navigation}) => {
           })
           .catch(() => {
             console.log('Scan aborted in screen');
-          })
-          .finally(() => cancelRequest());
+          });
+      } else {
+        cancelRequest();
       }
+    } else {
+      checkNfcEnabled();
     }
   };
 
@@ -77,36 +82,30 @@ export const ScanHome: React.FC<ScanHomeScreenProps> = ({navigation}) => {
         {!reading ? (
           <View marginTop="xl" marginHorizontal="m" height={507}>
             <View>
-              <View>
-                <Text variant="scanHeader">
-                  {translate('screen.scan.header')}
-                </Text>
-              </View>
-              <View
-                alignItems="center"
-                marginTop="xl"
-                marginBottom="l"
-                height={200}>
-                <IconI
-                  name="radio-outline"
-                  color={theme.colors.primary}
-                  size={100}
-                />
-                <IconF
-                  name="smartphone"
-                  color={theme.colors.primary}
-                  size={60}
-                />
-              </View>
-              <View
-                marginHorizontal="m"
-                marginTop="xxl"
-                marginBottom="m"
-                alignItems="center">
-                <Text variant="scanDescription">
-                  {translate('screen.scan.description')}
-                </Text>
-              </View>
+              <Text variant="scanHeader">
+                {translate('screen.scan.header')}
+              </Text>
+            </View>
+            <View
+              alignItems="center"
+              marginTop="xl"
+              marginBottom="l"
+              height={200}>
+              <IconI
+                name="radio-outline"
+                color={theme.colors.primary}
+                size={100}
+              />
+              <IconF name="smartphone" color={theme.colors.primary} size={60} />
+            </View>
+            <View
+              marginHorizontal="m"
+              marginTop="xxl"
+              marginBottom="m"
+              alignItems="center">
+              <Text variant="scanDescription">
+                {translate('screen.scan.description')}
+              </Text>
             </View>
           </View>
         ) : (
@@ -118,7 +117,7 @@ export const ScanHome: React.FC<ScanHomeScreenProps> = ({navigation}) => {
                 </Text>
               </View>
               <View marginVertical="xxl">
-                <View marginTop="xl">
+                <View marginTop="l">
                   <ActivityIndicator
                     size="large"
                     color={theme.colors.primary}
@@ -126,11 +125,11 @@ export const ScanHome: React.FC<ScanHomeScreenProps> = ({navigation}) => {
                 </View>
                 <View
                   flexDirection="row"
-                  marginHorizontal="l"
+                  marginHorizontal="m"
                   marginTop="dxxl"
                   marginBottom="m"
                   alignItems="center">
-                  <View marginRight="m">
+                  <View marginRight="s">
                     <Icon
                       name="information-circle-outline"
                       size={30}
@@ -153,7 +152,7 @@ export const ScanHome: React.FC<ScanHomeScreenProps> = ({navigation}) => {
                 : translate('button.scan.cancel')
             }
             variant="primary"
-            onPress={() => scanTag()}
+            onPress={scanTag}
           />
         </View>
       </View>
