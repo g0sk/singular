@@ -1,6 +1,6 @@
 import {apiURL} from 'api';
 import {AxiosRequestConfig, AxiosResponse, AxiosError} from 'axios';
-import {getCredentials} from 'utils/storage';
+import {getCredentials} from '../storage';
 import {fetchToken, fetchRefreshToken} from 'core/auth/authSlice';
 import store from 'store/configureStore';
 

@@ -4,40 +4,38 @@ import {translate} from 'core';
 import {useTheme} from 'ui/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {WriteHomeScreenProps} from 'types';
-import {isEnabled} from 'utils/nfc_scanner';
 
-export const WriteHome: React.FC<WriteHomeScreenProps> = ({
-  navigation,
-  setEnabled,
-}) => {
+export const WriteHome: React.FC<WriteHomeScreenProps> = ({navigation}) => {
   const theme = useTheme();
 
   const goToForm = async () => {
-    if (await isEnabled()) {
-      navigation.navigate('Write', {});
-    } else {
-      setEnabled(false);
-    }
+    navigation.navigate('WriteForm', {
+      title: translate('screen.scan.title'),
+    });
   };
 
   return (
-    <View>
-      <View marginHorizontal="m">
-        <View margin="m">
+    <View margin="m">
+      <View marginTop="xl" marginHorizontal="m" height={507}>
+        <View>
           <Text variant="scanHeader">
             {translate('screen.scan.write.header')}
           </Text>
         </View>
-        <View height={175} alignItems="center" marginVertical="m" padding="l">
-          <Icon name="push-outline" color={theme.colors.primary} size={120} />
+        <View
+          alignItems="center"
+          padding="l"
+          marginTop="xl"
+          marginBottom="l"
+          height={200}>
+          <Icon name="push-outline" color={theme.colors.primary} size={140} />
         </View>
         <View
           marginHorizontal="m"
-          marginTop="l"
+          marginTop="xxl"
           marginBottom="m"
-          alignItems="center"
-          height={120}>
-          <Text variant="scanDescription">
+          alignItems="center">
+          <Text variant="scanDescription" marginHorizontal="m">
             {translate('screen.scan.write.description')}
           </Text>
         </View>

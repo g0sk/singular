@@ -1,13 +1,14 @@
 import React, {useEffect} from 'react';
 import {AuthProvider} from './core/auth/index';
-import {RootNavigator} from 'navigation/navigators/RootNavigator';
+import {RootNavigator} from 'navigation/RootNavigator';
 import {Provider} from 'react-redux';
 import store from './store/configureStore';
 import {ThemeProvider} from './ui/theme';
-import {initialize} from 'helpers/general';
+import {initialize} from 'core/auth/interceptors';
 import {setI18nConfig} from 'core';
 import RNBootSplash from 'react-native-bootsplash';
 import {enableScreens} from 'react-native-screens';
+import {NfcProvider} from 'core/nfc';
 
 const App = () => {
   useEffect(() => {
@@ -25,7 +26,9 @@ const App = () => {
     <Provider store={store}>
       <AuthProvider>
         <ThemeProvider>
-          <RootNavigator />
+          <NfcProvider>
+            <RootNavigator />
+          </NfcProvider>
         </ThemeProvider>
       </AuthProvider>
     </Provider>

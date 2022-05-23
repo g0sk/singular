@@ -1,6 +1,6 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import ActiveApi from 'api/activeApi';
-import {createUrlParams} from 'helpers/filters';
+import {createUrlParams} from 'utils/filters';
 import {
   ActivesResponse,
   Active,

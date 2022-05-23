@@ -4,10 +4,10 @@ import {useTheme} from 'ui/theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {DocumentNavigator} from './DocumentNavigator';
 import {ActiveTypeNavigator} from './ActiveTypeNavigator';
-import {TabNavigatorParamList} from 'types';
+import {DocumentTabNavigatorParamList} from 'types';
 
-const Tab = createBottomTabNavigator<TabNavigatorParamList>();
-const TabNavigator = () => {
+const Tab = createBottomTabNavigator<DocumentTabNavigatorParamList>();
+const DocumentTabNavigator = () => {
   const theme = useTheme();
   return (
     <Tab.Navigator
@@ -54,4 +54,4 @@ const TabNavigator = () => {
   );
 };
 
-export default TabNavigator;
+export default DocumentTabNavigator;

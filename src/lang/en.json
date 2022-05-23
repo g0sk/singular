@@ -16,13 +16,13 @@
     },
     "scan": {
       "title": "Tags",
-      "header": "Start reading tags",
+      "header": "Read tag",
       "description": "To begin reading tags, press the scan button and bring the device close to the tag.",
       "tip": "Bring the device close to the tag.",
       "successActiveDescription": "Tag successfully read. Now you can check or modify the active data.",
       "successTagDescription": "New tag successfully read. Now you can add it to the database.",
       "write": {
-        "header": "Write data on a tag",
+        "header": "Write tag",
         "description": "To begin writing on a tag, lets fill the data form first.",
         "successDescription": "Tag successfully written. Now you can read the new data on the tag."
       },
@@ -373,7 +373,7 @@
       "write": "Tag couldn't be written. Try again",
       "nfcNotEnabled": "NFC not enabled",
       "enableNfc": "NFC must be enabled on the device, in order to read RFID tags.",
-      "nfcNotSupported": "NFC not supported",
+      "nfcNotSupported": "Not supported",
       "deviceNotCompatible": "This device does not support NFC technology, in order to use tag reading you need an NFC compatible device.",
       "appSettings": "Check permissions on the app configuration"
     }

@@ -210,7 +210,11 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
     <View marginHorizontal="m" marginBottom="xxl">
       {loading && initialLoad ? (
         <View alignItems="center" height={height - 100} justifyContent="center">
-          <ActivityIndicator animating={loading} size="large" color="black" />
+          <ActivityIndicator
+            animating={loading}
+            size="large"
+            color={theme.colors.primary}
+          />
         </View>
       ) : (
         <ScrollView

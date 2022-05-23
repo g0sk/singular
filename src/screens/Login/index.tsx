@@ -14,10 +14,9 @@ import {fetchUser} from 'store/slices/user/userAsyncThunk';
 import {useAuth} from 'core';
 import store, {useAppDispatch} from 'store/configureStore';
 import {ErrorHandler} from 'handlers/error';
-import {removeCredentials, setCredentials} from 'utils/storage';
+import {getCredentials, removeCredentials, setCredentials} from 'core';
 import {translate} from 'core';
 import {FormLoginValues} from 'types';
-import {getCredentials} from 'utils/storage';
 
 const {height, width} = Dimensions.get('window');
 
@@ -36,7 +35,8 @@ export const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const {signIn} = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
-
+  const userNameRef = useRef<RNTextInput>(null);
+  const passwordRef = useRef<RNTextInput>(null);
   const {
     handleChange,
     handleBlur,
@@ -62,10 +62,12 @@ export const Login: React.FC = () => {
       if (credentials) {
         setFieldValue('username', credentials.username);
         setFieldValue('password', credentials.password);
+      } else {
+        userNameRef.current?.focus();
       }
     };
     init();
-  }, [setFieldValue]);
+  }, [setFieldValue, userNameRef]);
 
   const login = ({username, password, saveCredentials}: FormLoginValues) => {
     setLoading(true);
@@ -90,7 +92,6 @@ export const Login: React.FC = () => {
       setLoading(false);
     });
   };
-  const password = useRef<RNTextInput>(null);
 
   const navigatorSignIn = async () => {
     try {
@@ -130,6 +131,7 @@ export const Login: React.FC = () => {
                 <View marginVertical="m" marginHorizontal="s">
                   <TextInput
                     icon="mail"
+                    ref={userNameRef}
                     placeholder={translate('form.login.email.placeholder')}
                     autoCapitalize="none"
                     autoCompleteType="email"
@@ -139,11 +141,11 @@ export const Login: React.FC = () => {
                     error={errors.username}
                     touched={touched.username}
                     returnKeyLabel="next"
-                    onSubmitEditing={() => password.current?.focus()}
+                    onSubmitEditing={() => passwordRef.current?.focus()}
                   />
                   <View marginTop="m">
                     <TextInput
-                      ref={password}
+                      ref={passwordRef}
                       icon="lock"
                       placeholder={translate('form.login.password.placeholder')}
                       secureTextEntry={true}

@@ -1,6 +1,6 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import RecordApi from 'api/recordApi';
-import {createUrlFilterParams} from 'helpers/filters';
+import {createUrlFilterParams} from 'utils/filters';
 import {Filters, Record} from 'types';
 import {RecordActive} from 'types';
 

@@ -148,7 +148,7 @@ export const NewActiveType: React.FC<NewActiveTypeScreenProps> = ({
         <View alignItems="center" height={height - 100} justifyContent="center">
           <ActivityIndicator
             size="large"
-            color="black"
+            color={theme.colors.primary}
             animating={basicAttributeState.loading}
           />
         </View>

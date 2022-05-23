@@ -166,7 +166,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
               filters: [{key: 'order[id]', value: 'desc'}],
             }),
           );
-          navigation.goBack();
+          navigation.navigate('ScanHome', {});
         })
         .catch((refError: ServerError) => {
           ToastAndroid.showWithGravity(

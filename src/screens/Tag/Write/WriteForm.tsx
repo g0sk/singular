@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {createRef, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,21 +8,22 @@ import {
 } from 'components';
 import {translate} from 'core';
 import {ActiveType} from 'types';
-import {ActiveTypeState, WriteScreenProps} from 'types';
+import {ActiveTypeState, WriteFormScreenProps} from 'types';
 import store, {useAppSelector} from 'store/configureStore';
 import {fetchActiveTypesList} from 'store/slices/activeType/activeTypeAsyncThunk';
-import {initNfc, writeNdefTextRecord} from 'utils/nfc_scanner';
-import {ToastAndroid} from 'react-native';
+import {initNfc, writeNdefTextRecord} from 'core/nfc/nfc_scanner';
+import {TextInput as RNTextInput, ToastAndroid} from 'react-native';
 import {clearActiveTypeList} from 'store/slices/activeType/activeTypeSlice';
 import {useTheme} from 'ui/theme';
 import Writting from './Writting';
 
-export const Write: React.FC<WriteScreenProps> = ({navigation}) => {
+export const WriteForm: React.FC<WriteFormScreenProps> = ({navigation}) => {
   const {colors} = useTheme();
   const {activeTypes}: ActiveTypeState = useAppSelector(
     (state) => state.activeType,
   );
   const [reference, setReference] = useState<string>('');
+  const referenceRef = createRef<RNTextInput>();
   const [referenceError, setReferenceError] = useState<boolean>(false);
   const [activeType, setActiveType] = useState<ActiveType | null>(null);
   const [error, setError] = useState<boolean>(false);
@@ -40,6 +41,10 @@ export const Write: React.FC<WriteScreenProps> = ({navigation}) => {
       }),
     );
   }, []);
+
+  useEffect(() => {
+    referenceRef.current?.focus();
+  }, [referenceRef]);
 
   const resetState = () => {
     setReference('');
@@ -96,7 +101,7 @@ export const Write: React.FC<WriteScreenProps> = ({navigation}) => {
   return (
     <View>
       {!writing ? (
-        <View height={538}>
+        <View height={507}>
           <View margin="m">
             <Text variant="header1">{translate('form.write.title')}</Text>
           </View>
@@ -123,6 +128,7 @@ export const Write: React.FC<WriteScreenProps> = ({navigation}) => {
                       : colors.primary,
                     borderBottomWidth: 1,
                   }}
+                  ref={referenceRef}
                   autoCapitalize="characters"
                   onChangeText={setReference}
                   placeholder={translate('form.active.reference.placeholder')}

@@ -2,20 +2,23 @@ import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {Profile} from 'screens';
 import {DrawerNavigatorParamList} from 'types';
-import TabNavigator from './TabNavigator';
-import CustomDrawerContent from 'navigation/DrawerContent';
+import DocumentTabNavigator from '../document/DocumentTabNavigator';
+import TagNavigator from '../tag/TagNavigator';
+import CustomDrawerContent from 'navigation/drawer/DrawerContent';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from 'ui/theme';
 import {translate} from 'core';
-import {TagNavigator} from './TagNavigator';
+import {useNfc} from 'core/nfc';
 
 const Drawer = createDrawerNavigator<DrawerNavigatorParamList>();
 
 const DrawerNavigator = () => {
-  const theme = useTheme();
+  const {colors} = useTheme();
+  const {enabled, supported} = useNfc();
   return (
     <Drawer.Navigator
       defaultStatus="closed"
+      initialRouteName="Home"
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       backBehavior="none"
       screenOptions={{
@@ -24,18 +27,20 @@ const DrawerNavigator = () => {
         drawerLabelStyle: {
           fontWeight: 'bold',
         },
-        drawerActiveBackgroundColor: theme.colors.darkPurple,
-        drawerActiveTintColor: theme.colors.white,
-        drawerInactiveTintColor: theme.colors.darkText,
+        drawerActiveBackgroundColor: colors.primary,
+        drawerActiveTintColor: colors.white,
+        drawerInactiveTintColor: colors.darkText,
         drawerItemStyle: {
           marginTop: 20,
         },
       }}>
       <Drawer.Screen
         name="Home"
-        component={TabNavigator}
+        component={DocumentTabNavigator}
         options={{
-          drawerIcon: ({color}) => <Icon name="home" size={20} color={color} />,
+          drawerIcon: ({color}) => (
+            <Icon name="radio" size={20} color={color} />
+          ),
           drawerLabel: translate('screen.drawer.home'),
         }}
       />
@@ -43,9 +48,16 @@ const DrawerNavigator = () => {
         name="Tag"
         component={TagNavigator}
         options={{
-          drawerIcon: ({color}) => (
-            <Icon name="radio" size={20} color={color} />
-          ),
+          drawerIcon: ({color}) => {
+            if (!supported) {
+              return <Icon name="warning" size={20} color={colors.error} />;
+            } else if (supported && !enabled) {
+              return (
+                <Icon name="alert-circle" size={20} color={colors.yellow} />
+              );
+            }
+            return <Icon name="radio" size={20} color={color} />;
+          },
           drawerLabel: translate('screen.drawer.tags'),
         }}
       />

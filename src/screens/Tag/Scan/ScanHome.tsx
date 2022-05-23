@@ -1,44 +1,39 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Button, Text, View} from 'components';
 import IconF from 'react-native-vector-icons/Feather';
 import IconI from 'react-native-vector-icons/Ionicons';
 import {translate} from 'core';
 import {useTheme} from 'ui/theme';
 import store, {useAppDispatch} from 'store/configureStore';
-import {readNdefTag, isEnabled, cancelRequest} from 'utils/nfc_scanner';
+import {readNdefTag, cancelRequest} from 'core/nfc/nfc_scanner';
 import {fetchTag} from 'store/slices/active/activeAsyncThunk';
 import {clearActive} from 'store/slices/active/activeSlice';
-import Scanning from './Scanning';
 import {ScanHomeScreenProps, ActiveState, TagInfo} from 'types';
+import {useNfc} from 'core/nfc';
+import {ActivityIndicator} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-export const ScanHome: React.FC<ScanHomeScreenProps> = ({
-  navigation,
-  setEnabled,
-}) => {
+export const ScanHome: React.FC<ScanHomeScreenProps> = ({navigation}) => {
   const theme = useTheme();
+  const {enabled} = useNfc();
   const dispatch = useAppDispatch();
   const [reading, setReading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const ready = async () => {
-      setEnabled(await isEnabled());
-    };
-    ready();
-  });
-
   const scanTag = async () => {
-    setReading(!reading);
-    if (!reading) {
-      readNdefTag()
-        .then((res) => {
-          if (res !== null && res.activeInfo !== null) {
-            fetchExistingTag(res);
-          }
-        })
-        .catch(() => {
-          console.log('Scan aborted in screen');
-        })
-        .finally(() => cancelRequest());
+    if (enabled) {
+      setReading(!reading);
+      if (!reading) {
+        readNdefTag()
+          .then((res) => {
+            if (res !== null && res.activeInfo !== null) {
+              fetchExistingTag(res);
+            }
+          })
+          .catch(() => {
+            console.log('Scan aborted in screen');
+          })
+          .finally(() => cancelRequest());
+      }
     }
   };
 
@@ -77,36 +72,78 @@ export const ScanHome: React.FC<ScanHomeScreenProps> = ({
   };
 
   return (
-    <View>
+    <View margin="m">
       <View>
         {!reading ? (
-          <View marginHorizontal="m">
-            <View margin="m">
-              <Text variant="scanHeader">
-                {translate('screen.scan.header')}
-              </Text>
-            </View>
-            <View height={175} alignItems="center" marginVertical="m">
-              <IconI
-                name="radio-outline"
-                color={theme.colors.primary}
-                size={100}
-              />
-              <IconF name="smartphone" color={theme.colors.primary} size={60} />
-            </View>
-            <View
-              marginHorizontal="l"
-              marginTop="l"
-              marginBottom="m"
-              alignItems="center"
-              height={120}>
-              <Text variant="scanDescription">
-                {translate('screen.scan.description')}
-              </Text>
+          <View marginTop="xl" marginHorizontal="m" height={507}>
+            <View>
+              <View>
+                <Text variant="scanHeader">
+                  {translate('screen.scan.header')}
+                </Text>
+              </View>
+              <View
+                alignItems="center"
+                marginTop="xl"
+                marginBottom="l"
+                height={200}>
+                <IconI
+                  name="radio-outline"
+                  color={theme.colors.primary}
+                  size={100}
+                />
+                <IconF
+                  name="smartphone"
+                  color={theme.colors.primary}
+                  size={60}
+                />
+              </View>
+              <View
+                marginHorizontal="m"
+                marginTop="xxl"
+                marginBottom="m"
+                alignItems="center">
+                <Text variant="scanDescription">
+                  {translate('screen.scan.description')}
+                </Text>
+              </View>
             </View>
           </View>
         ) : (
-          <Scanning />
+          <View marginTop="xl" marginHorizontal="m" height={507}>
+            <View>
+              <View>
+                <Text variant="scanHeader">
+                  {translate('action.scan.scan')}
+                </Text>
+              </View>
+              <View marginVertical="xxl">
+                <View marginTop="xl">
+                  <ActivityIndicator
+                    size="large"
+                    color={theme.colors.primary}
+                  />
+                </View>
+                <View
+                  flexDirection="row"
+                  marginHorizontal="l"
+                  marginTop="dxxl"
+                  marginBottom="m"
+                  alignItems="center">
+                  <View marginRight="m">
+                    <Icon
+                      name="information-circle-outline"
+                      size={30}
+                      color={theme.colors.primary}
+                    />
+                  </View>
+                  <View>
+                    <Text variant="tip">{translate('screen.scan.tip')}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
         )}
         <View marginTop="xl" marginHorizontal="xxl">
           <Button

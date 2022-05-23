@@ -1,4 +1,5 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+export const a = 0;
+/* import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {SimpleHeader, Segment, Screen, View} from 'components';
 import {ActivityIndicator, Dimensions, ToastAndroid} from 'react-native';
 import {translate} from 'core';
@@ -11,7 +12,7 @@ import {isEnabled, isSupported} from 'utils/nfc_scanner';
 const {height} = Dimensions.get('window');
 type Mode = 'read' | 'write';
 
-export const TagHome: React.FC<TagHomeStackProps> = ({navigation, route}) => {
+export const TagHome: React.FC = () => {
   const [mode, setMode] = useState<Mode>('read');
   const [reset, setReset] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -106,12 +107,13 @@ export const TagHome: React.FC<TagHomeStackProps> = ({navigation, route}) => {
           </View>
         ) : (
           <View>
-            {supported && enabled && <TagOperations />}
+           {  {supported && enabled && <TagOperations />}
             {supported && !enabled && <NfcNotEnabled retry={retry} />}
-            {!supported && <NfcNotSupported />}
+            {!supported && <NfcNotSupported />} }
           </View>
         )}
       </View>
     </Screen>
   );
 };
+ */

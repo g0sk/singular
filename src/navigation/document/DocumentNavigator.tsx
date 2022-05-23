@@ -4,7 +4,6 @@ import {
   ActiveList,
   ActiveDetails,
   NewActive,
-  NewTag,
   RecordList,
   RecordDetails,
   RecordStats,
@@ -45,15 +44,7 @@ export const DocumentNavigator = () => {
           title: route.params.title,
         })}
       />
-      <Stack.Screen
-        name="NewTag"
-        component={NewTag}
-        options={({route}) => ({
-          headerShown: true,
-          title: route.params.title,
-          tag: route.params.tag,
-        })}
-      />
+
       <Stack.Screen
         name="RecordList"
         component={RecordList}

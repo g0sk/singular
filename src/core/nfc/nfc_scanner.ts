@@ -1,7 +1,6 @@
 import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 
-import {TagInfo} from 'types';
-import {TagResponse} from 'types';
+import {TagInfo, TagResponse} from 'types';
 
 export async function isSupported() {
   return await NfcManager.isSupported();

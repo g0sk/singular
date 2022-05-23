@@ -16,13 +16,13 @@
     },
     "scan": {
       "title": "Etiquetas",
-      "header": "Comienza a leer etiquetas",
+      "header": "Leer etiqueta",
       "description": "Para empezar a leer etiquetas, pulsa el botón y acerca el dispositivo a la etiqueta.",
       "tip": "Acerca el dispositivo a la etiqueta.",
       "successActiveDescription": "Etiqueta leída correctamente. Ahora puedes consultar la información del activo.",
       "successTagDescription": "Nueva etiqueta leída correctamente. Ahora puedes añadirlo a la base de datos.",
       "write": {
-        "header": "Escribe en una etiqueta",
+        "header": "Escribir etiqueta",
         "description": "Para empezar a escribir una etiqueta, pulsa el botón y rellena los datos a insertar.",
         "successDescription": "La etiqueta ha sido escrita correctamente. A continuación puedes leer la etiqueta para ver los nuevos datos.",
         "goBack": "Volver"
@@ -383,8 +383,8 @@
       "write": "La etiqueta no ha podido ser escrita.",
       "nfcNotEnabled": "NFC desactivado",
       "enableNfc": "Es necesario activar NFC en el dispositivo para poder leer las etiquetas RFID.",
-      "nfcNotSupported": "NFC no disponible",
-      "deviceNotCompatible": "Este dispositivo no es compatible con la tecnología NFC, para poder usar la lectura de etiquetas necesita un dispositivo compatible con NFC.",
+      "nfcNotSupported": "No disponible",
+      "deviceNotCompatible": "Este dispositivo no es compatible con la tecnología NFC. Para poder usar la lectura de etiquetas necesita un dispositivo compatible con NFC.",
       "appSettings": "Comprobar permisos en la configuración de la aplicación"
     }
   }

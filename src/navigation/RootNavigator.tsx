@@ -1,11 +1,12 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useAuth} from 'core';
-import NavigationContainer from '../NavigationContainer';
+import NavigationContainer from './NavigationContainer';
 import AuthNavigator from './AuthNavigator';
-import DrawerNavigator from './DrawerNavigator';
+import DrawerNavigator from './drawer/DrawerNavigator';
+import {RootNavigatorParamList} from 'types';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootNavigatorParamList>();
 
 export const Root = () => {
   const {status} = useAuth();
@@ -16,9 +17,7 @@ export const Root = () => {
         headerShown: false,
       }}>
       {status === 'signIn' ? (
-        <Stack.Group>
-          <Stack.Screen name="App" component={DrawerNavigator} />
-        </Stack.Group>
+        <Stack.Screen name="Drawer" component={DrawerNavigator} />
       ) : (
         <Stack.Screen name="Auth" component={AuthNavigator} />
       )}

@@ -15,6 +15,7 @@ const createTheme = <T extends ThemeType>(themeObject: T): T => themeObject;
 
 const BaseTheme = {
   colors: {
+    yellow: '#FFC300',
     purple: '#b43bc9',
     darkPurple: '#8e14a3',
     background: '#000b31',
@@ -295,7 +296,7 @@ const theme = createTheme({
   },
   buttonVariants: {
     logOutDrawer: {
-      backgroundColor: 'purple',
+      backgroundColor: 'primary',
       width: 130,
       height: 35,
       borderRadius: 7,

@@ -15,13 +15,13 @@ export const NfcNotEnabled: React.FC<Props> = ({retry}) => {
 
   return (
     <View>
-      <View margin="m" marginTop="xxl">
+      <View marginTop="xxl">
         <Text variant="scanWarningHeader">
           {translate('error.scan.nfcNotEnabled')}
         </Text>
       </View>
       <View
-        height={295}
+        height={300}
         marginHorizontal="m"
         marginTop="l"
         marginBottom="m"

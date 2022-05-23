@@ -12,56 +12,62 @@ export const WriteSuccess: React.FC<WriteSuccessScreenProps> = ({
   const {colors} = useTheme();
 
   //Añadir #scan no write
-  const goBackTagHome = () => {
-    navigation.navigate('TagHome', {});
+  const goBackWriteHome = () => {
+    navigation.navigate('WriteHome', {});
   };
 
   return (
     <View margin="m">
-      <View margin="m">
-        <Text variant="scanSuccessHeader">{translate('success.write')}</Text>
-      </View>
-      <View height={175} alignItems="center" margin="m">
-        <View marginBottom="m">
-          <Icon
-            name="checkmark-circle-outline"
-            color={colors.primary}
-            size={100}
-          />
+      <View marginTop="xl" marginHorizontal="m" height={507}>
+        <View>
+          <Text variant="scanSuccessHeader">{translate('success.write')}</Text>
         </View>
-        <View flexDirection="column" marginTop="l">
-          <View flexDirection="row">
-            <View marginBottom="s" marginRight="m">
-              <Text variant="scanSuccessId">
-                {translate('active.data.ref') + ':' + ' '}
-              </Text>
+        <View alignItems="center" marginTop="xl" marginBottom="l" height={200}>
+          <View marginBottom="m">
+            <Icon
+              name="checkmark-circle-outline"
+              color={colors.primary}
+              size={100}
+            />
+          </View>
+          <View flexDirection="column" marginTop="m" marginBottom="s">
+            <View flexDirection="row">
+              <View marginBottom="s" marginRight="m">
+                <Text variant="scanSuccessId">
+                  {translate('active.data.ref') + ':' + ' '}
+                </Text>
+              </View>
+              <View marginBottom="s">
+                <Text variant="scanSuccessData">{route.params.reference}</Text>
+              </View>
             </View>
-            <View marginBottom="s">
-              <Text variant="scanSuccessData">{route.params.reference}</Text>
+            <View flexDirection="row">
+              <View marginBottom="s" marginRight="m">
+                <Text variant="scanSuccessId">
+                  {translate('active.data.type') + ':' + ' '}
+                </Text>
+              </View>
+              <View>
+                <Text variant="scanSuccessData">{route.params.type}</Text>
+              </View>
             </View>
           </View>
-          <View flexDirection="row">
-            <View marginBottom="s" marginRight="m">
-              <Text variant="scanSuccessId">
-                {translate('active.data.type') + ':' + ' '}
-              </Text>
-            </View>
-            <View>
-              <Text variant="scanSuccessData">{route.params.type}</Text>
-            </View>
-          </View>
+        </View>
+        <View
+          marginHorizontal="xl"
+          marginTop="xl"
+          marginBottom="m"
+          alignItems="center">
+          <Text variant="scanDescription">
+            {translate('screen.scan.write.successDescription')}
+          </Text>
         </View>
       </View>
-      <View marginTop="xxl" marginHorizontal="l" alignItems="center">
-        <Text variant="scanDescription">
-          {translate('screen.scan.write.successDescription')}
-        </Text>
-      </View>
-      <View marginVertical="dxxl" marginHorizontal="xxl">
+      <View marginVertical="xl" marginHorizontal="xxl">
         <Button
           label={translate('button.scan.goBack')}
           variant="primary"
-          onPress={goBackTagHome}
+          onPress={goBackWriteHome}
         />
       </View>
     </View>

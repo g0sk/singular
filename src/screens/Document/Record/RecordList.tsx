@@ -12,7 +12,7 @@ import {translate} from 'core';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from 'ui/theme';
 import {resetRecordState} from 'store/slices/record/recordSlice';
-import {formatDisplayDate} from 'helpers/dates';
+import {formatDisplayDate} from 'utils/dates';
 
 type Order = 'oldest' | 'latest';
 type FilterIcon = 'trending-up-outline' | 'trending-down-outline';
