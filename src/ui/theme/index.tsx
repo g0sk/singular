@@ -80,6 +80,17 @@ const BaseTheme = {
 const theme = createTheme({
   ...BaseTheme,
   textVariants: {
+    orangeText: {
+      color: 'orange',
+      fontWeight: 'bold',
+    },
+    boldText: {
+      fontWeight: 'bold',
+    },
+    activeTypeCardAttributes: {
+      color: 'darkText',
+      fontWeight: 'bold',
+    },
     drawerName: {
       color: 'white',
       fontWeight: 'bold',

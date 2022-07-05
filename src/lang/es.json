@@ -64,6 +64,7 @@
   "activeType": {
     "activeTypes": "tipos",
     "activeType": "tipo",
+    "attributes": "Atributos",
     "empty": "No hay categorías que mostrar",
     "menu": {
       "placeholder": "Selecciona un categoría",

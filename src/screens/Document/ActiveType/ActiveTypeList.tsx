@@ -133,7 +133,7 @@ export const ActiveTypeList: React.FC<ActiveTypeListsScreenProps> = ({
       <View
         height={height - 60}
         marginTop="m"
-        marginHorizontal="m"
+        marginRight="s"
         paddingBottom="dxxl">
         <FlatList
           scrollEnabled={true}

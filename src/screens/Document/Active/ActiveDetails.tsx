@@ -218,6 +218,21 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
           </View>
         ) : (
           <View marginBottom="xl">
+            {change && !activeState.loading && (
+              <View
+                width={100}
+                flex={1}
+                position="absolute"
+                zIndex={100}
+                right={15}
+                top={30}>
+                <Button
+                  onPress={onSave}
+                  variant="secondary"
+                  label={translate('action.general.save')}
+                />
+              </View>
+            )}
             <ScrollView
               horizontal={false}
               refreshControl={
@@ -254,15 +269,6 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
                     </View>
                   </TouchableOpacity>
                 </View>
-                {change && (
-                  <View width={100}>
-                    <Button
-                      onPress={onSave}
-                      variant="secondary"
-                      label={translate('action.general.save')}
-                    />
-                  </View>
-                )}
               </View>
               <View alignSelf="flex-start">
                 <View marginVertical="m">

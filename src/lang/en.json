@@ -59,6 +59,7 @@
   "activeType": {
     "activeTypes": "types",
     "activeType": "type",
+    "attributes": "Attributes",
     "empty": "No types to display",
     "menu": {
       "placeholder": "Select a type",

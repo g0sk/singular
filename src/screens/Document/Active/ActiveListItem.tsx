@@ -25,83 +25,95 @@ export const ActiveListItem: React.FC<ActiveItemFormProps> = ({
     setActiveDate(dayjs(new Date(active.updatedAt)).format('DD-MM-YYYY'));
   }, [active]);
 
+  const UserImage = () => {
+    return (
+      <View alignItems="center">
+        <View>
+          {active.createdBy.image ? (
+            <View borderWidth={2} borderRadius={20} borderColor="primary">
+              <Image
+                source={{
+                  uri: API_URL + active.createdBy.image.contentUrl,
+                }}
+                style={{
+                  borderRadius: 10,
+                  borderWidth: active.file ? 0 : 1,
+                }}
+                height={26}
+                width={26}
+              />
+            </View>
+          ) : (
+            <Icon name="person-circle-outline" size={30} />
+          )}
+        </View>
+        <View>
+          <Text>{active.updatedBy.name}</Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
-    <View flexDirection="row" marginBottom="l" alignItems="center">
+    <View marginBottom="l" alignItems="center">
       <TouchableOpacity onPress={_itemHandler}>
         <View
           borderColor="primary"
           borderWidth={3}
           borderRadius={13}
-          marginRight="m"
-          width={360}
+          width={350}
           flexDirection="row"
           paddingHorizontal="m"
           height={74}
           justifyContent="space-between"
-          alignContent="center"
           alignItems="center">
-          <View justifyContent="center" flexDirection="column">
+          <View justifyContent="center" flexDirection="column" marginRight="s">
             <View marginBottom="s">
               <Text variant="listItemPrimary">{active.reference}</Text>
             </View>
-            <View>
-              <Text variant="listItemData">{active.activeType.name}</Text>
+            <View flexDirection="row">
+              <View>
+                <Text variant="orangeText">{active.activeType.name}</Text>
+              </View>
             </View>
           </View>
           <View flexDirection="row" alignItems="center">
-            <View>
-              <View marginRight="l" marginLeft="s">
-                {active.createdBy.image ? (
-                  <View borderWidth={2} borderRadius={20} borderColor="primary">
-                    <Image
-                      source={{
-                        uri: API_URL + active.createdBy.image.contentUrl,
-                      }}
-                      style={{
-                        borderRadius: 10,
-                        borderWidth: active.file ? 0 : 1,
-                      }}
-                      height={26}
-                      width={26}
-                    />
-                  </View>
-                ) : (
-                  <Icon name="person-circle-outline" size={30} />
-                )}
-              </View>
-              <View>
-                <Text>{active.updatedBy.name}</Text>
-              </View>
-            </View>
-            <View flexDirection="row">
+            <View flexDirection="row" marginRight="l">
               <View
                 justifyContent="center"
                 flexDirection="column"
                 alignItems="center">
-                {!active.file && active.description.length === 0 && (
-                  <View marginBottom="s">
-                    <Text variant="dataLabel">
-                      {translate('active.lastUpdate')}
-                    </Text>
-                  </View>
-                )}
+                <View marginBottom="s">
+                  <Text variant="dataLabel">
+                    {translate('active.lastUpdate')}
+                  </Text>
+                </View>
                 <View marginBottom="s">
                   <Text variant="listItemData">{activeDate}</Text>
                 </View>
-                <View flexDirection="row">
-                  {active.file && (
-                    <View marginRight="m">
-                      <Icon name="image" size={15} />
-                    </View>
-                  )}
-                  {active.description.length > 0 && (
-                    <View>
-                      <Icon name="reader" size={15} />
-                    </View>
-                  )}
-                </View>
               </View>
             </View>
+            {active.file !== null ? (
+              <View>
+                <View>
+                  <View>
+                    <Image
+                      source={{
+                        uri: API_URL + active.file.contentUrl,
+                      }}
+                      style={{
+                        borderRadius: 30,
+                        borderWidth: active.file ? 0 : 1,
+                      }}
+                      height={50}
+                      width={50}
+                    />
+                  </View>
+                </View>
+              </View>
+            ) : (
+              <UserImage />
+            )}
           </View>
         </View>
       </TouchableOpacity>
