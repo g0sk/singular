@@ -58,7 +58,7 @@ export const Header: React.FC<HeaderProps> = ({
       {!openSearch ? (
         <View flexDirection="row" justifyContent="space-between" height={45}>
           <View>
-            <TouchableOpacity onPress={labelAction}>
+            <TouchableOpacity onPress={() => labelAction()}>
               <Text variant="headerTitle">{label}</Text>
             </TouchableOpacity>
           </View>

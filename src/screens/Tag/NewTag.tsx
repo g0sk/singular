@@ -55,7 +55,6 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
   const [reference, setReference] = useState<string>('');
   const [referenceError, setReferenceError] = useState<boolean>(false);
   const [type, setType] = useState<ActiveType | null>(null);
-  const [initialLoad, setInitialLoad] = useState<boolean>(true);
   const dispatch = useAppDispatch();
   const activeState = useAppSelector((state) => state.active);
   const {activeTypesList, loading} = useAppSelector(
@@ -208,7 +207,6 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
   };
 
   const onTypeChange = (_type: ActiveType) => {
-    initialLoad ? setInitialLoad(false) : null;
     setType(_type);
     onChange();
   };
@@ -229,7 +227,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
 
   return (
     <View marginHorizontal="m" marginBottom="xl">
-      {loading && initialLoad ? (
+      {loading ? (
         <View alignItems="center" height={height - 100} justifyContent="center">
           <ActivityIndicator animating={loading} size="large" color="black" />
         </View>

@@ -294,7 +294,7 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
               <ActivityIndicator
                 animating={loading}
                 size={'large'}
-                color="black"
+                color={theme.colors.primary}
               />
             </View>
           ) : (

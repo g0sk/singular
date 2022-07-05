@@ -17,6 +17,7 @@
     "scan": {
       "title": "Etiquetas",
       "header": "Leer etiqueta",
+      "headerScanning": "Leyendo etiqueta",
       "description": "Para empezar a leer etiquetas, pulsa el botón y acerca el dispositivo a la etiqueta.",
       "tip": "Acerca el dispositivo a la etiqueta.",
       "successActiveDescription": "Etiqueta leída correctamente. Ahora puedes consultar la información del activo.",
@@ -308,7 +309,8 @@
       "cancel": "Cancelar",
       "yes": "Sí",
       "no": "No",
-      "confirm": "Confirmar"
+      "confirm": "Confirmar",
+      "goToSettings": "Ajustes"
     },
     "login": {
       "logIn": "Iniciar sesión",
@@ -364,6 +366,15 @@
   "app": {
     "data": {
       "version": "Versión"
+    }
+  },
+  "permissions": {
+    "camera": {
+      "neverAskAgain": {
+        "title": "Permiso denegado",
+        "message": "Es necesario tener aceptar el permiso de acceso a cámara para usar esta función"
+
+      }
     }
   },
   "success": {

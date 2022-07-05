@@ -85,6 +85,13 @@ export const Search: React.FC<{
     }
   };
 
+  const closeSearch = () => {
+    if (query.length > 0) {
+      onChangeText('');
+    }
+    setOpen(false);
+  };
+
   return (
     <View flexDirection="row" alignItems="center" height={45}>
       <View
@@ -94,7 +101,7 @@ export const Search: React.FC<{
         borderColor={segment === 'active' ? 'primary' : 'orange'}
         flexDirection="row"
         alignItems="center">
-        <TouchableOpacity onPress={() => setOpen(false)}>
+        <TouchableOpacity onPress={() => closeSearch()}>
           <View marginHorizontal="s">
             <Icon
               name="arrow-back-outline"

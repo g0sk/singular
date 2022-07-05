@@ -7,12 +7,13 @@ import {File, UserState} from 'types';
 import Icon from 'react-native-vector-icons/Feather';
 import {useTheme} from 'ui/theme';
 import {updateUser} from 'store/slices/user/userAsyncThunk';
+import {DrawerActions, useNavigation} from '@react-navigation/native';
 
 export const Profile: React.FC = () => {
   const theme = useTheme();
+  const navigation = useNavigation();
   const [file, setFile] = useState<File | null>(null);
   const dispatch = useAppDispatch();
-  //const {signOut} = useAuth();
   const {user, error, loading}: UserState = useAppSelector(
     (state) => state.user,
   );
@@ -22,22 +23,6 @@ export const Profile: React.FC = () => {
       setFile(user.image);
     }
   }, [user]);
-  /* const logOut = () => {
-    Alert.alert(
-      translate('action.login.logOut.title'),
-      translate('action.login.logOut.message'),
-      [
-        {
-          text: translate('button.general.cancel'),
-          onPress: () => null,
-        },
-        {
-          text: translate('button.login.logOut'),
-          onPress: () => signOut(),
-        },
-      ],
-    );
-  }; */
 
   const saveImage = (_file: File | null) => {
     if (user !== null && _file !== null) {
@@ -58,7 +43,10 @@ export const Profile: React.FC = () => {
   return (
     <View>
       <View margin="m">
-        <SimpleHeader label={translate('screen.profile.title')} />
+        <SimpleHeader
+          label={translate('screen.profile.title')}
+          labelAction={() => navigation.dispatch(DrawerActions.openDrawer())}
+        />
       </View>
       <View marginHorizontal="xl" marginVertical="l">
         <View alignItems="center" marginBottom="xl">

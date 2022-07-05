@@ -42,7 +42,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
           source={require('../../../assets/images/purple-gradient.jpg')}
           style={{padding: 20}}>
           <View flexDirection="column" marginTop="xxl" marginHorizontal="m">
-            <SmallAvatar />
+            <SmallAvatar {...props} />
           </View>
         </ImageBackground>
         <View marginVertical="m">

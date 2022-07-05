@@ -9,12 +9,23 @@ import {setI18nConfig} from 'core';
 import RNBootSplash from 'react-native-bootsplash';
 import {enableScreens} from 'react-native-screens';
 import {NfcProvider} from 'core/nfc';
+import {PermissionsAndroid} from 'react-native';
 
 const App = () => {
   useEffect(() => {
     //Use native nativigation component (FragmentActivity) for navigation-screens
+    const askPermissions = async () => {
+      try {
+        await PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        ]);
+      } catch (e) {}
+    };
     enableScreens();
     initialize();
+    askPermissions();
     setI18nConfig();
     //Delay so login screen is not displayed when navigator is loaded
     setTimeout(() => {

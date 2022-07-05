@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Text, View} from 'components';
-import IconF from 'react-native-vector-icons/Feather';
+import {Button, SimpleHeader, Text, View} from 'components';
 import IconI from 'react-native-vector-icons/Ionicons';
 import {translate} from 'core';
 import {useTheme} from 'ui/theme';
@@ -10,15 +9,22 @@ import {fetchTag} from 'store/slices/active/activeAsyncThunk';
 import {clearActive} from 'store/slices/active/activeSlice';
 import {ScanHomeScreenProps, ActiveState, TagInfo} from 'types';
 import {useNfc} from 'core/nfc';
-import {ActivityIndicator} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {ActivityIndicator, Alert} from 'react-native';
 import {isEnabled} from 'core/nfc/nfc_scanner';
+import {DrawerActions} from '@react-navigation/native';
 
 export const ScanHome: React.FC<ScanHomeScreenProps> = ({navigation}) => {
   const theme = useTheme();
   const {checkNfcEnabled} = useNfc();
   const dispatch = useAppDispatch();
   const [reading, setReading] = useState<boolean>(false);
+
+  const nfcAlert = () =>
+    Alert.alert(
+      translate('error.scan.nfcNotEnabled'),
+      translate('error.scan.enableNfc'),
+      [{text: 'OK', onPress: () => null}],
+    );
 
   const scanTag = async () => {
     const _enabled: boolean = await isEnabled();
@@ -39,6 +45,7 @@ export const ScanHome: React.FC<ScanHomeScreenProps> = ({navigation}) => {
       }
     } else {
       checkNfcEnabled();
+      nfcAlert();
     }
   };
 
@@ -77,74 +84,61 @@ export const ScanHome: React.FC<ScanHomeScreenProps> = ({navigation}) => {
   };
 
   return (
-    <View margin="m">
+    <View>
       <View>
+        <View marginTop="m" marginLeft="m">
+          <SimpleHeader
+            label={
+              !reading
+                ? translate('screen.scan.header')
+                : translate('screen.scan.headerScanning')
+            }
+            labelAction={() => navigation.dispatch(DrawerActions.openDrawer())}
+          />
+        </View>
         {!reading ? (
-          <View marginTop="xl" marginHorizontal="m" height={507}>
-            <View>
-              <Text variant="scanHeader">
-                {translate('screen.scan.header')}
-              </Text>
-            </View>
-            <View
-              alignItems="center"
-              marginTop="xl"
-              marginBottom="l"
-              height={200}>
+          <View margin="m" height={507}>
+            <View alignItems="center" marginTop="xl" padding="l">
               <IconI
                 name="radio-outline"
                 color={theme.colors.primary}
-                size={100}
+                size={150}
               />
-              <IconF name="smartphone" color={theme.colors.primary} size={60} />
             </View>
-            <View
-              marginHorizontal="m"
-              marginTop="xxl"
-              marginBottom="m"
-              alignItems="center">
+            <View marginHorizontal="xl" marginTop="xxl" alignItems="center">
               <Text variant="scanDescription">
                 {translate('screen.scan.description')}
               </Text>
             </View>
           </View>
         ) : (
-          <View marginTop="xl" marginHorizontal="m" height={507}>
-            <View>
-              <View>
-                <Text variant="scanHeader">
-                  {translate('action.scan.scan')}
-                </Text>
+          <View margin="m" height={507}>
+            <View marginVertical="dxxl">
+              <View marginTop="l">
+                <ActivityIndicator size="large" color={theme.colors.primary} />
               </View>
-              <View marginVertical="xxl">
-                <View marginTop="l">
-                  <ActivityIndicator
-                    size="large"
+              <View
+                flexDirection="row"
+                marginHorizontal="xxl"
+                marginTop="dxxl"
+                marginBottom="m"
+                alignItems="center"
+                justifyContent="center">
+                <View marginRight="s">
+                  <IconI
+                    name="information-circle-outline"
+                    size={30}
                     color={theme.colors.primary}
                   />
                 </View>
-                <View
-                  flexDirection="row"
-                  marginHorizontal="m"
-                  marginTop="dxxl"
-                  marginBottom="m"
-                  alignItems="center">
-                  <View marginRight="s">
-                    <Icon
-                      name="information-circle-outline"
-                      size={30}
-                      color={theme.colors.primary}
-                    />
-                  </View>
-                  <View>
-                    <Text variant="tip">{translate('screen.scan.tip')}</Text>
-                  </View>
+                <View>
+                  <Text variant="tip">{translate('screen.scan.tip')}</Text>
                 </View>
               </View>
             </View>
           </View>
         )}
-        <View marginTop="xl" marginHorizontal="xxl">
+        <View marginTop="m" marginHorizontal="xxl">
           <Button
             label={
               !reading

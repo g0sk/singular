@@ -166,10 +166,12 @@ export type DrawerStackProps = {
   navigation: DrawerStackNavigationProp;
 };
 
+export type ProfileNavigationProp = {};
+
 export type DrawerNavigatorParamList = {
   Home: DocumentTabNavigatorParamList;
   Tag: TagNavigatorParamList;
-  Profile: undefined;
+  Profile: {};
 };
 
 //DocumentList items

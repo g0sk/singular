@@ -10,6 +10,7 @@ import {
 import {resetActiveTypeState} from 'store/slices/activeType/activeTypeSlice';
 import {ActiveTypeListsScreenProps, ActiveTypeState} from 'types';
 import {ActiveTypeListItem} from './ActiveTypeListItem';
+import {DrawerActions} from '@react-navigation/native';
 
 const height = Dimensions.get('window').height;
 
@@ -115,7 +116,7 @@ export const ActiveTypeList: React.FC<ActiveTypeListsScreenProps> = ({
           hasExtraIcon={true}
           extraIcon="search"
           label={translate('screen.activeType.title')}
-          labelAction={() => scrollToTop()}
+          labelAction={() => navigation.dispatch(DrawerActions.openDrawer())}
           segment={'activeType'}
         />
       </View>

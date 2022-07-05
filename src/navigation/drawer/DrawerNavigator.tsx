@@ -41,7 +41,7 @@ const DrawerNavigator = () => {
         component={DocumentTabNavigator}
         options={{
           drawerIcon: ({color}) => (
-            <Icon name="radio" size={20} color={color} />
+            <Icon name="folder" size={20} color={color} />
           ),
           drawerLabel: translate('screen.drawer.home'),
         }}

@@ -10,6 +10,7 @@ import {
 import {ActiveListScreenProps, ActiveState} from 'types';
 import {translate} from 'core';
 import {ActiveListItem} from './ActiveListItem';
+import {DrawerActions} from '@react-navigation/native';
 
 const height = Dimensions.get('window').height;
 
@@ -118,7 +119,7 @@ export const ActiveList: React.FC<ActiveListScreenProps> = ({
           hasExtraIcon={true}
           extraIcon="search"
           label={translate('screen.active.title')}
-          labelAction={() => scrollToTop()}
+          labelAction={() => navigation.dispatch(DrawerActions.openDrawer())}
           segment={'active'}
         />
       </View>
@@ -128,7 +129,7 @@ export const ActiveList: React.FC<ActiveListScreenProps> = ({
         </TouchableOpacity>
       </View>
       <View
-        height={height - 60}
+        height={height - 50}
         marginTop="m"
         marginHorizontal="m"
         paddingBottom="dxxl">

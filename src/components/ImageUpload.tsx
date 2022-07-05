@@ -128,7 +128,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({file, saveImage}) => {
         flexDirection="column"
         backgroundColor="white"
         borderRadius={10}
-        minHeight={150}>
+        minHeight={250}>
         <View>
           {contentUrl.length > 0 ? (
             <View flexDirection="column">
@@ -167,24 +167,26 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({file, saveImage}) => {
               </View>
             </View>
           ) : (
-            <View alignItems="center" margin="m">
+            <View alignItems="center" margin="l">
               <Icon name="image" size={40} color="black" />
             </View>
           )}
         </View>
         <View flexDirection="column" alignItems="center" marginBottom="m">
-          <Button
-            marginBottom="m"
-            variant="upload"
-            label={translate('action.image.take')}
-            onPress={showCamera}
-          />
-          <Button
-            marginBottom="m"
-            variant="upload"
-            label={translate('action.image.select')}
-            onPress={showGallery}
-          />
+          <View marginVertical="m">
+            <Button
+              variant="upload"
+              label={translate('action.image.take')}
+              onPress={showCamera}
+            />
+          </View>
+          <View marginVertical="m">
+            <Button
+              variant="upload"
+              label={translate('action.image.select')}
+              onPress={showGallery}
+            />
+          </View>
         </View>
       </View>
     );

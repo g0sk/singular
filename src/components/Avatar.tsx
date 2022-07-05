@@ -5,6 +5,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ToastAndroid,
+  PermissionsAndroid,
+  PermissionStatus,
 } from 'react-native';
 import {ImageUploadProps, MediaObjectState, ParsedImage} from 'types';
 import {View, Button} from './';
@@ -27,12 +29,25 @@ export const Avatar: React.FC<ImageUploadProps> = ({file, saveImage}) => {
   const [newImage, setNewImage] = useState<ParsedImage>();
   const [show, setShow] = useState<boolean>(false);
   const [isNew, setIsNew] = useState<boolean>(false);
+  const [permission, setPermission] = useState<PermissionStatus>('denied');
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const mediaObjectState: MediaObjectState = useAppSelector(
     (state) => state.mediaObject,
   );
+
+  useEffect(() => {
+    const checkCameraPermission = async () => {
+      const status = await PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      );
+      if (status) {
+        setPermission('granted');
+      }
+    };
+    checkCameraPermission();
+  }, []);
 
   useEffect(() => {
     if (file !== null) {
@@ -49,6 +64,34 @@ export const Avatar: React.FC<ImageUploadProps> = ({file, saveImage}) => {
       setContentUrl('');
     }
   }, [newImage]);
+
+  const askPermissions = async () => {
+    try {
+      const status: PermissionStatus = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      );
+      if (status) {
+        setPermission(status);
+      }
+    } catch (e) {}
+  };
+
+  const showModal = () => {
+    switch (permission) {
+      case 'granted':
+        console.log('granted');
+        setShow(true);
+        break;
+      case 'denied':
+        console.log('denied');
+        askPermissions();
+        break;
+      case 'never_ask_again':
+        console.log('case never_ask_again');
+        askPermissions();
+        break;
+    }
+  };
 
   const updateImage = () => {
     if (newImage !== undefined && newImage.uri !== undefined) {
@@ -86,41 +129,49 @@ export const Avatar: React.FC<ImageUploadProps> = ({file, saveImage}) => {
   };
 
   const showGallery = () => {
-    const libraryOptions: ImageLibraryOptions = {
-      mediaType: 'photo',
-      includeBase64: true,
-      quality: 1,
-    };
-    launchImageLibrary(libraryOptions, (response: ImagePickerResponse) => {
-      if (response.errorCode) {
-        errorToast(response.errorCode);
-      }
-      if (!response.didCancel) {
-        setIsNew(true);
-        const parsedImage = parseImageResponse(response);
-        setNewImage(parsedImage);
-      }
-    });
+    if (permission === 'granted') {
+      const libraryOptions: ImageLibraryOptions = {
+        mediaType: 'photo',
+        includeBase64: true,
+        quality: 1,
+      };
+      launchImageLibrary(libraryOptions, (response: ImagePickerResponse) => {
+        if (response.errorCode) {
+          errorToast(response.errorCode);
+        }
+        if (!response.didCancel) {
+          setIsNew(true);
+          const parsedImage = parseImageResponse(response);
+          setNewImage(parsedImage);
+        }
+      });
+    } else {
+      askPermissions();
+    }
   };
 
   const showCamera = () => {
-    const cameraOptions: CameraOptions = {
-      mediaType: 'photo',
-      quality: 1,
-      cameraType: 'back',
-      includeBase64: true,
-      saveToPhotos: true,
-    };
-    launchCamera(cameraOptions, (response: ImagePickerResponse) => {
-      if (response.errorCode) {
-        errorToast(response.errorCode);
-      }
-      if (!response.didCancel) {
-        setIsNew(true);
-        const parsedImage = parseImageResponse(response);
-        setNewImage(parsedImage);
-      }
-    });
+    if (permission === 'granted') {
+      const cameraOptions: CameraOptions = {
+        mediaType: 'photo',
+        quality: 1,
+        cameraType: 'back',
+        includeBase64: true,
+        saveToPhotos: true,
+      };
+      launchCamera(cameraOptions, (response: ImagePickerResponse) => {
+        if (response.errorCode) {
+          errorToast(response.errorCode);
+        }
+        if (!response.didCancel) {
+          setIsNew(true);
+          const parsedImage = parseImageResponse(response);
+          setNewImage(parsedImage);
+        }
+      });
+    } else {
+      askPermissions();
+    }
   };
 
   const ImageModal = () => {
@@ -195,7 +246,7 @@ export const Avatar: React.FC<ImageUploadProps> = ({file, saveImage}) => {
   const AvatarComponent = () => {
     return (
       <View>
-        <TouchableOpacity onPress={() => setShow(!show)}>
+        <TouchableOpacity onPress={() => showModal()}>
           <Image
             style={{borderRadius: 60, borderWidth: 3, borderColor: '#593ac1'}}
             height={100}

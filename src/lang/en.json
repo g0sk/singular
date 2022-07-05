@@ -17,6 +17,7 @@
     "scan": {
       "title": "Tags",
       "header": "Read tag",
+      "headerScanning": "Reading tag",
       "description": "To begin reading tags, press the scan button and bring the device close to the tag.",
       "tip": "Bring the device close to the tag.",
       "successActiveDescription": "Tag successfully read. Now you can check or modify the active data.",
@@ -334,12 +335,21 @@
       "version": "Version"
     }
   },
+  "permissions": {
+    "camera": {
+      "neverAskAgain": {
+        "title": "Denied permission",
+        "message": "Camera permission must be granted in order to use this feature"
+      }
+    }
+  },
   "button": {
     "general": {
       "cancel": "Cancel",
       "yes": "Yes",
       "no": "No",
-      "confirm": "Confirmar"
+      "confirm": "Confirmar",
+      "goToSettings": "Settings"
     },
     "login": {
       "logIn": "Log in",
