@@ -13,7 +13,6 @@ import {PermissionsAndroid} from 'react-native';
 
 const App = () => {
   useEffect(() => {
-    //Use native nativigation component (FragmentActivity) for navigation-screens
     const askPermissions = async () => {
       try {
         await PermissionsAndroid.requestMultiple([
@@ -23,11 +22,12 @@ const App = () => {
         ]);
       } catch (e) {}
     };
+    //Use native nativigation component (FragmentActivity) for navigation-screens
     enableScreens();
     initialize();
     askPermissions();
     setI18nConfig();
-    //Delay so login screen is not displayed when navigator is loaded
+    //Delay for init tasks to finish
     setTimeout(() => {
       RNBootSplash.hide({fade: true});
     }, 1500);

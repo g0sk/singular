@@ -11,14 +11,13 @@ export const WriteSuccess: React.FC<WriteSuccessScreenProps> = ({
 }) => {
   const {colors} = useTheme();
 
-  //Añadir #scan no write
   const goBackWriteHome = () => {
     navigation.navigate('WriteHome', {});
   };
 
   return (
-    <View margin="m">
-      <View marginTop="xl" marginHorizontal="m" height={507}>
+    <View>
+      <View marginTop="l" marginHorizontal="m" height={576}>
         <View>
           <Text variant="scanSuccessHeader">{translate('success.write')}</Text>
         </View>
@@ -63,7 +62,7 @@ export const WriteSuccess: React.FC<WriteSuccessScreenProps> = ({
           </Text>
         </View>
       </View>
-      <View marginVertical="xl" marginHorizontal="xxl">
+      <View marginTop="m" marginHorizontal="xxl">
         <Button
           label={translate('button.scan.goBack')}
           variant="primary"

@@ -75,9 +75,29 @@ export const RecordList: React.FC<RecordListProps> = ({route, navigation}) => {
     }
   };
 
+  /* const RecordStats = () => {
+    <View>
+      <TouchableOpacity onPress={goToRecordStats}>
+        <View
+          flexDirection="row"
+          alignItems="center"
+          padding="s"
+          backgroundColor="primary"
+          borderRadius={8}>
+          <View marginRight="s">
+            <Icon name="stats-chart" size={20} color={colors.lightBackground} />
+          </View>
+          <View>
+            <Text variant="recordStats">{translate('record.chart')}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </View>;
+  };
+
   const goToRecordStats = () => {
     navigation.navigate('RecordStats', {recordId: route.params.recordId});
-  };
+  }; */
 
   const scrollToTop = () => {
     if (records.length > 0) {
@@ -175,29 +195,6 @@ export const RecordList: React.FC<RecordListProps> = ({route, navigation}) => {
             <View>
               <TouchableOpacity onPress={() => scrollToTop()}>
                 <ItemsLabel />
-              </TouchableOpacity>
-            </View>
-            <View>
-              <TouchableOpacity onPress={goToRecordStats}>
-                <View
-                  flexDirection="row"
-                  alignItems="center"
-                  padding="s"
-                  backgroundColor="primary"
-                  borderRadius={8}>
-                  <View marginRight="s">
-                    <Icon
-                      name="stats-chart"
-                      size={20}
-                      color={colors.lightBackground}
-                    />
-                  </View>
-                  <View>
-                    <Text variant="recordStats">
-                      {translate('record.chart')}
-                    </Text>
-                  </View>
-                </View>
               </TouchableOpacity>
             </View>
           </View>

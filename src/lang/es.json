@@ -99,7 +99,8 @@
   },
   "form": {
     "write": {
-      "title": "Datos a escribir",
+      "title": "Escribir datos",
+      "titleWriting": "Escribiendo datos",
       "reference": {
         "label": "Referencia",
         "placeholder": "Introduce una referencia"

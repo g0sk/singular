@@ -56,7 +56,7 @@ export const RecordListItem: React.FC<RecordListItemProps> = ({
   const AdditionalInfo = () => {
     return (
       <View flexDirection="row" alignItems="center">
-        {recordActive.description && (
+        {recordActive.description.length > 0 && (
           <View marginRight="m">
             <Icon name="document-text" size={20} color={colors.primary} />
           </View>

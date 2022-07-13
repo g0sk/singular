@@ -94,7 +94,8 @@
   },
   "form": {
     "write": {
-      "title": "Data to write",
+      "title": "Write tag",
+      "titleWriting": "Writing tag",
       "reference": {
         "label": "Reference",
         "placeholder": "Enter a reference"

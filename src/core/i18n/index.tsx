@@ -19,7 +19,7 @@ export const translate = memoize<typeof i18n.t>(i18n.t, resolver);
 
 export const setI18nConfig = () => {
   const fallback = {languageTag: 'es', isRTL: false};
-  //RNLocalize priorizes the languages ordered by the user on the device settings
+
   const {languageTag, isRTL} =
     RNLocalize.findBestAvailableLanguage(Object.keys(translations)) || fallback;
 

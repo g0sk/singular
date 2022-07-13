@@ -11,19 +11,11 @@ const WriteNavigator = () => {
       initialRouteName="WriteHome"
       screenOptions={{headerShown: false, animation: 'slide_from_right'}}>
       <Stack.Screen name="WriteHome" component={WriteHome} />
-      <Stack.Screen
-        name="WriteForm"
-        component={WriteForm}
-        options={({route}) => ({
-          headerShown: true,
-          title: route.params.title,
-        })}
-      />
+      <Stack.Screen name="WriteForm" component={WriteForm} />
       <Stack.Screen
         name="WriteSuccess"
         component={WriteSuccess}
         options={({route}) => ({
-          headerShown: false,
           title: route.params.title,
         })}
       />

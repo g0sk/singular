@@ -5,6 +5,7 @@ import {
   Button,
   SimpleTextInput as TextInput,
   Dropdown,
+  SimpleHeader,
 } from 'components';
 import {translate} from 'core';
 import {ActiveType} from 'types';
@@ -26,6 +27,7 @@ import {useTheme} from 'ui/theme';
 import {isEnabled} from 'core/nfc/nfc_scanner';
 import {useNfc} from 'core/nfc';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {DrawerActions} from '@react-navigation/native';
 
 export const WriteForm: React.FC<WriteFormScreenProps> = ({navigation}) => {
   const {colors} = useTheme();
@@ -56,14 +58,6 @@ export const WriteForm: React.FC<WriteFormScreenProps> = ({navigation}) => {
   useEffect(() => {
     referenceRef.current?.focus();
   }, [referenceRef]);
-
-  useEffect(() => {
-    if (writing) {
-      navigation.setOptions({headerShown: false});
-    } else {
-      navigation.setOptions({headerShown: true});
-    }
-  }, [writing, navigation]);
 
   const resetState = () => {
     setReference('');
@@ -129,12 +123,19 @@ export const WriteForm: React.FC<WriteFormScreenProps> = ({navigation}) => {
   };
 
   return (
-    <View margin="m">
+    <View>
+      <View marginVertical="m" marginLeft="m">
+        <SimpleHeader
+          label={
+            !writing
+              ? translate('form.write.title')
+              : translate('form.write.titleWriting')
+          }
+          labelAction={() => navigation.dispatch(DrawerActions.openDrawer())}
+        />
+      </View>
       {!writing ? (
-        <View height={491}>
-          <View marginHorizontal="m" marginTop="m" marginBottom="m">
-            <Text variant="header1">{translate('form.write.title')}</Text>
-          </View>
+        <View height={507} paddingTop="xl" marginBottom="m">
           <View
             marginHorizontal="m"
             flexDirection="column"
@@ -186,37 +187,33 @@ export const WriteForm: React.FC<WriteFormScreenProps> = ({navigation}) => {
           </View>
         </View>
       ) : (
-        <View marginHorizontal="xl" height={491}>
-          <View>
-            <View>
-              <Text variant="scanHeader">{translate('action.scan.write')}</Text>
+        <View marginTop="m" height={507}>
+          <View marginVertical="dxxl">
+            <View marginTop="l">
+              <ActivityIndicator size="large" color={colors.primary} />
             </View>
-            <View marginVertical="xxl">
-              <View marginTop="l">
-                <ActivityIndicator size="large" color={colors.primary} />
+            <View
+              flexDirection="row"
+              marginHorizontal="xxl"
+              marginTop="dxxl"
+              marginBottom="m"
+              alignItems="center"
+              justifyContent="center">
+              <View marginRight="s">
+                <Icon
+                  name="information-circle-outline"
+                  size={30}
+                  color={colors.primary}
+                />
               </View>
-              <View
-                flexDirection="row"
-                marginHorizontal="m"
-                marginTop="dxxl"
-                marginBottom="m"
-                alignItems="center">
-                <View marginRight="s">
-                  <Icon
-                    name="information-circle-outline"
-                    size={30}
-                    color={colors.primary}
-                  />
-                </View>
-                <View>
-                  <Text variant="tip">{translate('screen.scan.tip')}</Text>
-                </View>
+              <View>
+                <Text variant="tip">{translate('screen.scan.tip')}</Text>
               </View>
             </View>
           </View>
         </View>
       )}
-      <View marginHorizontal="xxl" marginTop="xl">
+      <View marginHorizontal="xxl" marginTop="m">
         <Button
           variant="primary"
           label={

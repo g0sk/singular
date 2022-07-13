@@ -21,8 +21,8 @@ export const ScanTagSuccess: React.FC<ScanTagSuccessScreenProps> = ({
   };
 
   return (
-    <View margin="m">
-      <View marginTop="xl" marginHorizontal="m" height={507}>
+    <View>
+      <View marginTop="l" marginHorizontal="m" height={576}>
         <View>
           <Text variant="scanSuccessHeader">
             {translate('success.scan.tagFound')}
@@ -52,7 +52,7 @@ export const ScanTagSuccess: React.FC<ScanTagSuccessScreenProps> = ({
           </Text>
         </View>
       </View>
-      <View marginVertical="xl" marginHorizontal="xxl">
+      <View marginTop="m" marginHorizontal="xxl">
         <Button
           label={translate('button.scan.goToDetails')}
           variant="primary"
