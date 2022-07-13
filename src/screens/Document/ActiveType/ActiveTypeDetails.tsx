@@ -41,6 +41,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {fetchActives} from 'store/slices/active/activeAsyncThunk';
 import {resetActiveState} from 'store/slices/active/activeSlice';
 import {useTheme} from 'ui/theme';
+import {CommonActions} from '@react-navigation/core';
 
 const height = Dimensions.get('window').height;
 
@@ -162,6 +163,25 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
     }, []),
   );
 
+  const navigateRelatedActives = () => {
+    if (activeTypeState.activeType) {
+      CommonActions.navigate('DocumentNavigator', {
+        screen: 'ActiveList',
+        params: {
+          filter: {
+            pagination: {
+              page: 1,
+              itemsPerPage: 20,
+            },
+            filters: [
+              {key: 'activeType.name', value: activeTypeState.activeType.id},
+            ],
+          },
+        },
+      });
+    }
+  };
+
   return (
     <View marginHorizontal="m" marginBottom="m">
       {activeTypeState.loading && initialLoad ? (
@@ -174,6 +194,21 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
         </View>
       ) : (
         <View marginBottom="xl">
+          {change && !activeTypeState.loading && (
+            <View
+              width={100}
+              flex={1}
+              position="absolute"
+              zIndex={100}
+              right={15}
+              top={30}>
+              <Button
+                onPress={onSave}
+                variant="secondary"
+                label={translate('action.general.save')}
+              />
+            </View>
+          )}
           <KeyboardAwareScrollView
             scrollEnabled={true}
             horizontal={false}
@@ -200,30 +235,23 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
                   </View>
                 </TouchableOpacity>
               </View>
-              {change && (
-                <View width={100}>
-                  <Button
-                    onPress={onSave}
-                    variant="secondary"
-                    label={translate('action.general.save')}
-                  />
-                </View>
-              )}
             </View>
             <View flexDirection="column" marginBottom="m">
-              <View marginBottom="m">
-                <Text variant="formLabel">
-                  {translate('form.activeType.activeTypeCount')}
-                </Text>
-              </View>
-              <View flexDirection="row">
-                <View marginRight="s">
-                  <Icon name="document-text" size={20} />
+              <TouchableOpacity onPress={() => navigateRelatedActives()}>
+                <View marginBottom="m">
+                  <Text variant="formLabel">
+                    {translate('form.activeType.activeTypeCount')}
+                  </Text>
                 </View>
-                <View>
-                  <Text>{activeTypeState.activeType?.activesCount}</Text>
+                <View flexDirection="row">
+                  <View marginRight="s">
+                    <Icon name="document-text" size={20} />
+                  </View>
+                  <View>
+                    <Text>{activeTypeState.activeType?.activesCount}</Text>
+                  </View>
                 </View>
-              </View>
+              </TouchableOpacity>
             </View>
             <View marginBottom="m">
               <DynamicSection

@@ -96,6 +96,11 @@ const theme = createTheme({
       fontWeight: 'bold',
       fontSize: 19,
     },
+    drawerItem: {
+      color: 'darkText',
+      fontWeight: 'bold',
+      fontSize: 16,
+    },
     drawerEmail: {
       color: 'white',
       fontSize: 15,

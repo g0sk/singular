@@ -63,7 +63,9 @@ export type TagData = {
 //Navigators params
 
 export type RootDocumentParamList = {
-  ActiveList: {};
+  ActiveList: {
+    filters: PaginationFilters;
+  };
   ActiveDetails: {
     activeId: number;
     recordId: number;

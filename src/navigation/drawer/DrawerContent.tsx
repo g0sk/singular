@@ -3,9 +3,10 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
   DrawerContentComponentProps,
+  DrawerItem,
 } from '@react-navigation/drawer';
 import {VERSION} from '@env';
-import {Alert, ImageBackground, TouchableOpacity} from 'react-native';
+import {Alert, ImageBackground} from 'react-native';
 import {SmallAvatar} from 'components/SmallAvatar';
 import {Text, View} from 'components';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -33,6 +34,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
       ],
     );
   };
+
   return (
     <View flex={1}>
       <DrawerContentScrollView
@@ -47,23 +49,31 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
         </ImageBackground>
         <View marginVertical="m">
           <DrawerItemList {...props} />
+          <View marginTop="xxl">
+            <DrawerItem
+              label={() => (
+                <Text variant="drawerItem">
+                  {translate('action.login.logOut.title')}
+                </Text>
+              )}
+              icon={() => (
+                <Icon name="log-out-outline" size={30} color={colors.primary} />
+              )}
+              onPress={() => logOut()}
+            />
+          </View>
         </View>
       </DrawerContentScrollView>
-      <View
-        alignItems="center"
-        flexDirection="row"
-        marginHorizontal="l"
-        marginBottom="m"
-        justifyContent="space-between">
-        <View>
+      <View>
+        <View
+          alignItems="center"
+          flexDirection="row"
+          marginHorizontal="l"
+          marginBottom="m"
+          justifyContent="flex-start">
           <Text variant="version">
             {translate('app.data.version') + ' ' + VERSION}
           </Text>
-        </View>
-        <View>
-          <TouchableOpacity onPress={logOut}>
-            <Icon name="log-out-outline" size={30} color={colors.primary} />
-          </TouchableOpacity>
         </View>
       </View>
     </View>

@@ -30,16 +30,9 @@ export const ActiveList: React.FC<ActiveListScreenProps> = ({
   }: ActiveState = useAppSelector((state) => state.active);
 
   useEffect(() => {
-    store.dispatch(
-      fetchActives({
-        pagination: {
-          page: 1,
-          itemsPerPage: 7,
-        },
-        filters: [{key: 'order[entryDate]', value: 'desc'}],
-      }),
-    );
-  }, []);
+    console.log(route.params.filters);
+    store.dispatch(fetchActives(route.params.filters));
+  }, [route.params.filters]);
 
   const scrollToTop = () => {
     if (activesLength > 0) {

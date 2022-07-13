@@ -24,7 +24,19 @@ export const DocumentNavigator = () => {
       <Stack.Screen
         name="ActiveList"
         component={ActiveList}
-        initialParams={{tab: 'active'}}
+        initialParams={{
+          filters: {
+            pagination: {
+              page: 1,
+              itemsPerPage: 7,
+            },
+            filters: [{key: 'order[entryDate]', value: 'desc'}],
+          },
+        }}
+        options={({route}) => ({
+          headerShown: false,
+          filters: route.params.filters,
+        })}
       />
       <Stack.Screen
         name="ActiveDetails"
