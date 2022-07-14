@@ -24,8 +24,6 @@ const DrawerNavigator = () => {
       screenOptions={{
         drawerType: 'back',
         headerShown: false,
-        //headerTitle: '',
-        //headerStyle: {elevation: 0},
         drawerLabelStyle: {
           fontWeight: 'bold',
         },
