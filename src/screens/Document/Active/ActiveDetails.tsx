@@ -1,4 +1,4 @@
-import React, {useCallback, useLayoutEffect, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import {
   Active,
   ActiveDetailsScreenProps,
@@ -22,12 +22,12 @@ import {
   ImageUpload,
   UserModal,
   Screen,
+  DynamicDescription,
 } from 'components';
 import {
   ActivityIndicator,
   RefreshControl,
   ScrollView,
-  TextInput,
   Alert,
   ToastAndroid,
   TouchableOpacity,
@@ -75,6 +75,12 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
       setCustomAttributes(activeState.active.customAttributes);
     }
   }, [activeState.active]);
+
+  useEffect(() => {
+    if (description.length > 0) {
+      setChange(true);
+    }
+  }, [description]);
 
   //Unmount when screen loses focus
   useFocusEffect(
@@ -185,17 +191,12 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
     } else {
       setFile(null);
     }
-    onChange();
-  };
-
-  const onDescriptionChange = (_description: string) => {
-    setDescription(_description);
-    onChange();
+    setChange(true);
   };
 
   const onBasicAttributesChange = (_basicAttributes: Attribute[]) => {
     setBasicAttributes([..._basicAttributes]);
-    onChange();
+    setChange(true);
   };
   const onCustomAttributesChange = (_customAttributes: Attribute[]) => {
     setCustomAttributes([..._customAttributes]);
@@ -309,30 +310,10 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
                 </View>
               </View>
               <ImageUpload file={file} saveImage={onFileChange} />
-              <View marginTop="l" marginBottom="m">
-                <View marginBottom="m">
-                  <Text variant="formLabel">
-                    {translate('form.active.description.label')}
-                  </Text>
-                </View>
-                <View
-                  borderRadius={10}
-                  borderColor="primary"
-                  borderWidth={1}
-                  width={280}>
-                  <TextInput
-                    style={{textAlignVertical: 'top', padding: 10}}
-                    placeholder={translate(
-                      'form.active.description.placeholder',
-                    )}
-                    numberOfLines={4}
-                    value={description}
-                    multiline={true}
-                    onChangeText={onDescriptionChange}
-                    maxLength={255}
-                  />
-                </View>
-              </View>
+              <DynamicDescription
+                description={description}
+                setParentDescription={setDescription}
+              />
               <View>
                 <View marginVertical="s">
                   <DynamicSection

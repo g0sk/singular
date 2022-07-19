@@ -709,6 +709,7 @@ export interface ModalProps {
   children: React.ReactNode;
   show: boolean;
   setVisibility: Dispatch<SetStateAction<boolean>>;
+  onClose?: () => void;
 }
 
 export interface Item {

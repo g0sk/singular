@@ -17,6 +17,7 @@ import {
   DynamicSection,
   ImageUpload,
   Dropdown,
+  DynamicDescription,
 } from 'components';
 import {
   RefreshControl,
@@ -192,11 +193,6 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
     onChange();
   };
 
-  const onDescriptionChange = (_description: string) => {
-    setDescription(_description);
-    onChange();
-  };
-
   const onBasicAttributesChange = (_basicAttributes: Attribute[]) => {
     setBasicAttributes([..._basicAttributes]);
     onChange();
@@ -267,28 +263,10 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
             </View>
           </View>
           <ImageUpload file={file} saveImage={onFileChange} />
-          <View marginTop="l" marginBottom="m">
-            <View marginBottom="m">
-              <Text variant="formLabel">
-                {translate('form.active.description.label')}
-              </Text>
-            </View>
-            <View
-              borderRadius={10}
-              borderColor="primary"
-              borderWidth={1}
-              width={280}>
-              <TextInput
-                style={{textAlignVertical: 'top', padding: 10}}
-                placeholder={translate('form.active.description.placeholder')}
-                numberOfLines={4}
-                value={description}
-                multiline={true}
-                onChangeText={onDescriptionChange}
-                maxLength={255}
-              />
-            </View>
-          </View>
+          <DynamicDescription
+            description={description}
+            setParentDescription={setDescription}
+          />
           {loading ? (
             <View marginVertical="dxxl">
               <ActivityIndicator

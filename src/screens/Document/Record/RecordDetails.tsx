@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Modal, Section, Text, UserModal, View} from 'components';
+import {Description, Modal, Section, Text, UserModal, View} from 'components';
 import {API_URL} from '@env';
 import {Image, ScrollView, TouchableOpacity} from 'react-native';
 import {RecordDetailsStackProps} from 'types';
@@ -104,21 +104,7 @@ export const RecordDetails: React.FC<RecordDetailsStackProps> = ({route}) => {
                   {translate('form.active.description.label')}
                 </Text>
               </View>
-              {active.description.length > 0 ? (
-                <View
-                  borderRadius={10}
-                  borderColor="primary"
-                  borderWidth={1}
-                  padding="s"
-                  width={280}
-                  marginRight="xl">
-                  <Text>{active.description}</Text>
-                </View>
-              ) : (
-                <View width={250}>
-                  <Text>{translate('form.active.description.empty')}</Text>
-                </View>
-              )}
+              <Description description={active.description} />
             </View>
             <View>
               <View marginVertical="s">

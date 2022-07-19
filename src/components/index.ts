@@ -21,3 +21,5 @@ export * from './Section';
 export * from './Search';
 export * from './FilterModal';
 export * from './Chart';
+export * from './DynamicDescription';
+export * from './Description';
