@@ -55,7 +55,6 @@ const recordSlice = createSlice({
         state.error = false;
       })
       .addCase(fetchFilteredActiveRecord.rejected, (state) => {
-        console.log('no existe');
         state.error = true;
         state.loading = false;
       });

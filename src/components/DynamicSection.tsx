@@ -71,7 +71,6 @@ export const DynamicSection: React.FC<DynamicSectionProps> = ({
     const items = [...newItems];
     items.unshift(item);
     setNewItems([...items]);
-    console.log(newItems);
   };
 
   const onRemoveItem = (index: number) => {

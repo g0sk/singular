@@ -100,7 +100,7 @@ export const Login: React.FC = () => {
       if (token !== null && refreshToken !== null && user !== null) {
         signIn({token, refreshToken, user});
       } else {
-        console.log('Authentication error');
+        console.warn('Authentication error');
       }
     } catch (e) {
       throw e;

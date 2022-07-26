@@ -112,7 +112,7 @@ export const WriteForm: React.FC<WriteFormScreenProps> = ({navigation}) => {
             );
           })
           .catch(() => {
-            console.log('Writing aborted in screen');
+            console.warn('Writing aborted in screen');
           });
       } else {
         cancelRequest();

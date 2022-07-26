@@ -229,7 +229,11 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
     <View marginHorizontal="m" marginBottom="xl">
       {loading ? (
         <View alignItems="center" height={height - 100} justifyContent="center">
-          <ActivityIndicator animating={loading} size="large" color="black" />
+          <ActivityIndicator
+            animating={loading}
+            size="large"
+            color={theme.colors.primary}
+          />
         </View>
       ) : (
         <ScrollView

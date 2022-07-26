@@ -79,15 +79,12 @@ export const Avatar: React.FC<ImageUploadProps> = ({file, saveImage}) => {
   const showModal = () => {
     switch (permission) {
       case 'granted':
-        console.log('granted');
         setShow(true);
         break;
       case 'denied':
-        console.log('denied');
         askPermissions();
         break;
       case 'never_ask_again':
-        console.log('case never_ask_again');
         askPermissions();
         break;
     }

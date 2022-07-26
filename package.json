@@ -11,7 +11,6 @@
     "postinstall": "husky install"
   },
   "dependencies": {
-    "@react-native-community/datetimepicker": "^3.5.2",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/drawer": "^6.4.1",

@@ -7,11 +7,11 @@ import {
 import {ErrorFallback} from 'handlers/error/ErrorFallback';
 
 setJSExceptionHandler((error, isFatal) => {
-  console.log(error, isFatal);
+  console.warn(error, isFatal);
 });
 
 const errorHandler = (error: Error) => {
-  console.log(error);
+  console.error(error);
 };
 
 export const ErrorHandler = ({children}: {children: React.ReactNode}) => (

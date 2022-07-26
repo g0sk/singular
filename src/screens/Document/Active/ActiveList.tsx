@@ -30,7 +30,6 @@ export const ActiveList: React.FC<ActiveListScreenProps> = ({
   }: ActiveState = useAppSelector((state) => state.active);
 
   useEffect(() => {
-    console.log(route.params.filters);
     store.dispatch(fetchActives(route.params.filters));
   }, [route.params.filters]);
 

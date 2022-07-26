@@ -10,7 +10,6 @@ export const RecordDetails: React.FC<RecordDetailsStackProps> = ({route}) => {
   let active = route.params.recordActive;
   let uri =
     active.file !== null ? API_URL + route.params.recordActive.file : '';
-  console.log(route.params.recordActive);
   const ImagePreview = () => {
     return (
       <View>
@@ -72,7 +71,7 @@ export const RecordDetails: React.FC<RecordDetailsStackProps> = ({route}) => {
                     {translate('form.active.media.media')}
                   </Text>
                 </View>
-                <View marginLeft="s" justifyContent="flex-start">
+                <View justifyContent="flex-start">
                   <Text>{translate('form.active.media.noMediaShow')}</Text>
                 </View>
               </View>
@@ -98,14 +97,7 @@ export const RecordDetails: React.FC<RecordDetailsStackProps> = ({route}) => {
               show={showImage}
               setVisibility={setShowImage}
             />
-            <View marginTop="l" marginBottom="m">
-              <View marginBottom="m">
-                <Text variant="formLabel">
-                  {translate('form.active.description.label')}
-                </Text>
-              </View>
-              <Description description={active.description} />
-            </View>
+            <Description description={active.description} />
             <View>
               <View marginVertical="s">
                 <Section
