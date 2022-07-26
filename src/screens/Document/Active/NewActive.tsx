@@ -235,6 +235,7 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
                       borderBottomWidth: 1,
                     }}
                     selectionColor={theme.colors.primary}
+                    autoCapitalize="characters"
                     ref={referenceRef}
                     value={reference}
                     onChangeText={onReferenceChange}

@@ -257,6 +257,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
                         : theme.colors.primary,
                       borderBottomWidth: 1,
                     }}
+                    autoCapitalize="characters"
                     selectionColor={theme.colors.primary}
                     ref={referenceRef}
                     value={reference}

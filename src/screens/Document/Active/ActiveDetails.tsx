@@ -130,7 +130,6 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
           ToastAndroid.CENTER,
           ToastAndroid.SHORT,
         );
-        navigation.goBack();
       });
     }
   };

@@ -386,7 +386,7 @@
     },
     "scan": {
       "tagFound": "Nueva etiqueta leída correctamente",
-      "activeFound": "Etiqueta de activo leído correctamente"
+      "activeFound": "Etiqueta de activo leída correctamente"
     },
     "write": "Etiqueta actualizada correctamente"
   },
