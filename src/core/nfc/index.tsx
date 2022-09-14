@@ -48,7 +48,7 @@ export const NfcProvider = ({children}: {children: React.ReactNode}) => {
           dispatch({type: 'CHECK_NFC_ENABLED', enabled: isEnabled});
         }
       } catch (e) {
-        console.warn('Error while checking Nfc support/enabled');
+        //console.warn('Error while checking Nfc support/enabled');
       }
     };
     initState();

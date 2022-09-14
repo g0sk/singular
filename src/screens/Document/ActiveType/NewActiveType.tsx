@@ -84,7 +84,7 @@ export const NewActiveType: React.FC<NewActiveTypeScreenProps> = ({
         dispatch(resetActiveTypeState());
         dispatch(
           fetchActiveTypes({
-            pagination: {page: 1, itemsPerPage: 9},
+            pagination: {page: 1, itemsPerPage: 12},
             filters: [{key: 'order[id]', value: 'desc'}],
           }),
         );

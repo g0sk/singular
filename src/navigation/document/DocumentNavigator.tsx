@@ -28,7 +28,7 @@ export const DocumentNavigator = () => {
           filters: {
             pagination: {
               page: 1,
-              itemsPerPage: 7,
+              itemsPerPage: 12,
             },
             filters: [{key: 'order[entryDate]', value: 'desc'}],
           },

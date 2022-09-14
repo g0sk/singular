@@ -72,19 +72,17 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
                   if (user !== null) {
                     dispatch({type: 'SIGN_IN', token, refreshToken, user});
                   } else {
-                    console.warn('AuthProvider could not fetch user info');
+                    //console.warn('AuthProvider could not fetch user info');
                     dispatch({type: 'SIGN_OUT'});
                   }
                 });
               } else {
-                console.warn(
-                  'AuthProvider could not fetch authentication info',
-                );
+                //console.warn('AuthProvider could not fetch authentication info');
                 dispatch({type: 'SIGN_OUT'});
               }
             });
         } else {
-          console.warn("AuthProvider couldn't find credentials on device");
+          //console.warn("AuthProvider couldn't find credentials on device");
           dispatch({type: 'SIGN_OUT'});
         }
       } catch (e) {

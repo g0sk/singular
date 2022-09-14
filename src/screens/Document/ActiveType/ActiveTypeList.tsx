@@ -32,7 +32,7 @@ export const ActiveTypeList: React.FC<ActiveTypeListsScreenProps> = ({
   useEffect(() => {
     store.dispatch(
       fetchActiveTypes({
-        pagination: {page: 1, itemsPerPage: 9},
+        pagination: {page: 1, itemsPerPage: 12},
         filters: [{key: 'order[id]', value: 'desc'}],
       }),
     );

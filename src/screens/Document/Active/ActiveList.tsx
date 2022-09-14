@@ -136,7 +136,7 @@ export const ActiveList: React.FC<ActiveListScreenProps> = ({
           onRefresh={() => refreshActives()}
           refreshing={loading}
           ListEmptyComponent={<EmptyList />}
-          initialNumToRender={7}
+          initialNumToRender={12}
           onEndReachedThreshold={0}
           onEndReached={activesLength >= 7 ? onActivesOnEndReached : null}
         />

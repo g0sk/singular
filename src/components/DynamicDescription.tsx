@@ -1,10 +1,4 @@
-import React, {
-  useRef,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {View, Text, Button} from 'components';
 import {TextInput, TouchableOpacity} from 'react-native';
 import Modal from 'react-native-modal';
@@ -12,7 +6,7 @@ import {translate} from 'core';
 
 type DescriptionProps = {
   description: string;
-  setParentDescription: Dispatch<SetStateAction<string>>;
+  setParentDescription: (_description: string) => void;
 };
 
 export const DynamicDescription: React.FC<DescriptionProps> = ({
@@ -27,7 +21,11 @@ export const DynamicDescription: React.FC<DescriptionProps> = ({
 
   useEffect(() => {
     _setDescription(description);
-    setTruncatedText(description.substring(0, 75) + '...');
+    setTruncatedText(
+      description.length > 40
+        ? description.substring(0, 75) + '...'
+        : description,
+    );
   }, [description]);
 
   const showModal = () => {

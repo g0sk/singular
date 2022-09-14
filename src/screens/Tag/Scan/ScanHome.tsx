@@ -38,7 +38,7 @@ export const ScanHome: React.FC<ScanHomeScreenProps> = ({navigation}) => {
             }
           })
           .catch(() => {
-            console.warn('Scan aborted in screen');
+            //console.warn('Scan aborted in screen');
           });
       } else {
         cancelRequest();

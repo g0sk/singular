@@ -11,7 +11,7 @@ import {
 } from 'store/slices/activeType/activeTypeAsyncThunk';
 const initialState: ActiveTypeState = {
   nextPage: 1,
-  itemsPerPage: 9,
+  itemsPerPage: 12,
   filtered: false,
   activeTypesLength: 0,
   activeType: null,
@@ -30,7 +30,7 @@ export const activeTypeSlice = createSlice({
       state.nextPage = 1;
       state.activeTypesList = [];
       state.activeTypesLength = 0;
-      state.activeType = null;
+      //state.activeType = null;
       state.filtered = false;
     },
     clearActiveTypeList: (state) => {
@@ -112,8 +112,8 @@ export const activeTypeSlice = createSlice({
         state.loading = false;
         state.error = true;
       })
-      .addCase(updateActiveType.fulfilled, (state, action) => {
-        state.activeType = {...action.payload};
+      .addCase(updateActiveType.fulfilled, (state) => {
+        //state.activeType = {...action.payload};
         state.loading = false;
         state.error = false;
       })

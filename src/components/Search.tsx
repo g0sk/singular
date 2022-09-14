@@ -55,7 +55,7 @@ export const Search: React.FC<{
           store.dispatch(resetActiveState());
           store.dispatch(
             fetchFilteredActives({
-              pagination: {page: 1, itemsPerPage: 7},
+              pagination: {page: 1, itemsPerPage: 12},
               filters: _filters,
             }),
           );
@@ -64,7 +64,7 @@ export const Search: React.FC<{
           store.dispatch(resetActiveTypeState());
           store.dispatch(
             fetchFilteredActiveTypes({
-              pagination: {page: 1, itemsPerPage: 7},
+              pagination: {page: 1, itemsPerPage: 12},
               filters: _filters,
             }),
           );

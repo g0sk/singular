@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
+import React, {useCallback, useLayoutEffect, useState} from 'react';
 import {
   Active,
   ActiveDetailsScreenProps,
@@ -76,12 +76,6 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
     }
   }, [activeState.active]);
 
-  useEffect(() => {
-    if (description.length > 0) {
-      setChange(true);
-    }
-  }, [description]);
-
   //Unmount when screen loses focus
   useFocusEffect(
     useCallback(() => {
@@ -119,7 +113,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
           dispatch(resetActiveState());
           dispatch(
             fetchActives({
-              pagination: {page: 1, itemsPerPage: 7},
+              pagination: {page: 1, itemsPerPage: 12},
               filters: [{key: 'order[entryDate]', value: 'desc'}],
             }),
           );
@@ -159,14 +153,14 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
       dispatch(resetActiveState());
       dispatch(
         fetchActives({
-          pagination: {page: 1, itemsPerPage: 7},
+          pagination: {page: 1, itemsPerPage: 12},
           filters: [{key: 'order[entryDate]', value: 'desc'}],
         }),
       );
       dispatch(resetActiveTypeState());
       dispatch(
         fetchActiveTypes({
-          pagination: {page: 1, itemsPerPage: 9},
+          pagination: {page: 1, itemsPerPage: 12},
           filters: [{key: 'order[id]', value: 'desc'}],
         }),
       );
@@ -178,12 +172,6 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
     dispatch(fetchActive(route.params.activeId));
   };
 
-  const onChange = useCallback(() => {
-    if (!change) {
-      setChange(true);
-    }
-  }, [change]);
-
   const onFileChange = (_file: File | null) => {
     if (_file !== null) {
       setFile({..._file});
@@ -193,13 +181,18 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
     setChange(true);
   };
 
+  const onDescriptionChange = (_description: string) => {
+    setDescription(_description);
+    setChange(true);
+  };
+
   const onBasicAttributesChange = (_basicAttributes: Attribute[]) => {
     setBasicAttributes([..._basicAttributes]);
     setChange(true);
   };
   const onCustomAttributesChange = (_customAttributes: Attribute[]) => {
     setCustomAttributes([..._customAttributes]);
-    onChange();
+    setChange(true);
   };
 
   return (
@@ -218,7 +211,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
           </View>
         ) : (
           <View marginBottom="xl">
-            {change && !activeState.loading && (
+            {change && (
               <View
                 width={100}
                 flex={1}
@@ -311,7 +304,7 @@ export const ActiveDetails: React.FC<ActiveDetailsScreenProps> = ({
               <ImageUpload file={file} saveImage={onFileChange} />
               <DynamicDescription
                 description={description}
-                setParentDescription={setDescription}
+                setParentDescription={onDescriptionChange}
               />
               <View>
                 <View marginVertical="s">

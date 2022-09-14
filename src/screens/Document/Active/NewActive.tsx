@@ -8,7 +8,7 @@ import {
   ServerError,
 } from 'types';
 import {fetchUnits} from 'store/slices/unit/unitAsyncThunk';
-import {createActive, fetchActives} from 'store/slices/active/activeAsyncThunk';
+import {createActive} from 'store/slices/active/activeAsyncThunk';
 import store, {useAppDispatch, useAppSelector} from 'store/configureStore';
 import {
   Button,
@@ -134,19 +134,24 @@ export const NewActive: React.FC<ActiveDetailsScreenProps> = ({
         .then(() => {
           dispatch(resetActiveState());
           dispatch(resetActiveTypeState());
-          dispatch(
+          /* dispatch(
             fetchActives({
-              pagination: {page: 1, itemsPerPage: 7},
+              pagination: {page: 1, itemsPerPage: 12},
               filters: [{key: 'order[entryDate]', value: 'desc'}],
             }),
-          );
+          ); */
           dispatch(
             fetchActiveTypes({
-              pagination: {page: 1, itemsPerPage: 9},
+              pagination: {page: 1, itemsPerPage: 12},
               filters: [{key: 'order[id]', value: 'desc'}],
             }),
           );
-          navigation.goBack();
+          navigation.navigate('ActiveList', {
+            filters: {
+              pagination: {page: 1, itemsPerPage: 12},
+              filters: [{key: 'order[entryDate]', value: 'desc'}],
+            },
+          });
         })
         .catch((refError: ServerError) => {
           ToastAndroid.showWithGravity(

@@ -62,8 +62,6 @@ export const Login: React.FC = () => {
       if (credentials) {
         setFieldValue('username', credentials.username);
         setFieldValue('password', credentials.password);
-      } else {
-        userNameRef.current?.focus();
       }
     };
     init();
@@ -100,7 +98,7 @@ export const Login: React.FC = () => {
       if (token !== null && refreshToken !== null && user !== null) {
         signIn({token, refreshToken, user});
       } else {
-        console.warn('Authentication error');
+        //console.warn('Authentication error');
       }
     } catch (e) {
       throw e;

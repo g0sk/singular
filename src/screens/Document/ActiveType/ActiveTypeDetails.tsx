@@ -82,14 +82,14 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
       dispatch(resetActiveTypeState());
       dispatch(
         fetchActiveTypes({
-          pagination: {page: 1, itemsPerPage: 9},
+          pagination: {page: 1, itemsPerPage: 12},
           filters: [{key: 'order[id]', value: 'desc'}],
         }),
       );
       dispatch(resetActiveState());
       dispatch(
         fetchActives({
-          pagination: {page: 1, itemsPerPage: 7},
+          pagination: {page: 1, itemsPerPage: 12},
           filters: [{key: 'order[entryDate]', value: 'desc'}],
         }),
       );
@@ -115,7 +115,7 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
         dispatch(resetActiveTypeState());
         dispatch(
           fetchActiveTypes({
-            pagination: {page: 1, itemsPerPage: 9},
+            pagination: {page: 1, itemsPerPage: 12},
             filters: [{key: 'order[id]', value: 'desc'}],
           }),
         );
@@ -194,7 +194,7 @@ export const ActiveTypeDetails: React.FC<ActiveTypeDetailsScreenProps> = ({
         </View>
       ) : (
         <View marginBottom="xl">
-          {change && !activeTypeState.loading && (
+          {change && (
             <View
               width={100}
               flex={1}

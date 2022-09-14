@@ -15,7 +15,7 @@ const initialState: ActiveState = {
   nextPage: 1,
   filtered: false,
   activesLength: 0,
-  itemsPerPage: 7,
+  itemsPerPage: 12,
   loading: false,
   error: false,
   errorData: null,
@@ -26,7 +26,7 @@ const activeSlice = createSlice({
   initialState,
   reducers: {
     resetActiveState: (state) => {
-      state.active = null;
+      //state.active = null;
       state.actives = [];
       state.nextPage = 1;
       state.activesLength = 0;
@@ -120,8 +120,8 @@ const activeSlice = createSlice({
           state.errorData = {...action.payload};
         }
       })
-      .addCase(updateActive.fulfilled, (state, action) => {
-        state.active = {...action.payload};
+      .addCase(updateActive.fulfilled, (state) => {
+        //state.active = {...action.payload};
         state.loading = false;
         state.error = false;
       })

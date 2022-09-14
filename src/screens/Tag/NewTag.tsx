@@ -1,4 +1,10 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   NewTagScreenProps,
   ActiveType,
@@ -52,6 +58,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
   const [file, setFile] = useState<File | null>(null);
   const [description, setDescription] = useState<string>('');
   const [change, setChange] = useState<boolean>(false);
+  const [save, setSave] = useState<boolean>(false);
   const [reference, setReference] = useState<string>('');
   const [referenceError, setReferenceError] = useState<boolean>(false);
   const [type, setType] = useState<ActiveType | null>(null);
@@ -74,7 +81,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
     );
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (route.params.tag) {
       setReference(route.params.tag.reference);
       store
@@ -124,8 +131,8 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
         ToastAndroid.CENTER,
         ToastAndroid.LONG,
       );
-      refScrollView.current?.scrollTo({x: 0, y: 0, animated: true});
-      referenceRef.current?.focus();
+      /* refScrollView.current?.scrollTo({x: 0, y: 0, animated: true});
+      referenceRef.current?.focus(); */
     } else if (type === null) {
       setChange(false);
       ToastAndroid.showWithGravity(
@@ -140,6 +147,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
 
   const onSave = () => {
     if (type !== null) {
+      setSave(true);
       const newActive: NewActiveProps = {
         reference: reference,
         description: description,
@@ -155,17 +163,18 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
           dispatch(resetActiveTypeState());
           dispatch(
             fetchActives({
-              pagination: {page: 1, itemsPerPage: 7},
+              pagination: {page: 1, itemsPerPage: 12},
               filters: [{key: 'order[entryDate]', value: 'desc'}],
             }),
           );
           dispatch(
             fetchActiveTypes({
-              pagination: {page: 1, itemsPerPage: 9},
+              pagination: {page: 1, itemsPerPage: 12},
               filters: [{key: 'order[id]', value: 'desc'}],
             }),
           );
           navigation.navigate('ScanHome', {});
+          setSave(false);
         })
         .catch((refError: ServerError) => {
           ToastAndroid.showWithGravity(
@@ -177,6 +186,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
             ToastAndroid.LONG,
           );
           setChange(false);
+          setSave(false);
         });
     }
   };
@@ -227,7 +237,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
 
   return (
     <View marginHorizontal="m" marginBottom="xl">
-      {loading ? (
+      {activeState.loading && !save ? (
         <View alignItems="center" height={height - 100} justifyContent="center">
           <ActivityIndicator
             animating={loading}
@@ -239,7 +249,9 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
         <ScrollView
           horizontal={false}
           ref={refScrollView}
-          refreshControl={<RefreshControl refreshing={activeState.loading} />}>
+          refreshControl={
+            <RefreshControl refreshing={activeState.loading && save} />
+          }>
           <View marginTop="m">
             <TouchableOpacity onPress={() => referenceRef.current?.focus()}>
               <View flexDirection="column" alignItems="flex-start">
@@ -314,7 +326,7 @@ export const NewTag: React.FC<NewTagScreenProps> = ({route, navigation}) => {
               <ActivityIndicator
                 animating={loading}
                 size={'large'}
-                color="black"
+                color={theme.colors.primary}
               />
             </View>
           ) : (
