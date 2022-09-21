@@ -9,7 +9,7 @@ and updating data for different types of assets over time, providing an estimati
 
 ## App Demo
 
-[![Demo video](https://drive.google.com/drive/folders/1CN4qVrlsih8DfJZj_Ue5bgEnM6hJCRDA?usp=sharing)]
+[Demo video](https://drive.google.com/drive/folders/1CN4qVrlsih8DfJZj_Ue5bgEnM6hJCRDA?usp=sharing)
 
 ## Screenshots
 
