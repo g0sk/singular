@@ -1,12 +1,16 @@
-# Stack
+# Mobile application for inventory management in warehouse using RFID tags and asset measurements
 
-Stack is an android app made using [React native](https://reactnative.dev) which lets you scan RFID tags and update database assets.
+## This app is a final degree project in collaboration with the company [The Singular Factory](https://singularfactory.com).
 
-### Start using it
+Singular is a mobile application for Android based on [React native](https://reactnative.dev), which allows to simplify the tasks of receiving and identifying
+and identification of assets, by reading and writing RFID tags,
+using the device's NFC technology. It also provides a mechanism for measured
+and updating data for different types of assets over time, providing an estimation of the asset quality and lifetime.
 
-In first place, follow the instructions on the [React native docs](https://reactnative.dev/docs/environment-setup) to setup your environment correctly.
+## App Demo
 
-After setting up your environment, use `git clone https://github.com/g0sk/stack` on your preffered directory
-Once you have cloned the repository, install the project dependencies with `yarn install` and finally you can simply start using it with `yarn android` or `yarn react-native run android`
+[![Demo video](/public/video/demo.mp4)]
 
 ## Screenshots
+
+You can find more screenshots [here](/public/screenshots/).
